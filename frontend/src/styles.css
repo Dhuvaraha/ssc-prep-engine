@@ -1,0 +1,84 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172033;
+  background: #f5f7fb;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+button { font: inherit; }
+
+.shell {
+  width: min(1160px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 56px 0 80px;
+}
+
+.hero {
+  padding: 48px;
+  border-radius: 28px;
+  background: white;
+  box-shadow: 0 18px 60px rgba(23, 32, 51, 0.08);
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #596579;
+}
+
+h1 { max-width: 760px; margin: 0; font-size: clamp(40px, 7vw, 72px); line-height: .98; letter-spacing: -.05em; }
+h2 { margin: 4px 0 0; font-size: 32px; }
+h3 { margin: 8px 0; font-size: 22px; }
+
+.lead { max-width: 680px; margin: 22px 0 28px; font-size: 19px; line-height: 1.6; color: #596579; }
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 13px 18px;
+  background: #172033;
+  color: white;
+  cursor: pointer;
+}
+
+.metrics, .subjectGrid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 18px;
+}
+
+.metrics article, .subjectCard {
+  padding: 24px;
+  border-radius: 20px;
+  background: white;
+  border: 1px solid #e7ebf2;
+}
+
+.metrics span, .subjectCard span { color: #6a7487; font-size: 13px; }
+.metrics strong { display: block; margin-top: 8px; font-size: 32px; }
+.metrics small { color: #8a93a4; }
+
+.sectionHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 16px;
+  margin-top: 48px;
+}
+.sectionHeading > p, .subjectCard p { color: #6a7487; }
+
+.subjectGrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.secondary { background: #edf0f5; color: #172033; }
+
+@media (max-width: 800px) {
+  .shell { padding-top: 20px; }
+  .hero { padding: 28px; }
+  .metrics, .subjectGrid { grid-template-columns: 1fr; }
+  .sectionHeading { display: block; }
+}
