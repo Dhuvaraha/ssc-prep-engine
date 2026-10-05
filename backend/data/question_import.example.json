@@ -1,0 +1,25 @@
+[
+  {
+    "exam_slug": "ssc-cgl-tier-1",
+    "subject_slug": "reasoning",
+    "topic_slug": "coding-decoding",
+    "question_text": "Example private-study question",
+    "options": [
+      {"position": 1, "text": "Option A"},
+      {"position": 2, "text": "Option B"},
+      {"position": 3, "text": "Option C"},
+      {"position": 4, "text": "Option D"}
+    ],
+    "correct_option": 1,
+    "explanation": "Add the verified explanation here.",
+    "fast_method": "Add the verified shortcut here.",
+    "difficulty": 2,
+    "expected_time_seconds": 45,
+    "year": 2024,
+    "shift": "example",
+    "source_type": "user_private",
+    "source_reference": "private-study-source",
+    "visibility": "private",
+    "verification_status": "review_required"
+  }
+]
