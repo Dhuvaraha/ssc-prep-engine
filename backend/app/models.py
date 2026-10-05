@@ -72,6 +72,8 @@ class Question(Base):
     exam_id: Mapped[int] = mapped_column(ForeignKey("exams.id"))
     subject_id: Mapped[int] = mapped_column(ForeignKey("subjects.id"))
     topic_id: Mapped[int | None] = mapped_column(ForeignKey("topics.id"), nullable=True)
+    subtopic: Mapped[str | None] = mapped_column(String(160), nullable=True)
+    pattern_type: Mapped[str | None] = mapped_column(String(160), nullable=True)
     question_text: Mapped[str] = mapped_column(Text)
     question_image_url: Mapped[str | None] = mapped_column(Text, nullable=True)
     correct_option: Mapped[int] = mapped_column(Integer)
@@ -86,6 +88,7 @@ class Question(Base):
     visibility: Mapped[str] = mapped_column(String(20), default="private")
     verification_status: Mapped[str] = mapped_column(String(40), default=VerificationStatus.RAW.value)
     fingerprint: Mapped[str | None] = mapped_column(String(64), unique=True, index=True, nullable=True)
+    review_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     options: Mapped[list["QuestionOption"]] = relationship(
         back_populates="question", cascade="all, delete-orphan", order_by="QuestionOption.position"
