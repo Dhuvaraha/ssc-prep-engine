@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 QUESTION_START = re.compile(r"(?m)^\s*(\d{1,3})[.)]\s+")
 ANSWER_LINE = re.compile(r"(?im)^\s*Answer\s*:\s*([A-D1-4])\s*$")
-OPTION_LINE = re.compile(r"(?m)^\s*([A-D])(?:\s+(.*?))?\s*$")
+OPTION_LINE = re.compile(r"(?m)^\s*([A-D])(?:[ \t\xa0]{2,})(.*?)\s*$")
 
 
 @dataclass(slots=True)
