@@ -197,3 +197,35 @@ class MockAttemptQuestion(Base):
     selected_option: Mapped[int | None] = mapped_column(Integer, nullable=True)
     marked_for_review: Mapped[bool] = mapped_column(Boolean, default=False)
     time_seconds: Mapped[float] = mapped_column(Float, default=0)
+
+
+class Bookmark(Base):
+    __tablename__ = "bookmarks"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
+    question_id: Mapped[int] = mapped_column(ForeignKey("questions.id"), index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class Flashcard(Base):
+    __tablename__ = "flashcards"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    topic_id: Mapped[int | None] = mapped_column(ForeignKey("topics.id"), nullable=True, index=True)
+    front: Mapped[str] = mapped_column(Text)
+    back: Mapped[str] = mapped_column(Text)
+    related_fact: Mapped[str | None] = mapped_column(Text, nullable=True)
+    card_type: Mapped[str] = mapped_column(String(40), default="fact")
+    is_published: Mapped[bool] = mapped_column(Boolean, default=True)
+
+
+class FlashcardProgress(Base):
+    __tablename__ = "flashcard_progress"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
+    flashcard_id: Mapped[int] = mapped_column(ForeignKey("flashcards.id"), index=True)
+    successful_reviews: Mapped[int] = mapped_column(Integer, default=0)
+    next_review_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    last_reviewed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
