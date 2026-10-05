@@ -13,6 +13,7 @@ router = APIRouter(prefix="/review", tags=["content-review"])
 
 class ReviewUpdate(BaseModel):
     topic_id: int | None = None
+    correct_option: int | None = Field(default=None, ge=1, le=10)
     subtopic: str | None = Field(default=None, max_length=160)
     pattern_type: str | None = Field(default=None, max_length=160)
     review_notes: str | None = None
@@ -59,6 +60,9 @@ def list_review_questions(
             "source_reference": q.source_reference,
             "source_page": q.source_page,
             "requires_visual_review": q.requires_visual_review,
+            "source_chosen_option": q.source_chosen_option,
+            "source_question_id": q.source_question_id,
+            "source_status": q.source_status,
             "verification_status": q.verification_status,
             "review_notes": q.review_notes,
         }
@@ -114,12 +118,16 @@ def update_review_question(
     if payload.verification_status not in allowed:
         raise HTTPException(status_code=400, detail="Invalid verification status")
 
+    if payload.verification_status == "verified" and payload.correct_option is None:
+        raise HTTPException(status_code=400, detail="A verified question must have a correct answer")
+
     if payload.topic_id is not None:
         topic = db.get(Topic, payload.topic_id)
         if not topic or topic.subject_id != question.subject_id:
             raise HTTPException(status_code=400, detail="Topic does not match question subject")
 
     question.topic_id = payload.topic_id
+    question.correct_option = payload.correct_option
     question.subtopic = payload.subtopic
     question.pattern_type = payload.pattern_type
     question.review_notes = payload.review_notes
