@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import StrEnum
 
-from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, Date, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db import Base
@@ -229,3 +229,31 @@ class FlashcardProgress(Base):
     successful_reviews: Mapped[int] = mapped_column(Integer, default=0)
     next_review_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     last_reviewed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+
+
+class ExamTarget(Base):
+    __tablename__ = "exam_targets"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
+    exam_id: Mapped[int] = mapped_column(ForeignKey("exams.id"), index=True)
+    exam_date: Mapped[datetime.date] = mapped_column(Date)
+    daily_minutes: Mapped[int] = mapped_column(Integer, default=180)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+
+
+class DailyPlanTask(Base):
+    __tablename__ = "daily_plan_tasks"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
+    plan_date: Mapped[datetime.date] = mapped_column(Date, index=True)
+    activity_type: Mapped[str] = mapped_column(String(40))
+    subject_slug: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    topic_id: Mapped[int | None] = mapped_column(ForeignKey("topics.id"), nullable=True)
+    title: Mapped[str] = mapped_column(String(240))
+    target_minutes: Mapped[int] = mapped_column(Integer, default=15)
+    target_questions: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    priority: Mapped[int] = mapped_column(Integer, default=3)
+    status: Mapped[str] = mapped_column(String(30), default="pending")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
