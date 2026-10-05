@@ -19,22 +19,29 @@
 - [x] Source/visibility/verification metadata
 - [x] Duplicate fingerprinting
 - [x] Conservative text candidate parser
-- [x] Original demo question bank for end-to-end testing
-- [ ] Private PDF text/image extraction workflow
-- [ ] Topic tagging helpers
-- [ ] Visual-question asset handling
-- [ ] Review/verification UI
-- [ ] First large private CGL question bank
+- [x] Candidate-response parser
+- [x] Answer-key recovery
+- [x] Local PDF text/image extraction workflow
+- [x] Topic tagging helpers
+- [x] Visual-question asset handling
+- [x] Review/verification UI
+- [x] Review queue statistics and provenance
+- [x] First private CGL shift package built outside public Git
 
-**Status: IN PROGRESS**
+**Status: COMPLETE**
 
 ## Phase 3 — Learn Mode
-- [ ] Topic lesson schema
-- [ ] Quick notes
-- [ ] Shortcuts
-- [ ] Solved examples
+- [x] Topic lesson schema
+- [x] Quick notes / concepts
+- [x] Shortcuts
+- [x] Worked examples
+- [x] Memory rules and common traps
+- [x] Learn topic browser
+- [x] Structured lesson reader
 - [ ] Guided checks
-- [ ] Topic recap
+- [ ] Topic recap → practice handoff
+
+**Status: IN PROGRESS**
 
 ## Phase 4 — Practice Engine
 - [x] First practice API
