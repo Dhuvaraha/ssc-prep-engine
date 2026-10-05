@@ -149,3 +149,20 @@ class RevisionItem(Base):
     successful_reviews: Mapped[int] = mapped_column(Integer, default=0)
     next_review_at: Mapped[datetime] = mapped_column(DateTime)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+
+
+class Lesson(Base):
+    __tablename__ = "lessons"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    topic_id: Mapped[int] = mapped_column(ForeignKey("topics.id", ondelete="CASCADE"), index=True)
+    title: Mapped[str] = mapped_column(String(200))
+    intro: Mapped[str] = mapped_column(Text)
+    concept: Mapped[str] = mapped_column(Text)
+    shortcut: Mapped[str | None] = mapped_column(Text, nullable=True)
+    worked_example: Mapped[str | None] = mapped_column(Text, nullable=True)
+    memory_rule: Mapped[str | None] = mapped_column(Text, nullable=True)
+    common_traps: Mapped[str | None] = mapped_column(Text, nullable=True)
+    estimated_minutes: Mapped[int] = mapped_column(Integer, default=10)
+    sort_order: Mapped[int] = mapped_column(Integer, default=1)
+    is_published: Mapped[bool] = mapped_column(Boolean, default=True)
