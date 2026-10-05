@@ -25,6 +25,7 @@ export default function ReviewPage() {
   const [index, setIndex] = useState(0);
   const [topics, setTopics] = useState<Topic[]>([]);
   const [topicId, setTopicId] = useState<number | null>(null);
+  const [correctOption, setCorrectOption] = useState<number | null>(null);
   const [patternType, setPatternType] = useState("");
   const [subtopic, setSubtopic] = useState("");
   const [notes, setNotes] = useState("");
@@ -55,6 +56,7 @@ export default function ReviewPage() {
   useEffect(() => {
     if (!question) return;
     setTopicId(question.topic_id);
+    setCorrectOption(question.correct_option);
     setPatternType(question.pattern_type ?? "");
     setSubtopic(question.subtopic ?? "");
     setNotes(question.review_notes ?? "");
@@ -73,6 +75,7 @@ export default function ReviewPage() {
     if (!question) return;
     await updateReviewQuestion(question.id, {
       topic_id: topicId,
+      correct_option: correctOption,
       subtopic: subtopic || null,
       pattern_type: patternType || null,
       review_notes: notes || null,
@@ -122,7 +125,7 @@ export default function ReviewPage() {
             )}
             <div className="optionList">
               {question.options.map((option) => (
-                <div className={option.position === question.correct_option ? "option correctOption" : "option"} key={option.position}>
+                <div className={option.position === correctOption ? "option correctOption" : "option"} key={option.position}>
                   <strong>{String.fromCharCode(64 + option.position)}</strong>
                   <span>{option.text ?? "Image option"}</span>
                   {option.image_url && <SecureImage src={option.image_url} alt={"Option " + option.position} />}
@@ -130,6 +133,9 @@ export default function ReviewPage() {
               ))}
             </div>
             {question.explanation && <div className="explanation"><strong>Explanation</strong><p>{question.explanation}</p></div>}
+            {question.source_chosen_option && (
+              <p className="candidateSelection">Candidate selection: {String.fromCharCode(64 + question.source_chosen_option)} — not treated as the answer key.</p>
+            )}
             <p className="sourceLine">
               Source: {question.source_type} • {question.source_reference ?? "No reference"}
               {question.source_page ? " • Source page " + question.source_page : ""}
@@ -147,6 +153,17 @@ export default function ReviewPage() {
               </p>
             )}
 
+            <label>
+              Confirmed answer
+              <select value={correctOption ?? ""} onChange={(e) => setCorrectOption(e.target.value ? Number(e.target.value) : null)}>
+                <option value="">Select correct option</option>
+                {question.options.map((option) => (
+                  <option value={option.position} key={option.position}>
+                    {String.fromCharCode(64 + option.position)}{question.source_chosen_option === option.position ? " • candidate selected" : ""}
+                  </option>
+                ))}
+              </select>
+            </label>
             <label>
               Topic
               <select value={topicId ?? ""} onChange={(e) => setTopicId(e.target.value ? Number(e.target.value) : null)}>
