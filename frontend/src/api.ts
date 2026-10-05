@@ -312,3 +312,46 @@ export async function submitMock(attemptId: number): Promise<MockSubmitResult> {
   if (!response.ok) throw new Error("Failed to submit mock");
   return response.json();
 }
+
+
+export type AnalyticsSummary = {
+  overview: {
+    practice_attempts: number;
+    accuracy: number;
+    speed_score: number;
+    mastery: number;
+    mock_accuracy: number;
+    mock_attempt_rate: number;
+    readiness: number;
+  };
+  errors: {
+    breakdown: Record<string, number>;
+    avoidable_errors: number;
+    potential_score_gain: number;
+  };
+  weak_topics: Array<{
+    topic_id: number;
+    topic_name: string;
+    attempts: number;
+    accuracy: number;
+    avg_time_seconds: number;
+    mastery: number;
+  }>;
+  recent_mocks: Array<{
+    attempt_id: number;
+    mode: string;
+    score: number;
+    correct: number;
+    incorrect: number;
+    unattempted: number;
+    submitted_at: string | null;
+  }>;
+};
+
+export async function fetchAnalyticsSummary(): Promise<AnalyticsSummary> {
+  const response = await fetch(API_BASE + "/analytics/summary", {
+    headers: authHeaders(),
+  });
+  if (!response.ok) throw new Error("Failed to load analytics");
+  return response.json();
+}
