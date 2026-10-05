@@ -41,6 +41,8 @@ export type ReviewQuestion = {
   shift: string | null;
   source_type: string;
   source_reference: string | null;
+  source_page: number | null;
+  requires_visual_review: boolean;
   verification_status: string;
   review_notes: string | null;
 };
@@ -108,5 +110,17 @@ export async function updateReviewQuestion(
     body: JSON.stringify(payload),
   });
   if (!response.ok) throw new Error("Failed to update review question");
+  return response.json();
+}
+
+
+export type ReviewStats = {
+  by_status: Record<string, number>;
+  visual_pending: number;
+};
+
+export async function fetchReviewStats(): Promise<ReviewStats> {
+  const response = await fetch(API_BASE + "/review/stats", {headers: authHeaders()});
+  if (!response.ok) throw new Error("Failed to load review stats");
   return response.json();
 }
