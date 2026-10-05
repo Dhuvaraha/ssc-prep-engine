@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.db import Base, engine
-from app.routers import analytics, assets, auth, content, exams, health, learn, mocks, practice, review
+from app.routers import analytics, assets, auth, content, exams, health, learn, mocks, practice, review, revision
 
 
 @asynccontextmanager
@@ -36,6 +36,7 @@ app.include_router(content.router, prefix="/api/v1")
 app.include_router(learn.router, prefix="/api/v1")
 app.include_router(mocks.router, prefix="/api/v1")
 app.include_router(analytics.router, prefix="/api/v1")
+app.include_router(revision.router, prefix="/api/v1")
 app.include_router(review.router, prefix="/api/v1")
 app.include_router(assets.router, prefix="/api/v1")
 
