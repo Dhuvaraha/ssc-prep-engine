@@ -23,16 +23,16 @@ def main() -> None:
 
     inserted = 0
     duplicates = 0
-    incomplete = 0
+    unresolved_answers = 0
     invalid = 0
 
     with SessionLocal() as db:
         for item in raw:
-            if item.get("correct_option") is None:
-                incomplete += 1
-                continue
-
             payload = {key: value for key, value in item.items() if key in ALLOWED_KEYS}
+            if payload.get("correct_option") is None:
+                unresolved_answers += 1
+                payload["verification_status"] = "review_required"
+
             try:
                 question = ImportedQuestion.model_validate(payload)
                 _, was_inserted = import_question(db, question)
@@ -45,7 +45,7 @@ def main() -> None:
 
     print(
         f"Imported {inserted}; duplicates {duplicates}; "
-        f"incomplete-answer {incomplete}; invalid {invalid}"
+        f"unresolved-answer {unresolved_answers}; invalid {invalid}"
     )
 
 
