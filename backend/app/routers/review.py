@@ -23,6 +23,7 @@ class ReviewUpdate(BaseModel):
 def list_review_questions(
     status: str = Query(default="review_required"),
     limit: int = Query(default=50, ge=1, le=200),
+    visual_only: bool = Query(default=False),
     db: Session = Depends(get_db),
     _: User = Depends(get_current_user),
 ):
@@ -33,6 +34,8 @@ def list_review_questions(
         .order_by(Question.id)
         .limit(limit)
     )
+    if visual_only:
+        stmt = stmt.where(Question.requires_visual_review.is_(True))
     questions = list(db.scalars(stmt).unique())
     return [
         {
@@ -54,6 +57,8 @@ def list_review_questions(
             "shift": q.shift,
             "source_type": q.source_type,
             "source_reference": q.source_reference,
+            "source_page": q.source_page,
+            "requires_visual_review": q.requires_visual_review,
             "verification_status": q.verification_status,
             "review_notes": q.review_notes,
         }
@@ -122,3 +127,31 @@ def update_review_question(
     db.commit()
 
     return {"id": question.id, "verification_status": question.verification_status}
+
+
+@router.get("/stats")
+def review_stats(
+    db: Session = Depends(get_db),
+    _: User = Depends(get_current_user),
+):
+    statuses = ["raw", "parsed", "review_required", "verified", "rejected"]
+    totals = {}
+    for status in statuses:
+        totals[status] = len(
+            list(
+                db.scalars(
+                    select(Question.id).where(Question.verification_status == status)
+                )
+            )
+        )
+    visual_pending = len(
+        list(
+            db.scalars(
+                select(Question.id).where(
+                    Question.verification_status == "review_required",
+                    Question.requires_visual_review.is_(True),
+                )
+            )
+        )
+    )
+    return {"by_status": totals, "visual_pending": visual_pending}
