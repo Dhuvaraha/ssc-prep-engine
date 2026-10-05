@@ -89,7 +89,17 @@ def submit_practice(
         mastery_score = mastery.mastery_score
 
     revision_scheduled = False
-    should_review = (not is_correct) or payload.used_hint or payload.confidence == 1
+    is_slow = bool(
+        question.expected_time_seconds
+        and payload.time_seconds > question.expected_time_seconds * 1.25
+    )
+    should_review = (
+        (not is_correct)
+        or payload.used_hint
+        or payload.confidence == 1
+        or is_slow
+        or payload.mistake_type == "guess"
+    )
     if should_review:
         existing = db.scalar(
             select(RevisionItem).where(
@@ -108,7 +118,10 @@ def submit_practice(
                 RevisionItem(
                     user_id=user.id,
                     question_id=question.id,
-                    reason=payload.mistake_type or ("wrong" if not is_correct else "low_confidence"),
+                    reason=(
+                        payload.mistake_type
+                        or ("wrong" if not is_correct else "slow" if is_slow else "low_confidence")
+                    ),
                     next_review_at=datetime.combine(due, datetime.min.time()),
                 )
             )
