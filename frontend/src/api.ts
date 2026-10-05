@@ -514,3 +514,13 @@ export async function updatePlannerTask(taskId: number, completed: boolean): Pro
   });
   if (!response.ok) throw new Error("Failed to update task");
 }
+
+
+export async function exportBackup(): Promise<Blob> {
+  const response = await fetch(API_BASE + "/backup/export", {
+    headers: authHeaders(),
+  });
+  if (!response.ok) throw new Error("Failed to export backup");
+  const data = await response.json();
+  return new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+}
