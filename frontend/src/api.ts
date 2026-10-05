@@ -226,3 +226,89 @@ export async function classifyPracticeMistake(
   });
   if (!response.ok) throw new Error("Failed to classify mistake");
 }
+
+
+export type MockQuestion = {
+  position: number;
+  section_slug: string;
+  question: PracticeQuestion;
+};
+
+export type MockStartResponse = {
+  attempt_id: number;
+  mode: string;
+  duration_minutes: number;
+  questions: MockQuestion[];
+};
+
+export type MockStateResponse = {
+  attempt_id: number;
+  status: string;
+  started_at: string;
+  duration_minutes: number;
+  responses: Array<{
+    question_id: number;
+    selected_option: number | null;
+    marked_for_review: boolean;
+    time_seconds: number;
+  }>;
+};
+
+export type MockSubmitResult = {
+  attempt_id: number;
+  score: number;
+  correct: number;
+  incorrect: number;
+  unattempted: number;
+  total_questions: number;
+};
+
+export async function startMock(
+  mode: "mini" | "full" | "sectional",
+  subject_slug?: string,
+): Promise<MockStartResponse> {
+  const response = await fetch(API_BASE + "/mocks/start", {
+    method: "POST",
+    headers: {...authHeaders(), "Content-Type": "application/json"},
+    body: JSON.stringify({mode, subject_slug: subject_slug ?? null}),
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.detail ?? "Failed to start mock");
+  }
+  return response.json();
+}
+
+export async function fetchMockState(attemptId: number): Promise<MockStateResponse> {
+  const response = await fetch(API_BASE + "/mocks/" + attemptId + "/state", {
+    headers: authHeaders(),
+  });
+  if (!response.ok) throw new Error("Failed to load mock state");
+  return response.json();
+}
+
+export async function saveMockResponse(
+  attemptId: number,
+  payload: {
+    question_id: number;
+    selected_option: number | null;
+    marked_for_review: boolean;
+    time_seconds: number;
+  },
+): Promise<void> {
+  const response = await fetch(API_BASE + "/mocks/" + attemptId + "/response", {
+    method: "PATCH",
+    headers: {...authHeaders(), "Content-Type": "application/json"},
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) throw new Error("Failed to save mock response");
+}
+
+export async function submitMock(attemptId: number): Promise<MockSubmitResult> {
+  const response = await fetch(API_BASE + "/mocks/" + attemptId + "/submit", {
+    method: "POST",
+    headers: authHeaders(),
+  });
+  if (!response.ok) throw new Error("Failed to submit mock");
+  return response.json();
+}
