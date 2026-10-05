@@ -31,6 +31,8 @@ def validate_question(item: ImportedQuestion) -> None:
         raise ValueError("Option positions must be unique")
     if item.correct_option is not None and item.correct_option not in positions:
         raise ValueError("correct_option must point to an existing option")
+    if item.verification_status == "verified" and item.correct_option is None:
+        raise ValueError("Verified questions require a correct option")
 
 
 def import_question(db: Session, item: ImportedQuestion) -> tuple[Question, bool]:
