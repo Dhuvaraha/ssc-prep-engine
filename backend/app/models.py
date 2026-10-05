@@ -85,6 +85,8 @@ class Question(Base):
     shift: Mapped[str | None] = mapped_column(String(80), nullable=True)
     source_type: Mapped[str] = mapped_column(String(40), default=SourceType.USER_PRIVATE.value)
     source_reference: Mapped[str | None] = mapped_column(Text, nullable=True)
+    source_page: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    requires_visual_review: Mapped[bool] = mapped_column(Boolean, default=False)
     visibility: Mapped[str] = mapped_column(String(20), default="private")
     verification_status: Mapped[str] = mapped_column(String(40), default=VerificationStatus.RAW.value)
     fingerprint: Mapped[str | None] = mapped_column(String(64), unique=True, index=True, nullable=True)
