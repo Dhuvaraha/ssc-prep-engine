@@ -77,6 +77,7 @@ class PracticeSubmit(BaseModel):
 
 
 class PracticeResult(BaseModel):
+    attempt_id: int
     correct: bool
     correct_option: int
     explanation: str | None = None
@@ -98,3 +99,7 @@ class LessonOut(BaseModel):
     estimated_minutes: int
 
     model_config = {"from_attributes": True}
+
+
+class MistakeUpdate(BaseModel):
+    mistake_type: str
