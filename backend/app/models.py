@@ -88,6 +88,8 @@ class Question(Base):
     source_page: Mapped[int | None] = mapped_column(Integer, nullable=True)
     requires_visual_review: Mapped[bool] = mapped_column(Boolean, default=False)
     source_chosen_option: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    source_question_id: Mapped[str | None] = mapped_column(String(80), nullable=True, index=True)
+    source_status: Mapped[str | None] = mapped_column(String(120), nullable=True)
     visibility: Mapped[str] = mapped_column(String(20), default="private")
     verification_status: Mapped[str] = mapped_column(String(40), default=VerificationStatus.RAW.value)
     fingerprint: Mapped[str | None] = mapped_column(String(64), unique=True, index=True, nullable=True)
