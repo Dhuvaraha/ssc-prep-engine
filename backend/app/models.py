@@ -247,7 +247,7 @@ class DailyPlanTask(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
-    plan_date: Mapped[datetime.date] = mapped_column(Date, index=True)
+    plan_date: Mapped[date] = mapped_column(Date, index=True)
     activity_type: Mapped[str] = mapped_column(String(40))
     subject_slug: Mapped[str | None] = mapped_column(String(120), nullable=True)
     topic_id: Mapped[int | None] = mapped_column(ForeignKey("topics.id"), nullable=True)
