@@ -64,8 +64,8 @@ def create_mock_attempt(
         plan = [(subject_slug, 25)]
         duration = 15
     else:
-        plan = [(slug, 2) for slug in SECTION_ORDER]
-        duration = 6
+        plan = [(slug, 1) for slug in SECTION_ORDER]
+        duration = 4
 
     selected: list[tuple[str, Question]] = []
     for slug, count in plan:
