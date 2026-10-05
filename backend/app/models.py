@@ -166,3 +166,34 @@ class Lesson(Base):
     estimated_minutes: Mapped[int] = mapped_column(Integer, default=10)
     sort_order: Mapped[int] = mapped_column(Integer, default=1)
     is_published: Mapped[bool] = mapped_column(Boolean, default=True)
+
+
+class MockAttempt(Base):
+    __tablename__ = "mock_attempts"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
+    exam_id: Mapped[int] = mapped_column(ForeignKey("exams.id"), index=True)
+    mode: Mapped[str] = mapped_column(String(30))
+    subject_slug: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    duration_minutes: Mapped[int] = mapped_column(Integer)
+    status: Mapped[str] = mapped_column(String(30), default="in_progress")
+    started_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    submitted_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    correct_count: Mapped[int] = mapped_column(Integer, default=0)
+    incorrect_count: Mapped[int] = mapped_column(Integer, default=0)
+    unattempted_count: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class MockAttemptQuestion(Base):
+    __tablename__ = "mock_attempt_questions"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    attempt_id: Mapped[int] = mapped_column(ForeignKey("mock_attempts.id", ondelete="CASCADE"), index=True)
+    question_id: Mapped[int] = mapped_column(ForeignKey("questions.id"), index=True)
+    section_slug: Mapped[str] = mapped_column(String(120))
+    position: Mapped[int] = mapped_column(Integer)
+    selected_option: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    marked_for_review: Mapped[bool] = mapped_column(Boolean, default=False)
+    time_seconds: Mapped[float] = mapped_column(Float, default=0)
