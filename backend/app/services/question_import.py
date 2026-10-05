@@ -29,7 +29,7 @@ def validate_question(item: ImportedQuestion) -> None:
         raise ValueError("A question needs at least two options")
     if len(set(positions)) != len(positions):
         raise ValueError("Option positions must be unique")
-    if item.correct_option not in positions:
+    if item.correct_option is not None and item.correct_option not in positions:
         raise ValueError("correct_option must point to an existing option")
 
 
@@ -76,6 +76,7 @@ def import_question(db: Session, item: ImportedQuestion) -> tuple[Question, bool
         source_reference=item.source_reference,
         source_page=item.source_page,
         requires_visual_review=item.requires_visual_review,
+        source_chosen_option=item.source_chosen_option,
         visibility=item.visibility,
         verification_status=item.verification_status,
         fingerprint=fingerprint,
