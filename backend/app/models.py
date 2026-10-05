@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from enum import StrEnum
 
 from sqlalchemy import Boolean, Date, DateTime, Float, ForeignKey, Integer, String, Text
@@ -237,7 +237,7 @@ class ExamTarget(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
     exam_id: Mapped[int] = mapped_column(ForeignKey("exams.id"), index=True)
-    exam_date: Mapped[datetime.date] = mapped_column(Date)
+    exam_date: Mapped[date] = mapped_column(Date)
     daily_minutes: Mapped[int] = mapped_column(Integer, default=180)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
 
