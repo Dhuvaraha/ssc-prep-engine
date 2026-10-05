@@ -23,7 +23,8 @@ def main() -> None:
     print(
         f"Processed {stats['pages']} pages; "
         f"{stats['candidates']} question candidates; "
-        f"{stats['rendered_pages']} visual pages rendered."
+        f"{stats['rendered_pages']} visual pages rendered; "
+        f"{stats['recovered_answers']} answers recovered."
     )
 
 
