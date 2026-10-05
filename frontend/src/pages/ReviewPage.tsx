@@ -5,6 +5,7 @@ import {
   ReviewQuestion,
   Topic,
   fetchReviewQuestions,
+  fetchReviewStats,
   fetchTopics,
   suggestReviewTopic,
   updateReviewQuestion,
@@ -29,6 +30,7 @@ export default function ReviewPage() {
   const [notes, setNotes] = useState("");
   const [suggestion, setSuggestion] = useState<TopicSuggestion | null>(null);
   const [status, setStatus] = useState("Loading...");
+  const [stats, setStats] = useState<{by_status: Record<string, number>; visual_pending: number} | null>(null);
   const navigate = useNavigate();
 
   const question = useMemo(() => questions[index] ?? null, [questions, index]);
@@ -38,6 +40,7 @@ export default function ReviewPage() {
       navigate("/login");
       return;
     }
+    fetchReviewStats().then(setStats).catch(() => undefined);
     fetchReviewQuestions()
       .then((items) => {
         setQuestions(items);
@@ -96,6 +99,14 @@ export default function ReviewPage() {
         <nav><Link to="/">Dashboard</Link></nav>
       </header>
 
+      {stats && (
+        <section className="reviewStats">
+          <article><span>Pending</span><strong>{stats.by_status.review_required ?? 0}</strong></article>
+          <article><span>Verified</span><strong>{stats.by_status.verified ?? 0}</strong></article>
+          <article><span>Visual review</span><strong>{stats.visual_pending}</strong></article>
+        </section>
+      )}
+
       {!question ? (
         <section className="emptyCard">{status || "Review queue complete."}</section>
       ) : (
@@ -119,7 +130,11 @@ export default function ReviewPage() {
               ))}
             </div>
             {question.explanation && <div className="explanation"><strong>Explanation</strong><p>{question.explanation}</p></div>}
-            <p className="sourceLine">Source: {question.source_type} • {question.source_reference ?? "No reference"}</p>
+            <p className="sourceLine">
+              Source: {question.source_type} • {question.source_reference ?? "No reference"}
+              {question.source_page ? " • Source page " + question.source_page : ""}
+              {question.requires_visual_review ? " • Visual review required" : ""}
+            </p>
           </article>
 
           <aside className="reviewPanel">
