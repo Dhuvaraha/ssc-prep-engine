@@ -128,3 +128,39 @@ export async function fetchReviewStats(): Promise<ReviewStats> {
   if (!response.ok) throw new Error("Failed to load review stats");
   return response.json();
 }
+
+
+export type ContentTree = {
+  exam: {id: number; slug: string; name: string};
+  subjects: Array<{
+    id: number;
+    slug: string;
+    name: string;
+    topics: Array<{id: number; slug: string; name: string; priority: number}>;
+  }>;
+};
+
+export type Lesson = {
+  id: number;
+  topic_id: number;
+  title: string;
+  intro: string;
+  concept: string;
+  shortcut: string | null;
+  worked_example: string | null;
+  memory_rule: string | null;
+  common_traps: string | null;
+  estimated_minutes: number;
+};
+
+export async function fetchContentTree(): Promise<ContentTree> {
+  const response = await fetch(API_BASE + "/content/tree?exam_slug=ssc-cgl-tier-1");
+  if (!response.ok) throw new Error("Failed to load content tree");
+  return response.json();
+}
+
+export async function fetchTopicLessons(topicId: number): Promise<Lesson[]> {
+  const response = await fetch(API_BASE + "/learn/topics/" + topicId + "/lessons");
+  if (!response.ok) throw new Error("Failed to load lessons");
+  return response.json();
+}
