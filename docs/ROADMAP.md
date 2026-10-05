@@ -57,37 +57,43 @@
 **Status: COMPLETE**
 
 ## Phase 5 — Mock Test Engine
-- [ ] Test configuration
-- [ ] Section navigation
-- [ ] Timer
-- [ ] Question palette
-- [ ] Mark for review
-- [ ] Autosubmit
-- [ ] Scoring
+- [x] Test configuration
+- [x] Section navigation
+- [x] Timer
+- [x] Question palette
+- [x] Mark for review
+- [x] Autosubmit
+- [x] Scoring
 
-**Status: IN PROGRESS**
+**Status: COMPLETE**
 
 ## Phase 6 — Analytics
-- [ ] Accuracy
-- [ ] Attempt rate
-- [ ] Speed
-- [ ] Topic weakness
-- [ ] Error breakdown
-- [ ] Score leakage
-- [ ] Readiness score
+- [x] Accuracy
+- [x] Attempt rate
+- [x] Speed
+- [x] Topic weakness
+- [x] Error breakdown
+- [x] Score leakage
+- [x] Readiness score
+
+**Status: COMPLETE**
 
 ## Phase 7 — Revision
-- [ ] Due queue UI
-- [ ] Wrong/slow/guessed/bookmarked filters
-- [ ] Flashcards
-- [ ] Review completion flow
+- [x] Due queue UI
+- [x] Wrong/slow/guessed/bookmarked flows
+- [x] Flashcards
+- [x] Review completion flow
+
+**Status: COMPLETE**
 
 ## Phase 8 — Daily Planner
-- [ ] Exam target/date
-- [ ] Available study time
-- [ ] Daily task generation
-- [ ] Missed-task rebalance
-- [ ] Final sprint mode
+- [x] Exam target/date
+- [x] Available study time
+- [x] Daily task generation
+- [x] Pending-task rebalance
+- [x] Final sprint mode
+
+**Status: COMPLETE**
 
 ## Phase 9 — Polish & Deploy
 - [ ] Responsive navigation
