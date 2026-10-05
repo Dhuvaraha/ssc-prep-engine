@@ -344,3 +344,36 @@ input:focus, select:focus, textarea:focus {
   color: #7b8597;
   font-size: 13px;
 }
+
+
+.reviewStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.reviewStats article {
+  padding: 16px 18px;
+  border: 1px solid #e7ebf2;
+  border-radius: 16px;
+  background: white;
+}
+
+.reviewStats span {
+  display: block;
+  color: #7b8597;
+  font-size: 12px;
+}
+
+.reviewStats strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 24px;
+}
+
+@media (max-width: 800px) {
+  .reviewStats {
+    grid-template-columns: 1fr;
+  }
+}
