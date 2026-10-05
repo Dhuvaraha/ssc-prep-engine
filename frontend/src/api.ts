@@ -43,6 +43,9 @@ export type ReviewQuestion = {
   source_reference: string | null;
   source_page: number | null;
   requires_visual_review: boolean;
+  source_chosen_option: number | null;
+  source_question_id: string | null;
+  source_status: string | null;
   verification_status: string;
   review_notes: string | null;
 };
@@ -98,6 +101,7 @@ export async function updateReviewQuestion(
   questionId: number,
   payload: {
     topic_id: number | null;
+    correct_option: number | null;
     subtopic: string | null;
     pattern_type: string | null;
     review_notes: string | null;
