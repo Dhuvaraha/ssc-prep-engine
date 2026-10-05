@@ -7,6 +7,7 @@ import fitz
 
 from app.content.answer_key import parse_answer_page
 from app.content.candidate_builder import build_review_candidate
+from app.content.candidate_response_parser import parse_candidate_response
 from app.content.section_splitter import detect_shift, detect_subject
 from app.content.text_parser import parse_text_candidates
 
@@ -85,7 +86,10 @@ def ingest_pdf(
         if not subject_slug:
             continue
 
-        parsed = parse_text_candidates(text)
+        if "Question ID" in text and "Chosen Option" in text:
+            parsed = parse_candidate_response(text)
+        else:
+            parsed = parse_text_candidates(text)
         if not parsed:
             continue
 
@@ -104,12 +108,12 @@ def ingest_pdf(
         fallback_answers = answer_maps.get(None, {})
 
         for candidate in parsed:
-            if candidate.correct_option is None:
+            if getattr(candidate, "correct_option", None) is None:
                 recovered = shift_answers.get((subject_slug, candidate.number))
                 if recovered is None:
                     recovered = fallback_answers.get((subject_slug, candidate.number))
                 if recovered is not None:
-                    candidate.correct_option = recovered
+                    setattr(candidate, "correct_option", recovered)
                     recovered_answers += 1
 
             item = build_review_candidate(
