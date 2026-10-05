@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.routers import health, exams, practice
+from app.routers import auth, content, exams, health, practice
 
 app = FastAPI(
     title="SSC Prep Engine API",
@@ -11,6 +11,8 @@ app = FastAPI(
 app.include_router(health.router)
 app.include_router(exams.router, prefix="/api/v1")
 app.include_router(practice.router, prefix="/api/v1")
+app.include_router(auth.router, prefix="/api/v1")
+app.include_router(content.router, prefix="/api/v1")
 
 
 @app.get("/")
