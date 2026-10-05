@@ -85,6 +85,7 @@ class Question(Base):
     source_reference: Mapped[str | None] = mapped_column(Text, nullable=True)
     visibility: Mapped[str] = mapped_column(String(20), default="private")
     verification_status: Mapped[str] = mapped_column(String(40), default=VerificationStatus.RAW.value)
+    fingerprint: Mapped[str | None] = mapped_column(String(64), unique=True, index=True, nullable=True)
 
     options: Mapped[list["QuestionOption"]] = relationship(
         back_populates="question", cascade="all, delete-orphan", order_by="QuestionOption.position"
