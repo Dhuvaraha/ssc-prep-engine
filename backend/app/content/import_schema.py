@@ -26,5 +26,7 @@ class ImportedQuestion(BaseModel):
     source_page: int | None = Field(default=None, ge=1)
     requires_visual_review: bool = False
     source_chosen_option: int | None = Field(default=None, ge=1, le=10)
+    source_question_id: str | None = None
+    source_status: str | None = None
     visibility: str = "private"
     verification_status: str = "review_required"
