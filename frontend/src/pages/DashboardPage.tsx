@@ -28,7 +28,7 @@ export default function DashboardPage() {
           Learn concepts, practise targeted questions, analyse mistakes and automatically
           revise weak areas.
         </p>
-        <button>Start today's plan</button>
+        <Link className="primaryLink" to="/learn">Start learning</Link>
       </section>
 
       <section className="metrics">
@@ -51,7 +51,7 @@ export default function DashboardPage() {
               <span>Subject</span>
               <h3>{name}</h3>
               <p>{description}</p>
-              <button className="secondary">Explore</button>
+              <Link className="secondaryLink" to="/learn">Explore</Link>
             </article>
           ))}
         </div>
