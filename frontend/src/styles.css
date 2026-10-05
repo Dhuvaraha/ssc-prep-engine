@@ -843,3 +843,351 @@ input:focus, select:focus, textarea:focus {
   background: #8f1d14;
   color: white;
 }
+
+
+.mockShell {
+  width: min(1040px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 36px 0 80px;
+}
+
+.mockLandingHeader,
+.examHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.mockSetup,
+.mockResult {
+  margin-top: 28px;
+  padding: 36px;
+  border: 1px solid #e5e9f0;
+  border-radius: 24px;
+  background: white;
+}
+
+.mockSetup h1,
+.mockResult h1 {
+  max-width: none;
+  margin: 6px 0 26px;
+  font-size: clamp(38px, 6vw, 64px);
+  line-height: 1;
+}
+
+.mockModeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.mockModeCard {
+  display: grid;
+  gap: 8px;
+  min-height: 130px;
+  align-content: start;
+  padding: 20px;
+  border: 1px solid #e0e5ec;
+  background: white;
+  color: #172033;
+  text-align: left;
+}
+
+.mockModeCard strong {
+  font-size: 18px;
+}
+
+.mockModeCard span {
+  color: #6f7a8c;
+  line-height: 1.5;
+}
+
+.activeMockMode {
+  border-color: #172033;
+  box-shadow: inset 0 0 0 1px #172033;
+}
+
+.mockSubjectPicker {
+  max-width: 360px;
+  margin-top: 22px;
+}
+
+.mockStartButton {
+  margin-top: 22px;
+  min-width: 180px;
+}
+
+.mockResultGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.mockResultGrid article {
+  padding: 18px;
+  border: 1px solid #e7ebf2;
+  border-radius: 16px;
+}
+
+.mockResultGrid span {
+  display: block;
+  color: #7b8597;
+  font-size: 12px;
+}
+
+.mockResultGrid strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 30px;
+}
+
+.mockResultActions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.examShell {
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.examHeader {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 14px 22px;
+  border-bottom: 1px solid #e1e6ed;
+  background: rgba(255,255,255,.96);
+  backdrop-filter: blur(10px);
+}
+
+.examHeader > div:first-child {
+  display: grid;
+  gap: 3px;
+}
+
+.examHeader span {
+  color: #7b8597;
+  font-size: 12px;
+}
+
+.examTimer {
+  padding: 9px 14px;
+  border-radius: 10px;
+  background: #eef2f6;
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+
+.examTimerUrgent {
+  background: #fff0ee;
+  color: #a6362d;
+}
+
+.finishButton {
+  background: #8f1d14;
+}
+
+.examSectionTabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 14px 22px;
+  border-bottom: 1px solid #e4e8ee;
+  background: white;
+}
+
+.examSectionTabs button {
+  white-space: nowrap;
+  background: #f0f3f6;
+  color: #5f6b7b;
+}
+
+.examSectionTabs .activeSectionTab {
+  background: #172033;
+  color: white;
+}
+
+.examLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 18px;
+  width: min(1220px, calc(100% - 32px));
+  margin: 22px auto 0;
+  align-items: start;
+}
+
+.examQuestionCard,
+.examPalette {
+  border: 1px solid #e2e7ee;
+  border-radius: 18px;
+  background: white;
+}
+
+.examQuestionCard {
+  padding: 30px;
+}
+
+.examQuestionCard h1 {
+  max-width: none;
+  margin: 18px 0;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.35;
+  letter-spacing: -.02em;
+}
+
+.examQuestionMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: #7b8597;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.examQuestionActions {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.reviewToggle {
+  background: #f2effb;
+  color: #65558f;
+}
+
+.activeReviewToggle {
+  background: #65558f;
+  color: white;
+}
+
+.examPalette {
+  position: sticky;
+  top: 82px;
+  padding: 18px;
+}
+
+.paletteLegend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  color: #6f7a8c;
+  font-size: 11px;
+}
+
+.paletteLegend span {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+
+.legendDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #dfe4eb;
+}
+
+.answeredDot { background: #47845a; }
+.reviewDot { background: #7358a5; }
+.currentDot { background: #172033; }
+
+.questionPaletteGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.paletteNumber {
+  aspect-ratio: 1;
+  min-width: 0;
+  padding: 0;
+  border: 1px solid #dfe4eb;
+  border-radius: 9px;
+  background: white;
+  color: #596579;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.paletteAnswered {
+  border-color: #47845a;
+  background: #eaf5ed;
+  color: #376846;
+}
+
+.paletteReview {
+  border-color: #7358a5;
+  background: #f0ebfa;
+  color: #60488c;
+}
+
+.paletteCurrent {
+  box-shadow: inset 0 0 0 2px #172033;
+}
+
+.paletteSummary {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #edf0f4;
+  color: #6f7a8c;
+  font-size: 12px;
+}
+
+.paletteSummary span {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 850px) {
+  .mockModeGrid,
+  .mockResultGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .examLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .examPalette {
+    position: static;
+    order: -1;
+  }
+
+  .questionPaletteGrid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+
+  .examQuestionActions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .examHeader {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .finishButton {
+    width: 100%;
+  }
+
+  .questionPaletteGrid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .mockSetup,
+  .mockResult,
+  .examQuestionCard {
+    padding: 22px;
+  }
+}
