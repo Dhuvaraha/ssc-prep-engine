@@ -164,3 +164,51 @@ export async function fetchTopicLessons(topicId: number): Promise<Lesson[]> {
   if (!response.ok) throw new Error("Failed to load lessons");
   return response.json();
 }
+
+
+export type PracticeQuestion = {
+  id: number;
+  topic_id: number | null;
+  question_text: string;
+  question_image_url: string | null;
+  difficulty: number;
+  expected_time_seconds: number | null;
+  year: number | null;
+  shift: string | null;
+  options: Array<{position: number; text: string | null; image_url: string | null}>;
+};
+
+export type PracticeResult = {
+  correct: boolean;
+  correct_option: number;
+  explanation: string | null;
+  fast_method: string | null;
+  mastery_score: number | null;
+  revision_scheduled: boolean;
+};
+
+export async function fetchPracticeQuestions(topicId: number, limit = 5): Promise<PracticeQuestion[]> {
+  const response = await fetch(
+    API_BASE + "/practice/questions?topic_id=" + topicId + "&limit=" + limit,
+    {headers: authHeaders()},
+  );
+  if (!response.ok) throw new Error("Failed to load practice questions");
+  return response.json();
+}
+
+export async function submitPracticeAnswer(payload: {
+  question_id: number;
+  selected_option: number | null;
+  time_seconds: number;
+  confidence: number | null;
+  used_hint: boolean;
+  mistake_type: string | null;
+}): Promise<PracticeResult> {
+  const response = await fetch(API_BASE + "/practice/submit", {
+    method: "POST",
+    headers: {...authHeaders(), "Content-Type": "application/json"},
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) throw new Error("Failed to submit practice answer");
+  return response.json();
+}
