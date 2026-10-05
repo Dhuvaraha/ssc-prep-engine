@@ -440,3 +440,77 @@ export async function reviewFlashcard(flashcardId: number, success: boolean): Pr
   });
   if (!response.ok) throw new Error("Failed to update flashcard");
 }
+
+
+export type PlannerTask = {
+  id: number;
+  activity_type: string;
+  subject_slug: string | null;
+  topic_id: number | null;
+  title: string;
+  target_minutes: number;
+  target_questions: number | null;
+  priority: number;
+  status: string;
+};
+
+export type TodayPlan = {
+  target: {
+    exam_id: number;
+    exam_date: string;
+    daily_minutes: number;
+    days_left: number;
+  };
+  progress: {
+    completed_minutes: number;
+    planned_minutes: number;
+    completed_tasks: number;
+    total_tasks: number;
+  };
+  tasks: PlannerTask[];
+};
+
+export async function fetchTodayPlan(): Promise<TodayPlan> {
+  const response = await fetch(API_BASE + "/planner/today", {
+    headers: authHeaders(),
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.detail ?? "Failed to load plan");
+  }
+  return response.json();
+}
+
+export async function setPlannerConfig(
+  examDate: string,
+  dailyMinutes: number,
+): Promise<TodayPlan> {
+  const response = await fetch(API_BASE + "/planner/config", {
+    method: "PUT",
+    headers: {...authHeaders(), "Content-Type": "application/json"},
+    body: JSON.stringify({
+      exam_slug: "ssc-cgl-tier-1",
+      exam_date: examDate,
+      daily_minutes: dailyMinutes,
+    }),
+  });
+  if (!response.ok) throw new Error("Failed to save planner settings");
+  return response.json();
+}
+
+export async function rebuildTodayPlan(): Promise<TodayPlan> {
+  const response = await fetch(API_BASE + "/planner/today/rebuild", {
+    method: "POST",
+    headers: authHeaders(),
+  });
+  if (!response.ok) throw new Error("Failed to rebuild plan");
+  return response.json();
+}
+
+export async function updatePlannerTask(taskId: number, completed: boolean): Promise<void> {
+  const response = await fetch(API_BASE + "/planner/tasks/" + taskId + "?completed=" + completed, {
+    method: "PATCH",
+    headers: authHeaders(),
+  });
+  if (!response.ok) throw new Error("Failed to update task");
+}
