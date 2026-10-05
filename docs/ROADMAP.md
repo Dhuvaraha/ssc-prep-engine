@@ -96,11 +96,14 @@
 **Status: COMPLETE**
 
 ## Phase 9 — Polish & Deploy
-- [ ] Responsive navigation
-- [ ] Browser text-to-speech
-- [ ] Loading/error states
-- [ ] Backup/export
-- [ ] Deployment
+- [x] Responsive navigation
+- [x] Browser text-to-speech
+- [x] Loading/error states
+- [x] Backup/export
+- [x] Deployment configuration
+- [ ] Live deployment
+
+**Status: IN PROGRESS**
 
 ## Phase 10 — SSC JE
 - [ ] JE exam profile
