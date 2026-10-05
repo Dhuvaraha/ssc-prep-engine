@@ -11,6 +11,7 @@ import {
 } from "../api";
 import { clearToken, getToken } from "../auth";
 import SecureImage from "../components/SecureImage";
+import SpeakButton from "../components/SpeakButton";
 
 const confidenceOptions = [
   {value: 3, label: "Sure"},
@@ -208,6 +209,13 @@ export default function PracticePage() {
         </div>
 
         <h1>{question.question_text}</h1>
+        <SpeakButton
+          label="Read question"
+          text={[
+            question.question_text,
+            ...question.options.map((option) => option.text ? String.fromCharCode(64 + option.position) + ". " + option.text : ""),
+          ].filter(Boolean).join(". ")}
+        />
         {question.question_image_url && (
           <SecureImage className="practiceQuestionImage" src={question.question_image_url} alt="Question visual" />
         )}
@@ -264,6 +272,7 @@ export default function PracticePage() {
             <p className="eyebrow">{result.correct ? "Correct" : mode === "timed" && timedOut.current ? "Time up" : "Needs review"}</p>
             {!result.correct && <p>Correct option: {String.fromCharCode(64 + result.correct_option)}</p>}
             {result.explanation && <p>{result.explanation}</p>}
+            {result.explanation && <SpeakButton label="Explain aloud" text={result.explanation + (result.fast_method ? ". Fast method: " + result.fast_method : "")} />}
             {result.fast_method && <p><strong>Fast method:</strong> {result.fast_method}</p>}
 
             {!result.correct && (
