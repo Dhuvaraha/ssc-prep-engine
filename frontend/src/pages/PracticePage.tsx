@@ -7,6 +7,7 @@ import {
   classifyPracticeMistake,
   fetchPracticeQuestions,
   submitPracticeAnswer,
+  toggleBookmark,
 } from "../api";
 import { clearToken, getToken } from "../auth";
 import SecureImage from "../components/SecureImage";
@@ -40,6 +41,7 @@ export default function PracticePage() {
   const [mistakeSaved, setMistakeSaved] = useState<string | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [error, setError] = useState("");
+  const [bookmarked, setBookmarked] = useState(false);
   const startedAt = useRef(Date.now());
   const timedOut = useRef(false);
   const navigate = useNavigate();
@@ -120,12 +122,19 @@ export default function PracticePage() {
     setMistakeSaved(type);
   }
 
+  async function bookmarkCurrent() {
+    if (!question) return;
+    const response = await toggleBookmark(question.id);
+    setBookmarked(response.bookmarked);
+  }
+
   function next() {
     setIndex((value) => value + 1);
     setSelected(null);
     setConfidence(null);
     setResult(null);
     setMistakeSaved(null);
+    setBookmarked(false);
     setElapsed(0);
     timedOut.current = false;
     startedAt.current = Date.now();
@@ -184,13 +193,18 @@ export default function PracticePage() {
       </div>
 
       <article className="practiceCard">
-        <div className="practiceMeta">
+        <div className="practiceQuestionToolbar">
+          <div className="practiceMeta">
           <span>Difficulty {question.difficulty}</span>
           {question.expected_time_seconds && <span>Target {question.expected_time_seconds}s</span>}
           {question.year && <span>PYQ {question.year}</span>}
           <span className={mode === "timed" && remaining <= 10 ? "urgentTimer" : ""}>
             {mode === "timed" ? remaining + "s left" : elapsed + "s"}
           </span>
+          </div>
+          <button className={bookmarked ? "bookmarkButton activeBookmark" : "bookmarkButton"} onClick={() => void bookmarkCurrent()}>
+            {bookmarked ? "★ Bookmarked" : "☆ Bookmark"}
+          </button>
         </div>
 
         <h1>{question.question_text}</h1>
