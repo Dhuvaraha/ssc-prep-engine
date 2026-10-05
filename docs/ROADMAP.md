@@ -38,20 +38,23 @@
 - [x] Memory rules and common traps
 - [x] Learn topic browser
 - [x] Structured lesson reader
-- [ ] Guided checks
-- [ ] Topic recap → practice handoff
+- [x] Guided checks
+- [x] Topic recap → practice handoff
 
-**Status: IN PROGRESS**
+**Status: COMPLETE**
 
 ## Phase 4 — Practice Engine
 - [x] First practice API
 - [x] Attempt persistence
 - [x] Mastery update
 - [x] Auto revision scheduling
-- [ ] Practice session UI
+- [x] Practice session UI
 - [ ] Timed mode
-- [ ] Confidence and mistake capture UI
+- [x] Confidence capture UI
+- [ ] Detailed mistake classification UI
 - [ ] Adaptive selector
+
+**Status: IN PROGRESS**
 
 ## Phase 5 — Mock Test Engine
 - [ ] Test configuration
