@@ -7,6 +7,7 @@ import LearnPage from "./pages/LearnPage";
 import LessonPage from "./pages/LessonPage";
 import MockPage from "./pages/MockPage";
 import PracticePage from "./pages/PracticePage";
+import PlannerPage from "./pages/PlannerPage";
 import ReviewPage from "./pages/ReviewPage";
 import RevisionPage from "./pages/RevisionPage";
 
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/learn" element={<LearnPage />} />
         <Route path="/learn/topic/:topicId" element={<LessonPage />} />
         <Route path="/practice" element={<PracticePage />} />
+        <Route path="/planner" element={<PlannerPage />} />
         <Route path="/mocks" element={<MockPage />} />
         <Route path="/review" element={<ReviewPage />} />
         <Route path="/revision" element={<RevisionPage />} />
