@@ -103,3 +103,37 @@ class LessonOut(BaseModel):
 
 class MistakeUpdate(BaseModel):
     mistake_type: str
+
+
+class MockStartRequest(BaseModel):
+    mode: str = Field(pattern="^(mini|full|sectional)$")
+    subject_slug: str | None = None
+
+
+class MockResponseUpdate(BaseModel):
+    question_id: int
+    selected_option: int | None = None
+    marked_for_review: bool = False
+    time_seconds: float = Field(default=0, ge=0)
+
+
+class MockQuestionOut(BaseModel):
+    position: int
+    section_slug: str
+    question: QuestionOut
+
+
+class MockStartResponse(BaseModel):
+    attempt_id: int
+    mode: str
+    duration_minutes: int
+    questions: list[MockQuestionOut]
+
+
+class MockSubmitResponse(BaseModel):
+    attempt_id: int
+    score: float
+    correct: int
+    incorrect: int
+    unattempted: int
+    total_questions: int
