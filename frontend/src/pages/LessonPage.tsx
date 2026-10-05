@@ -68,7 +68,7 @@ export default function LessonPage() {
           )}
 
           <div className="lessonActions">
-            <button>Start guided practice</button>
+            <Link className="primaryLink" to={"/practice?topic_id=" + lesson.topic_id}>Start guided practice</Link>
             <Link to="/learn">Choose another topic</Link>
           </div>
         </article>
