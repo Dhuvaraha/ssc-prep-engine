@@ -331,3 +331,16 @@ input:focus, select:focus, textarea:focus {
     grid-template-columns: 1fr;
   }
 }
+
+
+.imagePlaceholder {
+  min-height: 120px;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  border: 1px dashed #cbd2dc;
+  border-radius: 12px;
+  background: #f8f9fb;
+  color: #7b8597;
+  font-size: 13px;
+}
