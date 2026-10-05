@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.core.config import get_settings
 from app.db import Base, engine
 from app.routers import analytics, assets, auth, backup, content, exams, health, learn, mocks, planner, practice, review, revision
 
@@ -13,6 +14,8 @@ async def lifespan(_: FastAPI):
     yield
 
 
+settings = get_settings()
+
 app = FastAPI(
     title="SSC Prep Engine API",
     version="0.1.0",
@@ -22,7 +25,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
