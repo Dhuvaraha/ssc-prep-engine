@@ -1,0 +1,170 @@
+[
+  {
+    "exam_slug": "ssc-cgl-tier-1",
+    "subject_slug": "reasoning",
+    "topic_slug": "number-series",
+    "question_text": "Find the next number: 3, 8, 15, 24, 35, ?",
+    "options": [
+      {"position": 1, "text": "46"},
+      {"position": 2, "text": "48"},
+      {"position": 3, "text": "50"},
+      {"position": 4, "text": "52"}
+    ],
+    "correct_option": 2,
+    "explanation": "The differences are +5, +7, +9, +11, so the next difference is +13. 35 + 13 = 48.",
+    "fast_method": "Check consecutive differences first; here they are consecutive odd numbers.",
+    "difficulty": 1,
+    "expected_time_seconds": 35,
+    "source_type": "original",
+    "source_reference": "SSC Prep Engine demo",
+    "visibility": "public",
+    "verification_status": "verified"
+  },
+  {
+    "exam_slug": "ssc-cgl-tier-1",
+    "subject_slug": "reasoning",
+    "topic_slug": "coding-decoding",
+    "question_text": "If each letter is moved one place forward in the alphabet, how is CODE written?",
+    "options": [
+      {"position": 1, "text": "DPEF"},
+      {"position": 2, "text": "DPDF"},
+      {"position": 3, "text": "BNCF"},
+      {"position": 4, "text": "EPFG"}
+    ],
+    "correct_option": 1,
+    "explanation": "C→D, O→P, D→E and E→F, giving DPEF.",
+    "fast_method": "Apply the same +1 shift independently to every letter.",
+    "difficulty": 1,
+    "expected_time_seconds": 25,
+    "source_type": "original",
+    "source_reference": "SSC Prep Engine demo",
+    "visibility": "public",
+    "verification_status": "verified"
+  },
+  {
+    "exam_slug": "ssc-cgl-tier-1",
+    "subject_slug": "reasoning",
+    "topic_slug": "dictionary-order",
+    "question_text": "Which word comes first in dictionary order?",
+    "options": [
+      {"position": 1, "text": "Calculation"},
+      {"position": 2, "text": "Calendar"},
+      {"position": 3, "text": "Calamity"},
+      {"position": 4, "text": "Calcium"}
+    ],
+    "correct_option": 3,
+    "explanation": "Compare from left to right. After 'Cal', the next letters are a, c, c and e; 'Calamity' comes first.",
+    "fast_method": "Ignore the common prefix and compare only from the first differing letter.",
+    "difficulty": 1,
+    "expected_time_seconds": 35,
+    "source_type": "original",
+    "source_reference": "SSC Prep Engine demo",
+    "visibility": "public",
+    "verification_status": "verified"
+  },
+  {
+    "exam_slug": "ssc-cgl-tier-1",
+    "subject_slug": "quant",
+    "topic_slug": "percentage",
+    "question_text": "A number increases from 200 to 250. What is the percentage increase?",
+    "options": [
+      {"position": 1, "text": "20%"},
+      {"position": 2, "text": "25%"},
+      {"position": 3, "text": "40%"},
+      {"position": 4, "text": "50%"}
+    ],
+    "correct_option": 2,
+    "explanation": "Increase = 50. Percentage increase = 50/200 × 100 = 25%.",
+    "fast_method": "Increase divided by original value, then multiply by 100.",
+    "difficulty": 1,
+    "expected_time_seconds": 30,
+    "source_type": "original",
+    "source_reference": "SSC Prep Engine demo",
+    "visibility": "public",
+    "verification_status": "verified"
+  },
+  {
+    "exam_slug": "ssc-cgl-tier-1",
+    "subject_slug": "quant",
+    "topic_slug": "average",
+    "question_text": "The average of five numbers is 18. What is their total?",
+    "options": [
+      {"position": 1, "text": "72"},
+      {"position": 2, "text": "80"},
+      {"position": 3, "text": "90"},
+      {"position": 4, "text": "108"}
+    ],
+    "correct_option": 3,
+    "explanation": "Total = average × count = 18 × 5 = 90.",
+    "fast_method": "Use sum = average × number of items.",
+    "difficulty": 1,
+    "expected_time_seconds": 20,
+    "source_type": "original",
+    "source_reference": "SSC Prep Engine demo",
+    "visibility": "public",
+    "verification_status": "verified"
+  },
+  {
+    "exam_slug": "ssc-cgl-tier-1",
+    "subject_slug": "english",
+    "topic_slug": "error-spotting",
+    "question_text": "Choose the correct form: 'The list of items ___ on the table.'",
+    "options": [
+      {"position": 1, "text": "are"},
+      {"position": 2, "text": "were"},
+      {"position": 3, "text": "is"},
+      {"position": 4, "text": "have"}
+    ],
+    "correct_option": 3,
+    "explanation": "The subject is 'list', which is singular, so the singular verb 'is' is required.",
+    "fast_method": "Ignore the phrase 'of items' and match the verb with the head noun 'list'.",
+    "difficulty": 1,
+    "expected_time_seconds": 25,
+    "source_type": "original",
+    "source_reference": "SSC Prep Engine demo",
+    "visibility": "public",
+    "verification_status": "verified"
+  },
+  {
+    "exam_slug": "ssc-cgl-tier-1",
+    "subject_slug": "english",
+    "topic_slug": "synonyms-and-antonyms",
+    "question_text": "Choose the antonym of 'scarce'.",
+    "options": [
+      {"position": 1, "text": "Rare"},
+      {"position": 2, "text": "Limited"},
+      {"position": 3, "text": "Abundant"},
+      {"position": 4, "text": "Insufficient"}
+    ],
+    "correct_option": 3,
+    "explanation": "'Scarce' means insufficient or hard to find; its opposite is 'abundant'.",
+    "fast_method": "Replace the word with a simple meaning first: scarce = not enough.",
+    "difficulty": 1,
+    "expected_time_seconds": 20,
+    "source_type": "original",
+    "source_reference": "SSC Prep Engine demo",
+    "visibility": "public",
+    "verification_status": "verified"
+  },
+  {
+    "exam_slug": "ssc-cgl-tier-1",
+    "subject_slug": "general-awareness",
+    "topic_slug": "physics",
+    "question_text": "Which SI unit is used for electric current?",
+    "options": [
+      {"position": 1, "text": "Volt"},
+      {"position": 2, "text": "Ampere"},
+      {"position": 3, "text": "Ohm"},
+      {"position": 4, "text": "Watt"}
+    ],
+    "correct_option": 2,
+    "explanation": "The SI base unit of electric current is the ampere (A).",
+    "fast_method": "Current → ampere; voltage → volt; resistance → ohm; power → watt.",
+    "difficulty": 1,
+    "expected_time_seconds": 15,
+    "source_type": "original",
+    "source_reference": "SSC Prep Engine demo",
+    "visibility": "public",
+    "verification_status": "verified"
+  }
+]
