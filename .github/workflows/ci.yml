@@ -34,4 +34,4 @@ jobs:
           cache-dependency-path: backend/requirements.txt
       - run: pip install -r requirements.txt
       - run: python -m compileall app
-      - run: pytest -q
+      - run: PYTHONPATH=. pytest -q
