@@ -782,3 +782,64 @@ input:focus, select:focus, textarea:focus {
     flex: 1;
   }
 }
+
+
+.practiceModes {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.modePill {
+  padding: 8px 12px;
+  border: 1px solid #e2e7ef;
+  border-radius: 999px;
+  background: white;
+  color: #667085;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.activeMode {
+  border-color: #172033;
+  background: #172033;
+  color: white;
+}
+
+.urgentTimer {
+  background: #fff0ee !important;
+  color: #a6362d !important;
+}
+
+.mistakePicker {
+  margin: 18px 0;
+  padding-top: 16px;
+  border-top: 1px solid rgba(23, 32, 51, .08);
+}
+
+.mistakePicker > span {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.mistakePicker > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mistakeChip {
+  padding: 8px 10px;
+  border: 1px solid #ddd6d3;
+  background: white;
+  color: #654b47;
+  font-size: 12px;
+}
+
+.activeMistake {
+  border-color: #8f1d14;
+  background: #8f1d14;
+  color: white;
+}
