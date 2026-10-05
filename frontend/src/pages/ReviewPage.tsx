@@ -10,6 +10,7 @@ import {
   updateReviewQuestion,
 } from "../api";
 import { clearToken, getToken } from "../auth";
+import SecureImage from "../components/SecureImage";
 
 type TopicSuggestion = {
   topic_id: number | null;
@@ -106,14 +107,14 @@ export default function ReviewPage() {
             </div>
             <h2>{question.question_text}</h2>
             {question.question_image_url && (
-              <img className="questionImage" src={question.question_image_url} alt="Question visual" />
+              <SecureImage className="questionImage" src={question.question_image_url} alt="Question visual" />
             )}
             <div className="optionList">
               {question.options.map((option) => (
                 <div className={option.position === question.correct_option ? "option correctOption" : "option"} key={option.position}>
                   <strong>{String.fromCharCode(64 + option.position)}</strong>
                   <span>{option.text ?? "Image option"}</span>
-                  {option.image_url && <img src={option.image_url} alt={"Option " + option.position} />}
+                  {option.image_url && <SecureImage src={option.image_url} alt={"Option " + option.position} />}
                 </div>
               ))}
             </div>
