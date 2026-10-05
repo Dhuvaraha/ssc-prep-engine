@@ -77,6 +77,8 @@ def import_question(db: Session, item: ImportedQuestion) -> tuple[Question, bool
         source_page=item.source_page,
         requires_visual_review=item.requires_visual_review,
         source_chosen_option=item.source_chosen_option,
+        source_question_id=item.source_question_id,
+        source_status=item.source_status,
         visibility=item.visibility,
         verification_status=item.verification_status,
         fingerprint=fingerprint,
