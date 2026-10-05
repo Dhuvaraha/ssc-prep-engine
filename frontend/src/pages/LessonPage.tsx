@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { Lesson, fetchTopicLessons } from "../api";
+import SpeakButton from "../components/SpeakButton";
 
 export default function LessonPage() {
   const { topicId } = useParams();
@@ -33,6 +34,17 @@ export default function LessonPage() {
           <p className="eyebrow">{lesson.estimated_minutes} min lesson</p>
           <h1>{lesson.title}</h1>
           <p className="lessonIntro">{lesson.intro}</p>
+          <SpeakButton
+            label="Read lesson"
+            text={[
+              lesson.title,
+              lesson.intro,
+              lesson.concept,
+              lesson.shortcut ?? "",
+              lesson.worked_example ?? "",
+              lesson.memory_rule ?? "",
+            ].filter(Boolean).join(". ")}
+          />
 
           <section className="lessonBlock">
             <span>Core concept</span>
