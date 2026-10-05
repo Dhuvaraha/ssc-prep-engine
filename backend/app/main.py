@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.db import Base, engine
-from app.routers import auth, content, exams, health, practice, review
+from app.routers import assets, auth, content, exams, health, practice, review
 
 
 @asynccontextmanager
@@ -34,6 +34,7 @@ app.include_router(practice.router, prefix="/api/v1")
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(content.router, prefix="/api/v1")
 app.include_router(review.router, prefix="/api/v1")
+app.include_router(assets.router, prefix="/api/v1")
 
 
 @app.get("/")
