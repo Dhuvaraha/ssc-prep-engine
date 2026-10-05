@@ -14,7 +14,7 @@ class ImportedQuestion(BaseModel):
     question_text: str
     question_image_url: str | None = None
     options: list[ImportedOption]
-    correct_option: int
+    correct_option: int | None = None
     explanation: str | None = None
     fast_method: str | None = None
     difficulty: int = Field(default=2, ge=1, le=5)
@@ -25,5 +25,6 @@ class ImportedQuestion(BaseModel):
     source_reference: str | None = None
     source_page: int | None = Field(default=None, ge=1)
     requires_visual_review: bool = False
+    source_chosen_option: int | None = Field(default=None, ge=1, le=10)
     visibility: str = "private"
     verification_status: str = "review_required"
