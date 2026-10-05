@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import AnalyticsPage from "./pages/AnalyticsPage";
 import AuthPage from "./pages/AuthPage";
 import DashboardPage from "./pages/DashboardPage";
 import LearnPage from "./pages/LearnPage";
@@ -14,6 +15,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/login" element={<AuthPage />} />
+        <Route path="/analytics" element={<AnalyticsPage />} />
         <Route path="/learn" element={<LearnPage />} />
         <Route path="/learn/topic/:topicId" element={<LessonPage />} />
         <Route path="/practice" element={<PracticePage />} />
