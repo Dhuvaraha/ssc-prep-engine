@@ -16,6 +16,7 @@ export default function DashboardPage() {
           <p className="muted">CGL first • JE ready architecture</p>
         </div>
         <nav>
+          <Link to="/planner">Today</Link>
           <Link to="/revision">Revision</Link>
           <Link to="/analytics">Analytics</Link>
           <Link to="/mocks">Mock tests</Link>
@@ -31,7 +32,7 @@ export default function DashboardPage() {
           Learn concepts, practise targeted questions, analyse mistakes and automatically
           revise weak areas.
         </p>
-        <Link className="primaryLink" to="/learn">Start learning</Link>
+        <Link className="primaryLink" to="/planner">Open today&apos;s plan</Link>
       </section>
 
       <section className="metrics">
