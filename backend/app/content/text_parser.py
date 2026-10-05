@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 QUESTION_START = re.compile(r"(?m)^\s*(\d{1,3})[.)]\s+")
 ANSWER_LINE = re.compile(r"(?im)^\s*Answer\s*:\s*([A-D1-4])\s*$")
-OPTION_LINE = re.compile(r"(?m)^\s*([A-D])(?:[ \t\xa0]{2,}(.*?))?\s*$")
+OPTION_LINE = re.compile(r"(?m)^\s*([A-D])(?:\s+(.*?))?\s*$")
 
 
 @dataclass(slots=True)
@@ -14,6 +14,29 @@ class ParsedCandidate:
     options: list[tuple[int, str]]
     correct_option: int | None
     raw_text: str
+
+
+def _last_abcd_sequence(matches: list[re.Match[str]]) -> list[re.Match[str]]:
+    """Return the last ordered A→B→C→D sequence.
+
+    Taking the last complete sequence avoids treating question-body lines such as
+    "A can complete the work..." as answer option A.
+    """
+    sequences: list[list[re.Match[str]]] = []
+    for start, match in enumerate(matches):
+        if match.group(1) != "A":
+            continue
+        sequence = [match]
+        expected = iter(("B", "C", "D"))
+        target = next(expected, None)
+        for later in matches[start + 1:]:
+            if later.group(1) == target:
+                sequence.append(later)
+                target = next(expected, None)
+                if target is None:
+                    sequences.append(sequence)
+                    break
+    return sequences[-1] if sequences else []
 
 
 def parse_text_candidates(text: str) -> list[ParsedCandidate]:
@@ -37,16 +60,19 @@ def parse_text_candidates(text: str) -> list[ParsedCandidate]:
             token = answer_match.group(1).upper()
             answer = "ABCD".index(token) + 1 if token in "ABCD" else int(token)
 
-        option_matches = list(OPTION_LINE.finditer(block))
+        option_matches = _last_abcd_sequence(list(OPTION_LINE.finditer(block)))
+        if not option_matches:
+            continue
+
         options: list[tuple[int, str]] = []
-        for option_match in option_matches[:4]:
+        for option_match in option_matches:
             position = "ABCD".index(option_match.group(1)) + 1
             options.append((position, (option_match.group(2) or "").strip()))
 
-        first_option_at = option_matches[0].start() if option_matches else len(block)
+        first_option_at = option_matches[0].start()
         question_text = block[:first_option_at].strip()
 
-        if question_text and len(options) >= 2:
+        if question_text:
             results.append(
                 ParsedCandidate(
                     number=int(match.group(1)),
