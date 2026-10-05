@@ -8,6 +8,7 @@ import LessonPage from "./pages/LessonPage";
 import MockPage from "./pages/MockPage";
 import PracticePage from "./pages/PracticePage";
 import ReviewPage from "./pages/ReviewPage";
+import RevisionPage from "./pages/RevisionPage";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/practice" element={<PracticePage />} />
         <Route path="/mocks" element={<MockPage />} />
         <Route path="/review" element={<ReviewPage />} />
+        <Route path="/revision" element={<RevisionPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
