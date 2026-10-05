@@ -17,6 +17,7 @@ class CandidateResponseQuestion:
     question_id: str | None
     status: str | None
     chosen_option: int | None
+    correct_option: int | None
     raw_text: str
 
 
@@ -68,6 +69,7 @@ def parse_candidate_response(text: str) -> list[CandidateResponseQuestion]:
                     question_id=question_id_match.group(1) if question_id_match else None,
                     status=re.sub(r"\s+", " ", status_match.group(1)).strip() if status_match else None,
                     chosen_option=chosen_option,
+                    correct_option=None,
                     raw_text=block,
                 )
             )
