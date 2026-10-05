@@ -83,14 +83,6 @@ export default function PracticePage() {
     );
   }
 
-  if (!question) {
-    return (
-      <main className="lessonShell">
-        <section className="emptyCard">Loading practice…</section>
-      </main>
-    );
-  }
-
   if (index >= questions.length) {
     return (
       <main className="lessonShell">
@@ -101,6 +93,14 @@ export default function PracticePage() {
           <p>Your attempts are already saved for mastery and revision.</p>
           <Link className="primaryLink" to="/learn">Choose next topic</Link>
         </section>
+      </main>
+    );
+  }
+
+  if (!question) {
+    return (
+      <main className="lessonShell">
+        <section className="emptyCard">Loading practice…</section>
       </main>
     );
   }
