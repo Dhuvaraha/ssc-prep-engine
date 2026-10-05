@@ -23,5 +23,7 @@ class ImportedQuestion(BaseModel):
     shift: str | None = None
     source_type: str = "user_private"
     source_reference: str | None = None
+    source_page: int | None = Field(default=None, ge=1)
+    requires_visual_review: bool = False
     visibility: str = "private"
     verification_status: str = "review_required"
