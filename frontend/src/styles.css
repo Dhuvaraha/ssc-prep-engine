@@ -377,3 +377,14 @@ input:focus, select:focus, textarea:focus {
     grid-template-columns: 1fr;
   }
 }
+
+
+.candidateSelection {
+  margin-top: 18px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fff8e6;
+  color: #6d5410;
+  font-size: 13px;
+  font-weight: 700;
+}
