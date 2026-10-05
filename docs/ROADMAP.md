@@ -49,12 +49,12 @@
 - [x] Mastery update
 - [x] Auto revision scheduling
 - [x] Practice session UI
-- [ ] Timed mode
+- [x] Timed mode
 - [x] Confidence capture UI
-- [ ] Detailed mistake classification UI
-- [ ] Adaptive selector
+- [x] Detailed mistake classification UI
+- [x] Adaptive selector
 
-**Status: IN PROGRESS**
+**Status: COMPLETE**
 
 ## Phase 5 — Mock Test Engine
 - [ ] Test configuration
@@ -64,6 +64,8 @@
 - [ ] Mark for review
 - [ ] Autosubmit
 - [ ] Scoring
+
+**Status: IN PROGRESS**
 
 ## Phase 6 — Analytics
 - [ ] Accuracy
