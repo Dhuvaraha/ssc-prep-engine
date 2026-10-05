@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 QUESTION_START = re.compile(r"(?m)^\s*(\d{1,3})[.)]\s+")
 ANSWER_LINE = re.compile(r"(?im)^\s*Answer\s*:\s*([A-D1-4])\s*$")
-OPTION_LINE = re.compile(r"(?m)^\s*([A-D])\s+(.+?)\s*$")
+OPTION_LINE = re.compile(r"(?m)^\s*([A-D])(?:\s+(.*?))?\s*$")
 
 
 @dataclass(slots=True)
@@ -41,7 +41,7 @@ def parse_text_candidates(text: str) -> list[ParsedCandidate]:
         options: list[tuple[int, str]] = []
         for option_match in option_matches[:4]:
             position = "ABCD".index(option_match.group(1)) + 1
-            options.append((position, option_match.group(2).strip()))
+            options.append((position, (option_match.group(2) or "").strip()))
 
         first_option_at = option_matches[0].start() if option_matches else len(block)
         question_text = block[:first_option_at].strip()
