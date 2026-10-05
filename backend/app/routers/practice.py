@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
-from sqlalchemy.orm import Session, selectinload
+from sqlalchemy.orm import Session
 
 from app.db import get_db
 from app.deps import get_current_user
@@ -10,7 +10,8 @@ from app.domain.mastery import clamp_mastery, mastery_delta
 from app.domain.models import AttemptOutcome, MasterySignal
 from app.domain.revision import next_revision_date
 from app.models import Question, QuestionAttempt, RevisionItem, TopicMastery, User
-from app.schemas import PracticeResult, PracticeSubmit, QuestionOut
+from app.schemas import MistakeUpdate, PracticeResult, PracticeSubmit, QuestionOut
+from app.services.practice_selector import select_practice_questions
 
 router = APIRouter(prefix="/practice", tags=["practice"])
 
@@ -19,18 +20,17 @@ router = APIRouter(prefix="/practice", tags=["practice"])
 def get_practice_questions(
     topic_id: int | None = Query(default=None),
     limit: int = Query(default=10, ge=1, le=50),
+    mode: str = Query(default="adaptive", pattern="^(guided|timed|adaptive)$"),
     db: Session = Depends(get_db),
-    _: User = Depends(get_current_user),
+    user: User = Depends(get_current_user),
 ):
-    stmt = (
-        select(Question)
-        .options(selectinload(Question.options))
-        .where(Question.verification_status == "verified")
-        .limit(limit)
+    return select_practice_questions(
+        db,
+        user_id=user.id,
+        topic_id=topic_id,
+        limit=limit,
+        mode=mode,
     )
-    if topic_id is not None:
-        stmt = stmt.where(Question.topic_id == topic_id)
-    return list(db.scalars(stmt).unique())
 
 
 @router.post("/submit", response_model=PracticeResult)
@@ -40,22 +40,24 @@ def submit_practice(
     user: User = Depends(get_current_user),
 ):
     question = db.get(Question, payload.question_id)
-    if not question:
-        raise HTTPException(status_code=404, detail="Question not found")
+    if not question or question.verification_status != "verified":
+        raise HTTPException(status_code=404, detail="Verified question not found")
+    if question.correct_option is None:
+        raise HTTPException(status_code=409, detail="Question answer key is not verified")
 
     is_correct = payload.selected_option == question.correct_option
-    db.add(
-        QuestionAttempt(
-            user_id=user.id,
-            question_id=question.id,
-            selected_option=payload.selected_option,
-            is_correct=is_correct,
-            time_seconds=payload.time_seconds,
-            confidence=payload.confidence,
-            used_hint=payload.used_hint,
-            mistake_type=payload.mistake_type,
-        )
+    attempt = QuestionAttempt(
+        user_id=user.id,
+        question_id=question.id,
+        selected_option=payload.selected_option,
+        is_correct=is_correct,
+        time_seconds=payload.time_seconds,
+        confidence=payload.confidence,
+        used_hint=payload.used_hint,
+        mistake_type=payload.mistake_type,
     )
+    db.add(attempt)
+    db.flush()
 
     mastery_score = None
     if question.topic_id is not None:
@@ -115,6 +117,7 @@ def submit_practice(
     db.commit()
 
     return PracticeResult(
+        attempt_id=attempt.id,
         correct=is_correct,
         correct_option=question.correct_option,
         explanation=question.explanation,
@@ -122,3 +125,42 @@ def submit_practice(
         mastery_score=mastery_score,
         revision_scheduled=revision_scheduled,
     )
+
+
+@router.patch("/attempts/{attempt_id}/mistake")
+def classify_mistake(
+    attempt_id: int,
+    payload: MistakeUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    allowed = {
+        "concept",
+        "formula",
+        "calculation",
+        "misread",
+        "guess",
+        "time_pressure",
+        "unknown",
+    }
+    if payload.mistake_type not in allowed:
+        raise HTTPException(status_code=400, detail="Invalid mistake type")
+
+    attempt = db.get(QuestionAttempt, attempt_id)
+    if not attempt or attempt.user_id != user.id:
+        raise HTTPException(status_code=404, detail="Attempt not found")
+
+    attempt.mistake_type = payload.mistake_type
+
+    revision = db.scalar(
+        select(RevisionItem).where(
+            RevisionItem.user_id == user.id,
+            RevisionItem.question_id == attempt.question_id,
+            RevisionItem.is_active.is_(True),
+        )
+    )
+    if revision:
+        revision.reason = payload.mistake_type
+
+    db.commit()
+    return {"attempt_id": attempt.id, "mistake_type": attempt.mistake_type}
