@@ -83,3 +83,18 @@ class PracticeResult(BaseModel):
     fast_method: str | None = None
     mastery_score: float | None = None
     revision_scheduled: bool = False
+
+
+class LessonOut(BaseModel):
+    id: int
+    topic_id: int
+    title: str
+    intro: str
+    concept: str
+    shortcut: str | None = None
+    worked_example: str | None = None
+    memory_rule: str | None = None
+    common_traps: str | None = None
+    estimated_minutes: int
+
+    model_config = {"from_attributes": True}
