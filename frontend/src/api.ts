@@ -179,6 +179,7 @@ export type PracticeQuestion = {
 };
 
 export type PracticeResult = {
+  attempt_id: number;
   correct: boolean;
   correct_option: number;
   explanation: string | null;
@@ -187,9 +188,9 @@ export type PracticeResult = {
   revision_scheduled: boolean;
 };
 
-export async function fetchPracticeQuestions(topicId: number, limit = 5): Promise<PracticeQuestion[]> {
+export async function fetchPracticeQuestions(topicId: number, limit = 5, mode = "adaptive"): Promise<PracticeQuestion[]> {
   const response = await fetch(
-    API_BASE + "/practice/questions?topic_id=" + topicId + "&limit=" + limit,
+    API_BASE + "/practice/questions?topic_id=" + topicId + "&limit=" + limit + "&mode=" + mode,
     {headers: authHeaders()},
   );
   if (!response.ok) throw new Error("Failed to load practice questions");
@@ -211,4 +212,17 @@ export async function submitPracticeAnswer(payload: {
   });
   if (!response.ok) throw new Error("Failed to submit practice answer");
   return response.json();
+}
+
+
+export async function classifyPracticeMistake(
+  attemptId: number,
+  mistakeType: string,
+): Promise<void> {
+  const response = await fetch(API_BASE + "/practice/attempts/" + attemptId + "/mistake", {
+    method: "PATCH",
+    headers: {...authHeaders(), "Content-Type": "application/json"},
+    body: JSON.stringify({mistake_type: mistakeType}),
+  });
+  if (!response.ok) throw new Error("Failed to classify mistake");
 }
