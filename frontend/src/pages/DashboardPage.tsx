@@ -16,6 +16,7 @@ export default function DashboardPage() {
           <p className="muted">CGL first • JE ready architecture</p>
         </div>
         <nav>
+          <Link to="/analytics">Analytics</Link>
           <Link to="/mocks">Mock tests</Link>
           <Link to="/review">Content review</Link>
           <Link to="/login">Login</Link>
