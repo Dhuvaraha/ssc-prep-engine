@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import { exportBackup } from "../api";
+
 const subjects = [
   ["Reasoning", "Pattern recognition, logic and speed"],
   ["General Awareness", "Static GK, science and recall"],
@@ -8,6 +10,16 @@ const subjects = [
 ];
 
 export default function DashboardPage() {
+  async function saveBackup() {
+    const blob = await exportBackup();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "ssc-prep-backup.json";
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <main className="shell">
       <header className="topbar">
@@ -21,6 +33,7 @@ export default function DashboardPage() {
           <Link to="/analytics">Analytics</Link>
           <Link to="/mocks">Mock tests</Link>
           <Link to="/review">Content review</Link>
+          <button className="navButton" onClick={() => void saveBackup()}>Export backup</button>
           <Link to="/login">Login</Link>
         </nav>
       </header>
