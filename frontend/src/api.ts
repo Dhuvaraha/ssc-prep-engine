@@ -355,3 +355,88 @@ export async function fetchAnalyticsSummary(): Promise<AnalyticsSummary> {
   if (!response.ok) throw new Error("Failed to load analytics");
   return response.json();
 }
+
+
+export type RevisionQuestion = {
+  id: number;
+  topic_id: number | null;
+  question_text: string;
+  question_image_url: string | null;
+  correct_option: number | null;
+  explanation: string | null;
+  fast_method: string | null;
+  options: Array<{position: number; text: string | null; image_url: string | null}>;
+};
+
+export type RevisionItem = {
+  id: number;
+  reason: string;
+  successful_reviews: number;
+  next_review_at: string;
+  question: RevisionQuestion;
+};
+
+export type FlashcardItem = {
+  id: number;
+  topic_id: number | null;
+  front: string;
+  back: string;
+  related_fact: string | null;
+  card_type: string;
+  successful_reviews: number;
+};
+
+export type BookmarkItem = {
+  bookmark_id: number;
+  question: RevisionQuestion;
+};
+
+export async function fetchRevisionQueue(reason?: string): Promise<RevisionItem[]> {
+  const suffix = reason ? "?reason=" + encodeURIComponent(reason) : "";
+  const response = await fetch(API_BASE + "/revision/queue" + suffix, {
+    headers: authHeaders(),
+  });
+  if (!response.ok) throw new Error("Failed to load revision queue");
+  return response.json();
+}
+
+export async function reviewRevisionItem(itemId: number, success: boolean): Promise<void> {
+  const response = await fetch(API_BASE + "/revision/items/" + itemId + "/review?success=" + success, {
+    method: "POST",
+    headers: authHeaders(),
+  });
+  if (!response.ok) throw new Error("Failed to update revision item");
+}
+
+export async function toggleBookmark(questionId: number): Promise<{bookmarked: boolean}> {
+  const response = await fetch(API_BASE + "/revision/bookmarks/" + questionId, {
+    method: "POST",
+    headers: authHeaders(),
+  });
+  if (!response.ok) throw new Error("Failed to update bookmark");
+  return response.json();
+}
+
+export async function fetchBookmarks(): Promise<BookmarkItem[]> {
+  const response = await fetch(API_BASE + "/revision/bookmarks", {
+    headers: authHeaders(),
+  });
+  if (!response.ok) throw new Error("Failed to load bookmarks");
+  return response.json();
+}
+
+export async function fetchDueFlashcards(): Promise<FlashcardItem[]> {
+  const response = await fetch(API_BASE + "/revision/flashcards/due", {
+    headers: authHeaders(),
+  });
+  if (!response.ok) throw new Error("Failed to load flashcards");
+  return response.json();
+}
+
+export async function reviewFlashcard(flashcardId: number, success: boolean): Promise<void> {
+  const response = await fetch(API_BASE + "/revision/flashcards/" + flashcardId + "/review?success=" + success, {
+    method: "POST",
+    headers: authHeaders(),
+  });
+  if (!response.ok) throw new Error("Failed to update flashcard");
+}
