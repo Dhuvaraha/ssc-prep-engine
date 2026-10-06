@@ -26,15 +26,26 @@ export default function LearnPage() {
           <p className="brand">Learn</p>
           <p className="muted">Concept → shortcut → example → practice</p>
         </div>
-        <nav><Link to="/">Dashboard</Link></nav>
+        <nav>
+          <Link to="/planner">Today</Link>
+          <Link to="/mocks">Mocks</Link>
+          <Link to="/">Dashboard</Link>
+        </nav>
       </header>
 
       <section className="learnHero">
         <div>
-          <p className="eyebrow">SSC CGL</p>
+          <p className="eyebrow">SSC CGL • Core study bank</p>
           <h1>Build the pattern before chasing speed.</h1>
         </div>
-        <p>Start from a topic, learn the core rule and move straight into guided practice.</p>
+        <div>
+          <p>Every listed topic now has a concise lesson and a verified original drill set.</p>
+          {tree && (
+            <p className="contentCountLine">
+              <strong>{tree.totals.lessons}</strong> lessons • <strong>{tree.totals.questions}</strong> practice questions
+            </p>
+          )}
+        </div>
       </section>
 
       {error && <section className="emptyCard">{error}</section>}
@@ -49,18 +60,22 @@ export default function LearnPage() {
                 onClick={() => setActive(item.slug)}
               >
                 {item.name}
+                <small>{item.question_count} Q</small>
               </button>
             ))}
           </div>
 
           <section className="topicGrid">
             {subject?.topics.map((topic) => (
-              <Link className="topicCard" to={"/learn/topic/" + topic.id} key={topic.id}>
+              <article className="topicCard" key={topic.id}>
                 <span>Topic</span>
                 <h3>{topic.name}</h3>
-                <p>Learn the rule, shortcut and worked example.</p>
-                <strong>Open lesson →</strong>
-              </Link>
+                <p>{topic.lesson_count ? "Lesson ready" : "Lesson pending"} • {topic.question_count} verified questions</p>
+                <div className="topicCardActions">
+                  <Link className="secondaryLink" to={"/learn/topic/" + topic.id}>Study lesson</Link>
+                  <Link className="primaryMiniLink" to={"/practice?topic_id=" + topic.id + "&mode=guided"}>Practice</Link>
+                </div>
+              </article>
             ))}
           </section>
         </>
