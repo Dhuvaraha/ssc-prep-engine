@@ -82,7 +82,10 @@ export default function LessonPage() {
             </div>
             <div className="topicLessonActions">
               <SpeakButton label="Read lesson" text={speakText} />
-              <Link className="primaryLink" to={"/practice?topic_id=" + pkg.topic.id + "&mode=guided"}>
+              <Link className="secondaryLink" to={"/practice?topic_id=" + pkg.topic.id + "&mode=guided&limit=3"}>
+                3-question quick check
+              </Link>
+              <Link className="primaryLink" to={"/practice?topic_id=" + pkg.topic.id + "&mode=guided&limit=10"}>
                 Start guided practice
               </Link>
             </div>
@@ -197,7 +200,7 @@ export default function LessonPage() {
           <section className="lessonBottomActions">
             <button className="secondary" onClick={() => navigate(-1)}>← Back</button>
             <Link to="/learn">Choose another topic</Link>
-            <Link className="primaryLink" to={"/practice?topic_id=" + pkg.topic.id + "&mode=guided"}>
+            <Link className="primaryLink" to={"/practice?topic_id=" + pkg.topic.id + "&mode=guided&limit=10"}>
               Practice this topic →
             </Link>
           </section>
