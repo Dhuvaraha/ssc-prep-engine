@@ -93,7 +93,7 @@ export default function DashboardPage() {
         </div>
         {tree && (
           <p className="heroContentStatus">
-            <strong>{tree.totals.lessons}</strong> lessons • <strong>{tree.totals.questions}</strong> verified practice questions • 4 exam sections
+            <strong>{tree.totals?.lessons ?? 0}</strong> lessons • <strong>{tree.totals?.questions ?? 0}</strong> verified practice questions • 4 exam sections
           </p>
         )}
       </section>
