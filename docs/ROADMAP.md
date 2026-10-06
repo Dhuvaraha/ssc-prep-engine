@@ -15,6 +15,7 @@
 **Status: COMPLETE**
 
 ## Phase 2 — Content Engine
+- [x] Core study bank populated: 66 lessons, 330 verified original questions, 132 flashcards
 - [x] Normalized question import schema
 - [x] Source/visibility/verification metadata
 - [x] Duplicate fingerprinting
