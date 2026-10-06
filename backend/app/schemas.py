@@ -101,6 +101,37 @@ class LessonOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class LessonBlockOut(BaseModel):
+    id: int
+    lesson_id: int
+    block_type: str
+    title: str
+    body: str
+    difficulty: int | None = None
+    sort_order: int
+
+    model_config = {"from_attributes": True}
+
+
+class QuestionArchetypeOut(BaseModel):
+    id: int
+    topic_id: int
+    slug: str
+    name: str
+    skill: str
+    recognition_cues: str
+    canonical_method: str
+    shortcut_method: str | None = None
+    common_trap: str | None = None
+    easy_rule: str | None = None
+    medium_rule: str | None = None
+    hard_rule: str | None = None
+    expected_time_seconds: int
+    source_notes: str | None = None
+
+    model_config = {"from_attributes": True}
+
+
 class MistakeUpdate(BaseModel):
     mistake_type: str
 
