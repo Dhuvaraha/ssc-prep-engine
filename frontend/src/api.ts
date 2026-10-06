@@ -132,11 +132,21 @@ export async function fetchReviewStats(): Promise<ReviewStats> {
 
 export type ContentTree = {
   exam: {id: number; slug: string; name: string};
+  totals: {lessons: number; questions: number};
   subjects: Array<{
     id: number;
     slug: string;
     name: string;
-    topics: Array<{id: number; slug: string; name: string; priority: number}>;
+    lesson_count: number;
+    question_count: number;
+    topics: Array<{
+      id: number;
+      slug: string;
+      name: string;
+      priority: number;
+      lesson_count: number;
+      question_count: number;
+    }>;
   }>;
 };
 
