@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.models import Exam, Subject, Topic
+from app.models import Exam, Lesson, Question, Subject, Topic
 from app.schemas import SubjectOut, TopicOut
 
 router = APIRouter(prefix="/content", tags=["content"])
@@ -44,24 +44,49 @@ def content_tree(exam_slug: str = "ssc-cgl-tier-1", db: Session = Depends(get_db
                 .order_by(Topic.priority.desc(), Topic.name)
             )
         )
+
+        topic_rows = []
+        for topic in topics:
+            lesson_count = db.scalar(
+                select(func.count(Lesson.id)).where(
+                    Lesson.topic_id == topic.id,
+                    Lesson.is_published.is_(True),
+                )
+            ) or 0
+            question_count = db.scalar(
+                select(func.count(Question.id)).where(
+                    Question.topic_id == topic.id,
+                    Question.verification_status == "verified",
+                    Question.correct_option.is_not(None),
+                )
+            ) or 0
+            topic_rows.append(
+                {
+                    "id": topic.id,
+                    "slug": topic.slug,
+                    "name": topic.name,
+                    "priority": topic.priority,
+                    "lesson_count": lesson_count,
+                    "question_count": question_count,
+                }
+            )
+
         result.append(
             {
                 "id": subject.id,
                 "slug": subject.slug,
                 "name": subject.name,
-                "topics": [
-                    {
-                        "id": topic.id,
-                        "slug": topic.slug,
-                        "name": topic.name,
-                        "priority": topic.priority,
-                    }
-                    for topic in topics
-                ],
+                "lesson_count": sum(item["lesson_count"] for item in topic_rows),
+                "question_count": sum(item["question_count"] for item in topic_rows),
+                "topics": topic_rows,
             }
         )
 
     return {
         "exam": {"id": exam.id, "slug": exam.slug, "name": exam.name},
+        "totals": {
+            "lessons": sum(item["lesson_count"] for item in result),
+            "questions": sum(item["question_count"] for item in result),
+        },
         "subjects": result,
     }
