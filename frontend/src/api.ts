@@ -132,7 +132,7 @@ export async function fetchReviewStats(): Promise<ReviewStats> {
 
 export type ContentTree = {
   exam: {id: number; slug: string; name: string};
-  totals: {lessons: number; questions: number};
+  totals?: {lessons: number; questions: number};
   subjects: Array<{
     id: number;
     slug: string;
