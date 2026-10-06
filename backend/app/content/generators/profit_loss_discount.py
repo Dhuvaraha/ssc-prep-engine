@@ -109,7 +109,12 @@ def build_profit_loss_discount_bank() -> list[GeneratedQuestion]:
         bank.append(_make(
             len(bank), pattern="recover-cp-sp", subtopic="Recover CP or SP", difficulty=2, seconds=45,
             question=question, answer=_money(answer_value),
-            distractors=[_money(answer_value+100), _money(max(1,answer_value-100)), _money(answer_value*1.1)],
+            distractors=[
+                _money(answer_value+100),
+                _money(max(1,answer_value-100)),
+                _money(answer_value*1.2),
+                _money(answer_value*0.8),
+            ],
             explanation=explanation,
             fast_method="Use SP = CP × (1 ± rate/100).",
         ))
