@@ -179,6 +179,8 @@ export async function fetchTopicLessons(topicId: number): Promise<Lesson[]> {
 export type PracticeQuestion = {
   id: number;
   topic_id: number | null;
+  subtopic: string | null;
+  pattern_type: string | null;
   question_text: string;
   question_image_url: string | null;
   difficulty: number;
