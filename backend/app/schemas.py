@@ -56,6 +56,8 @@ class OptionOut(BaseModel):
 class QuestionOut(BaseModel):
     id: int
     topic_id: int | None = None
+    subtopic: str | None = None
+    pattern_type: str | None = None
     question_text: str
     question_image_url: str | None = None
     difficulty: int
