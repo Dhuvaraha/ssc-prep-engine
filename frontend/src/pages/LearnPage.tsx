@@ -42,7 +42,7 @@ export default function LearnPage() {
           <p>Every listed topic now has a concise lesson and a verified original drill set.</p>
           {tree && (
             <p className="contentCountLine">
-              <strong>{tree.totals.lessons}</strong> lessons • <strong>{tree.totals.questions}</strong> practice questions
+              <strong>{tree.totals?.lessons ?? 0}</strong> lessons • <strong>{tree.totals?.questions ?? 0}</strong> practice questions
             </p>
           )}
         </div>
