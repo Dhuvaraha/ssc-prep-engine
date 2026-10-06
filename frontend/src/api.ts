@@ -534,3 +534,43 @@ export async function exportBackup(): Promise<Blob> {
   const data = await response.json();
   return new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
 }
+
+
+export type LessonBlock = {
+  id: number;
+  lesson_id: number;
+  block_type: string;
+  title: string;
+  body: string;
+  difficulty: number | null;
+  sort_order: number;
+};
+
+export type QuestionArchetype = {
+  id: number;
+  topic_id: number;
+  slug: string;
+  name: string;
+  skill: string;
+  recognition_cues: string;
+  canonical_method: string;
+  shortcut_method: string | null;
+  common_trap: string | null;
+  easy_rule: string | null;
+  medium_rule: string | null;
+  hard_rule: string | null;
+  expected_time_seconds: number;
+  source_notes: string | null;
+};
+
+export type TopicPackage = {
+  topic: {id: number; slug: string; name: string; priority: number};
+  lessons: Array<Lesson & {blocks: LessonBlock[]}>;
+  archetypes: QuestionArchetype[];
+};
+
+export async function fetchTopicPackage(topicId: number): Promise<TopicPackage> {
+  const response = await fetch(API_BASE + "/learn/topics/" + topicId + "/package");
+  if (!response.ok) throw new Error("Failed to load topic package");
+  return response.json();
+}
