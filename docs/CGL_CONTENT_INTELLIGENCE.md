@@ -194,22 +194,27 @@ Private PYQs remain a separate source layer and are not counted as original vari
 ## 7. First implementation batch
 
 Completed in the live database:
-- Percentage: expanded to 105 verified questions total
-- Number Series: expanded to 105 verified questions total
-- both topics now have richer recognition/method/example/trap lesson blocks
-- detailed archetype definitions added for direct %, reverse %, successive %, percentage comparison, constant difference, increasing difference, multiplication, alternating and interleaved series
+- Percentage: 105 verified unique questions
+- Number Series: 105 verified unique questions
+- Ratio & Proportion: 105 verified unique questions
+- Profit, Loss & Discount: 105 verified unique questions
+- Time & Work: 105 verified unique questions
+- richer recognition/method/example/trap lesson blocks are active for Percentage and Number Series
+- detailed archetype definitions are active across all five expanded topics
+
+That gives 525 verified unique questions across the first five high-priority banks, before counting the rest of the starter bank.
 
 Next content batches should prioritise:
 1. Analogy
 2. Coding-Decoding
 3. Geometry
-4. Ratio & Proportion
-5. Profit, Loss & Discount
-6. Error Spotting
-7. Sentence Improvement
-8. Synonyms & Antonyms
-9. Indian Polity
-10. Chemistry / Biology / Geography
+4. Error Spotting
+5. Sentence Improvement
+6. Synonyms & Antonyms
+7. Indian Polity
+8. Chemistry
+9. Biology
+10. Geography
 
 ## 8. QA rule
 
