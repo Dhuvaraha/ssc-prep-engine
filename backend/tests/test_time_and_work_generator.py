@@ -1,0 +1,21 @@
+from collections import Counter
+
+from app.content.generators.time_and_work import build_time_and_work_bank
+
+
+def test_time_and_work_bank_has_professional_shape():
+    bank = build_time_and_work_bank()
+
+    assert len(bank) == 100
+    counts = Counter(item.pattern_type for item in bank)
+    assert len(counts) == 10
+    assert set(counts.values()) == {10}
+
+    for item in bank:
+        assert len(item.options) == 4
+        assert len(set(item.options)) == 4
+        assert 1 <= item.correct_option <= 4
+        assert item.explanation
+        assert item.fast_method
+        assert item.expected_time_seconds > 0
+        assert item.difficulty in {1, 2, 3}
