@@ -30,7 +30,46 @@ def select_practice_questions(
     if not questions:
         return []
 
-    if mode != "adaptive":
+    if mode == "guided":
+        grouped: dict[str, list[Question]] = defaultdict(list)
+        for question in questions:
+            key = question.pattern_type or question.subtopic or f"question-{question.id}"
+            grouped[key].append(question)
+
+        for items in grouped.values():
+            items.sort(
+                key=lambda q: (
+                    q.difficulty,
+                    -(q.year or 0),
+                    q.id,
+                )
+            )
+
+        ordered_groups = sorted(
+            grouped.values(),
+            key=lambda items: (
+                items[0].difficulty,
+                items[0].pattern_type or "",
+                items[0].id,
+            ),
+        )
+
+        selected: list[Question] = []
+        depth = 0
+        while len(selected) < limit:
+            added = False
+            for items in ordered_groups:
+                if depth < len(items):
+                    selected.append(items[depth])
+                    added = True
+                    if len(selected) == limit:
+                        break
+            if not added:
+                break
+            depth += 1
+        return selected
+
+    if mode == "timed":
         return sorted(
             questions,
             key=lambda q: (
