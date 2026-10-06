@@ -82,7 +82,9 @@ def _fallback(answer: str) -> list[str]:
             "-".join(str(max(1, part - 1)) for part in parts),
             "-".join(str(part) for part in reversed(parts)),
         ]
-    return [_shift(answer, 1), _shift(answer, -1), answer[::-1], _swap_pairs(answer)]
+    if answer.isalpha() and answer.isupper():
+        return [_shift(answer, 1), _shift(answer, -1), answer[::-1], _swap_pairs(answer)]
+    return ["xx", "yy", "zz", "na"]
 
 
 def _make(
