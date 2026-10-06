@@ -33,6 +33,8 @@ export default function PracticePage() {
   const topicId = Number(params.get("topic_id"));
   const requestedMode = params.get("mode") ?? "adaptive";
   const mode = ["guided", "adaptive", "timed"].includes(requestedMode) ? requestedMode : "adaptive";
+  const requestedLimit = Number(params.get("limit") ?? "5");
+  const limit = Number.isFinite(requestedLimit) ? Math.min(20, Math.max(3, requestedLimit)) : 5;
 
   const [questions, setQuestions] = useState<PracticeQuestion[]>([]);
   const [index, setIndex] = useState(0);
@@ -63,7 +65,7 @@ export default function PracticePage() {
     setError("");
     setQuestions([]);
     setIndex(0);
-    fetchPracticeQuestions(topicId, 5, mode)
+    fetchPracticeQuestions(topicId, limit, mode)
       .then((items) => {
         setQuestions(items);
         startedAt.current = Date.now();
@@ -74,7 +76,7 @@ export default function PracticePage() {
         clearToken();
         navigate("/login");
       });
-  }, [navigate, topicId, mode]);
+  }, [navigate, topicId, mode, limit]);
 
   useEffect(() => {
     if (!question || result) return;
@@ -196,6 +198,7 @@ export default function PracticePage() {
       <article className="practiceCard">
         <div className="practiceQuestionToolbar">
           <div className="practiceMeta">
+          {question.subtopic && <span>{question.subtopic}</span>}
           <span>Difficulty {question.difficulty}</span>
           {question.expected_time_seconds && <span>Target {question.expected_time_seconds}s</span>}
           {question.year && <span>PYQ {question.year}</span>}
