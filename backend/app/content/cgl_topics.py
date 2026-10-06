@@ -18,6 +18,11 @@ CGL_TOPICS = {
         "Embedded Figures",
         "Figure Series",
         "Counting Figures",
+        "Missing Number & Number Matrix",
+        "Puzzle",
+        "Clock & Calendar",
+        "Seating Arrangement",
+        "Word Building",
     ],
     "general-awareness": [
         "History",
@@ -57,6 +62,9 @@ CGL_TOPICS = {
         "Mensuration",
         "Trigonometry",
         "Data Interpretation",
+        "Elementary Statistics",
+        "Coordinate Geometry",
+        "Heights & Distances",
     ],
     "english": [
         "Vocabulary",
