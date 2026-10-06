@@ -42,6 +42,21 @@ def _make(
             clean.append(item)
         if len(clean) == 3:
             break
+
+    if len(clean) < 3:
+        try:
+            numeric_answer = float(answer)
+        except ValueError:
+            numeric_answer = None
+        if numeric_answer is not None:
+            for delta in (1, 2, 3, 5, -1, -2, -3, 0.5, -0.5):
+                candidate = _fmt(numeric_answer + delta)
+                if candidate not in seen:
+                    seen.add(candidate)
+                    clean.append(candidate)
+                if len(clean) == 3:
+                    break
+
     if len(clean) != 3:
         raise ValueError(f"Need three unique distractors for: {question}")
 
