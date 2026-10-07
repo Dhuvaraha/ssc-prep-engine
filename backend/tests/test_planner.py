@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app.db import Base
 from app.models import Exam, ExamTarget, Subject, Topic, User
+from app.routers.planner import _serialize
 from app.services.planner import generate_today_plan
 
 
@@ -60,3 +61,13 @@ def test_daily_plan_is_generated_with_study_tasks():
         assert any(task.activity_type == "learn" for task in tasks)
         assert any(task.activity_type == "practice" for task in tasks)
         assert sum(task.target_minutes for task in tasks) <= 180
+
+        payload = _serialize(target, tasks, db)
+        assert payload["target"]["exam_slug"] == "ssc-cgl-tier-1"
+        assert payload["target"]["exam_name"] == "SSC CGL Tier I"
+
+        contextual_task = next(item for item in payload["tasks"] if item["topic_id"] is not None)
+        assert contextual_task["subject_name"] == "Reasoning"
+        assert contextual_task["topic_name"]
+        assert contextual_task["expected_outcome"]
+        assert "reason" in contextual_task
