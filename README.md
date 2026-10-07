@@ -10,10 +10,10 @@ Learn → Practice → Test → Analyse → Revise → Improve
 
 - Daily preparation dashboard
 - Learn mode with concise notes, shortcuts, worked examples and quick checks
-- Topic-wise adaptive practice
-- PYQ explorer
-- Full mock and sectional tests
-- Accuracy, attempt-rate, speed and error analysis
+- Adaptive, guided, topic, PYQ, mixed, weak-topic, revision, speed, ladder and timed practice
+- Contextual browser Voice Teacher with English/Tanglish prompts
+- Mini, topic, sectional and full SSC CGL Tier-I tests with autosave/resume
+- Accuracy, mastery, subject, trend, confidence, speed and error analysis
 - Wrong/slow/guessed/bookmarked revision queues
 - Spaced repetition for GK, vocabulary and formula recall
 - Exam-date-based planner
@@ -29,7 +29,11 @@ Learn → Practice → Test → Analyse → Revise → Improve
 
 ## Status
 
-Initial architecture and application scaffold in progress.
+- Phase 1 — Content Intelligence & Curriculum: **complete**
+- Phase 2 — Connected learner functionality: **complete**
+- Phase 3 — Production QA and release validation: **pending**
+
+Phase 2 completion gates are documented in `docs/PHASE2_FUNCTIONALITY_READINESS.md`.
 
 ## Content note
 
@@ -63,8 +67,8 @@ Open the frontend at `http://localhost:5173`.
 - `/` — dashboard
 - `/planner` — adaptive daily study plan
 - `/learn` — topic learning
-- `/practice` — guided/adaptive/timed practice
-- `/mocks` — mini, sectional and full mocks
+- `/practice` — adaptive/guided/topic/PYQ/mixed/weak/revision/speed/ladder/timed practice
+- `/mocks` — mini, focused topic, sectional and full mocks
 - `/analytics` — performance analytics
 - `/revision` — revision queue, flashcards and bookmarks
 - `/review` — private content verification
