@@ -78,6 +78,39 @@ def get_revision_queue(
     return result
 
 
+@router.post("/questions/{question_id}/add")
+def add_question_to_revision(
+    question_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    question = db.get(Question, question_id)
+    if not question or question.verification_status != "verified":
+        raise HTTPException(status_code=404, detail="Verified question not found")
+
+    existing = db.scalar(
+        select(RevisionItem).where(
+            RevisionItem.user_id == user.id,
+            RevisionItem.question_id == question_id,
+            RevisionItem.is_active.is_(True),
+        )
+    )
+    if existing:
+        return {"added": False, "item_id": existing.id, "reason": existing.reason}
+
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
+    item = RevisionItem(
+        user_id=user.id,
+        question_id=question_id,
+        reason="manual",
+        next_review_at=now,
+    )
+    db.add(item)
+    db.commit()
+    db.refresh(item)
+    return {"added": True, "item_id": item.id, "reason": item.reason}
+
+
 @router.post("/items/{item_id}/review")
 def review_revision_item(
     item_id: int,
