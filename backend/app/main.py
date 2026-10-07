@@ -10,6 +10,7 @@ from app.db import Base, SessionLocal, engine
 from app.routers import analytics, assets, auth, backup, content, exams, health, learn, mocks, planner, practice, review, revision
 from app.services.content_audit import collect_content_audit
 from app.services.content_repair import repair_content_integrity
+from app.services.learner_canary import run_production_learner_canary
 
 
 logger = logging.getLogger("uvicorn.error")
@@ -56,6 +57,18 @@ async def lifespan(_: FastAPI):
         logger.exception("PHASE4_CONTENT_AUDIT_FAILED")
     finally:
         db.close()
+
+    if settings.run_learner_canary_on_startup:
+        try:
+            canary_report = run_production_learner_canary(engine)
+            if canary_report.get("status") != "passed" or not canary_report.get("rollback_verified"):
+                raise RuntimeError("Phase 4D learner canary did not pass cleanly")
+            logger.info(
+                "PHASE4D_LEARNER_CANARY %s",
+                json.dumps(canary_report, separators=(",", ":"), sort_keys=True),
+            )
+        except Exception:
+            logger.exception("PHASE4D_LEARNER_CANARY_FAILED")
 
     yield
 

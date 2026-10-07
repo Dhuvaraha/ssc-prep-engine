@@ -281,7 +281,11 @@ def review_flashcard(
         )
     )
     if not progress:
-        progress = FlashcardProgress(user_id=user.id, flashcard_id=flashcard_id)
+        progress = FlashcardProgress(
+            user_id=user.id,
+            flashcard_id=flashcard_id,
+            successful_reviews=0,
+        )
         db.add(progress)
 
     now = datetime.now(timezone.utc).replace(tzinfo=None)

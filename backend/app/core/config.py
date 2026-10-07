@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     registration_enabled: bool = True
     content_audit_on_startup: bool = False
     apply_content_repair_on_startup: bool = False
+    run_learner_canary_on_startup: bool = False
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

@@ -72,7 +72,13 @@ def submit_practice(
             )
         )
         if not mastery:
-            mastery = TopicMastery(user_id=user.id, topic_id=question.topic_id)
+            mastery = TopicMastery(
+                user_id=user.id,
+                topic_id=question.topic_id,
+                mastery_score=0.0,
+                attempts=0,
+                correct=0,
+            )
             db.add(mastery)
 
         outcome = AttemptOutcome.CORRECT if is_correct else AttemptOutcome.INCORRECT
