@@ -54,8 +54,11 @@ export default function PracticePage() {
   const requestedMode = params.get("mode") ?? (topicId ? "adaptive" : "mixed");
   const validModes = practiceModes.map((item) => item[0]) as readonly string[];
   const mode = (validModes.includes(requestedMode) ? requestedMode : "adaptive") as Mode;
+  const rawSimilarTo = Number(params.get("similar_to") ?? "0");
+  const similarTo = Number.isFinite(rawSimilarTo) && rawSimilarTo > 0 ? rawSimilarTo : undefined;
   const requestedLimit = Number(params.get("limit") ?? "10");
-  const limit = Number.isFinite(requestedLimit) ? Math.min(30, Math.max(3, requestedLimit)) : 10;
+  const minimumLimit = similarTo ? 1 : 3;
+  const limit = Number.isFinite(requestedLimit) ? Math.min(30, Math.max(minimumLimit, requestedLimit)) : 10;
 
   const [questions, setQuestions] = useState<PracticeQuestion[]>([]);
   const [topicPackage, setTopicPackage] = useState<TopicPackage | null>(null);
@@ -108,7 +111,7 @@ export default function PracticePage() {
     } else {
       setTopicPackage(null);
     }
-    fetchPracticeQuestions(topicId, limit, mode)
+    fetchPracticeQuestions(topicId, limit, mode, similarTo)
       .then((items) => {
         setQuestions(items);
         startedAt.current = Date.now();
@@ -116,7 +119,7 @@ export default function PracticePage() {
         if (!items.length) setError("No verified questions matched this practice mode yet.");
       })
       .catch(() => setError("Could not load practice. Check your connection and try again."));
-  }, [navigate, topicId, mode, limit]);
+  }, [navigate, topicId, mode, limit, similarTo]);
 
   useEffect(() => {
     if (!question || result) return;
@@ -502,6 +505,31 @@ export default function PracticePage() {
                 </section>
               )}
 
+              <section className="solutionStep optionAuditStep">
+                <span>6 • Option check</span>
+                <h3>Why do the options resolve this way?</h3>
+                <div className="optionAuditList">
+                  {question.options.map((option) => {
+                    const label = String.fromCharCode(64 + option.position);
+                    const text = option.text ?? "Image option";
+                    const isCorrect = option.position === result.correct_option;
+                    const wasSelected = option.position === selected;
+                    return (
+                      <div className={isCorrect ? "optionAuditCorrect" : "optionAuditWrong"} key={option.position}>
+                        <strong>{label}. {text}</strong>
+                        <p>
+                          {isCorrect
+                            ? "Verified correct answer. It is the option reached by the worked solution above."
+                            : wasSelected
+                              ? "Your selected distractor. It does not match the verified result; compare the worked solution above with the step that led you here."
+                              : "Distractor. The verified worked solution resolves to " + (correctLabel ?? "the marked correct option") + ", not this choice."}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+
               {result.coaching?.worked_example && (
                 <details className="relatedExample">
                   <summary>See a related worked example</summary>
@@ -558,6 +586,14 @@ export default function PracticePage() {
               <button className="secondary" disabled={revisionSaved || result.revision_scheduled} onClick={() => void addToRevision()}>
                 {revisionSaved || result.revision_scheduled ? "✓ In revision" : "+ Add to revision"}
               </button>
+              {topicId && (
+                <Link
+                  className="secondary"
+                  to={"/practice?topic_id=" + topicId + "&mode=adaptive&limit=1&similar_to=" + question.id}
+                >
+                  Try one similar
+                </Link>
+              )}
               <button onClick={next}>{index + 1 === questions.length ? "Finish set" : "Next question"}</button>
             </div>
           </section>
