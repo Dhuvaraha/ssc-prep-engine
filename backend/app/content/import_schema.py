@@ -13,6 +13,8 @@ class ImportedQuestion(BaseModel):
     topic_slug: str | None = None
     question_text: str
     question_image_url: str | None = None
+    subtopic: str | None = None
+    pattern_type: str | None = None
     options: list[ImportedOption]
     correct_option: int | None = None
     explanation: str | None = None
