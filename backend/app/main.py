@@ -1,16 +1,35 @@
+import json
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
-from app.db import Base, engine
+from app.db import Base, SessionLocal, engine
 from app.routers import analytics, assets, auth, backup, content, exams, health, learn, mocks, planner, practice, review, revision
+from app.services.content_audit import collect_content_audit
+
+
+logger = logging.getLogger("ssc_prep.release_audit")
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     Base.metadata.create_all(engine)
+
+    db = SessionLocal()
+    try:
+        report = collect_content_audit(db)
+        logger.info(
+            "PHASE4_CONTENT_AUDIT %s",
+            json.dumps(report, separators=(",", ":"), sort_keys=True),
+        )
+    except Exception:
+        logger.exception("PHASE4_CONTENT_AUDIT_FAILED")
+    finally:
+        db.close()
+
     yield
 
 
