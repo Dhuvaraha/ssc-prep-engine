@@ -1,14 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import {
   ActiveMock,
   MockQuestion,
+  MockReview,
   MockSubmitResult,
   abandonMock,
   fetchActiveMock,
   fetchMockAttempt,
+  fetchMockReview,
   fetchMockState,
+  fetchTopicPackage,
   saveMockResponse,
   startMock,
   submitMock,
@@ -30,7 +33,11 @@ const sectionLabels: Record<string, string> = {
 };
 
 export default function MockPage() {
-  const [mode, setMode] = useState<"mini" | "full" | "sectional">("mini");
+  const [params] = useSearchParams();
+  const topicIdParam = Number(params.get("topic_id") ?? "0");
+  const topicId = Number.isFinite(topicIdParam) && topicIdParam > 0 ? topicIdParam : undefined;
+  const [mode, setMode] = useState<"mini" | "full" | "sectional" | "topic">(topicId ? "topic" : "mini");
+  const [topicName, setTopicName] = useState("");
   const [subject, setSubject] = useState("reasoning");
   const [attemptId, setAttemptId] = useState<number | null>(null);
   const [resumeInfo, setResumeInfo] = useState<ActiveMock | null>(null);
@@ -42,8 +49,16 @@ export default function MockPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState<MockSubmitResult | null>(null);
+  const [review, setReview] = useState<MockReview | null>(null);
   const questionOpenedAt = useRef(Date.now());
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (topicId) {
+      setMode("topic");
+      fetchTopicPackage(topicId).then((pkg) => setTopicName(pkg.topic.name)).catch(() => setTopicName("Topic test"));
+    }
+  }, [topicId]);
 
   useEffect(() => {
     if (!getToken()) {
@@ -86,7 +101,11 @@ export default function MockPage() {
     setError("");
     setResult(null);
     try {
-      const data = await startMock(mode, mode === "sectional" ? subject : undefined);
+      const data = await startMock(
+        mode,
+        mode === "sectional" ? subject : undefined,
+        mode === "topic" ? topicId : undefined,
+      );
       setAttemptId(data.attempt_id);
       setQuestions(data.questions);
       setAnswers({});
@@ -122,7 +141,7 @@ export default function MockPage() {
       setAttemptId(attempt.attempt_id);
       setQuestions(attempt.questions);
       setAnswers(restored);
-      setMode(attempt.mode as "mini" | "full" | "sectional");
+      setMode(attempt.mode as "mini" | "full" | "sectional" | "topic");
       if (resumeInfo.subject_slug) setSubject(resumeInfo.subject_slug);
       setCurrentIndex(0);
       setSecondsLeft(state.seconds_left);
@@ -230,6 +249,7 @@ export default function MockPage() {
       if (current) await persistPatch();
       const data = await submitMock(attemptId);
       setResult(data);
+      setReview(await fetchMockReview(attemptId).catch(() => null));
       setRunning(false);
       setResumeInfo(null);
     } catch {
@@ -268,14 +288,55 @@ export default function MockPage() {
             <article><span>Unattempted</span><strong>{result.unattempted}</strong></article>
             <article><span>Accuracy</span><strong>{accuracy}%</strong></article>
             <article><span>Attempt rate</span><strong>{attemptRate}%</strong></article>
+            {review && <article><span>Easy marks missed</span><strong>{review.easy_missed}</strong></article>}
+            {review && <article><span>Slow questions</span><strong>{review.slow_questions}</strong></article>}
           </div>
           <p className="muted">Scoring uses the configured SSC CGL marking scheme, including negative marks.</p>
+
+          {review && (
+            <>
+              <section className="mockSectionBreakdown">
+                <p className="eyebrow">Section breakdown</p>
+                <div>
+                  {Object.entries(review.sections).map(([slug, stats]) => (
+                    <article key={slug}>
+                      <strong>{sectionLabels[slug] ?? slug}</strong>
+                      <span>{stats.correct} correct • {stats.incorrect} wrong • {stats.unattempted} skipped</span>
+                      <small>{Math.round(stats.time_seconds / 60)} min spent</small>
+                    </article>
+                  ))}
+                </div>
+              </section>
+
+              <section className="mockQuestionReview">
+                <p className="eyebrow">Question review</p>
+                <h2>See exactly where marks leaked.</h2>
+                {review.questions.map((item) => (
+                  <details className={item.correct ? "mockReviewItem reviewCorrect" : "mockReviewItem reviewWrong"} key={item.question_id}>
+                    <summary>
+                      <span>Q{item.position}</span>
+                      <strong>{item.correct ? "Correct" : item.selected_option ? "Wrong" : "Skipped"}</strong>
+                      <small>{Math.round(item.time_seconds)}s{item.expected_time_seconds ? " / " + item.expected_time_seconds + "s target" : ""}</small>
+                    </summary>
+                    <div>
+                      <p>{item.question_text}</p>
+                      <p><strong>Your answer:</strong> {item.selected_option ? String.fromCharCode(64 + item.selected_option) : "Not answered"} • <strong>Correct:</strong> {String.fromCharCode(64 + item.correct_option)}</p>
+                      {item.pattern_type && <p><strong>Pattern:</strong> {item.pattern_type.replaceAll("-", " ")}</p>}
+                      {item.explanation && <p>{item.explanation}</p>}
+                      {item.fast_method && <p><strong>Fast method:</strong> {item.fast_method}</p>}
+                    </div>
+                  </details>
+                ))}
+              </section>
+            </>
+          )}
           <div className="mockResultActions">
             <button onClick={() => {
               setResult(null);
               setAttemptId(null);
               setQuestions([]);
               setAnswers({});
+              setReview(null);
             }}>Take another test</button>
             <Link to="/analytics">Analyse performance</Link>
             <Link to="/revision">Revision queue</Link>
@@ -302,7 +363,7 @@ export default function MockPage() {
             <div>
               <p className="eyebrow">In-progress test found</p>
               <h2>Resume where you stopped.</h2>
-              <p>{resumeInfo.mode} mock • {formatTime(resumeInfo.seconds_left ?? 0)} remaining</p>
+              <p>{resumeInfo.mode} test • {formatTime(resumeInfo.seconds_left ?? 0)} remaining</p>
             </div>
             <div>
               <button onClick={() => void resumeMock()} disabled={busy}>Resume test</button>
@@ -327,6 +388,12 @@ export default function MockPage() {
               <strong>Full CGL Tier I</strong>
               <span>100 questions • 60 minutes • +2 / -0.5</span>
             </button>
+            {topicId && (
+              <button className={mode === "topic" ? "mockModeCard activeMockMode" : "mockModeCard"} onClick={() => setMode("topic")}>
+                <strong>{topicName || "Topic test"}</strong>
+                <span>Up to 20 questions • 20 minutes • focused test</span>
+              </button>
+            )}
           </div>
 
           {mode === "sectional" && (
@@ -358,7 +425,7 @@ export default function MockPage() {
       <header className="examHeader">
         <div>
           <strong>SSC CGL Tier I</strong>
-          <span>{mode === "full" ? "Full mock" : mode === "sectional" ? "Sectional test" : "Mini mock"} • autosaved</span>
+          <span>{mode === "full" ? "Full mock" : mode === "sectional" ? "Sectional test" : mode === "topic" ? "Topic test" : "Mini mock"} • autosaved</span>
         </div>
         <div className={secondsLeft <= 60 ? "examTimer examTimerUrgent" : "examTimer"}>
           {formatTime(secondsLeft)}
