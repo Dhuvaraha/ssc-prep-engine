@@ -143,6 +143,15 @@ def test_content_audit_detects_integrity_and_quality_gaps():
         "missing_pattern_type": 1,
     }
     assert report["critical_issues"] == 3
+    assert report["diagnostics"]["duplicate_option_sets_by_topic"] == {
+        "reasoning/analogy": 1,
+    }
+    assert report["diagnostics"]["duplicate_option_sets_by_source"] == {
+        "original": 1,
+    }
+    assert report["diagnostics"]["missing_pattern_type_by_topic"] == {
+        "reasoning/analogy": 1,
+    }
     assert report["difficulty"] == {"1": 2, "2": 1, "3": 1}
     assert report["source_types"] == {"generated": 1, "original": 3}
     assert report["pending_topic_count"] == 1
