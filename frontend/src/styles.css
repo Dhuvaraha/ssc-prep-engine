@@ -4208,3 +4208,116 @@ body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
     padding: 16px;
   }
 }
+
+
+/* Phase 5F — evidence-aware analytics coach */
+.analyticsLoading {
+  display: grid;
+  gap: 16px;
+}
+
+.analyticsHeroSkeleton {
+  min-height: 260px;
+  border-radius: 24px;
+}
+
+.analyticsMetricSkeleton {
+  min-height: 112px;
+  border-radius: 18px;
+}
+
+.analyticsPanelSkeleton {
+  min-height: 320px;
+  border-radius: 20px;
+}
+
+.readinessPending {
+  border-color: #c8d0db;
+  color: #667487;
+}
+
+.readinessPending strong {
+  font-size: 38px;
+}
+
+.readinessPending span {
+  max-width: 78px;
+  text-align: center;
+}
+
+.analyticsCoachCard {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  gap: 22px;
+  margin-top: 16px;
+  padding: 26px;
+  border: 1px solid #dce4ed;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #172033 0%, #25334a 100%);
+  color: white;
+}
+
+.analyticsCoachLead > span,
+.analyticsCoachActions a > span {
+  color: #bdc8d7;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.analyticsCoachLead h2 {
+  max-width: 520px;
+  margin: 7px 0 10px;
+  color: white;
+  font-size: clamp(26px, 3vw, 38px);
+  line-height: 1.12;
+}
+
+.analyticsCoachLead p {
+  max-width: 600px;
+  margin: 0;
+  color: #cbd4df;
+  line-height: 1.65;
+}
+
+.analyticsCoachActions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.analyticsCoachActions a {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 15px;
+  background: rgba(255,255,255,.07);
+  color: white;
+  text-decoration: none;
+}
+
+.analyticsCoachActions a:hover {
+  background: rgba(255,255,255,.11);
+}
+
+.analyticsCoachActions strong {
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.analyticsCoachActions p {
+  margin: 0;
+  color: #c5cfdb;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+@media (max-width: 850px) {
+  .analyticsCoachCard,
+  .analyticsCoachActions {
+    grid-template-columns: 1fr;
+  }
+}

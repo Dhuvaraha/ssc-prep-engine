@@ -27,31 +27,69 @@ export default function AnalyticsPage() {
   if (!data) {
     return (
       <main className="shell">
-        <section className="emptyCard">{error || "Loading analytics..."}</section>
+        {error ? (
+          <section className="emptyCard">{error}</section>
+        ) : (
+          <section className="analyticsLoading" aria-label="Loading analytics">
+            <div className="skeletonBlock analyticsHeroSkeleton" />
+            <div className="analyticsMetricGrid">
+              {Array.from({length: 4}).map((_, index) => (
+                <div className="skeletonBlock analyticsMetricSkeleton" key={index} />
+              ))}
+            </div>
+            <div className="skeletonBlock analyticsPanelSkeleton" />
+          </section>
+        )}
       </main>
     );
   }
 
   const errorEntries = Object.entries(data.errors.breakdown);
+  const baselinePending = data.coach.evidence_level === "baseline";
+  const established = data.coach.evidence_level === "established";
 
   return (
     <main className="shell">
       <section className="analyticsHero">
         <div>
-          <p className="eyebrow">Exam readiness</p>
-          <h1>{data.overview.readiness}%</h1>
+          <p className="eyebrow">Exam readiness • {data.coach.evidence_level} evidence</p>
+          <h1>{baselinePending ? "Baseline" : data.overview.readiness + "%"}</h1>
           <p>
-            Combined from practice accuracy, topic mastery, speed and mock accuracy.
-            The score becomes more reliable as you complete more practice and tests.
+            {baselinePending
+              ? "Readiness is intentionally not treated as a real score until you create practice and timed-test evidence."
+              : "Combined from practice accuracy, topic mastery, speed and mock accuracy. Treat it as provisional until your evidence becomes established."}
           </p>
           <div className="analyticsHeroLinks">
-            <Link to="/practice?mode=weak&limit=10">Repair weak topics</Link>
-            <Link to="/mocks">Take a mock</Link>
+            <Link to={data.coach.primary_action.path}>{data.coach.primary_action.title}</Link>
+            <Link to="/mocks">Open Mock Lab</Link>
           </div>
         </div>
-        <div className="readinessRing" aria-label={"Readiness " + data.overview.readiness + "%"}>
-          <strong>{data.overview.readiness}%</strong>
-          <span>ready</span>
+        <div
+          className={"readinessRing" + (baselinePending ? " readinessPending" : "")}
+          aria-label={baselinePending ? "Readiness baseline pending" : "Readiness " + data.overview.readiness + "%"}
+        >
+          <strong>{baselinePending ? "—" : data.overview.readiness + "%"}</strong>
+          <span>{baselinePending ? "baseline pending" : "ready"}</span>
+        </div>
+      </section>
+
+      <section className="analyticsCoachCard">
+        <div className="analyticsCoachLead">
+          <span>Personal coach</span>
+          <h2>{data.coach.headline}</h2>
+          <p>{data.coach.summary}</p>
+        </div>
+        <div className="analyticsCoachActions">
+          <Link to={data.coach.primary_action.path}>
+            <span>Do this first</span>
+            <strong>{data.coach.primary_action.title}</strong>
+            <p>{data.coach.primary_action.reason}</p>
+          </Link>
+          <Link to={data.coach.secondary_action.path}>
+            <span>Then</span>
+            <strong>{data.coach.secondary_action.title}</strong>
+            <p>{data.coach.secondary_action.reason}</p>
+          </Link>
         </div>
       </section>
 
@@ -103,10 +141,12 @@ export default function AnalyticsPage() {
         <article className="analyticsCard">
           <div className="analyticsCardHead">
             <div>
-              <p className="eyebrow">Weakness map</p>
-              <h2>Topics to fix next</h2>
+              <p className="eyebrow">{established ? "Weakness map" : "Early topic signals"}</p>
+              <h2>{established ? "Topics to fix next" : "Topics to sample before judging"}</h2>
             </div>
-            <Link to="/practice?mode=weak&limit=10">Weak drill</Link>
+            <Link to={established ? "/practice?mode=weak&limit=10" : "/learn"}>
+              {established ? "Weak drill" : "Guided lessons"}
+            </Link>
           </div>
 
           {data.weak_topics.length === 0 ? (
@@ -123,7 +163,12 @@ export default function AnalyticsPage() {
                     <span>Accuracy <strong>{topic.accuracy}%</strong></span>
                     <span>Mastery <strong>{topic.mastery}%</strong></span>
                   </div>
-                  <Link className="analyticsRepairLink" to={"/practice?topic_id=" + topic.topic_id + "&mode=adaptive&limit=10"}>Repair</Link>
+                  <Link
+                    className="analyticsRepairLink"
+                    to={"/practice?topic_id=" + topic.topic_id + "&mode=" + (established ? "adaptive" : "guided") + "&limit=10"}
+                  >
+                    {established ? "Repair" : "Sample"}
+                  </Link>
                 </div>
               ))}
             </div>
@@ -230,7 +275,7 @@ export default function AnalyticsPage() {
             {data.recent_mocks.map((mock) => (
               <div className="recentMockRow" key={mock.attempt_id}>
                 <div>
-                  <strong>{mock.mode === "full" ? "Full mock" : mock.mode === "sectional" ? "Sectional test" : "Mini mock"}</strong>
+                  <strong>{mock.mode === "full" ? "Full Tier-I simulation" : mock.mode === "sectional" ? "Section test" : mock.mode === "mini" ? "Quick Sprint" : "Topic test"}</strong>
                   <span>{mock.submitted_at ? new Date(mock.submitted_at).toLocaleDateString() : ""}</span>
                 </div>
                 <strong>{mock.score} marks</strong>
