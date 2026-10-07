@@ -1,8 +1,32 @@
+import { clearToken } from "./auth";
+import {
+  SESSION_EXPIRED_EVENT,
+  beginSessionExpiry,
+} from "./session";
+
 export const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000/api/v1";
 
 function authHeaders(): HeadersInit {
   const token = localStorage.getItem("ssc_prep_token");
   return token ? { Authorization: "Bearer " + token } : {};
+}
+
+async function sessionFetch(input: RequestInfo | URL, init: RequestInit = {}): Promise<Response> {
+  const headers = new Headers(init.headers);
+  const authenticatedRequest = headers.has("Authorization");
+  const response = await window.fetch(input, init);
+
+  if (response.status === 401 && authenticatedRequest) {
+    clearToken();
+    const next = window.location.pathname + window.location.search + window.location.hash;
+    if (beginSessionExpiry(next)) {
+      window.dispatchEvent(
+        new CustomEvent(SESSION_EXPIRED_EVENT, {detail: {next}}),
+      );
+    }
+  }
+
+  return response;
 }
 
 type CacheEnvelope<T> = {
@@ -35,7 +59,7 @@ async function fetchCachedJson<T>(key: string, url: string, ttlMs: number): Prom
   const existing = inflightCache.get(key) as Promise<T> | undefined;
   if (existing) return existing;
 
-  const request = fetch(url)
+  const request = sessionFetch(url)
     .then(async (response) => {
       if (!response.ok) throw new Error("Request failed");
       const value = await response.json() as T;
@@ -100,7 +124,7 @@ export type ReviewQuestion = {
 };
 
 export async function login(email: string, password: string): Promise<AuthResponse> {
-  const response = await fetch(API_BASE + "/auth/login", {
+  const response = await sessionFetch(API_BASE + "/auth/login", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({email, password}),
@@ -114,7 +138,7 @@ export async function register(
   password: string,
   display_name?: string,
 ): Promise<AuthResponse> {
-  const response = await fetch(API_BASE + "/auth/register", {
+  const response = await sessionFetch(API_BASE + "/auth/register", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({email, password, display_name}),
@@ -124,13 +148,13 @@ export async function register(
 }
 
 export async function fetchCurrentUser(): Promise<User> {
-  const response = await fetch(API_BASE + "/auth/me", {headers: authHeaders()});
+  const response = await sessionFetch(API_BASE + "/auth/me", {headers: authHeaders()});
   if (!response.ok) throw new Error("Failed to load account");
   return response.json();
 }
 
 export async function updateCurrentUser(display_name: string): Promise<User> {
-  const response = await fetch(API_BASE + "/auth/me", {
+  const response = await sessionFetch(API_BASE + "/auth/me", {
     method: "PATCH",
     headers: {...authHeaders(), "Content-Type": "application/json"},
     body: JSON.stringify({display_name}),
@@ -140,7 +164,7 @@ export async function updateCurrentUser(display_name: string): Promise<User> {
 }
 
 export async function changePassword(current_password: string, new_password: string): Promise<void> {
-  const response = await fetch(API_BASE + "/auth/change-password", {
+  const response = await sessionFetch(API_BASE + "/auth/change-password", {
     method: "POST",
     headers: {...authHeaders(), "Content-Type": "application/json"},
     body: JSON.stringify({current_password, new_password}),
@@ -152,7 +176,7 @@ export async function changePassword(current_password: string, new_password: str
 }
 
 export async function fetchTopics(subjectId: number): Promise<Topic[]> {
-  const response = await fetch(API_BASE + "/content/topics?subject_id=" + subjectId, {
+  const response = await sessionFetch(API_BASE + "/content/topics?subject_id=" + subjectId, {
     headers: authHeaders(),
   });
   if (!response.ok) throw new Error("Failed to load topics");
@@ -160,13 +184,13 @@ export async function fetchTopics(subjectId: number): Promise<Topic[]> {
 }
 
 export async function fetchReviewQuestions(): Promise<ReviewQuestion[]> {
-  const response = await fetch(API_BASE + "/review/questions", {headers: authHeaders()});
+  const response = await sessionFetch(API_BASE + "/review/questions", {headers: authHeaders()});
   if (!response.ok) throw new Error("Failed to load review queue");
   return response.json();
 }
 
 export async function suggestReviewTopic(questionId: number) {
-  const response = await fetch(API_BASE + "/review/questions/" + questionId + "/suggest-topic", {
+  const response = await sessionFetch(API_BASE + "/review/questions/" + questionId + "/suggest-topic", {
     method: "POST",
     headers: authHeaders(),
   });
@@ -185,7 +209,7 @@ export async function updateReviewQuestion(
     verification_status: string;
   },
 ) {
-  const response = await fetch(API_BASE + "/review/questions/" + questionId, {
+  const response = await sessionFetch(API_BASE + "/review/questions/" + questionId, {
     method: "PATCH",
     headers: {...authHeaders(), "Content-Type": "application/json"},
     body: JSON.stringify(payload),
@@ -201,7 +225,7 @@ export type ReviewStats = {
 };
 
 export async function fetchReviewStats(): Promise<ReviewStats> {
-  const response = await fetch(API_BASE + "/review/stats", {headers: authHeaders()});
+  const response = await sessionFetch(API_BASE + "/review/stats", {headers: authHeaders()});
   if (!response.ok) throw new Error("Failed to load review stats");
   return response.json();
 }
@@ -248,7 +272,7 @@ export async function fetchContentTree(): Promise<ContentTree> {
 }
 
 export async function fetchTopicLessons(topicId: number): Promise<Lesson[]> {
-  const response = await fetch(API_BASE + "/learn/topics/" + topicId + "/lessons");
+  const response = await sessionFetch(API_BASE + "/learn/topics/" + topicId + "/lessons");
   if (!response.ok) throw new Error("Failed to load lessons");
   return response.json();
 }
@@ -295,7 +319,7 @@ export type PracticeResult = {
 export async function fetchPracticeQuestions(topicId: number | undefined, limit = 5, mode = "adaptive"): Promise<PracticeQuestion[]> {
   const params = new URLSearchParams({limit: String(limit), mode});
   if (topicId) params.set("topic_id", String(topicId));
-  const response = await fetch(
+  const response = await sessionFetch(
     API_BASE + "/practice/questions?" + params.toString(),
     {headers: authHeaders()},
   );
@@ -311,7 +335,7 @@ export async function submitPracticeAnswer(payload: {
   used_hint: boolean;
   mistake_type: string | null;
 }): Promise<PracticeResult> {
-  const response = await fetch(API_BASE + "/practice/submit", {
+  const response = await sessionFetch(API_BASE + "/practice/submit", {
     method: "POST",
     headers: {...authHeaders(), "Content-Type": "application/json"},
     body: JSON.stringify(payload),
@@ -325,7 +349,7 @@ export async function classifyPracticeMistake(
   attemptId: number,
   mistakeType: string,
 ): Promise<void> {
-  const response = await fetch(API_BASE + "/practice/attempts/" + attemptId + "/mistake", {
+  const response = await sessionFetch(API_BASE + "/practice/attempts/" + attemptId + "/mistake", {
     method: "PATCH",
     headers: {...authHeaders(), "Content-Type": "application/json"},
     body: JSON.stringify({mistake_type: mistakeType}),
@@ -379,7 +403,7 @@ export async function startMock(
   subject_slug?: string,
   topic_id?: number,
 ): Promise<MockStartResponse> {
-  const response = await fetch(API_BASE + "/mocks/start", {
+  const response = await sessionFetch(API_BASE + "/mocks/start", {
     method: "POST",
     headers: {...authHeaders(), "Content-Type": "application/json"},
     body: JSON.stringify({mode, subject_slug: subject_slug ?? null, topic_id: topic_id ?? null}),
@@ -403,19 +427,19 @@ export type ActiveMock = {
 };
 
 export async function fetchActiveMock(): Promise<ActiveMock> {
-  const response = await fetch(API_BASE + "/mocks/active/current", {headers: authHeaders()});
+  const response = await sessionFetch(API_BASE + "/mocks/active/current", {headers: authHeaders()});
   if (!response.ok) throw new Error("Failed to load active mock");
   return response.json();
 }
 
 export async function fetchMockAttempt(attemptId: number): Promise<MockStartResponse> {
-  const response = await fetch(API_BASE + "/mocks/" + attemptId, {headers: authHeaders()});
+  const response = await sessionFetch(API_BASE + "/mocks/" + attemptId, {headers: authHeaders()});
   if (!response.ok) throw new Error("Failed to load mock");
   return response.json();
 }
 
 export async function abandonMock(attemptId: number): Promise<void> {
-  const response = await fetch(API_BASE + "/mocks/" + attemptId, {
+  const response = await sessionFetch(API_BASE + "/mocks/" + attemptId, {
     method: "DELETE",
     headers: authHeaders(),
   });
@@ -424,7 +448,7 @@ export async function abandonMock(attemptId: number): Promise<void> {
 
 
 export async function fetchMockState(attemptId: number): Promise<MockStateResponse> {
-  const response = await fetch(API_BASE + "/mocks/" + attemptId + "/state", {
+  const response = await sessionFetch(API_BASE + "/mocks/" + attemptId + "/state", {
     headers: authHeaders(),
   });
   if (!response.ok) throw new Error("Failed to load mock state");
@@ -440,7 +464,7 @@ export async function saveMockResponse(
     time_seconds: number;
   },
 ): Promise<void> {
-  const response = await fetch(API_BASE + "/mocks/" + attemptId + "/response", {
+  const response = await sessionFetch(API_BASE + "/mocks/" + attemptId + "/response", {
     method: "PATCH",
     headers: {...authHeaders(), "Content-Type": "application/json"},
     body: JSON.stringify(payload),
@@ -483,7 +507,7 @@ export type MockReview = {
 };
 
 export async function fetchMockReview(attemptId: number): Promise<MockReview> {
-  const response = await fetch(API_BASE + "/mocks/" + attemptId + "/review", {
+  const response = await sessionFetch(API_BASE + "/mocks/" + attemptId + "/review", {
     headers: authHeaders(),
   });
   if (!response.ok) throw new Error("Failed to load mock review");
@@ -492,7 +516,7 @@ export async function fetchMockReview(attemptId: number): Promise<MockReview> {
 
 
 export async function submitMock(attemptId: number): Promise<MockSubmitResult> {
-  const response = await fetch(API_BASE + "/mocks/" + attemptId + "/submit", {
+  const response = await sessionFetch(API_BASE + "/mocks/" + attemptId + "/submit", {
     method: "POST",
     headers: authHeaders(),
   });
@@ -581,7 +605,7 @@ export type AnalyticsSummary = {
 };
 
 export async function fetchAnalyticsSummary(): Promise<AnalyticsSummary> {
-  const response = await fetch(API_BASE + "/analytics/summary", {
+  const response = await sessionFetch(API_BASE + "/analytics/summary", {
     headers: authHeaders(),
   });
   if (!response.ok) throw new Error("Failed to load analytics");
@@ -625,7 +649,7 @@ export type BookmarkItem = {
 
 export async function fetchRevisionQueue(reason?: string): Promise<RevisionItem[]> {
   const suffix = reason ? "?reason=" + encodeURIComponent(reason) : "";
-  const response = await fetch(API_BASE + "/revision/queue" + suffix, {
+  const response = await sessionFetch(API_BASE + "/revision/queue" + suffix, {
     headers: authHeaders(),
   });
   if (!response.ok) throw new Error("Failed to load revision queue");
@@ -633,7 +657,7 @@ export async function fetchRevisionQueue(reason?: string): Promise<RevisionItem[
 }
 
 export async function reviewRevisionItem(itemId: number, success: boolean): Promise<void> {
-  const response = await fetch(API_BASE + "/revision/items/" + itemId + "/review?success=" + success, {
+  const response = await sessionFetch(API_BASE + "/revision/items/" + itemId + "/review?success=" + success, {
     method: "POST",
     headers: authHeaders(),
   });
@@ -641,7 +665,7 @@ export async function reviewRevisionItem(itemId: number, success: boolean): Prom
 }
 
 export async function addQuestionToRevision(questionId: number): Promise<{added: boolean; item_id: number; reason: string}> {
-  const response = await fetch(API_BASE + "/revision/questions/" + questionId + "/add", {
+  const response = await sessionFetch(API_BASE + "/revision/questions/" + questionId + "/add", {
     method: "POST",
     headers: authHeaders(),
   });
@@ -651,7 +675,7 @@ export async function addQuestionToRevision(questionId: number): Promise<{added:
 
 
 export async function toggleBookmark(questionId: number): Promise<{bookmarked: boolean}> {
-  const response = await fetch(API_BASE + "/revision/bookmarks/" + questionId, {
+  const response = await sessionFetch(API_BASE + "/revision/bookmarks/" + questionId, {
     method: "POST",
     headers: authHeaders(),
   });
@@ -660,7 +684,7 @@ export async function toggleBookmark(questionId: number): Promise<{bookmarked: b
 }
 
 export async function fetchBookmarks(): Promise<BookmarkItem[]> {
-  const response = await fetch(API_BASE + "/revision/bookmarks", {
+  const response = await sessionFetch(API_BASE + "/revision/bookmarks", {
     headers: authHeaders(),
   });
   if (!response.ok) throw new Error("Failed to load bookmarks");
@@ -668,7 +692,7 @@ export async function fetchBookmarks(): Promise<BookmarkItem[]> {
 }
 
 export async function fetchDueFlashcards(): Promise<FlashcardItem[]> {
-  const response = await fetch(API_BASE + "/revision/flashcards/due", {
+  const response = await sessionFetch(API_BASE + "/revision/flashcards/due", {
     headers: authHeaders(),
   });
   if (!response.ok) throw new Error("Failed to load flashcards");
@@ -676,7 +700,7 @@ export async function fetchDueFlashcards(): Promise<FlashcardItem[]> {
 }
 
 export async function reviewFlashcard(flashcardId: number, success: boolean): Promise<void> {
-  const response = await fetch(API_BASE + "/revision/flashcards/" + flashcardId + "/review?success=" + success, {
+  const response = await sessionFetch(API_BASE + "/revision/flashcards/" + flashcardId + "/review?success=" + success, {
     method: "POST",
     headers: authHeaders(),
   });
@@ -716,7 +740,7 @@ export type TodayPlan = {
 };
 
 export async function fetchTodayPlan(): Promise<TodayPlan> {
-  const response = await fetch(API_BASE + "/planner/today", {
+  const response = await sessionFetch(API_BASE + "/planner/today", {
     headers: authHeaders(),
   });
   if (!response.ok) {
@@ -730,7 +754,7 @@ export async function setPlannerConfig(
   examDate: string,
   dailyMinutes: number,
 ): Promise<TodayPlan> {
-  const response = await fetch(API_BASE + "/planner/config", {
+  const response = await sessionFetch(API_BASE + "/planner/config", {
     method: "PUT",
     headers: {...authHeaders(), "Content-Type": "application/json"},
     body: JSON.stringify({
@@ -744,7 +768,7 @@ export async function setPlannerConfig(
 }
 
 export async function rebuildTodayPlan(): Promise<TodayPlan> {
-  const response = await fetch(API_BASE + "/planner/today/rebuild", {
+  const response = await sessionFetch(API_BASE + "/planner/today/rebuild", {
     method: "POST",
     headers: authHeaders(),
   });
@@ -753,7 +777,7 @@ export async function rebuildTodayPlan(): Promise<TodayPlan> {
 }
 
 export async function updatePlannerTask(taskId: number, completed: boolean): Promise<void> {
-  const response = await fetch(API_BASE + "/planner/tasks/" + taskId + "?completed=" + completed, {
+  const response = await sessionFetch(API_BASE + "/planner/tasks/" + taskId + "?completed=" + completed, {
     method: "PATCH",
     headers: authHeaders(),
   });
@@ -762,7 +786,7 @@ export async function updatePlannerTask(taskId: number, completed: boolean): Pro
 
 
 export async function exportBackup(): Promise<Blob> {
-  const response = await fetch(API_BASE + "/backup/export", {
+  const response = await sessionFetch(API_BASE + "/backup/export", {
     headers: authHeaders(),
   });
   if (!response.ok) throw new Error("Failed to export backup");
