@@ -172,11 +172,34 @@ def collect_content_audit(
             (int(position), text_value, image_url)
         )
 
-    verified_question_ids = list(
-        db.scalars(select(Question.id).where(*verified_filter))
-    )
+    verified_question_rows = db.execute(
+        select(Question.id, Question.topic_id, Question.source_type).where(*verified_filter)
+    ).all()
+    verified_question_ids = [int(row[0]) for row in verified_question_rows]
+    question_topic = {
+        int(question_id): int(topic_id) if topic_id is not None else None
+        for question_id, topic_id, _ in verified_question_rows
+    }
+    question_source = {
+        int(question_id): str(source_type)
+        for question_id, _, source_type in verified_question_rows
+    }
+    topic_labels = {
+        topic.id: (
+            next(
+                (subject.slug for subject in subjects if subject.id == topic.subject_id),
+                "unknown",
+            )
+            + "/"
+            + topic.slug
+        )
+        for topic in topics
+    }
+
     invalid_option_count = 0
     duplicate_option_count = 0
+    duplicate_by_topic: Counter[str] = Counter()
+    duplicate_by_source: Counter[str] = Counter()
     for question_id in verified_question_ids:
         options = options_by_question.get(int(question_id), [])
         positions = [item[0] for item in options]
@@ -194,6 +217,9 @@ def collect_content_audit(
         ]
         if len(non_empty) != len(set(non_empty)):
             duplicate_option_count += 1
+            topic_id = question_topic.get(int(question_id))
+            duplicate_by_topic[topic_labels.get(topic_id, "unassigned")] += 1
+            duplicate_by_source[question_source.get(int(question_id), "unknown")] += 1
 
     invalid_correct_option = int(
         db.scalar(
@@ -241,18 +267,30 @@ def collect_content_audit(
         )
         or 0
     )
+    missing_pattern_clause = (
+        Question.pattern_type.is_(None)
+        | (func.length(func.trim(Question.pattern_type)) == 0)
+    )
     missing_pattern = int(
         db.scalar(
             select(func.count(Question.id)).where(
                 *verified_filter,
-                (
-                    Question.pattern_type.is_(None)
-                    | (func.length(func.trim(Question.pattern_type)) == 0)
-                ),
+                missing_pattern_clause,
             )
         )
         or 0
     )
+    missing_pattern_by_topic = Counter()
+    for topic_id, count in db.execute(
+        select(Question.topic_id, func.count(Question.id))
+        .where(
+            *verified_filter,
+            missing_pattern_clause,
+        )
+        .group_by(Question.topic_id)
+    ).all():
+        label = topic_labels.get(int(topic_id), "unassigned") if topic_id is not None else "unassigned"
+        missing_pattern_by_topic[label] = int(count)
 
     difficulty = Counter(
         {
@@ -310,6 +348,11 @@ def collect_content_audit(
             "missing_fast_methods": missing_fast_method,
             "missing_expected_time": missing_expected_time,
             "missing_pattern_type": missing_pattern,
+        },
+        "diagnostics": {
+            "duplicate_option_sets_by_topic": dict(duplicate_by_topic.most_common()),
+            "duplicate_option_sets_by_source": dict(duplicate_by_source.most_common()),
+            "missing_pattern_type_by_topic": dict(missing_pattern_by_topic.most_common()),
         },
         "difficulty": dict(sorted(difficulty.items())),
         "source_types": dict(sorted(source_types.items())),
