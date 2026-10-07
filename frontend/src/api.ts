@@ -307,13 +307,14 @@ export type MockSubmitResult = {
 };
 
 export async function startMock(
-  mode: "mini" | "full" | "sectional",
+  mode: "mini" | "full" | "sectional" | "topic",
   subject_slug?: string,
+  topic_id?: number,
 ): Promise<MockStartResponse> {
   const response = await fetch(API_BASE + "/mocks/start", {
     method: "POST",
     headers: {...authHeaders(), "Content-Type": "application/json"},
-    body: JSON.stringify({mode, subject_slug: subject_slug ?? null}),
+    body: JSON.stringify({mode, subject_slug: subject_slug ?? null, topic_id: topic_id ?? null}),
   });
   if (!response.ok) {
     const error = await response.json().catch(() => null);
@@ -374,6 +375,43 @@ export async function saveMockResponse(
   });
   if (!response.ok) throw new Error("Failed to save mock response");
 }
+
+export type MockReview = {
+  attempt_id: number;
+  sections: Record<string, {
+    correct: number;
+    incorrect: number;
+    unattempted: number;
+    time_seconds: number;
+  }>;
+  easy_missed: number;
+  slow_questions: number;
+  questions: Array<{
+    position: number;
+    section_slug: string;
+    question_id: number;
+    question_text: string;
+    selected_option: number | null;
+    correct_option: number;
+    correct: boolean;
+    marked_for_review: boolean;
+    time_seconds: number;
+    expected_time_seconds: number | null;
+    difficulty: number;
+    pattern_type: string | null;
+    explanation: string | null;
+    fast_method: string | null;
+  }>;
+};
+
+export async function fetchMockReview(attemptId: number): Promise<MockReview> {
+  const response = await fetch(API_BASE + "/mocks/" + attemptId + "/review", {
+    headers: authHeaders(),
+  });
+  if (!response.ok) throw new Error("Failed to load mock review");
+  return response.json();
+}
+
 
 export async function submitMock(attemptId: number): Promise<MockSubmitResult> {
   const response = await fetch(API_BASE + "/mocks/" + attemptId + "/submit", {
