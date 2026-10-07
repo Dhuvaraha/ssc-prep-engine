@@ -1,0 +1,79 @@
+name: Production Smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/production-smoke.yml"
+      - "backend/**"
+      - "frontend/**"
+      - "render.yaml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  production-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Wait for production rollout
+        run: sleep 90
+
+      - name: Verify live health and SPA routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          API="https://ssc-prep-engine-api.onrender.com"
+          WEB="https://ssc-prep-engine-web.onrender.com"
+
+          test "$(curl --retry 4 --retry-delay 5 --max-time 20 -sS -o /tmp/health -w '%{http_code}' "$API/health")" = "200"
+          grep -q '"status":"ok"' /tmp/health
+
+          for path in / /learn /practice /mocks /revision /analytics; do
+            code="$(curl --retry 4 --retry-delay 5 --max-time 20 -sS -o /tmp/spa -w '%{http_code}' "$WEB$path")"
+            test "$code" = "200"
+            grep -qi '<div id="root"></div>' /tmp/spa
+          done
+
+          code="$(curl --max-time 20 -sS -o /tmp/auth -w '%{http_code}' "$API/api/v1/analytics/summary")"
+          test "$code" = "401"
+
+      - name: Measure warm learner API latency
+        shell: bash
+        run: |
+          set -euo pipefail
+          API="https://ssc-prep-engine-api.onrender.com"
+
+          measure() {
+            name="$1"
+            url="$2"
+            file="/tmp/${name}.times"
+            : > "$file"
+
+            curl --retry 4 --retry-delay 5 --max-time 20 -fsS -o /dev/null "$url"
+
+            for _ in $(seq 1 12); do
+              curl --max-time 20 -fsS -o /dev/null -w '%{time_total}\n' "$url" >> "$file"
+            done
+
+            sort -n "$file" -o "$file"
+            p50="$(sed -n '6p' "$file")"
+            p95="$(sed -n '12p' "$file")"
+            echo "$name p50=${p50}s p95=${p95}s"
+            awk -v p95="$p95" 'BEGIN {
+              if (p95 >= 5.0) {
+                print "RELEASE BLOCKER: " p95 "s >= 5s"
+                exit 2
+              }
+              if (p95 >= 2.0) {
+                print "FAIL: " p95 "s >= 2s investigation threshold"
+                exit 1
+              }
+            }'
+          }
+
+          measure health "$API/health"
+          measure content_tree "$API/api/v1/content/tree?exam_slug=ssc-cgl-tier-1"
+          measure lesson_package "$API/api/v1/learn/topics/28/package"
