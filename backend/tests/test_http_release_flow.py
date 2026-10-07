@@ -107,7 +107,8 @@ def test_http_release_flow_register_plan_mock_review_and_permissions():
 
         tree = client.get("/api/v1/content/tree?exam_slug=ssc-cgl-tier-1")
         assert tree.status_code == 200
-        assert tree.json()["totals"]["questions"] == 10
+        assert tree.json()["totals"]["topics"] == 1
+        assert tree.json()["subjects"][0]["topic_count"] == 1
 
         plan = client.put(
             "/api/v1/planner/config",
