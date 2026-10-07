@@ -13,7 +13,7 @@ from app.schemas import (
     MockStartResponse,
     MockSubmitResponse,
 )
-from app.services.mock_engine import create_mock_attempt, load_mock_attempt, mock_timing, submit_mock_attempt
+from app.services.mock_engine import SECTION_ORDER, create_mock_attempt, load_mock_attempt, mock_timing, submit_mock_attempt
 
 router = APIRouter(prefix="/mocks", tags=["mocks"])
 
@@ -290,7 +290,7 @@ def submit_mock(
         attempt.mode == "full"
         and timing["seconds_left"] > 0
         and timing["section_index"] is not None
-        and timing["section_index"] < len(("reasoning", "general-awareness", "quant", "english")) - 1
+        and timing["section_index"] < len(SECTION_ORDER) - 1
     ):
         raise HTTPException(
             status_code=409,
