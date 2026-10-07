@@ -32,8 +32,9 @@ Learn → Practice → Test → Analyse → Revise → Improve
 - Phase 1 — Content Intelligence & Curriculum: **complete**
 - Phase 2 — Connected learner functionality: **complete**
 - Phase 3 — Production QA and release validation: **complete**
+- Phase 4A — Real-use & content-quality audit: **hardening complete; unique-depth remediation in progress**
 
-Phase 2 completion gates are documented in `docs/PHASE2_FUNCTIONALITY_READINESS.md`. Phase 3 production release gates and live deployment sign-off are documented in `docs/PHASE3_RELEASE_READINESS.md`.
+Phase 2 completion gates are documented in `docs/PHASE2_FUNCTIONALITY_READINESS.md`. Phase 3 production release gates and live deployment sign-off are documented in `docs/PHASE3_RELEASE_READINESS.md`. Phase 4A audit findings are documented in `docs/PHASE4A_REAL_USE_AUDIT.md`.
 
 ## Content note
 
