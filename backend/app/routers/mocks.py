@@ -1,6 +1,4 @@
 from collections import Counter
-from datetime import datetime, timezone
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -15,7 +13,7 @@ from app.schemas import (
     MockStartResponse,
     MockSubmitResponse,
 )
-from app.services.mock_engine import create_mock_attempt, load_mock_attempt, submit_mock_attempt
+from app.services.mock_engine import create_mock_attempt, load_mock_attempt, mock_timing, submit_mock_attempt
 
 router = APIRouter(prefix="/mocks", tags=["mocks"])
 
@@ -79,16 +77,12 @@ def active_mock(
     )
     if not attempt:
         return {"attempt_id": None}
-    elapsed = max(
-        0,
-        int((datetime.now(timezone.utc).replace(tzinfo=None) - attempt.started_at).total_seconds()),
-    )
-    total = attempt.duration_minutes * 60
+    timing = mock_timing(attempt)
     return {
         "attempt_id": attempt.id,
         "mode": attempt.mode,
         "subject_slug": attempt.subject_slug,
-        "seconds_left": max(0, total - elapsed),
+        **timing,
     }
 
 
@@ -124,6 +118,16 @@ def save_mock_response(
     if not target:
         raise HTTPException(status_code=404, detail="Question not part of this mock")
 
+    timing = mock_timing(attempt)
+    if timing["seconds_left"] <= 0:
+        raise HTTPException(status_code=409, detail="Test time is over. Submit the test.")
+    if attempt.mode == "full" and target.section_slug != timing["active_section_slug"]:
+        active = timing["active_section_slug"] or "next section"
+        raise HTTPException(
+            status_code=409,
+            detail=f"This section is locked. Continue with {active}.",
+        )
+
     target.selected_option = payload.selected_option
     target.marked_for_review = payload.marked_for_review
     target.time_seconds = payload.time_seconds
@@ -148,16 +152,13 @@ def get_mock_state(
     except LookupError:
         raise HTTPException(status_code=404, detail="Mock attempt not found")
 
-    elapsed = max(
-        0,
-        int((datetime.now(timezone.utc).replace(tzinfo=None) - attempt.started_at).total_seconds()),
-    )
+    timing = mock_timing(attempt)
     return {
         "attempt_id": attempt.id,
         "status": attempt.status,
         "started_at": attempt.started_at.isoformat(),
         "duration_minutes": attempt.duration_minutes,
-        "seconds_left": max(0, attempt.duration_minutes * 60 - elapsed),
+        **timing,
         "responses": [
             {
                 "question_id": row.question_id,
@@ -283,4 +284,16 @@ def submit_mock(
         attempt, rows = load_mock_attempt(db, attempt_id=attempt_id, user_id=user.id)
     except LookupError:
         raise HTTPException(status_code=404, detail="Mock attempt not found")
+
+    timing = mock_timing(attempt)
+    if (
+        attempt.mode == "full"
+        and timing["seconds_left"] > 0
+        and timing["section_index"] is not None
+        and timing["section_index"] < len(("reasoning", "general-awareness", "quant", "english")) - 1
+    ):
+        raise HTTPException(
+            status_code=409,
+            detail="Full Tier-I simulation can be submitted only in the final section or after time expires.",
+        )
     return submit_mock_attempt(db, attempt=attempt, rows=rows)
