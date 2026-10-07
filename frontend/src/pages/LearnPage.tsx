@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import { ContentTree, fetchContentTree, prefetchTopicPackage } from "../api";
 
 export default function LearnPage() {
+  const [params] = useSearchParams();
+  const requestedSubject = params.get("subject");
   const [tree, setTree] = useState<ContentTree | null>(null);
   const [active, setActive] = useState("reasoning");
   const [query, setQuery] = useState("");
@@ -16,7 +18,14 @@ export default function LearnPage() {
       .then((data) => {
         if (cancelled) return;
         setTree(data);
-        if (data.subjects.length) setActive(data.subjects[0].slug);
+        const requestedExists = requestedSubject
+          ? data.subjects.some((item) => item.slug === requestedSubject)
+          : false;
+        if (requestedExists && requestedSubject) {
+          setActive(requestedSubject);
+        } else if (data.subjects.length) {
+          setActive(data.subjects[0].slug);
+        }
       })
       .catch(() => {
         if (!cancelled) setError("Could not load learning content.");
@@ -24,7 +33,7 @@ export default function LearnPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [requestedSubject]);
 
   const subject = tree?.subjects.find((item) => item.slug === active);
   const topics = useMemo(() => {
