@@ -20,7 +20,13 @@ def question_fingerprint(item: ImportedQuestion) -> str:
         for option in sorted(item.options, key=lambda row: row.position)
     )
     payload = "::".join(
-        [item.exam_slug, item.subject_slug, normalize_text(item.question_text), option_text]
+        [
+            item.exam_slug,
+            item.subject_slug,
+            normalize_text(item.question_text),
+            (item.question_image_url or "").strip(),
+            option_text,
+        ]
     )
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
