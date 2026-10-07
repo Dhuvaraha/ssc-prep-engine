@@ -562,6 +562,15 @@ export type AnalyticsSummary = {
     guess_rate: number;
     overconfident_errors: number;
   };
+  learning_curve: {
+    first_attempts: number;
+    first_attempt_accuracy: number;
+    repeat_attempts: number;
+    repeat_attempt_accuracy: number;
+    repeat_gain: number;
+    slow_attempts: number;
+    time_over_target_seconds: number;
+  };
   subject_breakdown: Array<{
     subject_slug: string;
     subject_name: string;
