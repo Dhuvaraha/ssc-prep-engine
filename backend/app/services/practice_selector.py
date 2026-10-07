@@ -1,7 +1,7 @@
 from collections import defaultdict
 from datetime import datetime, timezone
 
-from sqlalchemy import select
+from sqlalchemy import case, func, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.models import Question, QuestionAttempt, RevisionItem, TopicMastery
@@ -26,6 +26,98 @@ def _round_robin(groups: dict[object, list[Question]], limit: int) -> list[Quest
     return selected
 
 
+def _question_order():
+    source_rank = case(
+        (Question.source_type == "official", 0),
+        (Question.source_type == "licensed", 1),
+        (Question.source_type == "user_private", 1),
+        (Question.source_type == "original", 2),
+        else_=3,
+    )
+    missing_year = case((Question.year.is_(None), 1), else_=0)
+    return (missing_year, Question.year.desc(), source_rank, Question.difficulty, Question.id)
+
+
+def _hydrate_questions(db: Session, ids: list[int]) -> list[Question]:
+    if not ids:
+        return []
+    rows = list(
+        db.scalars(
+            select(Question)
+            .options(selectinload(Question.options))
+            .where(Question.id.in_(ids))
+        ).unique()
+    )
+    by_id = {question.id: question for question in rows}
+    return [by_id[qid] for qid in ids if qid in by_id]
+
+
+def _balanced_candidate_ids(db: Session, *, topic_id: int | None, limit: int) -> list[int]:
+    base = (
+        Question.verification_status == "verified",
+        Question.correct_option.is_not(None),
+    )
+
+    if topic_id is not None:
+        return list(
+            db.scalars(
+                select(Question.id)
+                .where(*base, Question.topic_id == topic_id)
+                .order_by(*_question_order())
+                .limit(max(120, limit * 12))
+            )
+        )
+
+    # Keep broad practice balanced across the syllabus without hydrating the
+    # entire question bank and its option rows. Four candidates per topic gives
+    # ample diversity for 3-30 question learner sets.
+    ranked = (
+        select(
+            Question.id.label("question_id"),
+            func.row_number()
+            .over(
+                partition_by=Question.topic_id,
+                order_by=_question_order(),
+            )
+            .label("topic_rank"),
+        )
+        .where(*base)
+        .subquery()
+    )
+    return list(
+        db.scalars(
+            select(ranked.c.question_id)
+            .where(ranked.c.topic_rank <= 4)
+            .limit(max(320, limit * 24))
+        )
+    )
+
+
+def _recent_attempt_ids(db: Session, *, user_id: int, limit: int) -> list[int]:
+    raw = list(
+        db.scalars(
+            select(QuestionAttempt.question_id)
+            .where(QuestionAttempt.user_id == user_id)
+            .order_by(QuestionAttempt.attempted_at.desc(), QuestionAttempt.id.desc())
+            .limit(max(100, limit * 12))
+        )
+    )
+    # Preserve recency while removing repeated attempts of the same question.
+    return list(dict.fromkeys(raw))
+
+
+def _merge_ids(*groups: list[int]) -> list[int]:
+    merged: list[int] = []
+    seen: set[int] = set()
+    for group in groups:
+        for value in group:
+            if value in seen:
+                continue
+            seen.add(value)
+            merged.append(value)
+    return merged
+
+
 def select_practice_questions(
     db: Session,
     *,
@@ -34,21 +126,6 @@ def select_practice_questions(
     limit: int,
     mode: str,
 ) -> list[Question]:
-    stmt = (
-        select(Question)
-        .options(selectinload(Question.options))
-        .where(
-            Question.verification_status == "verified",
-            Question.correct_option.is_not(None),
-        )
-    )
-    if topic_id is not None:
-        stmt = stmt.where(Question.topic_id == topic_id)
-
-    questions = unique_questions(list(db.scalars(stmt).unique()))
-    if not questions:
-        return []
-
     now = datetime.now(timezone.utc).replace(tzinfo=None)
 
     if mode == "revision":
@@ -61,13 +138,25 @@ def select_practice_questions(
                     RevisionItem.next_review_at <= now,
                 )
                 .order_by(RevisionItem.next_review_at, RevisionItem.id)
+                .limit(max(limit * 3, 30))
             )
         )
-        if due_ids:
-            by_id = {question.id: question for question in questions}
-            due_questions = [by_id[qid] for qid in due_ids if qid in by_id]
-            if due_questions:
-                return due_questions[:limit]
+        due_questions = unique_questions(_hydrate_questions(db, due_ids))
+        if topic_id is not None:
+            due_questions = [question for question in due_questions if question.topic_id == topic_id]
+        if due_questions:
+            return due_questions[:limit]
+
+    candidate_ids = _balanced_candidate_ids(db, topic_id=topic_id, limit=limit)
+    if topic_id is None:
+        candidate_ids = _merge_ids(
+            _recent_attempt_ids(db, user_id=user_id, limit=limit),
+            candidate_ids,
+        )
+
+    questions = unique_questions(_hydrate_questions(db, candidate_ids))
+    if not questions:
+        return []
 
     if mode == "guided":
         grouped: dict[str, list[Question]] = defaultdict(list)
@@ -106,17 +195,19 @@ def select_practice_questions(
         for items in grouped_by_difficulty.values():
             items.sort(key=lambda q: (-(q.year or 0), q.id))
         selected: list[Question] = []
+        depth = 0
         while len(selected) < limit:
             added = False
             for difficulty in (1, 2, 3):
                 items = grouped_by_difficulty.get(difficulty, [])
-                if items:
-                    selected.append(items.pop(0))
+                if depth < len(items):
+                    selected.append(items[depth])
                     added = True
                     if len(selected) >= limit:
                         break
             if not added:
                 break
+            depth += 1
         return selected
 
     if mode in {"mixed", "topic"}:
@@ -135,7 +226,7 @@ def select_practice_questions(
                 QuestionAttempt.user_id == user_id,
                 QuestionAttempt.question_id.in_(ids),
             )
-            .order_by(QuestionAttempt.attempted_at.desc())
+            .order_by(QuestionAttempt.attempted_at.desc(), QuestionAttempt.id.desc())
         )
     )
 

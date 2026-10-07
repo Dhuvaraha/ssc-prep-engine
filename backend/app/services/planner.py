@@ -80,7 +80,7 @@ def _pick_topics(
     *,
     user_id: int,
     exam_id: int,
-    limit: int = 3,
+    limit: int = 4,
 ) -> list[Topic]:
     exam_topic_ids = select(Topic.id).join(Subject, Subject.id == Topic.subject_id).where(
         Subject.exam_id == exam_id
@@ -91,6 +91,7 @@ def _pick_topics(
             .where(
                 TopicMastery.user_id == user_id,
                 TopicMastery.topic_id.in_(exam_topic_ids),
+                TopicMastery.attempts > 0,
             )
             .order_by(TopicMastery.mastery_score.asc(), TopicMastery.updated_at.asc())
             .limit(limit)
@@ -142,7 +143,7 @@ def generate_today_plan(
                 DailyPlanTask.user_id == user_id,
                 DailyPlanTask.plan_date == today,
             )
-            .order_by(DailyPlanTask.priority.desc(), DailyPlanTask.id.asc())
+            .order_by(DailyPlanTask.id.asc())
         )
     )
     if existing and not rebalance:
@@ -153,6 +154,7 @@ def generate_today_plan(
     completed_minutes = sum(task.target_minutes for task in completed_tasks)
     minutes_left = max(0, target.daily_minutes - completed_minutes) if rebalance else max(45, target.daily_minutes)
     days_left = _days_until(target.exam_date, today)
+
     due_revision = db.scalar(
         select(func.count(RevisionItem.id)).where(
             RevisionItem.user_id == user_id,
@@ -160,6 +162,15 @@ def generate_today_plan(
             RevisionItem.next_review_at <= datetime.combine(today, datetime.max.time()),
         )
     ) or 0
+
+    evidence_topic_ids = set(
+        db.scalars(
+            select(TopicMastery.topic_id).where(
+                TopicMastery.user_id == user_id,
+                TopicMastery.attempts > 0,
+            )
+        )
+    )
 
     def add_task(
         activity_type: str,
@@ -200,19 +211,59 @@ def generate_today_plan(
             priority=5,
         )
 
-    topics = _pick_topics(db, user_id=user_id, exam_id=target.exam_id, limit=3)
+    topics = _pick_topics(db, user_id=user_id, exam_id=target.exam_id, limit=4)
 
-    if days_left <= 3:
-        for topic in topics[:2]:
+    def practice_label(topic: Topic) -> str:
+        return "Weak-topic practice" if topic.id in evidence_topic_ids else "Priority practice"
+
+    if days_left <= 7:
+        if topics:
+            add_task(
+                "learn",
+                f"Learn & revise {topics[0].name}",
+                25,
+                topic=topics[0],
+                priority=5,
+            )
             add_task(
                 "practice",
-                f"Final sprint: {topic.name}",
+                f"Guided practice: {topics[0].name}",
+                30,
+                topic=topics[0],
+                target_questions=20,
+                priority=5,
+            )
+        if len(topics) > 1:
+            add_task(
+                "practice",
+                f"{practice_label(topics[1])}: {topics[1].name}",
                 25,
-                topic=topic,
+                topic=topics[1],
                 target_questions=15,
                 priority=5,
             )
-        add_task("mock", "Timed mini/full mock + error review", 45, priority=5)
+
+        if days_left > 0:
+            if target.daily_minutes >= 180 and days_left % 2 == 1:
+                add_task("mock", "Full mock + immediate error review", 80, priority=5)
+            else:
+                add_task("mock", "15-minute sectional test + error review", 30, priority=5)
+
+        if len(topics) > 2:
+            add_task(
+                "practice",
+                f"{practice_label(topics[2])}: {topics[2].name}",
+                25,
+                topic=topics[2],
+                target_questions=15,
+                priority=4,
+            )
+        add_task(
+            "flashcards",
+            "Formula, vocabulary & GK active recall",
+            20,
+            priority=4,
+        )
     else:
         if topics:
             add_task(
@@ -233,21 +284,61 @@ def generate_today_plan(
         if len(topics) > 1:
             add_task(
                 "practice",
-                f"Second weak area: {topics[1].name}",
+                f"{practice_label(topics[1])}: {topics[1].name}",
                 25,
                 topic=topics[1],
                 target_questions=15,
                 priority=4,
             )
         if target.daily_minutes >= 120:
-            add_task("mock", "Mini mock and mistake review", 30, priority=4)
-
-    if minutes_left >= 15:
+            add_task("mock", "Quick timed test + mistake review", 30, priority=4)
+        if len(topics) > 2:
+            add_task(
+                "practice",
+                f"Reinforce {topics[2].name}",
+                25,
+                topic=topics[2],
+                target_questions=15,
+                priority=3,
+            )
         add_task(
             "flashcards",
-            "Formula, vocabulary & GK flashcard recall",
-            min(20, minutes_left),
+            "Formula, vocabulary & GK active recall",
+            20,
             priority=3,
+        )
+
+    # Fill the learner's declared study budget instead of silently leaving large
+    # unused gaps. Extra blocks stay actionable and rotate through priority topics.
+    rotation = topics or []
+    rotation_index = 0
+    while minutes_left >= 20:
+        topic = rotation[rotation_index % len(rotation)] if rotation else None
+        if topic is not None:
+            add_task(
+                "practice",
+                f"Mixed reinforcement: {topic.name}",
+                min(25, minutes_left),
+                topic=topic,
+                target_questions=15,
+                priority=3,
+            )
+            rotation_index += 1
+        else:
+            add_task(
+                "practice",
+                "Mixed syllabus reinforcement",
+                min(25, minutes_left),
+                target_questions=15,
+                priority=3,
+            )
+
+    if minutes_left >= 10:
+        add_task(
+            "flashcards",
+            "Rapid recall finish",
+            minutes_left,
+            priority=2,
         )
 
     db.commit()

@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import select
+from sqlalchemy import case, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.models import Exam, MockAttempt, MockAttemptQuestion, Question, Subject, Topic
@@ -8,6 +8,52 @@ from app.services.question_quality import unique_questions
 
 
 SECTION_ORDER = ["reasoning", "general-awareness", "quant", "english"]
+
+
+def _question_order():
+    source_rank = case(
+        (Question.source_type == "official", 0),
+        (Question.source_type == "licensed", 1),
+        (Question.source_type == "user_private", 1),
+        (Question.source_type == "original", 2),
+        else_=3,
+    )
+    missing_year = case((Question.year.is_(None), 1), else_=0)
+    return (missing_year, Question.year.desc(), source_rank, Question.difficulty, Question.id)
+
+
+def _hydrate_questions(db: Session, ids: list[int]) -> list[Question]:
+    if not ids:
+        return []
+    questions = list(
+        db.scalars(
+            select(Question)
+            .options(selectinload(Question.options))
+            .where(Question.id.in_(ids))
+        ).unique()
+    )
+    by_id = {question.id: question for question in questions}
+    return [by_id[qid] for qid in ids if qid in by_id]
+
+
+def _bounded_unique_questions(db: Session, stmt, *, count: int) -> list[Question]:
+    """
+    Fetch a bounded candidate window first, then hydrate only those option rows.
+
+    Full/section mocks used to hydrate an entire subject bank to choose 25
+    questions. Production subjects can contain thousands of rows, so this keeps
+    mock startup proportional to the requested test size while preserving the
+    exact duplicate-content guard.
+    """
+    for candidate_limit in (max(80, count * 6), max(200, count * 20)):
+        ids = list(db.scalars(stmt.limit(candidate_limit)))
+        selected = unique_questions(_hydrate_questions(db, ids))
+        if len(selected) >= count:
+            return selected[:count]
+
+    # Safety fallback for an unusually duplicate-heavy subject/topic.
+    ids = list(db.scalars(stmt))
+    return unique_questions(_hydrate_questions(db, ids))[:count]
 
 
 def _questions_for_subject(
@@ -27,21 +73,16 @@ def _questions_for_subject(
         return []
 
     stmt = (
-        select(Question)
-        .options(selectinload(Question.options))
+        select(Question.id)
         .where(
             Question.exam_id == exam_id,
             Question.subject_id == subject.id,
             Question.verification_status == "verified",
             Question.correct_option.is_not(None),
         )
-        .order_by(
-            Question.year.desc().nullslast(),
-            Question.difficulty,
-            Question.id,
-        )
+        .order_by(*_question_order())
     )
-    return unique_questions(list(db.scalars(stmt).unique()))[:count]
+    return _bounded_unique_questions(db, stmt, count=count)
 
 
 def _questions_for_topic(
@@ -57,18 +98,18 @@ def _questions_for_topic(
     subject = db.get(Subject, topic.subject_id)
     if not subject or subject.exam_id != exam_id:
         return "", []
+
     stmt = (
-        select(Question)
-        .options(selectinload(Question.options))
+        select(Question.id)
         .where(
             Question.exam_id == exam_id,
             Question.topic_id == topic_id,
             Question.verification_status == "verified",
             Question.correct_option.is_not(None),
         )
-        .order_by(Question.difficulty, Question.year.desc().nullslast(), Question.id)
+        .order_by(*_question_order())
     )
-    return subject.slug, unique_questions(list(db.scalars(stmt).unique()))[:count]
+    return subject.slug, _bounded_unique_questions(db, stmt, count=count)
 
 
 def create_mock_attempt(
@@ -167,17 +208,15 @@ def load_mock_attempt(
             .order_by(MockAttemptQuestion.position)
         )
     )
+    question_ids = [row.question_id for row in rows]
+    questions = _hydrate_questions(db, question_ids)
+    by_id = {question.id: question for question in questions}
 
-    result: list[tuple[MockAttemptQuestion, Question]] = []
-    for row in rows:
-        question = db.scalar(
-            select(Question)
-            .options(selectinload(Question.options))
-            .where(Question.id == row.question_id)
-        )
-        if question:
-            result.append((row, question))
-
+    result = [
+        (row, by_id[row.question_id])
+        for row in rows
+        if row.question_id in by_id
+    ]
     return attempt, result
 
 

@@ -94,7 +94,7 @@ export default function DashboardPage() {
         </div>
         {tree && (
           <p className="heroContentStatus">
-            <strong>{tree.totals?.lessons ?? 0}</strong> lessons • <strong>{tree.totals?.questions ?? 0}</strong> verified practice questions • 4 exam sections
+            <strong>{tree.totals?.topics ?? 0}</strong> topics • <strong>{tree.totals?.lessons ?? 0}</strong> lessons • verified practice bank • 4 exam sections
           </p>
         )}
       </section>
@@ -134,7 +134,7 @@ export default function DashboardPage() {
                 <h3>{name}</h3>
                 <p>{description}</p>
                 {subject && (
-                  <small>{subject.lesson_count} topics • {subject.question_count} questions</small>
+                  <small>{subject.topic_count} topics • {subject.lesson_count} lessons</small>
                 )}
                 <Link className="secondaryLink" to="/learn">Study section</Link>
               </article>
@@ -152,8 +152,8 @@ export default function DashboardPage() {
         </article>
         <article>
           <p className="eyebrow">If you want an exam check</p>
-          <h3>Take a 4-minute diagnostic</h3>
-          <p>One question from each section gives the system an initial performance signal.</p>
+          <h3>Take a 4-question quick diagnostic</h3>
+          <p>One question from each section gives the system an initial performance signal without pretending to be a full exam.</p>
           <Link to={authenticated ? "/mocks" : "/login"}>Open Mock Lab →</Link>
         </article>
         <article>

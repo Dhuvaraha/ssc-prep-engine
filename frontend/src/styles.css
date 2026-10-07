@@ -2966,3 +2966,150 @@ body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
     animation-iteration-count: 1 !important;
   }
 }
+
+
+/* Phase 5 launch performance states */
+.skeletonBlock {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #e9edf2;
+}
+
+.skeletonBlock::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.72), transparent);
+  animation: skeletonSweep 1.15s ease-in-out infinite;
+}
+
+@keyframes skeletonSweep {
+  100% { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeletonBlock::after { animation: none; }
+}
+
+.learnLoading {
+  display: grid;
+  gap: 18px;
+}
+
+.learnSkeletonTabs {
+  pointer-events: none;
+}
+
+.skeletonTab {
+  width: 150px;
+  height: 54px;
+  border-radius: 14px;
+}
+
+.learnSkeletonTools {
+  pointer-events: none;
+}
+
+.skeletonInput {
+  min-height: 56px;
+}
+
+.skeletonSummary {
+  min-height: 56px;
+}
+
+.skeletonCard {
+  min-height: 190px;
+  pointer-events: none;
+}
+
+.skeletonLine {
+  width: 78%;
+  height: 12px;
+  margin-bottom: 14px;
+}
+
+.skeletonLine.short {
+  width: 38%;
+}
+
+.skeletonTitle {
+  width: 62%;
+  height: 26px;
+  margin: 18px 0;
+}
+
+.skeletonButton {
+  width: 112px;
+  height: 34px;
+  margin-top: 24px;
+}
+
+.plannerLoading {
+  display: grid;
+  gap: 14px;
+}
+
+.plannerHeroSkeleton {
+  min-height: 210px;
+}
+
+.skeletonHeroTitle {
+  width: min(420px, 72vw);
+  height: 56px;
+  margin: 18px 0;
+}
+
+.skeletonCircle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+
+.plannerTaskSkeleton {
+  min-height: 118px;
+  pointer-events: none;
+}
+
+.skeletonTaskCheck {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+}
+
+.skeletonTaskTitle {
+  width: min(390px, 72%);
+  height: 25px;
+  margin: 12px 0;
+}
+
+.plannerStudyDays {
+  margin: 0 0 8px;
+  color: #46546a !important;
+}
+
+.plannerStudyDays strong {
+  color: #172033;
+}
+
+.plannerInlineError {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border: 1px solid #efc0bb;
+  border-radius: 12px;
+  background: #fff4f2;
+  color: #8a3028;
+}
+
+@media (max-width: 760px) {
+  .skeletonCircle {
+    width: 112px;
+    height: 112px;
+  }
+
+  .learnSkeletonTabs {
+    overflow: hidden;
+  }
+}

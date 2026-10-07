@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { ContentTree, fetchContentTree } from "../api";
+import { ContentTree, fetchContentTree, prefetchTopicPackage } from "../api";
 
 export default function LearnPage() {
   const [tree, setTree] = useState<ContentTree | null>(null);
@@ -11,12 +11,19 @@ export default function LearnPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    let cancelled = false;
     fetchContentTree()
       .then((data) => {
+        if (cancelled) return;
         setTree(data);
         if (data.subjects.length) setActive(data.subjects[0].slug);
       })
-      .catch(() => setError("Could not load learning content."));
+      .catch(() => {
+        if (!cancelled) setError("Could not load learning content.");
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const subject = tree?.subjects.find((item) => item.slug === active);
@@ -41,13 +48,38 @@ export default function LearnPage() {
           <p>Every topic connects lesson → question patterns → quick check → guided practice → topic test.</p>
           {tree && (
             <p className="contentCountLine">
-              <strong>{tree.totals?.lessons ?? 0}</strong> lessons • <strong>{tree.totals?.questions ?? 0}</strong> verified questions
+              <strong>{tree.totals?.topics ?? 0}</strong> topics • <strong>{tree.totals?.lessons ?? 0}</strong> lessons
             </p>
           )}
         </div>
       </section>
 
       {error && <section className="emptyCard">{error}</section>}
+
+      {!tree && !error && (
+        <section className="learnLoading" aria-label="Loading learning topics">
+          <div className="subjectTabs learnSkeletonTabs">
+            {Array.from({length: 4}).map((_, index) => (
+              <div className="skeletonBlock skeletonTab" key={index} />
+            ))}
+          </div>
+          <div className="learnTools learnSkeletonTools">
+            <div className="skeletonBlock skeletonInput" />
+            <div className="skeletonBlock skeletonInput" />
+            <div className="skeletonBlock skeletonSummary" />
+          </div>
+          <div className="topicGrid">
+            {Array.from({length: 6}).map((_, index) => (
+              <article className="topicCard skeletonCard" key={index}>
+                <div className="skeletonBlock skeletonLine short" />
+                <div className="skeletonBlock skeletonTitle" />
+                <div className="skeletonBlock skeletonLine" />
+                <div className="skeletonBlock skeletonButton" />
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       {tree && (
         <>
@@ -59,7 +91,7 @@ export default function LearnPage() {
                 onClick={() => setActive(item.slug)}
               >
                 {item.name}
-                <small>{item.question_count} Q</small>
+                <small>{item.topic_count} topics</small>
               </button>
             ))}
           </div>
@@ -91,13 +123,18 @@ export default function LearnPage() {
           ) : (
             <section className="topicGrid">
               {topics.map((topic) => (
-                <article className="topicCard" key={topic.id}>
+                <article
+                  className="topicCard"
+                  key={topic.id}
+                  onMouseEnter={() => prefetchTopicPackage(topic.id)}
+                  onFocus={() => prefetchTopicPackage(topic.id)}
+                >
                   <div className="topicCardTopline">
                     <span>Priority {topic.priority}</span>
-                    <small>{topic.question_count} Q</small>
+                    <small>{topic.lesson_count ? "Lesson ready" : "Lesson pending"}</small>
                   </div>
                   <h3>{topic.name}</h3>
-                  <p>{topic.lesson_count ? "Lesson ready" : "Lesson pending"} • verified practice bank</p>
+                  <p>Concept lesson • verified practice bank • topic assessment</p>
                   <div className="topicCardActions">
                     <Link className="secondaryLink" to={"/learn/topic/" + topic.id}>Study lesson</Link>
                     <Link className="primaryMiniLink" to={"/practice?topic_id=" + topic.id + "&mode=guided&limit=10"}>Practice</Link>

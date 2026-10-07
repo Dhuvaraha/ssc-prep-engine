@@ -38,9 +38,7 @@ def _task_reason(task: DailyPlanTask) -> str:
     if task.activity_type == "learn":
         return "Concept-first study was prioritised before more questions from this topic."
     if task.activity_type == "practice":
-        if task.priority >= 5:
-            return "High-priority or weak-topic practice was selected by the adaptive planner."
-        return "Practice was selected to strengthen mastery and keep the topic active."
+        return "Adaptive practice was selected from your current priority topics and available attempt evidence."
     return "This task fits today's available study time and preparation priority."
 
 
@@ -60,6 +58,7 @@ class PlannerConfig(BaseModel):
 def _serialize(target, tasks):
     today = current_study_date()
     days_left = max(0, (target.exam_date - today).days)
+    full_study_days = max(0, days_left - 1) if days_left > 0 else 0
     completed_minutes = sum(task.target_minutes for task in tasks if task.status == "completed")
     total_minutes = sum(task.target_minutes for task in tasks)
     return {
@@ -68,6 +67,7 @@ def _serialize(target, tasks):
             "exam_date": target.exam_date.isoformat(),
             "daily_minutes": target.daily_minutes,
             "days_left": days_left,
+            "full_study_days": full_study_days,
         },
         "progress": {
             "completed_minutes": completed_minutes,
