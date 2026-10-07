@@ -176,3 +176,5 @@ def test_duplicate_start_returns_existing_active_attempt_instead_of_creating_two
             )
         )
         assert len(active) == 1
+    finally:
+        db.close()
