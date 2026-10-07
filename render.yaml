@@ -19,6 +19,8 @@ services:
         sync: false
       - key: REGISTRATION_ENABLED
         value: "false"
+      - key: APPLY_CONTENT_REPAIR_ON_STARTUP
+        value: "false"
       - key: PRIVATE_ASSET_DIR
         value: data/private/assets
 
