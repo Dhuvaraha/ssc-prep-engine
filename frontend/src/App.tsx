@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import AppErrorBoundary from "./components/AppErrorBoundary";
 import GlobalNav from "./components/GlobalNav";
 import OfflineBanner from "./components/OfflineBanner";
 import AnalyticsPage from "./pages/AnalyticsPage";
@@ -19,7 +20,8 @@ export default function App() {
     <BrowserRouter>
       <GlobalNav />
       <OfflineBanner />
-      <Routes>
+      <AppErrorBoundary>
+        <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
@@ -32,7 +34,8 @@ export default function App() {
         <Route path="/revision" element={<RevisionPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+        </Routes>
+      </AppErrorBoundary>
     </BrowserRouter>
   );
 }
