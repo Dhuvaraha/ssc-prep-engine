@@ -7,8 +7,8 @@ from sqlalchemy.orm import sessionmaker
 
 from app.db import Base
 from app.models import Exam, ExamTarget, Question, Subject, User
-from app.routers.mocks import get_mock_state, save_mock_response, submit_mock
-from app.schemas import MockResponseUpdate
+from app.routers.mocks import get_mock_state, save_mock_response, start_mock, submit_mock
+from app.schemas import MockResponseUpdate, MockStartRequest
 from app.services.mock_engine import SECTION_ORDER, create_mock_attempt
 from app.services.planner import ensure_exam_target
 
@@ -156,3 +156,19 @@ def test_mock_state_isolated_between_users():
         assert denied.value.status_code == 404
     finally:
         db.close()
+
+
+def test_duplicate_start_returns_existing_active_attempt_instead_of_creating_two():
+    db = _db()
+    try:
+        user, _ = _seed_full_mock(db)
+        payload = MockStartRequest(mode="full", subject_slug=None, topic_id=None)
+        first = start_mock(payload, db=db, user=user)
+        second = start_mock(payload, db=db, user=user)
+
+        assert first.attempt_id == second.attempt_id
+        active = list(db.scalars(select(__import__("app.models", fromlist=["MockAttempt"]).MockAttempt).where(
+            __import__("app.models", fromlist=["MockAttempt"]).MockAttempt.user_id == user.id,
+            __import__("app.models", fromlist=["MockAttempt"]).MockAttempt.status == "in_progress",
+        )))
+        assert len(active) == 1
