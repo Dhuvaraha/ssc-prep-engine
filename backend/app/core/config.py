@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     private_asset_dir: str = "data/private/assets"
     cors_origins: str = "http://localhost:5173"
     reviewer_emails: str = ""
+    registration_enabled: bool = True
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
