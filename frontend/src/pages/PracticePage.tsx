@@ -4,9 +4,11 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   PracticeQuestion,
   PracticeResult,
+  TopicPackage,
   addQuestionToRevision,
   classifyPracticeMistake,
   fetchPracticeQuestions,
+  fetchTopicPackage,
   submitPracticeAnswer,
   toggleBookmark,
 } from "../api";
@@ -56,6 +58,7 @@ export default function PracticePage() {
   const limit = Number.isFinite(requestedLimit) ? Math.min(30, Math.max(3, requestedLimit)) : 10;
 
   const [questions, setQuestions] = useState<PracticeQuestion[]>([]);
+  const [topicPackage, setTopicPackage] = useState<TopicPackage | null>(null);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [confidence, setConfidence] = useState<number | null>(null);
@@ -86,6 +89,11 @@ export default function PracticePage() {
     setQuestions([]);
     setIndex(0);
     setOutcomes([]);
+    if (topicId) {
+      fetchTopicPackage(topicId).then(setTopicPackage).catch(() => setTopicPackage(null));
+    } else {
+      setTopicPackage(null);
+    }
     fetchPracticeQuestions(topicId, limit, mode)
       .then((items) => {
         setQuestions(items);
@@ -264,14 +272,23 @@ export default function PracticePage() {
       <header className="practiceTopbar">
         <div>
           <button className="textBackButton" onClick={() => navigate(-1)}>← Back</button>
-          <span>{topicId ? "Topic practice" : "Mixed syllabus"}</span>
+          <span>
+            {topicPackage
+              ? topicPackage.subject.name + " / " + topicPackage.topic.name
+              : topicId
+                ? "Topic practice"
+                : "Mixed syllabus"}
+          </span>
         </div>
         <span>Question {index + 1} / {questions.length}</span>
       </header>
 
       <section className="practiceModePanel">
         <div>
-          <p className="eyebrow">{currentMode?.[1]}</p>
+          <p className="eyebrow">
+            {topicPackage ? topicPackage.subject.name + " • " + topicPackage.topic.name + " • " : ""}
+            {currentMode?.[1]}
+          </p>
           <p>{currentMode?.[2]}</p>
         </div>
         <div className="practiceModes">
