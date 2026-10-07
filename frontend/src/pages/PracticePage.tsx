@@ -54,8 +54,11 @@ export default function PracticePage() {
   const requestedMode = params.get("mode") ?? (topicId ? "adaptive" : "mixed");
   const validModes = practiceModes.map((item) => item[0]) as readonly string[];
   const mode = (validModes.includes(requestedMode) ? requestedMode : "adaptive") as Mode;
+  const rawSimilarTo = Number(params.get("similar_to") ?? "0");
+  const similarTo = Number.isFinite(rawSimilarTo) && rawSimilarTo > 0 ? rawSimilarTo : undefined;
   const requestedLimit = Number(params.get("limit") ?? "10");
-  const limit = Number.isFinite(requestedLimit) ? Math.min(30, Math.max(3, requestedLimit)) : 10;
+  const minimumLimit = similarTo ? 1 : 3;
+  const limit = Number.isFinite(requestedLimit) ? Math.min(30, Math.max(minimumLimit, requestedLimit)) : 10;
 
   const [questions, setQuestions] = useState<PracticeQuestion[]>([]);
   const [topicPackage, setTopicPackage] = useState<TopicPackage | null>(null);
@@ -108,7 +111,7 @@ export default function PracticePage() {
     } else {
       setTopicPackage(null);
     }
-    fetchPracticeQuestions(topicId, limit, mode)
+    fetchPracticeQuestions(topicId, limit, mode, similarTo)
       .then((items) => {
         setQuestions(items);
         startedAt.current = Date.now();
@@ -116,7 +119,7 @@ export default function PracticePage() {
         if (!items.length) setError("No verified questions matched this practice mode yet.");
       })
       .catch(() => setError("Could not load practice. Check your connection and try again."));
-  }, [navigate, topicId, mode, limit]);
+  }, [navigate, topicId, mode, limit, similarTo]);
 
   useEffect(() => {
     if (!question || result) return;
