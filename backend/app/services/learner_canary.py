@@ -54,7 +54,7 @@ def run_production_learner_canary(engine) -> dict:
         bind=connection,
         autoflush=False,
         expire_on_commit=False,
-        join_transaction_mode="create_savepoint",
+        join_transaction_mode="rollback_only",
     )
     canary_email = f"phase4d-canary-{uuid4().hex}@example.invalid"
 
