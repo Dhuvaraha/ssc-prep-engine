@@ -563,6 +563,21 @@ export type AnalyticsSummary = {
     unattempted: number;
     submitted_at: string | null;
   }>;
+  coach: {
+    evidence_level: "baseline" | "developing" | "established";
+    headline: string;
+    summary: string;
+    primary_action: {
+      title: string;
+      reason: string;
+      path: string;
+    };
+    secondary_action: {
+      title: string;
+      reason: string;
+      path: string;
+    };
+  };
 };
 
 export async function fetchAnalyticsSummary(): Promise<AnalyticsSummary> {
