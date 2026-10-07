@@ -84,20 +84,6 @@ def active_mock(
         int((datetime.now(timezone.utc).replace(tzinfo=None) - attempt.started_at).total_seconds()),
     )
     total = attempt.duration_minutes * 60
-    exam = db.get(Exam, attempt.exam_id)
-    positive = float(exam.positive_marks if exam else 2.0)
-    negative = float(exam.negative_marks if exam else 0.5)
-    for section in sections.values():
-        section["score"] = round(
-            float(section["correct"]) * positive - float(section["incorrect"]) * negative,
-            2,
-        )
-        attempted_count = int(section["correct"]) + int(section["incorrect"])
-        section["accuracy"] = round(
-            float(section["correct"]) * 100 / attempted_count,
-            1,
-        ) if attempted_count else 0.0
-
     return {
         "attempt_id": attempt.id,
         "mode": attempt.mode,
@@ -243,6 +229,20 @@ def review_mock(
                 "fast_method": question.fast_method,
             }
         )
+
+    exam = db.get(Exam, attempt.exam_id)
+    positive = float(exam.positive_marks if exam else 2.0)
+    negative = float(exam.negative_marks if exam else 0.5)
+    for section in sections.values():
+        section["score"] = round(
+            float(section["correct"]) * positive - float(section["incorrect"]) * negative,
+            2,
+        )
+        attempted_count = int(section["correct"]) + int(section["incorrect"])
+        section["accuracy"] = round(
+            float(section["correct"]) * 100 / attempted_count,
+            1,
+        ) if attempted_count else 0.0
 
     return {
         "attempt_id": attempt.id,
