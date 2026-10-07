@@ -1890,3 +1890,85 @@ input:focus, select:focus, textarea:focus {
     flex-direction: column;
   }
 }
+
+
+/* Settings */
+.settingsShell {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 64px;
+}
+
+.settingsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.settingsCard {
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.04);
+}
+
+.settingsCard h1,
+.settingsCard h2 {
+  margin: 4px 0 8px;
+}
+
+.settingsForm {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.settingsForm label {
+  display: grid;
+  gap: 7px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.settingsForm input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--border, #dbe1e8);
+  border-radius: 10px;
+  padding: 11px 12px;
+  font: inherit;
+  background: #fff;
+}
+
+.settingsActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.settingsNotice {
+  margin-top: 18px;
+  border: 1px solid #b7dfc5;
+  background: #f0fbf4;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.settingsError {
+  border-color: #f1b8b8;
+  background: #fff4f4;
+}
+
+@media (max-width: 760px) {
+  .settingsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .settingsShell {
+    width: min(100% - 20px, 1120px);
+    padding-top: 14px;
+  }
+}
