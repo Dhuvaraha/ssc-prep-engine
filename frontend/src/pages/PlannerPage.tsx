@@ -29,6 +29,7 @@ function localDatePlusDays(days: number): string {
 
 export default function PlannerPage() {
   const [plan, setPlan] = useState<TodayPlan | null>(null);
+  const [loading, setLoading] = useState(true);
   const [needsSetup, setNeedsSetup] = useState(false);
   const [examDate, setExamDate] = useState(() => localDatePlusDays(30));
   const [dailyMinutes, setDailyMinutes] = useState(240);
@@ -41,11 +42,13 @@ export default function PlannerPage() {
       navigate("/login");
       return;
     }
+    setLoading(true);
     fetchTodayPlan()
       .then((data) => {
         setPlan(data);
         setExamDate(data.target.exam_date);
         setDailyMinutes(data.target.daily_minutes);
+        setNeedsSetup(false);
       })
       .catch((err) => {
         if (err instanceof Error && err.message.includes("Set an exam target")) {
@@ -53,7 +56,8 @@ export default function PlannerPage() {
         } else {
           setError("Could not load today's plan.");
         }
-      });
+      })
+      .finally(() => setLoading(false));
   }, [navigate]);
 
   const progress = useMemo(() => {
@@ -78,26 +82,29 @@ export default function PlannerPage() {
 
   async function toggleTask(taskId: number, completed: boolean) {
     if (!plan) return;
-    await updatePlannerTask(taskId, completed);
-    setPlan({
-      ...plan,
-      progress: {
-        ...plan.progress,
-        completed_tasks: plan.progress.completed_tasks + (completed ? 1 : -1),
-        completed_minutes:
-          plan.progress.completed_minutes
-          + (completed
-            ? plan.tasks.find((task) => task.id === taskId)?.target_minutes ?? 0
-            : -(plan.tasks.find((task) => task.id === taskId)?.target_minutes ?? 0)),
-      },
-      tasks: plan.tasks.map((task) =>
-        task.id === taskId ? {...task, status: completed ? "completed" : "pending"} : task
-      ),
-    });
+    setError("");
+    try {
+      await updatePlannerTask(taskId, completed);
+      const minutes = plan.tasks.find((task) => task.id === taskId)?.target_minutes ?? 0;
+      setPlan({
+        ...plan,
+        progress: {
+          ...plan.progress,
+          completed_tasks: plan.progress.completed_tasks + (completed ? 1 : -1),
+          completed_minutes: plan.progress.completed_minutes + (completed ? minutes : -minutes),
+        },
+        tasks: plan.tasks.map((task) =>
+          task.id === taskId ? {...task, status: completed ? "completed" : "pending"} : task
+        ),
+      });
+    } catch {
+      setError("Could not update that task. Your plan was not changed.");
+    }
   }
 
   async function rebuild() {
     setBusy(true);
+    setError("");
     try {
       setPlan(await rebuildTodayPlan());
     } catch {
@@ -112,7 +119,7 @@ export default function PlannerPage() {
       <header className="topbar">
         <div>
           <p className="brand">Today's Preparation</p>
-          <p className="muted">Your plan adapts to weak topics, revision due and days remaining.</p>
+          <p className="muted">Concept first, then practice, timed testing and revision.</p>
         </div>
         <nav>
           <Link to="/analytics">Analytics</Link>
@@ -120,7 +127,32 @@ export default function PlannerPage() {
         </nav>
       </header>
 
-      {(needsSetup || !plan) && (
+      {loading && (
+        <section className="plannerLoading" aria-label="Loading today's plan">
+          <div className="plannerHero plannerHeroSkeleton">
+            <div>
+              <div className="skeletonBlock skeletonLine short" />
+              <div className="skeletonBlock skeletonHeroTitle" />
+              <div className="skeletonBlock skeletonLine" />
+            </div>
+            <div className="skeletonBlock skeletonCircle" />
+          </div>
+          <div className="plannerTaskList">
+            {Array.from({length: 4}).map((_, index) => (
+              <article className="plannerTask plannerTaskSkeleton" key={index}>
+                <div className="skeletonBlock skeletonTaskCheck" />
+                <div>
+                  <div className="skeletonBlock skeletonLine short" />
+                  <div className="skeletonBlock skeletonTaskTitle" />
+                  <div className="skeletonBlock skeletonLine" />
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {!loading && (needsSetup || !plan) && (
         <section className="plannerSetup">
           <p className="eyebrow">Set your target</p>
           <h1>Tell the planner when the exam is.</h1>
@@ -146,12 +178,15 @@ export default function PlannerPage() {
         </section>
       )}
 
-      {plan && !needsSetup && (
+      {!loading && plan && !needsSetup && (
         <>
           <section className="plannerHero">
             <div>
               <p className="eyebrow">SSC CGL Tier I</p>
-              <h1>{plan.target.days_left} days left</h1>
+              <h1>{plan.target.days_left} calendar days</h1>
+              <p className="plannerStudyDays">
+                <strong>{plan.target.full_study_days}</strong> full study days available before exam day
+              </p>
               <p>{plan.progress.planned_minutes} minutes planned today • {plan.target.daily_minutes} minute daily budget</p>
             </div>
             <div className="plannerProgress">
@@ -159,6 +194,8 @@ export default function PlannerPage() {
               <span>{plan.progress.completed_tasks} / {plan.progress.total_tasks} tasks</span>
             </div>
           </section>
+
+          {error && <section className="plannerInlineError">{error}</section>}
 
           <section className="plannerToolbar">
             <div className="plannerBar"><span style={{width: progress + "%"}} /></div>
@@ -168,10 +205,11 @@ export default function PlannerPage() {
           <section className="plannerTaskList">
             {plan.tasks.map((task, index) => {
               const completed = task.status === "completed";
+              const practiceMode = task.title.startsWith("Guided practice") ? "guided" : "adaptive";
               const link = task.topic_id && (task.activity_type === "learn" || task.activity_type === "practice")
                 ? task.activity_type === "learn"
                   ? "/learn/topic/" + task.topic_id
-                  : "/practice?topic_id=" + task.topic_id + "&mode=adaptive"
+                  : "/practice?topic_id=" + task.topic_id + "&mode=" + practiceMode + "&limit=10"
                 : activityLinks[task.activity_type] ?? "/";
 
               return (
