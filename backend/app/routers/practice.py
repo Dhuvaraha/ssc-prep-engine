@@ -13,6 +13,7 @@ from app.domain.revision import next_revision_date
 from app.models import Question, QuestionAttempt, RevisionItem, TopicMastery, User
 from app.schemas import MistakeUpdate, PracticeResult, PracticeSubmit, QuestionOut
 from app.services.planner import days_until_active_exam
+from app.services.practice_coach import build_question_coaching
 from app.services.practice_selector import select_practice_questions
 
 router = APIRouter(prefix="/practice", tags=["practice"])
@@ -137,6 +138,7 @@ def submit_practice(
             )
         revision_scheduled = True
 
+    coaching = build_question_coaching(db, question)
     db.commit()
 
     return PracticeResult(
@@ -147,6 +149,7 @@ def submit_practice(
         fast_method=question.fast_method,
         mastery_score=mastery_score,
         revision_scheduled=revision_scheduled,
+        coaching=coaching,
     )
 
 

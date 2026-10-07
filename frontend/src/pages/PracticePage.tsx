@@ -79,6 +79,20 @@ export default function PracticePage() {
   const targetSeconds = question?.expected_time_seconds ?? 45;
   const currentMode = practiceModes.find((item) => item[0] === mode);
 
+  const coachPreview = useMemo(() => {
+    if (!question || !topicPackage || question.topic_id !== topicPackage.topic.id) return null;
+    const exact = topicPackage.archetypes.find((item) => item.slug === question.pattern_type) ?? null;
+    const lesson = topicPackage.lessons[0] ?? null;
+    const recognition = exact?.recognition_cues ?? null;
+    const standardMethod = exact?.canonical_method ?? lesson?.concept ?? null;
+    const fastMethod = exact?.shortcut_method ?? lesson?.shortcut ?? null;
+    const commonTrap = exact?.common_trap ?? lesson?.common_traps ?? null;
+    const hintSteps = [recognition, standardMethod, fastMethod].filter(
+      (value): value is string => Boolean(value)
+    );
+    return {recognition, standardMethod, fastMethod, commonTrap, hintSteps};
+  }, [question, topicPackage]);
+
   useEffect(() => {
     if (!getToken()) {
       navigate("/login");
@@ -362,8 +376,16 @@ export default function PracticePage() {
         {!result && (
           <>
             <TeacherCoach
+              key={"before-" + question.id}
               title={question.subtopic || question.pattern_type || "this question"}
               context={question.question_text}
+              explanation={coachPreview?.recognition}
+              standardMethod={coachPreview?.standardMethod}
+              fastMethod={coachPreview?.fastMethod}
+              commonTrap={coachPreview?.commonTrap}
+              hintSteps={coachPreview?.hintSteps ?? []}
+              defaultOpen={mode === "guided"}
+              lead="Try the question yourself first. If you are stuck, ask for Hint 1; I will reveal the method progressively instead of giving the answer immediately."
               onHintUsed={() => setUsedHint(true)}
             />
             {usedHint && <p className="hintUsedNote">Hint used — this attempt will be considered by mastery and revision.</p>}
@@ -415,15 +437,101 @@ export default function PracticePage() {
                 </strong>
               </div>
             </div>
-            {result.explanation && <p>{result.explanation}</p>}
-            {result.fast_method && <p><strong>Fast method:</strong> {result.fast_method}</p>}
+            <div className="solutionTutor">
+              <div className="solutionTutorHead">
+                <div>
+                  <span>Teacher review</span>
+                  <h2>{result.correct ? "Confirm the method, not just the answer." : "Repair the method before the next question."}</h2>
+                </div>
+                {result.coaching?.archetype_exact && <small>Exact pattern match</small>}
+              </div>
+
+              {result.coaching?.pattern_name && (
+                <section className="solutionStep solutionIdentity">
+                  <span>What this tests</span>
+                  <h3>{result.coaching.pattern_name}</h3>
+                  {result.coaching.skill && <p>{result.coaching.skill}</p>}
+                </section>
+              )}
+
+              {result.coaching?.recognition_cues && (
+                <section className="solutionStep">
+                  <span>1 • Recognise</span>
+                  <h3>What clue should you notice?</h3>
+                  <p>{result.coaching.recognition_cues}</p>
+                </section>
+              )}
+
+              {result.coaching?.standard_method && (
+                <section className="solutionStep">
+                  <span>2 • Safe method</span>
+                  <h3>How should you approach it?</h3>
+                  <p>{result.coaching.standard_method}</p>
+                </section>
+              )}
+
+              {result.explanation && (
+                <section className="solutionStep solutionWorked">
+                  <span>3 • This question</span>
+                  <h3>Worked solution</h3>
+                  <p>{result.explanation}</p>
+                </section>
+              )}
+
+              {(result.coaching?.fast_method || result.fast_method) && (
+                <section className="solutionStep solutionFast">
+                  <span>4 • SSC-fast method</span>
+                  <h3>Can this be done faster?</h3>
+                  <p>{result.coaching?.fast_method ?? result.fast_method}</p>
+                </section>
+              )}
+
+              {result.coaching?.difficulty_rule && (
+                <section className="solutionStep">
+                  <span>Difficulty cue</span>
+                  <h3>At this level</h3>
+                  <p>{result.coaching.difficulty_rule}</p>
+                </section>
+              )}
+
+              {result.coaching?.common_trap && (
+                <section className="solutionStep solutionTrap">
+                  <span>5 • Marks trap</span>
+                  <h3>What mistake should you avoid?</h3>
+                  <p>{result.coaching.common_trap}</p>
+                </section>
+              )}
+
+              {result.coaching?.worked_example && (
+                <details className="relatedExample">
+                  <summary>See a related worked example</summary>
+                  <p>{result.coaching.worked_example}</p>
+                </details>
+              )}
+            </div>
+
             <TeacherCoach
-              title={question.subtopic || question.pattern_type || "this question"}
-              context={question.question_text}
+              key={"after-" + question.id}
+              title={result.coaching?.pattern_name || question.subtopic || question.pattern_type || "this question"}
+              context={[
+                question.question_text,
+                result.coaching?.recognition_cues ?? "",
+                result.coaching?.standard_method ?? "",
+              ].filter(Boolean).join(". ")}
               explanation={result.explanation}
-              fastMethod={result.fast_method}
+              fastMethod={result.coaching?.fast_method ?? result.fast_method}
+              commonTrap={result.coaching?.common_trap}
+              standardMethod={result.coaching?.standard_method}
+              examples={result.coaching?.worked_example ? [result.coaching.worked_example] : []}
+              hintSteps={result.coaching?.hint_steps ?? []}
               correctAnswer={correctLabel}
               selectedAnswer={selectedLabel}
+              defaultOpen={!result.correct}
+              lead={
+                result.correct
+                  ? "Correct. Now make sure you can explain the recognition cue and method before moving on."
+                  : "You missed this one. I will help you repair the recognition cue and method before the next question."
+              }
               onNext={next}
             />
 
