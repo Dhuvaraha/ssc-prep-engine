@@ -66,6 +66,13 @@ def import_question(db: Session, item: ImportedQuestion) -> tuple[Question, bool
     validate_question(item)
     fingerprint = question_fingerprint(item)
 
+    if item.source_question_id:
+        existing = db.scalar(
+            select(Question).where(Question.source_question_id == item.source_question_id)
+        )
+        if existing:
+            return existing, False
+
     existing = db.scalar(select(Question).where(Question.fingerprint == fingerprint))
     if existing:
         return existing, False
