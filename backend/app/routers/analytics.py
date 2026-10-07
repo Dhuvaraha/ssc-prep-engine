@@ -1,10 +1,11 @@
 from collections import Counter, defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 
 from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.study_time import current_study_date, utc_naive_to_study_date
 from app.db import get_db
 from app.deps import get_current_user
 from app.models import MockAttempt, Question, QuestionAttempt, Subject, Topic, TopicMastery, User
@@ -60,8 +61,9 @@ def analytics_summary(
         if not question:
             continue
 
-        day_key = attempt.attempted_at.date().isoformat()
-        active_dates.add(attempt.attempted_at.date())
+        attempt_day = utc_naive_to_study_date(attempt.attempted_at)
+        day_key = attempt_day.isoformat()
+        active_dates.add(attempt_day)
         daily_stats[day_key]["attempts"] += 1
         daily_stats[day_key]["correct"] += int(attempt.is_correct is True)
         daily_stats[day_key]["time"] += attempt.time_seconds
@@ -142,7 +144,7 @@ def analytics_summary(
         )
     subject_rows.sort(key=lambda item: item["subject_name"])
 
-    now = datetime.now(timezone.utc).date()
+    now = current_study_date()
     trend = []
     for offset in range(13, -1, -1):
         day = now - timedelta(days=offset)

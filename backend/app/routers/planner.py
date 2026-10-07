@@ -1,5 +1,7 @@
 from datetime import date
 
+from app.core.study_time import current_study_date
+
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field, field_validator
 from sqlalchemy.orm import Session
@@ -50,13 +52,13 @@ class PlannerConfig(BaseModel):
     @field_validator("exam_date")
     @classmethod
     def validate_exam_date(cls, value: date) -> date:
-        if value < date.today():
+        if value < current_study_date():
             raise ValueError("Exam date cannot be in the past")
         return value
 
 
 def _serialize(target, tasks):
-    today = date.today()
+    today = current_study_date()
     days_left = max(0, (target.exam_date - today).days)
     completed_minutes = sum(task.target_minutes for task in tasks if task.status == "completed")
     total_minutes = sum(task.target_minutes for task in tasks)

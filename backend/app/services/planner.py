@@ -1,8 +1,9 @@
-from datetime import date, datetime, timezone
+from datetime import date, datetime
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from app.core.study_time import current_study_date
 from app.models import DailyPlanTask, Exam, ExamTarget, RevisionItem, Subject, Topic, TopicMastery
 
 
@@ -62,11 +63,35 @@ def get_active_target(db: Session, *, user_id: int) -> ExamTarget | None:
     )
 
 
-def _pick_topics(db: Session, *, user_id: int, limit: int = 3) -> list[Topic]:
+def days_until_active_exam(
+    db: Session,
+    *,
+    user_id: int,
+    today: date | None = None,
+) -> int | None:
+    target = get_active_target(db, user_id=user_id)
+    if not target:
+        return None
+    return _days_until(target.exam_date, today or current_study_date())
+
+
+def _pick_topics(
+    db: Session,
+    *,
+    user_id: int,
+    exam_id: int,
+    limit: int = 3,
+) -> list[Topic]:
+    exam_topic_ids = select(Topic.id).join(Subject, Subject.id == Topic.subject_id).where(
+        Subject.exam_id == exam_id
+    )
     mastery_rows = list(
         db.scalars(
             select(TopicMastery)
-            .where(TopicMastery.user_id == user_id)
+            .where(
+                TopicMastery.user_id == user_id,
+                TopicMastery.topic_id.in_(exam_topic_ids),
+            )
             .order_by(TopicMastery.mastery_score.asc(), TopicMastery.updated_at.asc())
             .limit(limit)
         )
@@ -79,10 +104,16 @@ def _pick_topics(db: Session, *, user_id: int, limit: int = 3) -> list[Topic]:
 
     if len(topics) < limit:
         existing = {topic.id for topic in topics}
+        extras_stmt = (
+            select(Topic)
+            .join(Subject, Subject.id == Topic.subject_id)
+            .where(Subject.exam_id == exam_id)
+        )
+        if existing:
+            extras_stmt = extras_stmt.where(Topic.id.not_in(existing))
         extras = list(
             db.scalars(
-                select(Topic)
-                .where(Topic.id.not_in(existing) if existing else True)
+                extras_stmt
                 .order_by(Topic.priority.desc(), Topic.id.asc())
                 .limit(limit - len(topics))
             )
@@ -97,8 +128,9 @@ def generate_today_plan(
     *,
     user_id: int,
     today: date | None = None,
+    rebalance: bool = False,
 ) -> tuple[ExamTarget, list[DailyPlanTask]]:
-    today = today or datetime.now(timezone.utc).date()
+    today = today or current_study_date()
     target = get_active_target(db, user_id=user_id)
     if not target:
         raise ValueError("Set an exam target first")
@@ -113,10 +145,13 @@ def generate_today_plan(
             .order_by(DailyPlanTask.priority.desc(), DailyPlanTask.id.asc())
         )
     )
-    if existing:
+    if existing and not rebalance:
         return target, existing
 
-    minutes_left = max(45, target.daily_minutes)
+    completed_tasks = [task for task in existing if task.status == "completed"]
+    tasks: list[DailyPlanTask] = list(completed_tasks)
+    completed_minutes = sum(task.target_minutes for task in completed_tasks)
+    minutes_left = max(0, target.daily_minutes - completed_minutes) if rebalance else max(45, target.daily_minutes)
     days_left = _days_until(target.exam_date, today)
     due_revision = db.scalar(
         select(func.count(RevisionItem.id)).where(
@@ -125,8 +160,6 @@ def generate_today_plan(
             RevisionItem.next_review_at <= datetime.combine(today, datetime.max.time()),
         )
     ) or 0
-
-    tasks: list[DailyPlanTask] = []
 
     def add_task(
         activity_type: str,
@@ -167,7 +200,7 @@ def generate_today_plan(
             priority=5,
         )
 
-    topics = _pick_topics(db, user_id=user_id, limit=3)
+    topics = _pick_topics(db, user_id=user_id, exam_id=target.exam_id, limit=3)
 
     if days_left <= 3:
         for topic in topics[:2]:
@@ -224,7 +257,7 @@ def generate_today_plan(
 
 
 def rebuild_today_plan(db: Session, *, user_id: int, today: date | None = None):
-    today = today or datetime.now(timezone.utc).date()
+    today = today or current_study_date()
     tasks = list(
         db.scalars(
             select(DailyPlanTask).where(
@@ -237,4 +270,4 @@ def rebuild_today_plan(db: Session, *, user_id: int, today: date | None = None):
     for task in tasks:
         db.delete(task)
     db.commit()
-    return generate_today_plan(db, user_id=user_id, today=today)
+    return generate_today_plan(db, user_id=user_id, today=today, rebalance=True)
