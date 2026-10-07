@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { TopicPackage, fetchTopicPackage } from "../api";
+import SecureImage from "../components/SecureImage";
 import SpeakButton from "../components/SpeakButton";
 import TeacherCoach from "../components/TeacherCoach";
 
@@ -200,10 +201,13 @@ export default function LessonPage() {
   const progress = stages.length ? Math.round(((activeStageIndex + 1) / stages.length) * 100) : 0;
 
   const examples = useMemo(
-    () => allBlocks
-      .filter((block) => block.blockType.startsWith("example"))
-      .map((block) => block.body),
-    [allBlocks],
+    () => [
+      ...allBlocks
+        .filter((block) => block.blockType.startsWith("example"))
+        .map((block) => block.body),
+      ...(pkg?.worked_questions ?? []).map((question) => question.explanation),
+    ],
+    [allBlocks, pkg],
   );
 
   const shortcuts = useMemo(
@@ -291,6 +295,7 @@ export default function LessonPage() {
                 <span>{estimatedMinutes} min guided lesson</span>
                 <span>{stages.length} teaching steps</span>
                 <span>{pkg.archetypes.length} question patterns</span>
+                <span>{pkg.worked_questions.length} verified solved examples</span>
               </div>
             </div>
             <div className="topicLessonActions">
@@ -375,6 +380,72 @@ export default function LessonPage() {
                   );
                 })}
               </div>
+
+              {activeStage.id === "examples" && pkg.worked_questions.length > 0 && (
+                <section className="verifiedWalkthroughSection">
+                  <div className="verifiedWalkthroughHeading">
+                    <div>
+                      <p className="eyebrow">Verified question walkthroughs</p>
+                      <h3>Now watch the concept work on real questions.</h3>
+                    </div>
+                    <span>Answer + method shown for teaching</span>
+                  </div>
+
+                  <div className="verifiedWalkthroughList">
+                    {pkg.worked_questions.map((worked, workedIndex) => {
+                      const correctOption = worked.options.find((option) => option.position === worked.correct_option);
+                      const difficultyLabel = worked.difficulty === 1 ? "Easy" : worked.difficulty === 3 ? "Hard" : "Medium";
+                      return (
+                        <article className="verifiedWalkthrough" key={worked.id}>
+                          <header>
+                            <div>
+                              <span>{difficultyLabel} • Example {workedIndex + 1}</span>
+                              {worked.pattern_type && <small>{worked.pattern_type.replaceAll("-", " ")}</small>}
+                            </div>
+                            <div>
+                              {worked.year && <small>PYQ {worked.year}</small>}
+                              {worked.expected_time_seconds && <small>{worked.expected_time_seconds}s target</small>}
+                            </div>
+                          </header>
+
+                          <h4>{worked.question_text}</h4>
+                          {worked.question_image_url && (
+                            <SecureImage className="workedQuestionImage" src={worked.question_image_url} alt="Worked question visual" />
+                          )}
+
+                          <div className="workedQuestionOptions">
+                            {worked.options.map((option) => (
+                              <div
+                                className={option.position === worked.correct_option ? "workedQuestionOption workedCorrectOption" : "workedQuestionOption"}
+                                key={option.position}
+                              >
+                                <strong>{String.fromCharCode(64 + option.position)}</strong>
+                                <span>{option.text ?? "Image option"}</span>
+                                {option.image_url && <SecureImage src={option.image_url} alt={"Option " + option.position} />}
+                              </div>
+                            ))}
+                          </div>
+
+                          <div className="workedTeacherSolution">
+                            <span>Teacher solution</span>
+                            <strong>
+                              Correct: {String.fromCharCode(64 + worked.correct_option)}
+                              {correctOption?.text ? ". " + correctOption.text : ""}
+                            </strong>
+                            <p>{worked.explanation}</p>
+                            {worked.fast_method && (
+                              <div>
+                                <small>SSC-fast method</small>
+                                <p>{worked.fast_method}</p>
+                              </div>
+                            )}
+                          </div>
+                        </article>
+                      );
+                    })}
+                  </div>
+                </section>
+              )}
 
               <TeacherCoach
                 title={pkg.topic.name}
