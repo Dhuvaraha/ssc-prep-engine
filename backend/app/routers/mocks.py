@@ -168,6 +168,22 @@ def get_mock_state(
     }
 
 
+@router.delete("/{attempt_id}")
+def abandon_mock(
+    attempt_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    attempt = db.get(MockAttempt, attempt_id)
+    if not attempt or attempt.user_id != user.id:
+        raise HTTPException(status_code=404, detail="Mock attempt not found")
+    if attempt.status == "submitted":
+        raise HTTPException(status_code=409, detail="Submitted mock cannot be abandoned")
+    attempt.status = "abandoned"
+    db.commit()
+    return {"attempt_id": attempt.id, "status": attempt.status}
+
+
 @router.post("/{attempt_id}/submit", response_model=MockSubmitResponse)
 def submit_mock(
     attempt_id: int,
