@@ -8,6 +8,43 @@ from app.services.question_quality import unique_questions
 
 
 SECTION_ORDER = ["reasoning", "general-awareness", "quant", "english"]
+FULL_SECTION_SECONDS = 15 * 60
+FULL_TOTAL_SECONDS = len(SECTION_ORDER) * FULL_SECTION_SECONDS
+
+
+def mock_timing(attempt: MockAttempt, *, now: datetime | None = None) -> dict:
+    now = now or datetime.now(timezone.utc).replace(tzinfo=None)
+    elapsed = max(0, int((now - attempt.started_at).total_seconds()))
+    total_seconds = attempt.duration_minutes * 60
+    seconds_left = max(0, total_seconds - elapsed)
+
+    if attempt.mode != "full":
+        return {
+            "seconds_left": seconds_left,
+            "active_section_slug": None,
+            "section_index": None,
+            "section_seconds_left": None,
+            "section_duration_seconds": None,
+        }
+
+    if elapsed >= FULL_TOTAL_SECONDS:
+        return {
+            "seconds_left": 0,
+            "active_section_slug": None,
+            "section_index": None,
+            "section_seconds_left": 0,
+            "section_duration_seconds": FULL_SECTION_SECONDS,
+        }
+
+    section_index = min(elapsed // FULL_SECTION_SECONDS, len(SECTION_ORDER) - 1)
+    section_elapsed = elapsed - section_index * FULL_SECTION_SECONDS
+    return {
+        "seconds_left": max(0, FULL_TOTAL_SECONDS - elapsed),
+        "active_section_slug": SECTION_ORDER[section_index],
+        "section_index": section_index,
+        "section_seconds_left": max(0, FULL_SECTION_SECONDS - section_elapsed),
+        "section_duration_seconds": FULL_SECTION_SECONDS,
+    }
 
 
 def _question_order():

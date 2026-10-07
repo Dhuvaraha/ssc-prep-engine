@@ -339,6 +339,10 @@ export type MockStateResponse = {
   started_at: string;
   duration_minutes: number;
   seconds_left: number;
+  active_section_slug: string | null;
+  section_index: number | null;
+  section_seconds_left: number | null;
+  section_duration_seconds: number | null;
   responses: Array<{
     question_id: number;
     selected_option: number | null;
@@ -378,6 +382,10 @@ export type ActiveMock = {
   mode?: string;
   subject_slug?: string | null;
   seconds_left?: number;
+  active_section_slug?: string | null;
+  section_index?: number | null;
+  section_seconds_left?: number | null;
+  section_duration_seconds?: number | null;
 };
 
 export async function fetchActiveMock(): Promise<ActiveMock> {
@@ -423,7 +431,10 @@ export async function saveMockResponse(
     headers: {...authHeaders(), "Content-Type": "application/json"},
     body: JSON.stringify(payload),
   });
-  if (!response.ok) throw new Error("Failed to save mock response");
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.detail ?? "Failed to save mock response");
+  }
 }
 
 export type MockReview = {
@@ -471,7 +482,10 @@ export async function submitMock(attemptId: number): Promise<MockSubmitResult> {
     method: "POST",
     headers: authHeaders(),
   });
-  if (!response.ok) throw new Error("Failed to submit mock");
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.detail ?? "Failed to submit mock");
+  }
   return response.json();
 }
 
