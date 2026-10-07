@@ -137,6 +137,7 @@ def test_content_audit_detects_integrity_and_quality_gaps():
         "invalid_option_sets": 1,
         "invalid_correct_options": 1,
         "duplicate_option_sets": 1,
+        "empty_option_content_sets": 0,
         "missing_explanations": 1,
         "missing_fast_methods": 1,
         "missing_expected_time": 1,
@@ -149,9 +150,16 @@ def test_content_audit_detects_integrity_and_quality_gaps():
     assert report["diagnostics"]["duplicate_option_sets_by_source"] == {
         "original": 1,
     }
+    assert report["diagnostics"]["duplicate_shape"] == {"3-unique": 1}
+    assert report["diagnostics"]["duplicate_correct_answer_payload"] == 1
+    assert report["diagnostics"]["duplicate_distractor_only"] == 0
+    assert report["diagnostics"]["duplicate_with_image"] == 0
+    assert report["diagnostics"]["duplicate_text_only"] == 1
     assert report["diagnostics"]["missing_pattern_type_by_topic"] == {
         "reasoning/analogy": 1,
     }
+    assert report["diagnostics"]["missing_pattern_with_subtopic"] == 0
+    assert report["diagnostics"]["missing_pattern_without_subtopic"] == 1
     assert report["difficulty"] == {"1": 2, "2": 1, "3": 1}
     assert report["source_types"] == {"generated": 1, "original": 3}
     assert report["pending_topic_count"] == 1
