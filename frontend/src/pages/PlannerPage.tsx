@@ -12,7 +12,7 @@ import { getToken } from "../auth";
 
 const activityLinks: Record<string, string> = {
   learn: "/learn",
-  practice: "/learn",
+  practice: "/practice?mode=adaptive&limit=10",
   mock: "/mocks",
   revision: "/revision",
   flashcards: "/revision",
@@ -69,26 +69,32 @@ export default function PlannerPage() {
 
   async function toggleTask(taskId: number, completed: boolean) {
     if (!plan) return;
-    await updatePlannerTask(taskId, completed);
-    setPlan({
-      ...plan,
-      progress: {
-        ...plan.progress,
-        completed_tasks: plan.progress.completed_tasks + (completed ? 1 : -1),
-        completed_minutes:
-          plan.progress.completed_minutes
-          + (completed
-            ? plan.tasks.find((task) => task.id === taskId)?.target_minutes ?? 0
-            : -(plan.tasks.find((task) => task.id === taskId)?.target_minutes ?? 0)),
-      },
-      tasks: plan.tasks.map((task) =>
-        task.id === taskId ? {...task, status: completed ? "completed" : "pending"} : task
-      ),
-    });
+    setError("");
+    try {
+      await updatePlannerTask(taskId, completed);
+      setPlan({
+        ...plan,
+        progress: {
+          ...plan.progress,
+          completed_tasks: plan.progress.completed_tasks + (completed ? 1 : -1),
+          completed_minutes:
+            plan.progress.completed_minutes
+            + (completed
+              ? plan.tasks.find((task) => task.id === taskId)?.target_minutes ?? 0
+              : -(plan.tasks.find((task) => task.id === taskId)?.target_minutes ?? 0)),
+        },
+        tasks: plan.tasks.map((task) =>
+          task.id === taskId ? {...task, status: completed ? "completed" : "pending"} : task
+        ),
+      });
+    } catch {
+      setError("Could not update this task. Check your connection and try again.");
+    }
   }
 
   async function rebuild() {
     setBusy(true);
+    setError("");
     try {
       setPlan(await rebuildTodayPlan());
     } catch {
@@ -141,7 +147,7 @@ export default function PlannerPage() {
         <>
           <section className="plannerHero">
             <div>
-              <p className="eyebrow">SSC CGL Tier I</p>
+              <p className="eyebrow">{plan.target.exam_name}</p>
               <h1>{plan.target.days_left} days left</h1>
               <p>{plan.progress.planned_minutes} minutes planned today • {plan.target.daily_minutes} minute daily budget</p>
             </div>
@@ -155,6 +161,7 @@ export default function PlannerPage() {
             <div className="plannerBar"><span style={{width: progress + "%"}} /></div>
             <button className="secondary" onClick={rebuild} disabled={busy}>Rebalance pending plan</button>
           </section>
+          {error && <p className="errorText plannerError" role="alert">{error}</p>}
 
           <section className="plannerTaskList">
             {plan.tasks.map((task, index) => {
@@ -176,12 +183,16 @@ export default function PlannerPage() {
                   </button>
                   <div className="plannerTaskBody">
                     <div className="plannerTaskMeta">
+                      {task.subject_name && <span>{task.subject_name}</span>}
+                      {task.topic_name && <span>{task.topic_name}</span>}
+                      {task.subtopic && <span>{task.subtopic}</span>}
                       <span>{task.activity_type}</span>
                       <span>{task.target_minutes} min</span>
                       {task.target_questions && <span>{task.target_questions} questions</span>}
                     </div>
                     <h2>{task.title}</h2>
                     <p className="plannerTaskReason"><strong>Why this?</strong> {task.reason}</p>
+                    <p className="plannerTaskOutcome"><strong>Expected outcome:</strong> {task.expected_outcome}</p>
                   </div>
                   <Link className="taskOpen" to={link}>Open →</Link>
                 </article>
@@ -192,7 +203,7 @@ export default function PlannerPage() {
           <section className="plannerSettings">
             <div>
               <strong>Plan settings</strong>
-              <span>Exam: {new Date(plan.target.exam_date + "T00:00:00").toLocaleDateString()} • {plan.target.daily_minutes / 60}h/day</span>
+              <span>{plan.target.exam_name} • Exam: {new Date(plan.target.exam_date + "T00:00:00").toLocaleDateString()} • {plan.target.daily_minutes / 60}h/day</span>
             </div>
             <button className="secondary" onClick={() => setNeedsSetup(true)}>Change</button>
           </section>
