@@ -4,7 +4,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.core.study_time import current_study_date
-from app.models import DailyPlanTask, Exam, ExamTarget, RevisionItem, Subject, Topic, TopicMastery
+from app.models import DailyPlanTask, Exam, ExamTarget, MockAttempt, RevisionItem, Subject, Topic, TopicMastery
 
 
 def _days_until(target: date, today: date) -> int:
@@ -14,6 +14,34 @@ def _days_until(target: date, today: date) -> int:
 def _find_subject_slug(db: Session, topic: Topic) -> str | None:
     subject = db.get(Subject, topic.subject_id)
     return subject.slug if subject else None
+
+
+def _sprint_stage(days_left: int) -> str:
+    if days_left <= 0:
+        return "exam_day"
+    if days_left == 1:
+        return "final_day"
+    if days_left <= 3:
+        return "test_and_repair"
+    if days_left <= 5:
+        return "consolidate"
+    if days_left <= 7:
+        return "coverage"
+    return "normal"
+
+
+def _submitted_full_mock_count(db: Session, *, user_id: int, exam_id: int) -> int:
+    return int(
+        db.scalar(
+            select(func.count(MockAttempt.id)).where(
+                MockAttempt.user_id == user_id,
+                MockAttempt.exam_id == exam_id,
+                MockAttempt.mode == "full",
+                MockAttempt.status == "submitted",
+            )
+        )
+        or 0
+    )
 
 
 def ensure_exam_target(
