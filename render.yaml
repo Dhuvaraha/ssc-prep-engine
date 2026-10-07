@@ -15,5 +15,7 @@ services:
         generateValue: true
       - key: CORS_ORIGINS
         sync: false
+      - key: REVIEWER_EMAILS
+        sync: false
       - key: PRIVATE_ASSET_DIR
         value: data/private/assets
