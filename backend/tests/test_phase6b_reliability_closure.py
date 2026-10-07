@@ -6,7 +6,7 @@ from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 
 from app.db import Base
-from app.models import Exam, ExamTarget, Question, Subject, User
+from app.models import Exam, ExamTarget, MockAttempt, Question, Subject, User
 from app.routers.mocks import get_mock_state, save_mock_response, start_mock, submit_mock
 from app.schemas import MockResponseUpdate, MockStartRequest
 from app.services.mock_engine import SECTION_ORDER, create_mock_attempt
@@ -167,8 +167,12 @@ def test_duplicate_start_returns_existing_active_attempt_instead_of_creating_two
         second = start_mock(payload, db=db, user=user)
 
         assert first.attempt_id == second.attempt_id
-        active = list(db.scalars(select(__import__("app.models", fromlist=["MockAttempt"]).MockAttempt).where(
-            __import__("app.models", fromlist=["MockAttempt"]).MockAttempt.user_id == user.id,
-            __import__("app.models", fromlist=["MockAttempt"]).MockAttempt.status == "in_progress",
-        )))
+        active = list(
+            db.scalars(
+                select(MockAttempt).where(
+                    MockAttempt.user_id == user.id,
+                    MockAttempt.status == "in_progress",
+                )
+            )
+        )
         assert len(active) == 1
