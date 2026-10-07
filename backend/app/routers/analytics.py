@@ -47,6 +47,13 @@ def analytics_summary(
 
     timed_count = 0
     within_target = 0
+    time_over_target_seconds = 0.0
+    slow_attempts = 0
+    first_attempts = 0
+    first_correct = 0
+    repeat_attempts = 0
+    repeat_correct = 0
+    seen_question_ids: set[int] = set()
     topic_stats: dict[int, dict[str, float]] = defaultdict(
         lambda: {"attempts": 0, "correct": 0, "time": 0}
     )
@@ -60,10 +67,18 @@ def analytics_summary(
     confidence_counts = Counter()
     active_dates = set()
 
-    for attempt in attempts:
+    for attempt in sorted(attempts, key=lambda item: (item.attempted_at, item.id)):
         question = question_cache.get(attempt.question_id)
         if not question:
             continue
+
+        if attempt.question_id in seen_question_ids:
+            repeat_attempts += 1
+            repeat_correct += int(attempt.is_correct is True)
+        else:
+            seen_question_ids.add(attempt.question_id)
+            first_attempts += 1
+            first_correct += int(attempt.is_correct is True)
 
         attempt_day = utc_naive_to_study_date(attempt.attempted_at)
         day_key = attempt_day.isoformat()
@@ -90,6 +105,12 @@ def analytics_summary(
             timed_count += 1
             if attempt.time_seconds <= question.expected_time_seconds:
                 within_target += 1
+            else:
+                slow_attempts += 1
+                time_over_target_seconds += max(
+                    0.0,
+                    float(attempt.time_seconds) - float(question.expected_time_seconds),
+                )
 
         if question.topic_id:
             row = topic_stats[question.topic_id]
@@ -103,6 +124,9 @@ def analytics_summary(
         row["time"] += attempt.time_seconds
 
     speed_score = _pct(within_target, timed_count)
+    first_attempt_accuracy = _pct(first_correct, first_attempts)
+    repeat_attempt_accuracy = _pct(repeat_correct, repeat_attempts)
+    repeat_gain = round(repeat_attempt_accuracy - first_attempt_accuracy, 1) if repeat_attempts else 0.0
 
     masteries = list(
         db.scalars(select(TopicMastery).where(TopicMastery.user_id == user.id))
@@ -361,6 +385,15 @@ def analytics_summary(
             "guess_accuracy": _pct(confidence_counts["guess_correct"], confidence_counts["guess"]),
             "guess_rate": _pct(confidence_counts["guess"], total_attempts),
             "overconfident_errors": confidence_counts["overconfident_errors"],
+        },
+        "learning_curve": {
+            "first_attempts": first_attempts,
+            "first_attempt_accuracy": first_attempt_accuracy,
+            "repeat_attempts": repeat_attempts,
+            "repeat_attempt_accuracy": repeat_attempt_accuracy,
+            "repeat_gain": repeat_gain,
+            "slow_attempts": slow_attempts,
+            "time_over_target_seconds": round(time_over_target_seconds, 1),
         },
         "subject_breakdown": subject_rows,
         "trend": trend,
