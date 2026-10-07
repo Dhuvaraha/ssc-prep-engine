@@ -2387,7 +2387,7 @@ input:focus, select:focus, textarea:focus {
   min-height: 58px;
   margin-left: 214px;
   display: grid;
-  grid-template-columns: auto minmax(0,1fr) auto;
+  grid-template-columns: auto minmax(0,1fr) auto auto;
   gap: 12px;
   align-items: center;
   padding: 9px 24px;
@@ -2935,4 +2935,44 @@ body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
 .settingsForm input[type="range"] {
   padding: 0;
   accent-color: #172033;
+}
+
+
+/* Phase 2 closure: explicit profile access and context actions */
+.contextProfile {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid #dfe5ed;
+  border-radius: 50%;
+  background: white;
+}
+.contextProfile:hover,
+.contextProfileActive {
+  border-color: #9aa7b7;
+  box-shadow: 0 0 0 3px rgba(148,163,184,.14);
+}
+.contextProfile .avatarDot {
+  width: 30px;
+  height: 30px;
+}
+.plannerError { margin: 10px 0 0; }
+
+@media (max-width: 980px) {
+  .appContextBar {
+    grid-template-columns: auto minmax(0,1fr) auto;
+  }
+  .contextProfile { grid-column: 3; }
+}
+
+@media (max-width: 560px) {
+  .contextProfile {
+    width: 34px;
+    height: 34px;
+  }
+  .contextProfile .avatarDot {
+    width: 28px;
+    height: 28px;
+  }
 }
