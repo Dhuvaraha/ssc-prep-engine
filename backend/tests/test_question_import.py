@@ -116,3 +116,9 @@ def test_import_persists_subtopic_and_pattern_type():
         assert len(question.options) == 4
     finally:
         db.close()
+
+
+def test_visual_fingerprint_includes_prompt_image_identity():
+    first = _verified_question(question_image_url="private://prompt-a.svg")
+    second = _verified_question(question_image_url="private://prompt-b.svg")
+    assert question_fingerprint(first) != question_fingerprint(second)
