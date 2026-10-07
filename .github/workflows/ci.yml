@@ -33,5 +33,7 @@ jobs:
           cache: pip
           cache-dependency-path: backend/requirements.txt
       - run: pip install -r requirements.txt
+      - run: pip install pyflakes==4.0.2
+      - run: pyflakes app tests
       - run: python -m compileall app
       - run: PYTHONPATH=. pytest -q
