@@ -11,10 +11,25 @@ from app.routers import analytics, assets, auth, backup, content, exams, health,
 from app.services.content_audit import collect_content_audit
 from app.services.content_repair import repair_content_integrity
 from app.services.learner_canary import run_production_learner_canary
+from app.services.mock_readiness import collect_mock_readiness
+from app.services.teacher_readiness import collect_teacher_readiness
 
 
 logger = logging.getLogger("uvicorn.error")
 settings = get_settings()
+
+
+def run_launch_readiness_checks(db) -> dict:
+    teacher = collect_teacher_readiness(db)
+    mock = collect_mock_readiness(db)
+    report = {"teacher": teacher, "mock": mock}
+    logger.info(
+        "PHASE6_LAUNCH_READINESS %s",
+        json.dumps(report, separators=(",", ":"), sort_keys=True),
+    )
+    if teacher.get("status") != "ready" or mock.get("status") != "ready":
+        raise RuntimeError("Launch readiness audit reported pending content gates")
+    return report
 
 
 def run_startup_content_checks(db) -> None:
@@ -53,8 +68,10 @@ async def lifespan(_: FastAPI):
     db = SessionLocal()
     try:
         run_startup_content_checks(db)
+        if settings.run_launch_audit_on_startup:
+            run_launch_readiness_checks(db)
     except Exception:
-        logger.exception("PHASE4_CONTENT_AUDIT_FAILED")
+        logger.exception("STARTUP_CONTENT_OR_LAUNCH_AUDIT_FAILED")
     finally:
         db.close()
 
