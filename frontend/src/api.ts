@@ -5,6 +5,55 @@ function authHeaders(): HeadersInit {
   return token ? { Authorization: "Bearer " + token } : {};
 }
 
+type CacheEnvelope<T> = {
+  value: T;
+  expires_at: number;
+};
+
+const memoryCache = new Map<string, CacheEnvelope<unknown>>();
+const inflightCache = new Map<string, Promise<unknown>>();
+
+async function fetchCachedJson<T>(key: string, url: string, ttlMs: number): Promise<T> {
+  const now = Date.now();
+  const memory = memoryCache.get(key) as CacheEnvelope<T> | undefined;
+  if (memory && memory.expires_at > now) return memory.value;
+
+  try {
+    const raw = sessionStorage.getItem(key);
+    if (raw) {
+      const cached = JSON.parse(raw) as CacheEnvelope<T>;
+      if (cached.expires_at > now) {
+        memoryCache.set(key, cached as CacheEnvelope<unknown>);
+        return cached.value;
+      }
+      sessionStorage.removeItem(key);
+    }
+  } catch {
+    sessionStorage.removeItem(key);
+  }
+
+  const existing = inflightCache.get(key) as Promise<T> | undefined;
+  if (existing) return existing;
+
+  const request = fetch(url)
+    .then(async (response) => {
+      if (!response.ok) throw new Error("Request failed");
+      const value = await response.json() as T;
+      const envelope: CacheEnvelope<T> = {value, expires_at: Date.now() + ttlMs};
+      memoryCache.set(key, envelope as CacheEnvelope<unknown>);
+      try {
+        sessionStorage.setItem(key, JSON.stringify(envelope));
+      } catch {
+        // Cache is an optimisation; storage quota/private mode must not break navigation.
+      }
+      return value;
+    })
+    .finally(() => inflightCache.delete(key));
+
+  inflightCache.set(key, request as Promise<unknown>);
+  return request;
+}
+
 export type User = {
   id: number;
   email: string;
@@ -160,20 +209,19 @@ export async function fetchReviewStats(): Promise<ReviewStats> {
 
 export type ContentTree = {
   exam: {id: number; slug: string; name: string};
-  totals?: {lessons: number; questions: number};
+  totals?: {lessons: number; topics: number};
   subjects: Array<{
     id: number;
     slug: string;
     name: string;
     lesson_count: number;
-    question_count: number;
+    topic_count: number;
     topics: Array<{
       id: number;
       slug: string;
       name: string;
       priority: number;
       lesson_count: number;
-      question_count: number;
     }>;
   }>;
 };
@@ -192,9 +240,11 @@ export type Lesson = {
 };
 
 export async function fetchContentTree(): Promise<ContentTree> {
-  const response = await fetch(API_BASE + "/content/tree?exam_slug=ssc-cgl-tier-1");
-  if (!response.ok) throw new Error("Failed to load content tree");
-  return response.json();
+  return fetchCachedJson<ContentTree>(
+    "ssc_content_tree_v2",
+    API_BASE + "/content/tree?exam_slug=ssc-cgl-tier-1",
+    30 * 60 * 1000,
+  );
 }
 
 export async function fetchTopicLessons(topicId: number): Promise<Lesson[]> {
@@ -611,6 +661,7 @@ export type TodayPlan = {
     exam_date: string;
     daily_minutes: number;
     days_left: number;
+    full_study_days: number;
   };
   progress: {
     completed_minutes: number;
@@ -712,7 +763,13 @@ export type TopicPackage = {
 };
 
 export async function fetchTopicPackage(topicId: number): Promise<TopicPackage> {
-  const response = await fetch(API_BASE + "/learn/topics/" + topicId + "/package");
-  if (!response.ok) throw new Error("Failed to load topic package");
-  return response.json();
+  return fetchCachedJson<TopicPackage>(
+    "ssc_topic_package_v2_" + topicId,
+    API_BASE + "/learn/topics/" + topicId + "/package",
+    30 * 60 * 1000,
+  );
+}
+
+export function prefetchTopicPackage(topicId: number): void {
+  void fetchTopicPackage(topicId).catch(() => undefined);
 }
