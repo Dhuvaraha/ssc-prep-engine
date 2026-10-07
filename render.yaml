@@ -23,6 +23,8 @@ services:
         value: "false"
       - key: APPLY_CONTENT_REPAIR_ON_STARTUP
         value: "false"
+      - key: RUN_LEARNER_CANARY_ON_STARTUP
+        value: "false"
       - key: PRIVATE_ASSET_DIR
         value: data/private/assets
 
