@@ -142,6 +142,10 @@ Each task must display:
 ## Definition of done
 A student can enter any deep page and always knows: where am I, what am I learning, how do I go back, and what is next.
 
+**Status: COMPLETE — 2026-10-07**
+
+Closure includes persistent desktop navigation, compact mobile navigation, profile access, global loading/error/offline feedback, explicit exam and study settings, subject/topic hierarchy on deep study pages, and planner tasks with exact targets, selection reason, expected outcome and direct actions.
+
 ---
 
 # Phase 3 — Teacher-Quality Learn Mode
