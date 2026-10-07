@@ -783,11 +783,27 @@ export type QuestionArchetype = {
   source_notes: string | null;
 };
 
+export type SolvedExample = {
+  id: number;
+  pattern_type: string | null;
+  question_text: string;
+  question_image_url: string | null;
+  difficulty: number;
+  expected_time_seconds: number | null;
+  year: number | null;
+  shift: string | null;
+  correct_option: number;
+  explanation: string | null;
+  fast_method: string | null;
+  options: Array<{position: number; text: string | null; image_url: string | null}>;
+};
+
 export type TopicPackage = {
   subject: {id: number; slug: string; name: string};
   topic: {id: number; slug: string; name: string; priority: number};
   lessons: Array<Lesson & {blocks: LessonBlock[]}>;
   archetypes: QuestionArchetype[];
+  solved_examples: SolvedExample[];
 };
 
 export async function fetchTopicPackage(topicId: number): Promise<TopicPackage> {
