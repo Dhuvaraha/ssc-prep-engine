@@ -228,9 +228,11 @@ export type PracticeResult = {
   revision_scheduled: boolean;
 };
 
-export async function fetchPracticeQuestions(topicId: number, limit = 5, mode = "adaptive"): Promise<PracticeQuestion[]> {
+export async function fetchPracticeQuestions(topicId: number | undefined, limit = 5, mode = "adaptive"): Promise<PracticeQuestion[]> {
+  const params = new URLSearchParams({limit: String(limit), mode});
+  if (topicId) params.set("topic_id", String(topicId));
   const response = await fetch(
-    API_BASE + "/practice/questions?topic_id=" + topicId + "&limit=" + limit + "&mode=" + mode,
+    API_BASE + "/practice/questions?" + params.toString(),
     {headers: authHeaders()},
   );
   if (!response.ok) throw new Error("Failed to load practice questions");
@@ -286,6 +288,7 @@ export type MockStateResponse = {
   status: string;
   started_at: string;
   duration_minutes: number;
+  seconds_left: number;
   responses: Array<{
     question_id: number;
     selected_option: number | null;
@@ -318,6 +321,34 @@ export async function startMock(
   }
   return response.json();
 }
+
+export type ActiveMock = {
+  attempt_id: number | null;
+  mode?: string;
+  subject_slug?: string | null;
+  seconds_left?: number;
+};
+
+export async function fetchActiveMock(): Promise<ActiveMock> {
+  const response = await fetch(API_BASE + "/mocks/active/current", {headers: authHeaders()});
+  if (!response.ok) throw new Error("Failed to load active mock");
+  return response.json();
+}
+
+export async function fetchMockAttempt(attemptId: number): Promise<MockStartResponse> {
+  const response = await fetch(API_BASE + "/mocks/" + attemptId, {headers: authHeaders()});
+  if (!response.ok) throw new Error("Failed to load mock");
+  return response.json();
+}
+
+export async function abandonMock(attemptId: number): Promise<void> {
+  const response = await fetch(API_BASE + "/mocks/" + attemptId, {
+    method: "DELETE",
+    headers: authHeaders(),
+  });
+  if (!response.ok) throw new Error("Failed to abandon mock");
+}
+
 
 export async function fetchMockState(attemptId: number): Promise<MockStateResponse> {
   const response = await fetch(API_BASE + "/mocks/" + attemptId + "/state", {
@@ -492,6 +523,7 @@ export type PlannerTask = {
   target_questions: number | null;
   priority: number;
   status: string;
+  reason: string;
 };
 
 export type TodayPlan = {
