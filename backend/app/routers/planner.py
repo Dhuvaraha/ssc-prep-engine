@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.db import get_db
 from app.deps import get_current_user
-from app.models import DailyPlanTask, User
+from app.models import DailyPlanTask, Exam, Subject, Topic, User
 from app.services.planner import ensure_exam_target, generate_today_plan, rebuild_today_plan
 
 router = APIRouter(prefix="/planner", tags=["planner"])
@@ -48,14 +48,31 @@ class PlannerConfig(BaseModel):
     daily_minutes: int = Field(default=180, ge=45, le=720)
 
 
-def _serialize(target, tasks):
+def _serialize(target, tasks, db: Session):
     today = date.today()
+    exam = db.get(Exam, target.exam_id)
+
+    subject_slugs = {task.subject_slug for task in tasks if task.subject_slug}
+    subjects = (
+        db.query(Subject)
+        .filter(Subject.exam_id == target.exam_id, Subject.slug.in_(subject_slugs))
+        .all()
+        if subject_slugs
+        else []
+    )
+    subject_names = {subject.slug: subject.name for subject in subjects}
+
+    topic_ids = {task.topic_id for task in tasks if task.topic_id}
+    topics = db.query(Topic).filter(Topic.id.in_(topic_ids)).all() if topic_ids else []
+    topic_names = {topic.id: topic.name for topic in topics}
     days_left = max(0, (target.exam_date - today).days)
     completed_minutes = sum(task.target_minutes for task in tasks if task.status == "completed")
     total_minutes = sum(task.target_minutes for task in tasks)
     return {
         "target": {
             "exam_id": target.exam_id,
+            "exam_slug": exam.slug if exam else None,
+            "exam_name": exam.name if exam else "SSC CGL Tier I",
             "exam_date": target.exam_date.isoformat(),
             "daily_minutes": target.daily_minutes,
             "days_left": days_left,
@@ -71,7 +88,10 @@ def _serialize(target, tasks):
                 "id": task.id,
                 "activity_type": task.activity_type,
                 "subject_slug": task.subject_slug,
+                "subject_name": subject_names.get(task.subject_slug) if task.subject_slug else None,
                 "topic_id": task.topic_id,
+                "topic_name": topic_names.get(task.topic_id) if task.topic_id else None,
+                "subtopic": None,
                 "title": task.title,
                 "target_minutes": task.target_minutes,
                 "target_questions": task.target_questions,
@@ -102,7 +122,7 @@ def set_planner_config(
         target, tasks = rebuild_today_plan(db, user_id=user.id)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
-    return _serialize(target, tasks)
+    return _serialize(target, tasks, db)
 
 
 @router.get("/today")
@@ -114,7 +134,7 @@ def today_plan(
         target, tasks = generate_today_plan(db, user_id=user.id)
     except ValueError as exc:
         raise HTTPException(status_code=404, detail=str(exc))
-    return _serialize(target, tasks)
+    return _serialize(target, tasks, db)
 
 
 @router.post("/today/rebuild")
@@ -126,7 +146,7 @@ def rebuild_plan(
         target, tasks = rebuild_today_plan(db, user_id=user.id)
     except ValueError as exc:
         raise HTTPException(status_code=404, detail=str(exc))
-    return _serialize(target, tasks)
+    return _serialize(target, tasks, db)
 
 
 @router.patch("/tasks/{task_id}")
