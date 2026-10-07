@@ -808,7 +808,7 @@ export type TopicPackage = {
 
 export async function fetchTopicPackage(topicId: number): Promise<TopicPackage> {
   return fetchCachedJson<TopicPackage>(
-    "ssc_topic_package_v2_" + topicId,
+    "ssc_topic_package_v3_" + topicId,
     API_BASE + "/learn/topics/" + topicId + "/package",
     30 * 60 * 1000,
   );
