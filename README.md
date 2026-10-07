@@ -29,7 +29,7 @@ Learn → Practice → Test → Analyse → Revise → Improve
 
 ## Status
 
-Initial architecture and application scaffold in progress.
+SSC CGL content readiness and the Phase 2 study experience / information architecture are complete. The current app includes the learner shell, profile/settings, planner context, lessons, practice, mocks, analytics and revision flows; later product phases continue to deepen teacher-quality learning and exam intelligence.
 
 ## Content note
 
