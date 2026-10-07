@@ -13,6 +13,36 @@ from app.services.content_repair import repair_content_integrity
 
 
 logger = logging.getLogger("uvicorn.error")
+settings = get_settings()
+
+
+def run_startup_content_checks(db) -> None:
+    should_check = (
+        settings.content_audit_on_startup
+        or settings.apply_content_repair_on_startup
+    )
+    if not should_check:
+        logger.info("PHASE4_CONTENT_CHECKS_SKIPPED")
+        return
+
+    report = collect_content_audit(db)
+    logger.info(
+        "PHASE4_CONTENT_AUDIT %s",
+        json.dumps(report, separators=(",", ":"), sort_keys=True),
+    )
+
+    if settings.apply_content_repair_on_startup:
+        applied_plan = repair_content_integrity(db, apply=True)
+        logger.info(
+            "PHASE4_CONTENT_REPAIR_APPLIED %s",
+            json.dumps(applied_plan, separators=(",", ":"), sort_keys=True),
+        )
+
+    repair_plan = repair_content_integrity(db, apply=False)
+    logger.info(
+        "PHASE4_CONTENT_REPAIR_PLAN %s",
+        json.dumps(repair_plan, separators=(",", ":"), sort_keys=True),
+    )
 
 
 @asynccontextmanager
@@ -21,32 +51,13 @@ async def lifespan(_: FastAPI):
 
     db = SessionLocal()
     try:
-        report = collect_content_audit(db)
-        logger.info(
-            "PHASE4_CONTENT_AUDIT %s",
-            json.dumps(report, separators=(",", ":"), sort_keys=True),
-        )
-        if settings.apply_content_repair_on_startup:
-            applied_plan = repair_content_integrity(db, apply=True)
-            logger.info(
-                "PHASE4_CONTENT_REPAIR_APPLIED %s",
-                json.dumps(applied_plan, separators=(",", ":"), sort_keys=True),
-            )
-
-        repair_plan = repair_content_integrity(db, apply=False)
-        logger.info(
-            "PHASE4_CONTENT_REPAIR_PLAN %s",
-            json.dumps(repair_plan, separators=(",", ":"), sort_keys=True),
-        )
+        run_startup_content_checks(db)
     except Exception:
         logger.exception("PHASE4_CONTENT_AUDIT_FAILED")
     finally:
         db.close()
 
     yield
-
-
-settings = get_settings()
 
 app = FastAPI(
     title="SSC Prep Engine API",
