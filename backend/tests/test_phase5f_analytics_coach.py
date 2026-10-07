@@ -110,7 +110,6 @@ def test_analytics_developing_signal_is_not_overclaimed_as_established():
             )
         )
         db.commit()
-        event.listen(engine, "before_cursor_execute", count_question_selects)
 
         payload = analytics_summary(db=db, user=user)
 
@@ -170,6 +169,7 @@ def test_analytics_established_coach_is_actionable_and_batches_question_lookup()
             )
         )
         db.commit()
+        event.listen(engine, "before_cursor_execute", count_question_selects)
 
         payload = analytics_summary(db=db, user=user)
 
