@@ -181,6 +181,7 @@ export default function PlannerPage() {
                       {task.target_questions && <span>{task.target_questions} questions</span>}
                     </div>
                     <h2>{task.title}</h2>
+                    <p className="plannerTaskReason"><strong>Why this?</strong> {task.reason}</p>
                   </div>
                   <Link className="taskOpen" to={link}>Open →</Link>
                 </article>
