@@ -2901,3 +2901,38 @@ body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
   .mockReviewItem summary { grid-template-columns: 42px 1fr; }
   .mockReviewItem summary small { grid-column: 2; }
 }
+
+
+.mockWeakPatterns {
+  margin-top: 22px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #fff8ed;
+}
+
+.mockWeakPatterns > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.mockWeakPatterns span {
+  padding: 7px 9px;
+  border: 1px solid #ead8b7;
+  border-radius: 999px;
+  background: white;
+  color: #715d3a;
+  font-size: 11px;
+  text-transform: capitalize;
+}
+
+.mockWeakPatterns strong {
+  margin-left: 4px;
+  color: #40341f;
+}
+
+.settingsForm input[type="range"] {
+  padding: 0;
+  accent-color: #172033;
+}
