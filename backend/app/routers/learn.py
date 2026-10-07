@@ -37,25 +37,28 @@ def _representative_solved_examples(
     )
     missing_year = case((Question.year.is_(None), 1), else_=0)
 
-    candidate_ids = list(
-        db.scalars(
-            select(Question.id)
-            .where(
-                Question.topic_id == topic_id,
-                Question.verification_status == "verified",
-                Question.correct_option.is_not(None),
-                Question.explanation.is_not(None),
+    candidate_ids: list[int] = []
+    for difficulty in (1, 2, 3):
+        candidate_ids.extend(
+            db.scalars(
+                select(Question.id)
+                .where(
+                    Question.topic_id == topic_id,
+                    Question.verification_status == "verified",
+                    Question.correct_option.is_not(None),
+                    Question.explanation.is_not(None),
+                    Question.difficulty == difficulty,
+                )
+                .order_by(
+                    missing_year,
+                    Question.year.desc(),
+                    source_rank,
+                    Question.id,
+                )
+                .limit(12)
             )
-            .order_by(
-                Question.difficulty,
-                missing_year,
-                Question.year.desc(),
-                source_rank,
-                Question.id,
-            )
-            .limit(36)
         )
-    )
+    candidate_ids = list(dict.fromkeys(candidate_ids))
     if not candidate_ids:
         return []
 
