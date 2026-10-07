@@ -66,6 +66,7 @@ export default function DashboardPage() {
           <Link to="/revision">Revision</Link>
           <Link to="/analytics">Analytics</Link>
           <Link to="/mocks">Mock tests</Link>
+          {authenticated && <Link to="/settings">Settings</Link>}
           {authenticated ? (
             <>
               <button className="navButton" onClick={() => void saveBackup()}>Export backup</button>
