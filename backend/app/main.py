@@ -9,6 +9,7 @@ from app.core.config import get_settings
 from app.db import Base, SessionLocal, engine
 from app.routers import analytics, assets, auth, backup, content, exams, health, learn, mocks, planner, practice, review, revision
 from app.services.content_audit import collect_content_audit
+from app.services.content_repair import repair_content_integrity
 
 
 logger = logging.getLogger("uvicorn.error")
@@ -24,6 +25,11 @@ async def lifespan(_: FastAPI):
         logger.info(
             "PHASE4_CONTENT_AUDIT %s",
             json.dumps(report, separators=(",", ":"), sort_keys=True),
+        )
+        repair_plan = repair_content_integrity(db, apply=False)
+        logger.info(
+            "PHASE4_CONTENT_REPAIR_PLAN %s",
+            json.dumps(repair_plan, separators=(",", ":"), sort_keys=True),
         )
     except Exception:
         logger.exception("PHASE4_CONTENT_AUDIT_FAILED")
