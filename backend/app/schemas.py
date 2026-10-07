@@ -78,6 +78,23 @@ class QuestionOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class SolvedExampleOut(BaseModel):
+    id: int
+    pattern_type: str | None = None
+    question_text: str
+    question_image_url: str | None = None
+    difficulty: int
+    expected_time_seconds: int | None = None
+    year: int | None = None
+    shift: str | None = None
+    correct_option: int
+    explanation: str | None = None
+    fast_method: str | None = None
+    options: list[OptionOut]
+
+    model_config = {"from_attributes": True}
+
+
 class PracticeSubmit(BaseModel):
     question_id: int
     selected_option: int | None = Field(ge=1, le=4)
