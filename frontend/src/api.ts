@@ -595,7 +595,10 @@ export type PlannerTask = {
   id: number;
   activity_type: string;
   subject_slug: string | null;
+  subject_name: string | null;
   topic_id: number | null;
+  topic_name: string | null;
+  subtopic: string | null;
   title: string;
   target_minutes: number;
   target_questions: number | null;
@@ -608,6 +611,8 @@ export type PlannerTask = {
 export type TodayPlan = {
   target: {
     exam_id: number;
+    exam_slug: string | null;
+    exam_name: string;
     exam_date: string;
     daily_minutes: number;
     days_left: number;
