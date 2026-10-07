@@ -1,9 +1,12 @@
+from datetime import datetime, timezone
+
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db import get_db
 from app.deps import get_current_user
-from app.models import MockAttemptQuestion, User
+from app.models import MockAttempt, User
 from app.schemas import (
     MockQuestionOut,
     MockResponseUpdate,
@@ -38,6 +41,18 @@ def start_mock(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
+    active = db.scalar(
+        select(MockAttempt)
+        .where(MockAttempt.user_id == user.id, MockAttempt.status == "in_progress")
+        .order_by(MockAttempt.started_at.desc())
+    )
+    if active:
+        try:
+            active_attempt, rows = load_mock_attempt(db, attempt_id=active.id, user_id=user.id)
+            return _serialize_attempt(active_attempt, rows)
+        except LookupError:
+            pass
+
     try:
         attempt, rows = create_mock_attempt(
             db,
@@ -48,6 +63,31 @@ def start_mock(
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
     return _serialize_attempt(attempt, rows)
+
+
+@router.get("/active/current")
+def active_mock(
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    attempt = db.scalar(
+        select(MockAttempt)
+        .where(MockAttempt.user_id == user.id, MockAttempt.status == "in_progress")
+        .order_by(MockAttempt.started_at.desc())
+    )
+    if not attempt:
+        return {"attempt_id": None}
+    elapsed = max(
+        0,
+        int((datetime.now(timezone.utc).replace(tzinfo=None) - attempt.started_at).total_seconds()),
+    )
+    total = attempt.duration_minutes * 60
+    return {
+        "attempt_id": attempt.id,
+        "mode": attempt.mode,
+        "subject_slug": attempt.subject_slug,
+        "seconds_left": max(0, total - elapsed),
+    }
 
 
 @router.get("/{attempt_id}", response_model=MockStartResponse)
@@ -106,11 +146,16 @@ def get_mock_state(
     except LookupError:
         raise HTTPException(status_code=404, detail="Mock attempt not found")
 
+    elapsed = max(
+        0,
+        int((datetime.now(timezone.utc).replace(tzinfo=None) - attempt.started_at).total_seconds()),
+    )
     return {
         "attempt_id": attempt.id,
         "status": attempt.status,
         "started_at": attempt.started_at.isoformat(),
         "duration_minutes": attempt.duration_minutes,
+        "seconds_left": max(0, attempt.duration_minutes * 60 - elapsed),
         "responses": [
             {
                 "question_id": row.question_id,
