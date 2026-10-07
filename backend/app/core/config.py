@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173"
     reviewer_emails: str = ""
     registration_enabled: bool = True
+    content_audit_on_startup: bool = False
     apply_content_repair_on_startup: bool = False
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
