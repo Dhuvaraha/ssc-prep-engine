@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { TopicPackage, fetchTopicPackage } from "../api";
+import SecureImage from "../components/SecureImage";
 import SpeakButton from "../components/SpeakButton";
 import TeacherCoach from "../components/TeacherCoach";
 
@@ -142,6 +143,16 @@ function fallbackBlocks(pkg: TopicPackage): TeachingBlock[] {
   });
 }
 
+function solvedExampleLabel(difficulty: number): string {
+  if (difficulty <= 1) return "Easy";
+  if (difficulty === 2) return "SSC level";
+  return "Hard variation";
+}
+
+function optionLabel(position: number): string {
+  return String.fromCharCode(64 + position);
+}
+
 export default function LessonPage() {
   const { topicId } = useParams();
   const navigate = useNavigate();
@@ -191,19 +202,29 @@ export default function LessonPage() {
         blockTypes: [...blueprint.blockTypes],
         blocks: allBlocks.filter((block) => (blueprint.blockTypes as readonly string[]).includes(block.blockType)),
       }))
-      .filter((stage) => stage.blocks.length > 0);
-  }, [allBlocks]);
+      .filter(
+        (stage) =>
+          stage.blocks.length > 0 ||
+          (stage.id === "examples" && (pkg?.solved_examples?.length ?? 0) > 0),
+      );
+  }, [allBlocks, pkg]);
 
   const activeStage = stages[activeStageIndex] ?? stages[0] ?? null;
   const activePattern = pkg?.archetypes[activePatternIndex] ?? null;
+  const solvedExamples = pkg?.solved_examples ?? [];
   const estimatedMinutes = pkg?.lessons.reduce((sum, lesson) => sum + lesson.estimated_minutes, 0) ?? 0;
   const progress = stages.length ? Math.round(((activeStageIndex + 1) / stages.length) * 100) : 0;
 
   const examples = useMemo(
-    () => allBlocks
-      .filter((block) => block.blockType.startsWith("example"))
-      .map((block) => block.body),
-    [allBlocks],
+    () => [
+      ...allBlocks
+        .filter((block) => block.blockType.startsWith("example"))
+        .map((block) => block.body),
+      ...solvedExamples.map((example) =>
+        [example.question_text, example.explanation ?? ""].filter(Boolean).join(" — ")
+      ),
+    ],
+    [allBlocks, solvedExamples],
   );
 
   const shortcuts = useMemo(
@@ -231,14 +252,27 @@ export default function LessonPage() {
         stage.title,
         ...stage.blocks.flatMap((block) => [block.title, block.body]),
       ]),
+      ...solvedExamples.flatMap((example) => [
+        example.question_text,
+        example.explanation ?? "",
+        example.fast_method ?? "",
+      ]),
     ].filter(Boolean).join(". ");
-  }, [pkg, stages]);
+  }, [pkg, stages, solvedExamples]);
 
   const teacherLead = activeStage
-    ? `We are on “${activeStage.title}”. ${activeStage.description} ${activeStage.blocks[0]?.body ?? ""}`
+    ? `We are on “${activeStage.title}”. ${activeStage.description} ${
+        activeStage.blocks[0]?.body ??
+        (activeStage.id === "examples" ? solvedExamples[0]?.question_text : "") ??
+        ""
+      }`
     : null;
 
-  const teacherHints = activeStage?.blocks.map((block) => block.body).slice(0, 3) ?? [];
+  const teacherHints = activeStage?.id === "examples" && solvedExamples.length
+    ? solvedExamples
+        .slice(0, 3)
+        .map((example) => example.fast_method ?? example.explanation ?? example.question_text)
+    : activeStage?.blocks.map((block) => block.body).slice(0, 3) ?? [];
 
   return (
     <main className="lessonShell teacherLessonShell">
@@ -344,7 +378,10 @@ export default function LessonPage() {
                   <h2>{activeStage.title}</h2>
                   <p>{activeStage.description}</p>
                 </div>
-                <span className="teacherBoardBadge">{activeStage.blocks.length} key point{activeStage.blocks.length === 1 ? "" : "s"}</span>
+                <span className="teacherBoardBadge">
+                  {activeStage.blocks.length + (activeStage.id === "examples" ? solvedExamples.length : 0)} key point
+                  {activeStage.blocks.length + (activeStage.id === "examples" ? solvedExamples.length : 0) === 1 ? "" : "s"}
+                </span>
               </header>
 
               <div className="teacherBlockList">
@@ -374,6 +411,86 @@ export default function LessonPage() {
                     </article>
                   );
                 })}
+
+                {activeStage.id === "examples" && solvedExamples.length > 0 && (
+                  <section className="verifiedExampleStack" aria-label="Verified solved examples">
+                    <header className="verifiedExampleIntro">
+                      <div>
+                        <span>Verified question bank</span>
+                        <h3>Now watch the method on real practice questions.</h3>
+                      </div>
+                      <small>Easy → SSC level → harder variation</small>
+                    </header>
+
+                    {solvedExamples.map((example, exampleIndex) => {
+                      const correct = example.options.find(
+                        (option) => option.position === example.correct_option,
+                      );
+                      return (
+                        <article className="verifiedExampleCard" key={example.id}>
+                          <div className="verifiedExampleMeta">
+                            <span>{solvedExampleLabel(example.difficulty)}</span>
+                            {example.pattern_type && <span>{example.pattern_type.replaceAll("-", " ")}</span>}
+                            {example.year && <span>{example.year}{example.shift ? " • " + example.shift : ""}</span>}
+                            {example.expected_time_seconds && <span>{example.expected_time_seconds}s target</span>}
+                          </div>
+
+                          <div className="verifiedExampleQuestion">
+                            <small>Worked example {exampleIndex + 1}</small>
+                            <h3>{example.question_text}</h3>
+                            {example.question_image_url && (
+                              <SecureImage
+                                className="verifiedExampleImage"
+                                src={example.question_image_url}
+                                alt={"Worked example " + (exampleIndex + 1)}
+                              />
+                            )}
+                          </div>
+
+                          <div className="verifiedExampleOptions">
+                            {example.options.map((option) => (
+                              <div
+                                className={
+                                  option.position === example.correct_option
+                                    ? "verifiedExampleOption verifiedExampleCorrect"
+                                    : "verifiedExampleOption"
+                                }
+                                key={option.position}
+                              >
+                                <strong>{optionLabel(option.position)}</strong>
+                                <span>{option.text ?? "Image option"}</span>
+                                {option.image_url && (
+                                  <SecureImage
+                                    className="verifiedExampleOptionImage"
+                                    src={option.image_url}
+                                    alt={"Option " + optionLabel(option.position)}
+                                  />
+                                )}
+                              </div>
+                            ))}
+                          </div>
+
+                          <section className="verifiedExampleSolution">
+                            <span>Teacher walkthrough</span>
+                            <p>
+                              <strong>Correct answer: {optionLabel(example.correct_option)}
+                                {correct?.text ? ". " + correct.text : ""}
+                              </strong>
+                            </p>
+                            <p>{example.explanation}</p>
+                          </section>
+
+                          {example.fast_method && (
+                            <section className="verifiedExampleFast">
+                              <span>SSC-fast method</span>
+                              <p>{example.fast_method}</p>
+                            </section>
+                          )}
+                        </article>
+                      );
+                    })}
+                  </section>
+                )}
               </div>
 
               <TeacherCoach
