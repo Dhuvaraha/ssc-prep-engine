@@ -268,6 +268,19 @@ export type PracticeQuestion = {
   options: Array<{position: number; text: string | null; image_url: string | null}>;
 };
 
+export type PracticeCoaching = {
+  pattern_name: string | null;
+  skill: string | null;
+  recognition_cues: string | null;
+  standard_method: string | null;
+  fast_method: string | null;
+  common_trap: string | null;
+  difficulty_rule: string | null;
+  worked_example: string | null;
+  hint_steps: string[];
+  archetype_exact: boolean;
+};
+
 export type PracticeResult = {
   attempt_id: number;
   correct: boolean;
@@ -276,6 +289,7 @@ export type PracticeResult = {
   fast_method: string | null;
   mastery_score: number | null;
   revision_scheduled: boolean;
+  coaching: PracticeCoaching | null;
 };
 
 export async function fetchPracticeQuestions(topicId: number | undefined, limit = 5, mode = "adaptive"): Promise<PracticeQuestion[]> {
