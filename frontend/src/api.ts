@@ -327,9 +327,15 @@ export type PracticeResult = {
   coaching: PracticeCoaching | null;
 };
 
-export async function fetchPracticeQuestions(topicId: number | undefined, limit = 5, mode = "adaptive"): Promise<PracticeQuestion[]> {
+export async function fetchPracticeQuestions(
+  topicId: number | undefined,
+  limit = 5,
+  mode = "adaptive",
+  similarTo?: number,
+): Promise<PracticeQuestion[]> {
   const params = new URLSearchParams({limit: String(limit), mode});
   if (topicId) params.set("topic_id", String(topicId));
+  if (similarTo) params.set("similar_to", String(similarTo));
   const response = await sessionFetch(
     API_BASE + "/practice/questions?" + params.toString(),
     {headers: authHeaders()},
