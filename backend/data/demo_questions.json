@@ -30,7 +30,8 @@
     "source_type": "original",
     "source_reference": "SSC Prep Engine demo",
     "visibility": "public",
-    "verification_status": "verified"
+    "verification_status": "verified",
+    "pattern_type": "difference-series"
   },
   {
     "exam_slug": "ssc-cgl-tier-1",
@@ -63,7 +64,8 @@
     "source_type": "original",
     "source_reference": "SSC Prep Engine demo",
     "visibility": "public",
-    "verification_status": "verified"
+    "verification_status": "verified",
+    "pattern_type": "letter-shift"
   },
   {
     "exam_slug": "ssc-cgl-tier-1",
@@ -96,7 +98,8 @@
     "source_type": "original",
     "source_reference": "SSC Prep Engine demo",
     "visibility": "public",
-    "verification_status": "verified"
+    "verification_status": "verified",
+    "pattern_type": "lexicographic-order"
   },
   {
     "exam_slug": "ssc-cgl-tier-1",
@@ -129,7 +132,8 @@
     "source_type": "original",
     "source_reference": "SSC Prep Engine demo",
     "visibility": "public",
-    "verification_status": "verified"
+    "verification_status": "verified",
+    "pattern_type": "percentage-change"
   },
   {
     "exam_slug": "ssc-cgl-tier-1",
@@ -162,7 +166,8 @@
     "source_type": "original",
     "source_reference": "SSC Prep Engine demo",
     "visibility": "public",
-    "verification_status": "verified"
+    "verification_status": "verified",
+    "pattern_type": "average-total"
   },
   {
     "exam_slug": "ssc-cgl-tier-1",
@@ -195,7 +200,8 @@
     "source_type": "original",
     "source_reference": "SSC Prep Engine demo",
     "visibility": "public",
-    "verification_status": "verified"
+    "verification_status": "verified",
+    "pattern_type": "subject-verb-agreement"
   },
   {
     "exam_slug": "ssc-cgl-tier-1",
@@ -228,7 +234,8 @@
     "source_type": "original",
     "source_reference": "SSC Prep Engine demo",
     "visibility": "public",
-    "verification_status": "verified"
+    "verification_status": "verified",
+    "pattern_type": "antonym-context"
   },
   {
     "exam_slug": "ssc-cgl-tier-1",
@@ -261,7 +268,8 @@
     "source_type": "original",
     "source_reference": "SSC Prep Engine demo",
     "visibility": "public",
-    "verification_status": "verified"
+    "verification_status": "verified",
+    "pattern_type": "si-units"
   },
   {
     "exam_slug": "ssc-cgl-tier-1",
@@ -294,7 +302,8 @@
     "source_type": "original",
     "source_reference": "SSC Prep Engine demo",
     "visibility": "public",
-    "verification_status": "verified"
+    "verification_status": "verified",
+    "pattern_type": "set-relations"
   },
   {
     "exam_slug": "ssc-cgl-tier-1",
@@ -327,7 +336,8 @@
     "source_type": "original",
     "source_reference": "SSC Prep Engine demo",
     "visibility": "public",
-    "verification_status": "verified"
+    "verification_status": "verified",
+    "pattern_type": "sign-interchange"
   },
   {
     "exam_slug": "ssc-cgl-tier-1",
@@ -360,7 +370,8 @@
     "source_type": "original",
     "source_reference": "SSC Prep Engine demo",
     "visibility": "public",
-    "verification_status": "verified"
+    "verification_status": "verified",
+    "pattern_type": "family-tree-relation"
   },
   {
     "exam_slug": "ssc-cgl-tier-1",
@@ -393,7 +404,8 @@
     "source_type": "original",
     "source_reference": "SSC Prep Engine demo",
     "visibility": "public",
-    "verification_status": "verified"
+    "verification_status": "verified",
+    "pattern_type": "coordinate-distance"
   },
   {
     "exam_slug": "ssc-cgl-tier-1",
@@ -426,7 +438,8 @@
     "source_type": "original",
     "source_reference": "SSC Prep Engine demo",
     "visibility": "public",
-    "verification_status": "verified"
+    "verification_status": "verified",
+    "pattern_type": "ratio-difference"
   },
   {
     "exam_slug": "ssc-cgl-tier-1",
@@ -459,6 +472,7 @@
     "source_type": "original",
     "source_reference": "SSC Prep Engine demo",
     "visibility": "public",
-    "verification_status": "verified"
+    "verification_status": "verified",
+    "pattern_type": "constitutional-parts"
   }
 ]
