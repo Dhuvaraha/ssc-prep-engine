@@ -132,6 +132,7 @@ def test_content_audit_detects_integrity_and_quality_gaps():
     report = collect_content_audit(db, current_year=2026)
 
     assert report["verified_questions"] == 4
+    assert report["unique_verified_questions"] == 4
     assert report["topics"] == 1
     assert report["question_integrity"] == {
         "invalid_option_sets": 1,
@@ -165,6 +166,7 @@ def test_content_audit_detects_integrity_and_quality_gaps():
     assert report["pending_topic_count"] == 1
     assert report["subjects"][0]["slug"] == "reasoning"
     assert report["subjects"][0]["verified_questions"] == 4
+    assert report["subjects"][0]["unique_verified_questions"] == 4
     assert report["status"] == "attention"
 
     db.close()
