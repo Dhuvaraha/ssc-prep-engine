@@ -7,12 +7,12 @@
 - "Try one similar" resolves to a different verified same-pattern question when available, with same-topic fallback.
 - Full/section mock selection prioritises official/licensed/private-PYQ evidence before original practice content.
 - A 25-question section targets 7 easy / 12 medium / 6 hard questions, with deterministic fallback only when the bank cannot satisfy the target.
-- Mock readiness is audited per section for unique verified depth, difficulty coverage and high-fidelity source depth.
+- Mock readiness is audited per section for unique verified depth, difficulty coverage and exam-ready traceability. PYQ/high-fidelity depth remains explicit and is prioritised when available, but original verified SSC-style content is not falsely relabelled as PYQ.
 
 ## Production gates
 
 - Phase 6A teacher-readiness audit: status=ready, pending_topics=0.
-- Phase 6C mock-readiness audit: status=ready, pending_sections=0.
+- Phase 6C mock-readiness audit: status=ready, pending_sections=0; each section has at least 25 exam-ready questions and reports PYQ/high-fidelity availability separately.
 - Rollback-safe learner canary: status=passed and rollback_verified=true.
 - Backend and frontend are deployed from the final main commit.
 - Public health and SPA deep-route smoke checks pass.
