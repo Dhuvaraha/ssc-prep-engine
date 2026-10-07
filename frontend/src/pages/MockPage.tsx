@@ -120,6 +120,26 @@ export default function MockPage() {
     return () => document.removeEventListener("visibilitychange", onVisibilityChange);
   }, [running, attemptId, mode, questions]);
 
+  useEffect(() => {
+    if (!running || !attemptId) return;
+
+    function onBeforeUnload(event: BeforeUnloadEvent) {
+      event.preventDefault();
+      event.returnValue = "";
+    }
+
+    function onReconnect() {
+      void syncServerTiming();
+    }
+
+    window.addEventListener("beforeunload", onBeforeUnload);
+    window.addEventListener("online", onReconnect);
+    return () => {
+      window.removeEventListener("beforeunload", onBeforeUnload);
+      window.removeEventListener("online", onReconnect);
+    };
+  }, [running, attemptId, mode, questions]);
+
   const current = questions[currentIndex] ?? null;
   const currentAnswer = current ? answers[current.question.id] : undefined;
 

@@ -56,13 +56,17 @@ def ensure_exam_target(
     if not exam:
         raise ValueError("Exam not found")
 
-    target = db.scalar(
-        select(ExamTarget).where(
-            ExamTarget.user_id == user_id,
-            ExamTarget.exam_id == exam.id,
-            ExamTarget.is_active.is_(True),
+    active_targets = list(
+        db.scalars(
+            select(ExamTarget)
+            .where(
+                ExamTarget.user_id == user_id,
+                ExamTarget.is_active.is_(True),
+            )
+            .order_by(ExamTarget.id.desc())
         )
     )
+    target = next((item for item in active_targets if item.exam_id == exam.id), None)
     if not target:
         target = ExamTarget(
             user_id=user_id,
@@ -75,6 +79,11 @@ def ensure_exam_target(
     else:
         target.exam_date = exam_date
         target.daily_minutes = daily_minutes
+
+    for item in active_targets:
+        if item is not target:
+            item.is_active = False
+
     db.commit()
     db.refresh(target)
     return target
