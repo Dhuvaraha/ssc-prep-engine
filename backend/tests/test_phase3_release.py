@@ -1,9 +1,18 @@
+from datetime import date, timedelta
+
+import pytest
+from fastapi import HTTPException
+from pydantic import ValidationError
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from app.core.config import get_settings
 from app.db import Base
+from app.deps import get_content_reviewer
 from app.models import Exam, Question, Subject, Topic, User
 from app.routers.mocks import active_mock, review_mock
+from app.routers.planner import PlannerConfig
+from app.schemas import MockResponseUpdate, PracticeSubmit
 from app.services.mock_engine import create_mock_attempt, submit_mock_attempt
 
 
@@ -117,3 +126,38 @@ def test_mock_review_includes_section_score_and_accuracy():
         }
     finally:
         db.close()
+
+
+
+def test_release_request_schemas_reject_impossible_option_positions():
+    with pytest.raises(ValidationError):
+        PracticeSubmit(
+            question_id=1,
+            selected_option=5,
+            time_seconds=1,
+            confidence=2,
+        )
+
+    with pytest.raises(ValidationError):
+        MockResponseUpdate(question_id=1, selected_option=0)
+
+
+def test_planner_config_rejects_past_exam_date():
+    with pytest.raises(ValidationError):
+        PlannerConfig(
+            exam_date=date.today() - timedelta(days=1),
+            daily_minutes=180,
+        )
+
+
+def test_content_review_requires_explicit_reviewer_allowlist(monkeypatch):
+    settings = get_settings()
+    monkeypatch.setattr(settings, "reviewer_emails", "reviewer@example.com")
+
+    reviewer = User(email="reviewer@example.com", password_hash="x")
+    ordinary = User(email="learner@example.com", password_hash="x")
+
+    assert get_content_reviewer(reviewer) is reviewer
+    with pytest.raises(HTTPException) as exc:
+        get_content_reviewer(ordinary)
+    assert exc.value.status_code == 403
