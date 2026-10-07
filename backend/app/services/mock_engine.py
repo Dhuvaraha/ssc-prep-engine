@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
-from app.models import Exam, MockAttempt, MockAttemptQuestion, Question, Subject
+from app.models import Exam, MockAttempt, MockAttemptQuestion, Question, Subject, Topic
 
 
 SECTION_ORDER = ["reasoning", "general-awareness", "quant", "english"]
@@ -44,12 +44,41 @@ def _questions_for_subject(
     return list(db.scalars(stmt).unique())
 
 
+def _questions_for_topic(
+    db: Session,
+    *,
+    exam_id: int,
+    topic_id: int,
+    count: int,
+) -> tuple[str, list[Question]]:
+    topic = db.get(Topic, topic_id)
+    if not topic:
+        return "", []
+    subject = db.get(Subject, topic.subject_id)
+    if not subject or subject.exam_id != exam_id:
+        return "", []
+    stmt = (
+        select(Question)
+        .options(selectinload(Question.options))
+        .where(
+            Question.exam_id == exam_id,
+            Question.topic_id == topic_id,
+            Question.verification_status == "verified",
+            Question.correct_option.is_not(None),
+        )
+        .order_by(Question.difficulty, Question.year.desc().nullslast(), Question.id)
+        .limit(count)
+    )
+    return subject.slug, list(db.scalars(stmt).unique())
+
+
 def create_mock_attempt(
     db: Session,
     *,
     user_id: int,
     mode: str,
     subject_slug: str | None,
+    topic_id: int | None = None,
 ) -> tuple[MockAttempt, list[tuple[MockAttemptQuestion, Question]]]:
     exam = db.scalar(select(Exam).where(Exam.slug == "ssc-cgl-tier-1"))
     if not exam:
@@ -63,23 +92,39 @@ def create_mock_attempt(
             raise ValueError("A valid subject is required for sectional mode")
         plan = [(subject_slug, 25)]
         duration = 15
+    elif mode == "topic":
+        if not topic_id:
+            raise ValueError("A topic is required for topic-test mode")
+        plan = []
+        duration = 20
     else:
         plan = [(slug, 1) for slug in SECTION_ORDER]
         duration = 4
 
     selected: list[tuple[str, Question]] = []
-    for slug, count in plan:
-        questions = _questions_for_subject(
+    if mode == "topic":
+        slug, questions = _questions_for_topic(
             db,
             exam_id=exam.id,
-            subject_slug=slug,
-            count=count,
+            topic_id=topic_id,
+            count=20,
         )
-        if len(questions) < count:
-            raise ValueError(
-                f"Not enough verified questions for {slug}: need {count}, found {len(questions)}"
-            )
+        if len(questions) < 10:
+            raise ValueError(f"Not enough verified questions for topic {topic_id}: need at least 10")
         selected.extend((slug, question) for question in questions)
+    else:
+        for slug, count in plan:
+            questions = _questions_for_subject(
+                db,
+                exam_id=exam.id,
+                subject_slug=slug,
+                count=count,
+            )
+            if len(questions) < count:
+                raise ValueError(
+                    f"Not enough verified questions for {slug}: need {count}, found {len(questions)}"
+                )
+            selected.extend((slug, question) for question in questions)
 
     attempt = MockAttempt(
         user_id=user_id,
