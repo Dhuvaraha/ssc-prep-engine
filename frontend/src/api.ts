@@ -506,6 +506,16 @@ export async function reviewRevisionItem(itemId: number, success: boolean): Prom
   if (!response.ok) throw new Error("Failed to update revision item");
 }
 
+export async function addQuestionToRevision(questionId: number): Promise<{added: boolean; item_id: number; reason: string}> {
+  const response = await fetch(API_BASE + "/revision/questions/" + questionId + "/add", {
+    method: "POST",
+    headers: authHeaders(),
+  });
+  if (!response.ok) throw new Error("Failed to add question to revision");
+  return response.json();
+}
+
+
 export async function toggleBookmark(questionId: number): Promise<{bookmarked: boolean}> {
   const response = await fetch(API_BASE + "/revision/bookmarks/" + questionId, {
     method: "POST",
