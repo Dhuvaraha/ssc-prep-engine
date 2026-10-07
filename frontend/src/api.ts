@@ -766,6 +766,20 @@ export type LessonBlock = {
   sort_order: number;
 };
 
+export type WorkedQuestion = {
+  id: number;
+  question_text: string;
+  question_image_url: string | null;
+  options: Array<{position: number; text: string | null; image_url: string | null}>;
+  correct_option: number;
+  explanation: string;
+  fast_method: string | null;
+  difficulty: number;
+  expected_time_seconds: number | null;
+  pattern_type: string | null;
+  year: number | null;
+};
+
 export type QuestionArchetype = {
   id: number;
   topic_id: number;
@@ -788,11 +802,12 @@ export type TopicPackage = {
   topic: {id: number; slug: string; name: string; priority: number};
   lessons: Array<Lesson & {blocks: LessonBlock[]}>;
   archetypes: QuestionArchetype[];
+  worked_questions: WorkedQuestion[];
 };
 
 export async function fetchTopicPackage(topicId: number): Promise<TopicPackage> {
   return fetchCachedJson<TopicPackage>(
-    "ssc_topic_package_v2_" + topicId,
+    "ssc_topic_package_v3_" + topicId,
     API_BASE + "/learn/topics/" + topicId + "/package",
     30 * 60 * 1000,
   );
