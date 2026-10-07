@@ -8,9 +8,11 @@ from app.db import get_db
 from app.deps import get_current_user
 from app.domain.mastery import clamp_mastery, mastery_delta
 from app.domain.models import AttemptOutcome, MasterySignal
+from app.core.study_time import current_study_date
 from app.domain.revision import next_revision_date
 from app.models import Question, QuestionAttempt, RevisionItem, TopicMastery, User
 from app.schemas import MistakeUpdate, PracticeResult, PracticeSubmit, QuestionOut
+from app.services.planner import days_until_active_exam
 from app.services.practice_selector import select_practice_questions
 
 router = APIRouter(prefix="/practice", tags=["practice"])
@@ -112,9 +114,9 @@ def submit_practice(
         )
         if not existing:
             due = next_revision_date(
-                today=datetime.now(timezone.utc).date(),
+                today=current_study_date(),
                 successful_reviews=0,
-                days_until_exam=10,
+                days_until_exam=days_until_active_exam(db, user_id=user.id),
             )
             db.add(
                 RevisionItem(
