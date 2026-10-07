@@ -88,11 +88,15 @@ def test_mock_resume_round_trips_saved_response_and_long_visual_question():
     try:
         user, _ = _seed_full_mock(db)
         attempt, rows = create_mock_attempt(db, user_id=user.id, mode="full", subject_slug=None)
-        first = rows[0][0]
+        visual_row, visual_question = next(
+            (row, question)
+            for row, question in rows
+            if question.question_image_url == "private://question.svg"
+        )
         save_mock_response(
             attempt.id,
             MockResponseUpdate(
-                question_id=first.question_id,
+                question_id=visual_row.question_id,
                 selected_option=2,
                 marked_for_review=True,
                 time_seconds=47.5,
@@ -102,15 +106,18 @@ def test_mock_resume_round_trips_saved_response_and_long_visual_question():
         )
 
         state = get_mock_state(attempt.id, db=db, user=user)
-        restored = next(item for item in state["responses"] if item["question_id"] == first.question_id)
+        restored = next(
+            item for item in state["responses"]
+            if item["question_id"] == visual_row.question_id
+        )
         assert restored == {
-            "question_id": first.question_id,
+            "question_id": visual_row.question_id,
             "selected_option": 2,
             "marked_for_review": True,
             "time_seconds": 47.5,
         }
-        assert len(rows[0][1].question_text) > 500
-        assert rows[0][1].question_image_url == "private://question.svg"
+        assert len(visual_question.question_text) > 500
+        assert visual_question.question_image_url == "private://question.svg"
     finally:
         db.close()
 
