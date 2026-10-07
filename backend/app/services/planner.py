@@ -1,17 +1,10 @@
 from datetime import date, datetime
-from zoneinfo import ZoneInfo
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from app.core.study_time import current_study_date
 from app.models import DailyPlanTask, Exam, ExamTarget, RevisionItem, Subject, Topic, TopicMastery
-
-
-SSC_TIMEZONE = ZoneInfo("Asia/Kolkata")
-
-
-def current_study_date() -> date:
-    return datetime.now(SSC_TIMEZONE).date()
 
 
 def _days_until(target: date, today: date) -> int:
