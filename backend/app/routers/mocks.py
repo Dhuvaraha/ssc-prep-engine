@@ -59,6 +59,7 @@ def start_mock(
             user_id=user.id,
             mode=payload.mode,
             subject_slug=payload.subject_slug,
+            topic_id=payload.topic_id,
         )
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
@@ -165,6 +166,72 @@ def get_mock_state(
             }
             for row, _ in rows
         ],
+    }
+
+
+@router.get("/{attempt_id}/review")
+def review_mock(
+    attempt_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    try:
+        attempt, rows = load_mock_attempt(db, attempt_id=attempt_id, user_id=user.id)
+    except LookupError:
+        raise HTTPException(status_code=404, detail="Mock attempt not found")
+    if attempt.status != "submitted":
+        raise HTTPException(status_code=409, detail="Submit the mock before reviewing it")
+
+    sections: dict[str, dict[str, float | int]] = {}
+    questions = []
+    easy_missed = 0
+    slow_questions = 0
+
+    for row, question in rows:
+        correct = row.selected_option == question.correct_option if row.selected_option is not None else False
+        attempted = row.selected_option is not None
+        section = sections.setdefault(
+            row.section_slug,
+            {"correct": 0, "incorrect": 0, "unattempted": 0, "time_seconds": 0.0},
+        )
+        if not attempted:
+            section["unattempted"] += 1
+        elif correct:
+            section["correct"] += 1
+        else:
+            section["incorrect"] += 1
+        section["time_seconds"] += float(row.time_seconds or 0)
+
+        if question.difficulty == 1 and not correct:
+            easy_missed += 1
+        if question.expected_time_seconds and row.time_seconds > question.expected_time_seconds * 1.25:
+            slow_questions += 1
+
+        questions.append(
+            {
+                "position": row.position,
+                "section_slug": row.section_slug,
+                "question_id": question.id,
+                "question_text": question.question_text,
+                "selected_option": row.selected_option,
+                "correct_option": question.correct_option,
+                "correct": correct,
+                "marked_for_review": row.marked_for_review,
+                "time_seconds": round(float(row.time_seconds or 0), 1),
+                "expected_time_seconds": question.expected_time_seconds,
+                "difficulty": question.difficulty,
+                "pattern_type": question.pattern_type,
+                "explanation": question.explanation,
+                "fast_method": question.fast_method,
+            }
+        )
+
+    return {
+        "attempt_id": attempt.id,
+        "sections": sections,
+        "easy_missed": easy_missed,
+        "slow_questions": slow_questions,
+        "questions": questions,
     }
 
 
