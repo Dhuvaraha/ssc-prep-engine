@@ -82,7 +82,21 @@ def test_content_audit_detects_integrity_and_quality_gaps():
         source_type="original",
         verification_status="verified",
     )
-    db.add_all([valid, invalid, duplicate])
+    visual = Question(
+        exam_id=exam.id,
+        subject_id=subject.id,
+        topic_id=topic.id,
+        question_text="Visual options can share labels",
+        correct_option=1,
+        explanation="Explanation",
+        fast_method="Shortcut",
+        expected_time_seconds=40,
+        pattern_type="visual-pattern",
+        difficulty=1,
+        source_type="original",
+        verification_status="verified",
+    )
+    db.add_all([valid, invalid, duplicate, visual])
     db.flush()
 
     for question, values in [
@@ -99,11 +113,25 @@ def test_content_audit_detects_integrity_and_quality_gaps():
                 )
             )
 
+
+    for position, image_url in enumerate(
+        ["private://a.svg", "private://b.svg", "private://c.svg", "private://d.svg"],
+        start=1,
+    ):
+        db.add(
+            QuestionOption(
+                question_id=visual.id,
+                position=position,
+                text="Figure",
+                image_url=image_url,
+            )
+        )
+
     db.commit()
 
     report = collect_content_audit(db, current_year=2026)
 
-    assert report["verified_questions"] == 3
+    assert report["verified_questions"] == 4
     assert report["topics"] == 1
     assert report["question_integrity"] == {
         "invalid_option_sets": 1,
@@ -115,11 +143,11 @@ def test_content_audit_detects_integrity_and_quality_gaps():
         "missing_pattern_type": 1,
     }
     assert report["critical_issues"] == 3
-    assert report["difficulty"] == {"1": 1, "2": 1, "3": 1}
-    assert report["source_types"] == {"generated": 1, "original": 2}
+    assert report["difficulty"] == {"1": 2, "2": 1, "3": 1}
+    assert report["source_types"] == {"generated": 1, "original": 3}
     assert report["pending_topic_count"] == 1
     assert report["subjects"][0]["slug"] == "reasoning"
-    assert report["subjects"][0]["verified_questions"] == 3
+    assert report["subjects"][0]["verified_questions"] == 4
     assert report["status"] == "attention"
 
     db.close()
