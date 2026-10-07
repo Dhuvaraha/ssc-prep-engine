@@ -599,6 +599,7 @@ export type PlannerTask = {
   priority: number;
   status: string;
   reason: string;
+  expected_outcome: string;
 };
 
 export type TodayPlan = {
