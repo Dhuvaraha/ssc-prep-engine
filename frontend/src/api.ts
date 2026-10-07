@@ -74,6 +74,34 @@ export async function register(
   return response.json();
 }
 
+export async function fetchCurrentUser(): Promise<User> {
+  const response = await fetch(API_BASE + "/auth/me", {headers: authHeaders()});
+  if (!response.ok) throw new Error("Failed to load account");
+  return response.json();
+}
+
+export async function updateCurrentUser(display_name: string): Promise<User> {
+  const response = await fetch(API_BASE + "/auth/me", {
+    method: "PATCH",
+    headers: {...authHeaders(), "Content-Type": "application/json"},
+    body: JSON.stringify({display_name}),
+  });
+  if (!response.ok) throw new Error("Failed to update profile");
+  return response.json();
+}
+
+export async function changePassword(current_password: string, new_password: string): Promise<void> {
+  const response = await fetch(API_BASE + "/auth/change-password", {
+    method: "POST",
+    headers: {...authHeaders(), "Content-Type": "application/json"},
+    body: JSON.stringify({current_password, new_password}),
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.detail ?? "Failed to change password");
+  }
+}
+
 export async function fetchTopics(subjectId: number): Promise<Topic[]> {
   const response = await fetch(API_BASE + "/content/topics?subject_id=" + subjectId, {
     headers: authHeaders(),
