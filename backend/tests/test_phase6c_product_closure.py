@@ -39,6 +39,10 @@ def test_mock_blueprint_balances_difficulty_and_prefers_official_content():
                         difficulty=difficulty,
                         year=2025,
                         source_type="official",
+                        source_reference="ssc-official-fixture",
+                        pattern_type=f"reasoning-d{difficulty}",
+                        explanation="Verified worked explanation",
+                        expected_time_seconds=45,
                         verification_status="verified",
                     )
                 )
@@ -51,6 +55,10 @@ def test_mock_blueprint_balances_difficulty_and_prefers_official_content():
                         correct_option=1,
                         difficulty=difficulty,
                         source_type="original",
+                        source_reference="original-fixture-v1",
+                        pattern_type=f"reasoning-d{difficulty}",
+                        explanation="Verified worked explanation",
+                        expected_time_seconds=45,
                         verification_status="verified",
                     )
                 )
@@ -77,7 +85,9 @@ def test_mock_blueprint_balances_difficulty_and_prefers_official_content():
         assert readiness["status"] == "attention"
         assert section["subject"] == "reasoning"
         assert section["ready"] is True
+        assert section["exam_ready"] >= 25
         assert section["high_fidelity"] >= 25
+        assert section["pyq_priority_available"] is True
     finally:
         db.close()
 
