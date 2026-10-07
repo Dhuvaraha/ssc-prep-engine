@@ -19,7 +19,8 @@ export default function SpeakButton({ text, label = "Read aloud" }: Props) {
 
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.95;
+    utterance.rate = Number(localStorage.getItem("ssc_voice_rate") ?? "0.94");
+    utterance.lang = "en-IN";
     utterance.onend = () => setSpeaking(false);
     utterance.onerror = () => setSpeaking(false);
     setSpeaking(true);
