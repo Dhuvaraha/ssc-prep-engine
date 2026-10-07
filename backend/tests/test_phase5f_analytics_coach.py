@@ -110,6 +110,7 @@ def test_analytics_developing_signal_is_not_overclaimed_as_established():
             )
         )
         db.commit()
+        event.listen(engine, "before_cursor_execute", count_question_selects)
 
         payload = analytics_summary(db=db, user=user)
 
@@ -130,7 +131,6 @@ def test_analytics_established_coach_is_actionable_and_batches_question_lookup()
         if normalized.startswith("select") and " from questions" in normalized:
             question_selects += 1
 
-    event.listen(engine, "before_cursor_execute", count_question_selects)
     try:
         for index in range(50):
             correct = index % 5 != 0
@@ -179,5 +179,8 @@ def test_analytics_established_coach_is_actionable_and_batches_question_lookup()
         assert "marks" in payload["coach"]["summary"].lower()
         assert question_selects == 1
     finally:
-        event.remove(engine, "before_cursor_execute", count_question_selects)
+        try:
+            event.remove(engine, "before_cursor_execute", count_question_selects)
+        except Exception:
+            pass
         db.close()
