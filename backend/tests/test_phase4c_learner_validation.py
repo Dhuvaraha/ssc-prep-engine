@@ -208,3 +208,42 @@ def test_revision_success_spacing_uses_real_exam_distance():
 def test_analytics_study_day_rolls_over_at_india_midnight():
     assert utc_naive_to_study_date(datetime(2026, 10, 6, 17, 59)) == date(2026, 10, 6)
     assert utc_naive_to_study_date(datetime(2026, 10, 6, 18, 30)) == date(2026, 10, 7)
+
+
+
+def test_normal_startup_skips_heavy_content_checks(monkeypatch):
+    import app.main as main_module
+
+    monkeypatch.setattr(main_module.settings, "content_audit_on_startup", False)
+    monkeypatch.setattr(main_module.settings, "apply_content_repair_on_startup", False)
+
+    def unexpected(*args, **kwargs):
+        raise AssertionError("heavy content check should not run")
+
+    monkeypatch.setattr(main_module, "collect_content_audit", unexpected)
+    monkeypatch.setattr(main_module, "repair_content_integrity", unexpected)
+
+    main_module.run_startup_content_checks(object())
+
+
+def test_explicit_startup_audit_still_runs_dry_repair_plan(monkeypatch):
+    import app.main as main_module
+
+    calls = []
+    monkeypatch.setattr(main_module.settings, "content_audit_on_startup", True)
+    monkeypatch.setattr(main_module.settings, "apply_content_repair_on_startup", False)
+    monkeypatch.setattr(
+        main_module,
+        "collect_content_audit",
+        lambda db: calls.append(("audit", db)) or {"status": "ready"},
+    )
+    monkeypatch.setattr(
+        main_module,
+        "repair_content_integrity",
+        lambda db, apply=False: calls.append(("repair", apply)) or {"replacement_count": 0},
+    )
+
+    db = object()
+    main_module.run_startup_content_checks(db)
+
+    assert calls == [("audit", db), ("repair", False)]
