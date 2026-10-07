@@ -76,23 +76,25 @@ def topic_package(topic_id: int, db: Session = Depends(get_db)):
         )
     )
 
-    candidate_ids = list(
-        db.scalars(
-            select(Question.id)
-            .where(
-                Question.topic_id == topic_id,
-                Question.verification_status == "verified",
-                Question.correct_option.is_not(None),
-                Question.explanation.is_not(None),
+    candidate_ids: list[int] = []
+    for difficulty in (1, 2, 3):
+        candidate_ids.extend(
+            db.scalars(
+                select(Question.id)
+                .where(
+                    Question.topic_id == topic_id,
+                    Question.verification_status == "verified",
+                    Question.correct_option.is_not(None),
+                    Question.explanation.is_not(None),
+                    Question.difficulty == difficulty,
+                )
+                .order_by(
+                    Question.year.desc().nullslast(),
+                    Question.id,
+                )
+                .limit(20)
             )
-            .order_by(
-                Question.difficulty,
-                Question.year.desc().nullslast(),
-                Question.id,
-            )
-            .limit(60)
         )
-    )
     candidate_questions = []
     if candidate_ids:
         loaded = list(
