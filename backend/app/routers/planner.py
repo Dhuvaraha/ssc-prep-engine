@@ -12,6 +12,22 @@ from app.services.planner import ensure_exam_target, generate_today_plan, rebuil
 router = APIRouter(prefix="/planner", tags=["planner"])
 
 
+def _task_reason(task: DailyPlanTask) -> str:
+    if task.activity_type == "revision":
+        return "Due from a previous wrong, slow or low-confidence attempt."
+    if task.activity_type == "flashcards":
+        return "Spaced recall is due today, so this protects memory before it fades."
+    if task.activity_type == "mock":
+        return "Exam simulation is scheduled to measure speed, attempt rate and accuracy."
+    if task.activity_type == "learn":
+        return "Concept-first study was prioritised before more questions from this topic."
+    if task.activity_type == "practice":
+        if task.priority >= 5:
+            return "High-priority or weak-topic practice was selected by the adaptive planner."
+        return "Practice was selected to strengthen mastery and keep the topic active."
+    return "This task fits today's available study time and preparation priority."
+
+
 class PlannerConfig(BaseModel):
     exam_slug: str = "ssc-cgl-tier-1"
     exam_date: date
@@ -47,6 +63,7 @@ def _serialize(target, tasks):
                 "target_questions": task.target_questions,
                 "priority": task.priority,
                 "status": task.status,
+                "reason": _task_reason(task),
             }
             for task in tasks
         ],
