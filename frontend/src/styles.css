@@ -4036,3 +4036,175 @@ body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
     flex-direction: column;
   }
 }
+
+
+/* Phase 5E — verified solved examples inside teacher lessons */
+.verifiedExampleStack {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.verifiedExampleIntro {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: end;
+  padding: 4px 2px;
+}
+
+.verifiedExampleIntro span,
+.verifiedExampleQuestion > small,
+.verifiedExampleSolution > span,
+.verifiedExampleFast > span {
+  color: #728096;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.verifiedExampleIntro h3 {
+  max-width: 680px;
+  margin: 5px 0 0;
+  font-size: 22px;
+  line-height: 1.25;
+}
+
+.verifiedExampleIntro small {
+  color: #7d899a;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.verifiedExampleCard {
+  padding: 22px;
+  border: 1px solid #dce4ed;
+  border-radius: 18px;
+  background: #fbfcfe;
+}
+
+.verifiedExampleMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+.verifiedExampleMeta span {
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: #eef2f6;
+  color: #617087;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.verifiedExampleQuestion h3 {
+  max-width: none;
+  margin: 6px 0 14px;
+  color: #172033;
+  font-size: clamp(20px, 2.4vw, 28px);
+  line-height: 1.4;
+}
+
+.verifiedExampleImage,
+.verifiedExampleOptionImage {
+  max-width: 100%;
+  border: 1px solid #dfe5ec;
+  border-radius: 12px;
+}
+
+.verifiedExampleImage {
+  margin: 4px 0 16px;
+}
+
+.verifiedExampleOptions {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.verifiedExampleOption {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  padding: 12px 14px;
+  border: 1px solid #e1e6ed;
+  border-radius: 12px;
+  background: white;
+  color: #455368;
+}
+
+.verifiedExampleOption > strong {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 8px;
+  background: #eef2f6;
+  color: #5d6a7c;
+  font-size: 11px;
+}
+
+.verifiedExampleCorrect {
+  border-color: #a8c9b1;
+  background: #f0f8f2;
+  color: #284d34;
+}
+
+.verifiedExampleCorrect > strong {
+  background: #39764d;
+  color: white;
+}
+
+.verifiedExampleOptionImage {
+  grid-column: 2;
+  margin-top: 5px;
+}
+
+.verifiedExampleSolution,
+.verifiedExampleFast {
+  margin-top: 14px;
+  padding: 15px 16px;
+  border-radius: 13px;
+}
+
+.verifiedExampleSolution {
+  border: 1px solid #d9e4f0;
+  background: #f5f9fe;
+}
+
+.verifiedExampleFast {
+  border: 1px solid #d7e7da;
+  background: #f3f9f4;
+}
+
+.verifiedExampleSolution p,
+.verifiedExampleFast p {
+  margin: 7px 0 0;
+  color: #3e4e63;
+  line-height: 1.65;
+}
+
+.verifiedExampleSolution strong {
+  color: #172033;
+}
+
+@media (max-width: 620px) {
+  .verifiedExampleIntro {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .verifiedExampleIntro small {
+    white-space: normal;
+  }
+
+  .verifiedExampleCard {
+    padding: 16px;
+  }
+}
