@@ -37,25 +37,7 @@ type CacheEnvelope<T> = {
 const memoryCache = new Map<string, CacheEnvelope<unknown>>();
 const inflightCache = new Map<string, Promise<unknown>>();
 
-async function fetchCachedJson<T>(key: string, url: string, ttlMs: number): Promise<T> {
-  const now = Date.now();
-  const memory = memoryCache.get(key) as CacheEnvelope<T> | undefined;
-  if (memory && memory.expires_at > now) return memory.value;
-
-  try {
-    const raw = sessionStorage.getItem(key);
-    if (raw) {
-      const cached = JSON.parse(raw) as CacheEnvelope<T>;
-      if (cached.expires_at > now) {
-        memoryCache.set(key, cached as CacheEnvelope<unknown>);
-        return cached.value;
-      }
-      sessionStorage.removeItem(key);
-    }
-  } catch {
-    sessionStorage.removeItem(key);
-  }
-
+function requestCachedJson<T>(key: string, url: string, ttlMs: number): Promise<T> {
   const existing = inflightCache.get(key) as Promise<T> | undefined;
   if (existing) return existing;
 
@@ -76,6 +58,35 @@ async function fetchCachedJson<T>(key: string, url: string, ttlMs: number): Prom
 
   inflightCache.set(key, request as Promise<unknown>);
   return request;
+}
+
+async function fetchCachedJson<T>(key: string, url: string, ttlMs: number): Promise<T> {
+  const now = Date.now();
+  const memory = memoryCache.get(key) as CacheEnvelope<T> | undefined;
+  if (memory?.expires_at && memory.expires_at > now) return memory.value;
+
+  let stale = memory;
+  try {
+    const raw = sessionStorage.getItem(key);
+    if (raw) {
+      const cached = JSON.parse(raw) as CacheEnvelope<T>;
+      memoryCache.set(key, cached as CacheEnvelope<unknown>);
+      if (cached.expires_at > now) return cached.value;
+      stale = cached;
+    }
+  } catch {
+    // Storage is optional. Keep any in-memory value and continue to the network.
+  }
+
+  if (stale) {
+    // Immutable learner-navigation content can render stale immediately while a
+    // background refresh keeps the next navigation fresh. Versioned cache keys
+    // are bumped whenever the response contract/content shape changes.
+    void requestCachedJson<T>(key, url, ttlMs).catch(() => undefined);
+    return stale.value;
+  }
+
+  return requestCachedJson<T>(key, url, ttlMs);
 }
 
 export type User = {

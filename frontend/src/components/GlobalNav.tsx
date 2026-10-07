@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import { fetchContentTree } from "../api";
 import { getToken } from "../auth";
 
 const links = [
@@ -33,6 +34,11 @@ export default function GlobalNav() {
   useEffect(() => {
     document.body.classList.toggle("hasAppSidebar", !hidden);
     return () => document.body.classList.remove("hasAppSidebar");
+  }, [hidden]);
+
+  useEffect(() => {
+    if (hidden) return;
+    void fetchContentTree().catch(() => undefined);
   }, [hidden]);
 
   if (hidden) return null;
