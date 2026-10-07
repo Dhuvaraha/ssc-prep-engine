@@ -27,6 +27,7 @@ base AS (
       chr(97+(g%20))||'able'||chr(97+((g+8)%26)),
       chr(97+(g%20))||'able'||chr(97+((g+13)%26)),
       chr(97+(g%20))||'able'||chr(97+((g+18)%26))) question_text,
+    NULL::text image_url,
     chr(97+(g%20))||'able'||least(chr(97+((g+3)%26)),chr(97+((g+8)%26)),chr(97+((g+13)%26)),chr(97+((g+18)%26))) answer,
     chr(97+(g%20))||'able'||greatest(chr(97+((g+3)%26)),chr(97+((g+8)%26)),chr(97+((g+13)%26)),chr(97+((g+18)%26))) d1,
     chr(97+(g%20))||'ablez' d2, chr(97+(g%20))||'abley' d3,
@@ -41,6 +42,7 @@ base AS (
     format('Find the next letter: %s, %s, %s, %s, %s, ?',
       chr(65+((g)%26)),chr(65+((g+(1+(g%5)))%26)),chr(65+((g+2*(1+(g%5)))%26)),
       chr(65+((g+3*(1+(g%5)))%26)),chr(65+((g+4*(1+(g%5)))%26))) question_text,
+    NULL::text image_url,
     chr(65+((g+5*(1+(g%5)))%26)) answer,
     chr(65+((g+5*(1+(g%5))+1)%26)) d1,
     chr(65+((g+5*(1+(g%5))+2)%26)) d2,
@@ -54,6 +56,7 @@ base AS (
   -- Syllogism
   SELECT tm.topic_id,tm.subject_id,'syllogism',g,
     format('Statements: All A%s are B%s. All B%s are C%s. Conclusions: I. All A%s are C%s. II. Some C%s are not A%s. Which conclusion definitely follows?',g,g,g,g,g,g,g,g) question_text,
+    NULL::text image_url,
     'Only I follows' answer,'Only II follows' d1,'Both I and II follow' d2,'Neither I nor II follows' d3,
     'all-all-chain','Categorical syllogism',2+(g%2),50,
     'If every A is inside B and every B is inside C, every A is inside C. Conclusion II is not guaranteed.',
@@ -64,6 +67,7 @@ base AS (
   -- Direction sense
   SELECT tm.topic_id,tm.subject_id,'direction-sense',g,
     format('A person walks %s m east and then %s m north. How far is the person from the starting point?',3*(1+(g%25)),4*(1+(g%25))) question_text,
+    NULL::text image_url,
     (5*(1+(g%25)))::text answer,
     (5*(1+(g%25))+3)::text d1,(5*(1+(g%25))-2)::text d2,(7*(1+(g%25)))::text d3,
     'right-angle-displacement','Pythagorean displacement',1+(g%3),40,
@@ -75,6 +79,7 @@ base AS (
   -- Clock & calendar
   SELECT tm.topic_id,tm.subject_id,'clock-and-calendar',g,
     format('If today is Monday, what day will it be after %s days?',g+7) question_text,
+    NULL::text image_url,
     (ARRAY['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'])[1+((g+7)%7)] answer,
     (ARRAY['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'])[1+((g+8)%7)] d1,
     (ARRAY['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'])[1+((g+9)%7)] d2,
@@ -88,6 +93,7 @@ base AS (
   -- Puzzle
   SELECT tm.topic_id,tm.subject_id,'puzzle',g,
     format('Five boxes P%s, Q%s, R%s, S%s and T%s are stacked from top to bottom in that order. Which box is immediately below R%s?',g,g,g,g,g,g) question_text,
+    NULL::text image_url,
     format('S%s',g) answer,format('Q%s',g) d1,format('T%s',g) d2,format('P%s',g) d3,
     'ordered-stack','Simple ordering puzzle',1+(g%3),35,
     'The stated order is P, Q, R, S, T, so S is immediately below R.',
@@ -98,6 +104,7 @@ base AS (
   -- Seating arrangement
   SELECT tm.topic_id,tm.subject_id,'seating-arrangement',g,
     format('A%s, B%s, C%s, D%s and E%s sit in a row from left to right in that order. Who sits second to the right of B%s?',g,g,g,g,g,g) question_text,
+    NULL::text image_url,
     format('D%s',g) answer,format('C%s',g) d1,format('E%s',g) d2,format('A%s',g) d3,
     'linear-seating-offset','Linear seating',1+(g%3),35,
     'From B, one place right is C and two places right is D.',
@@ -108,6 +115,7 @@ base AS (
   -- Word building
   SELECT tm.topic_id,tm.subject_id,'word-building',g,
     format('Which word can be formed using letters from "DOCUMENTATION%s" without using any letter more times than it appears?',g) question_text,
+    NULL::text image_url,
     'ACTION' answer,'MOTIONX' d1,'ACCOUNT' d2,'VACUUM' d3,
     'word-from-letters','Letter availability',1+(g%3),40,
     'ACTION uses only letters available in DOCUMENTATION. The other options require unavailable or overused letters.',
@@ -118,6 +126,7 @@ base AS (
   -- Venn diagrams
   SELECT tm.topic_id,tm.subject_id,'venn-diagrams',g,
     format('All poets%s are writers%s, and no writer%s is a machine%s. Which Venn relation is correct?',g,g,g,g) question_text,
+    NULL::text image_url,
     'Poets inside Writers; Machines separate' answer,
     'Writers inside Poets; Machines overlap' d1,
     'All three sets completely overlap' d2,
