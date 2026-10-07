@@ -2,9 +2,11 @@ import { FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
+  AnalyticsSummary,
   User,
   changePassword,
   exportBackup,
+  fetchAnalyticsSummary,
   fetchCurrentUser,
   fetchTodayPlan,
   setPlannerConfig,
@@ -21,12 +23,16 @@ function todayPlusDays(days: number): string {
 export default function SettingsPage() {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
+  const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
   const [displayName, setDisplayName] = useState("");
   const [examDate, setExamDate] = useState(todayPlusDays(8));
   const [dailyMinutes, setDailyMinutes] = useState(180);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [preferredLanguage, setPreferredLanguage] = useState(localStorage.getItem("ssc_preferred_language") ?? "english");
+  const [voiceRate, setVoiceRate] = useState(Number(localStorage.getItem("ssc_voice_rate") ?? "0.94"));
+  const [autoSpeak, setAutoSpeak] = useState(localStorage.getItem("ssc_auto_speak") === "true");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -40,10 +46,12 @@ export default function SettingsPage() {
     Promise.all([
       fetchCurrentUser(),
       fetchTodayPlan().catch(() => null),
+      fetchAnalyticsSummary().catch(() => null),
     ])
-      .then(([account, plan]) => {
+      .then(([account, plan, stats]) => {
         setUser(account);
         setDisplayName(account.display_name ?? "");
+        setAnalytics(stats);
         if (plan) {
           setExamDate(plan.target.exam_date);
           setDailyMinutes(plan.target.daily_minutes);
@@ -77,6 +85,15 @@ export default function SettingsPage() {
     } catch {
       setError("Could not update study target.");
     }
+  }
+
+  function savePreferences(event: FormEvent) {
+    event.preventDefault();
+    localStorage.setItem("ssc_preferred_language", preferredLanguage);
+    localStorage.setItem("ssc_voice_rate", String(voiceRate));
+    localStorage.setItem("ssc_auto_speak", String(autoSpeak));
+    setError("");
+    setMessage("Learning and voice preferences saved on this device.");
   }
 
   async function savePassword(event: FormEvent) {
@@ -119,47 +136,46 @@ export default function SettingsPage() {
   }
 
   if (loading) {
-    return (
-      <main className="settingsShell">
-        <section className="settingsCard"><p>Loading settings…</p></section>
-      </main>
-    );
+    return <main className="settingsShell"><section className="settingsCard"><p>Loading profile…</p></section></main>;
   }
 
   return (
     <main className="settingsShell">
-      <header className="topbar">
-        <div>
-          <p className="brand">Settings</p>
-          <p className="muted">Account, exam target and data controls.</p>
-        </div>
-        <nav>
-          <Link to="/">Dashboard</Link>
-          <Link to="/planner">Today</Link>
-          <Link to="/learn">Learn</Link>
-        </nav>
-      </header>
-
       {(message || error) && (
         <div className={error ? "settingsNotice settingsError" : "settingsNotice"}>
           {error || message}
         </div>
       )}
 
+      <section className="profileHero">
+        <div>
+          <span className="profileAvatar">{(displayName || user?.email || "U").slice(0, 2).toUpperCase()}</span>
+          <div>
+            <p className="eyebrow">Learner profile</p>
+            <h1>{displayName || "SSC aspirant"}</h1>
+            <p>{user?.email}</p>
+          </div>
+        </div>
+        <div className="profileStatStrip">
+          <div><span>Streak</span><strong>{analytics?.overview.streak ?? 0}d</strong></div>
+          <div><span>Practice</span><strong>{analytics?.overview.practice_attempts ?? 0}</strong></div>
+          <div><span>Readiness</span><strong>{analytics?.overview.readiness ?? 0}%</strong></div>
+          <div><span>Mastery</span><strong>{analytics?.overview.mastery ?? 0}%</strong></div>
+        </div>
+      </section>
+
       <div className="settingsGrid">
         <section className="settingsCard">
           <p className="eyebrow">Profile</p>
-          <h1>Your account</h1>
-          <p className="muted">{user?.email}</p>
+          <h2>Name & account</h2>
           <form className="settingsForm" onSubmit={saveProfile}>
             <label>
               Display name
-              <input
-                value={displayName}
-                onChange={(event) => setDisplayName(event.target.value)}
-                maxLength={120}
-                placeholder="Your name"
-              />
+              <input value={displayName} onChange={(event) => setDisplayName(event.target.value)} maxLength={120} placeholder="Your name" />
+            </label>
+            <label>
+              Email
+              <input value={user?.email ?? ""} disabled />
             </label>
             <button type="submit">Save profile</button>
           </form>
@@ -167,30 +183,40 @@ export default function SettingsPage() {
 
         <section className="settingsCard">
           <p className="eyebrow">Preparation target</p>
-          <h2>Daily plan</h2>
+          <h2>Exam & daily hours</h2>
           <form className="settingsForm" onSubmit={saveStudyPlan}>
             <label>
-              CGL exam date
-              <input
-                type="date"
-                value={examDate}
-                onChange={(event) => setExamDate(event.target.value)}
-                required
-              />
+              SSC CGL exam date
+              <input type="date" value={examDate} onChange={(event) => setExamDate(event.target.value)} required />
             </label>
             <label>
               Daily study minutes
-              <input
-                type="number"
-                min={45}
-                max={720}
-                step={15}
-                value={dailyMinutes}
-                onChange={(event) => setDailyMinutes(Number(event.target.value))}
-                required
-              />
+              <input type="number" min={45} max={720} step={15} value={dailyMinutes} onChange={(event) => setDailyMinutes(Number(event.target.value))} required />
             </label>
             <button type="submit">Update plan</button>
+          </form>
+        </section>
+
+        <section className="settingsCard">
+          <p className="eyebrow">Learning preferences</p>
+          <h2>Language & voice</h2>
+          <form className="settingsForm" onSubmit={savePreferences}>
+            <label>
+              Preferred coach style
+              <select value={preferredLanguage} onChange={(event) => setPreferredLanguage(event.target.value)}>
+                <option value="english">English</option>
+                <option value="tanglish">Tanglish prompts + English exam content</option>
+              </select>
+            </label>
+            <label>
+              Voice speed — {voiceRate.toFixed(2)}×
+              <input type="range" min={0.75} max={1.2} step={0.05} value={voiceRate} onChange={(event) => setVoiceRate(Number(event.target.value))} />
+            </label>
+            <label className="settingsCheck">
+              <input type="checkbox" checked={autoSpeak} onChange={(event) => setAutoSpeak(event.target.checked)} />
+              Auto-read teacher responses when supported
+            </label>
+            <button type="submit">Save preferences</button>
           </form>
         </section>
 
@@ -198,48 +224,48 @@ export default function SettingsPage() {
           <p className="eyebrow">Security</p>
           <h2>Change password</h2>
           <form className="settingsForm" onSubmit={savePassword}>
-            <label>
-              Current password
-              <input
-                type="password"
-                value={currentPassword}
-                onChange={(event) => setCurrentPassword(event.target.value)}
-                autoComplete="current-password"
-                required
-              />
-            </label>
-            <label>
-              New password
-              <input
-                type="password"
-                minLength={8}
-                value={newPassword}
-                onChange={(event) => setNewPassword(event.target.value)}
-                autoComplete="new-password"
-                required
-              />
-            </label>
-            <label>
-              Confirm new password
-              <input
-                type="password"
-                minLength={8}
-                value={confirmPassword}
-                onChange={(event) => setConfirmPassword(event.target.value)}
-                autoComplete="new-password"
-                required
-              />
-            </label>
+            <label>Current password<input type="password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} autoComplete="current-password" required /></label>
+            <label>New password<input type="password" minLength={8} value={newPassword} onChange={(event) => setNewPassword(event.target.value)} autoComplete="new-password" required /></label>
+            <label>Confirm new password<input type="password" minLength={8} value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} autoComplete="new-password" required /></label>
             <button type="submit">Change password</button>
           </form>
         </section>
 
+        <section className="settingsCard settingsWide">
+          <div className="analyticsCardHead">
+            <div>
+              <p className="eyebrow">Mock history</p>
+              <h2>Recent test performance</h2>
+            </div>
+            <Link to="/mocks">Take a test</Link>
+          </div>
+          {!analytics?.recent_mocks.length ? (
+            <p className="muted">No submitted mocks yet.</p>
+          ) : (
+            <div className="profileMockHistory">
+              {analytics.recent_mocks.slice(0, 6).map((mock) => (
+                <div key={mock.attempt_id}>
+                  <strong>{mock.mode} mock</strong>
+                  <span>{mock.score} marks</span>
+                  <small>{mock.correct} correct • {mock.incorrect} wrong • {mock.unattempted} skipped</small>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
         <section className="settingsCard">
-          <p className="eyebrow">Data & session</p>
-          <h2>Controls</h2>
-          <p className="muted">Keep a portable JSON backup of your attempts, mastery and revision data.</p>
+          <p className="eyebrow">Data</p>
+          <h2>Backup</h2>
+          <p className="muted">Export a portable JSON snapshot of your learning progress.</p>
+          <div className="settingsActions"><button className="secondary" onClick={() => void saveBackup()}>Export backup</button></div>
+        </section>
+
+        <section className="settingsCard">
+          <p className="eyebrow">Session</p>
+          <h2>Account controls</h2>
           <div className="settingsActions">
-            <button className="secondary" onClick={() => void saveBackup()}>Export backup</button>
+            <Link className="secondaryLink" to="/analytics">View analytics</Link>
             <button className="danger" onClick={logout}>Log out</button>
           </div>
         </section>
