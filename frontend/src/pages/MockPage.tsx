@@ -302,11 +302,22 @@ export default function MockPage() {
                     <article key={slug}>
                       <strong>{sectionLabels[slug] ?? slug}</strong>
                       <span>{stats.correct} correct • {stats.incorrect} wrong • {stats.unattempted} skipped</span>
-                      <small>{Math.round(stats.time_seconds / 60)} min spent</small>
+                      <small>{stats.score} marks • {stats.accuracy}% accuracy • {Math.round(stats.time_seconds / 60)} min</small>
                     </article>
                   ))}
                 </div>
               </section>
+
+              {review.weak_patterns.length > 0 && (
+                <section className="mockWeakPatterns">
+                  <p className="eyebrow">Weak question patterns</p>
+                  <div>
+                    {review.weak_patterns.map((item) => (
+                      <span key={item.pattern}>{item.pattern.replaceAll("-", " ")} <strong>{item.missed} missed</strong></span>
+                    ))}
+                  </div>
+                </section>
+              )}
 
               <section className="mockQuestionReview">
                 <p className="eyebrow">Question review</p>
