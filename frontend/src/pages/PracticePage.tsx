@@ -4,6 +4,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   PracticeQuestion,
   PracticeResult,
+  addQuestionToRevision,
   classifyPracticeMistake,
   fetchPracticeQuestions,
   submitPracticeAnswer,
@@ -32,9 +33,11 @@ const mistakeOptions = [
 const practiceModes = [
   ["adaptive", "Adaptive", "Prioritises unseen, wrong, slow and low-confidence questions."],
   ["guided", "Guided", "Moves across question patterns from easier to harder."],
+  ["topic", "Topic drill", "Rotates through the different patterns inside the selected topic."],
   ["pyq", "PYQ", "Prioritises previous-year and official-source questions."],
   ["mixed", "Mixed", "Rotates across topics for broader exam recall."],
   ["weak", "Weak topics", "Targets low-mastery topics and recent misses."],
+  ["revision", "Revision drill", "Serves questions that are due from your revision queue."],
   ["speed", "Speed drill", "Prioritises questions with shorter target times."],
   ["ladder", "Difficulty ladder", "Cycles Easy → Medium → Hard."],
   ["timed", "Timed", "Per-question countdown using the expected exam time."],
@@ -63,6 +66,7 @@ export default function PracticePage() {
   const [error, setError] = useState("");
   const [bookmarked, setBookmarked] = useState(false);
   const [usedHint, setUsedHint] = useState(false);
+  const [revisionSaved, setRevisionSaved] = useState(false);
   const [outcomes, setOutcomes] = useState<Array<{correct: boolean; seconds: number}>>([]);
   const startedAt = useRef(Date.now());
   const timedOut = useRef(false);
@@ -153,6 +157,16 @@ export default function PracticePage() {
     setBookmarked(response.bookmarked);
   }
 
+  async function addToRevision() {
+    if (!question) return;
+    try {
+      await addQuestionToRevision(question.id);
+      setRevisionSaved(true);
+    } catch {
+      setError("Could not add this question to revision.");
+    }
+  }
+
   function next() {
     setIndex((value) => value + 1);
     setSelected(null);
@@ -161,6 +175,7 @@ export default function PracticePage() {
     setMistakeSaved(null);
     setBookmarked(false);
     setUsedHint(false);
+    setRevisionSaved(false);
     setElapsed(0);
     setActualSeconds(0);
     timedOut.current = false;
@@ -373,6 +388,15 @@ export default function PracticePage() {
                   {Math.round(actualSeconds)}s / {targetSeconds}s target
                 </strong>
               </div>
+              <div>
+                <span>Confidence calibration</span>
+                <strong>
+                  {confidence === 3 && !result.correct ? "Overconfident miss" :
+                   confidence === 1 && result.correct ? "Correct guess — revise once" :
+                   confidence === 3 && result.correct ? "Confident + correct" :
+                   confidence === 2 ? "Uncertain — reinforce" : "Low-confidence attempt"}
+                </strong>
+              </div>
             </div>
             {result.explanation && <p>{result.explanation}</p>}
             {result.fast_method && <p><strong>Fast method:</strong> {result.fast_method}</p>}
@@ -404,8 +428,13 @@ export default function PracticePage() {
             )}
 
             {result.mastery_score !== null && <p className="muted">Topic mastery: {Math.round(result.mastery_score)}%</p>}
-            {result.revision_scheduled && <p className="muted">Added to your revision queue.</p>}
-            <button onClick={next}>{index + 1 === questions.length ? "Finish set" : "Next question"}</button>
+            {(result.revision_scheduled || revisionSaved) && <p className="muted">This question is in your revision queue.</p>}
+            <div className="answerActionRow">
+              <button className="secondary" disabled={revisionSaved || result.revision_scheduled} onClick={() => void addToRevision()}>
+                {revisionSaved || result.revision_scheduled ? "✓ In revision" : "+ Add to revision"}
+              </button>
+              <button onClick={next}>{index + 1 === questions.length ? "Finish set" : "Next question"}</button>
+            </div>
           </section>
         )}
       </article>
