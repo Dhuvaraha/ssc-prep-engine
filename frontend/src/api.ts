@@ -394,12 +394,39 @@ export type AnalyticsSummary = {
     mock_accuracy: number;
     mock_attempt_rate: number;
     readiness: number;
+    streak: number;
   };
   errors: {
     breakdown: Record<string, number>;
     avoidable_errors: number;
     potential_score_gain: number;
   };
+  confidence: {
+    sure_accuracy: number;
+    unsure_accuracy: number;
+    guess_accuracy: number;
+    guess_rate: number;
+    overconfident_errors: number;
+  };
+  subject_breakdown: Array<{
+    subject_slug: string;
+    subject_name: string;
+    attempts: number;
+    accuracy: number;
+    avg_time_seconds: number;
+  }>;
+  trend: Array<{
+    date: string;
+    attempts: number;
+    accuracy: number;
+    avg_time_seconds: number;
+  }>;
+  next_actions: Array<{
+    type: string;
+    title: string;
+    reason: string;
+    topic_id: number | null;
+  }>;
   weak_topics: Array<{
     topic_id: number;
     topic_name: string;
