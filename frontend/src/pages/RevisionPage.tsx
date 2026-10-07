@@ -24,6 +24,7 @@ const reasonOptions = [
   ["calculation", "Calculation"],
   ["misread", "Misread"],
   ["time_pressure", "Time pressure"],
+  ["manual", "Added manually"],
 ];
 
 export default function RevisionPage() {
