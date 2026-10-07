@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.models import Lesson, LessonBlock, QuestionArchetype, Topic
+from app.models import Lesson, LessonBlock, QuestionArchetype, Subject, Topic
 from app.schemas import LessonBlockOut, LessonOut, QuestionArchetypeOut
 
 router = APIRouter(prefix="/learn", tags=["learn"])
@@ -37,6 +37,10 @@ def topic_package(topic_id: int, db: Session = Depends(get_db)):
     topic = db.get(Topic, topic_id)
     if not topic:
         raise HTTPException(status_code=404, detail="Topic not found")
+
+    subject = db.get(Subject, topic.subject_id)
+    if not subject:
+        raise HTTPException(status_code=404, detail="Subject not found")
 
     lessons = list(
         db.scalars(
@@ -76,6 +80,11 @@ def topic_package(topic_id: int, db: Session = Depends(get_db)):
         blocks_by_lesson.setdefault(block.lesson_id, []).append(LessonBlockOut.model_validate(block))
 
     return {
+        "subject": {
+            "id": subject.id,
+            "slug": subject.slug,
+            "name": subject.name,
+        },
         "topic": {
             "id": topic.id,
             "slug": topic.slug,
