@@ -142,6 +142,14 @@ export default function SettingsPage() {
     return <main className="settingsShell"><section className="settingsCard"><p>Loading profile…</p></section></main>;
   }
 
+  const baselinePending = analytics?.coach.evidence_level === "baseline";
+  const readinessLabel = analytics
+    ? baselinePending ? "—" : analytics.overview.readiness + "%"
+    : "—";
+  const masteryLabel = analytics
+    ? baselinePending ? "—" : analytics.overview.mastery + "%"
+    : "—";
+
   return (
     <main className="settingsShell">
       {(message || error) && (
@@ -162,8 +170,14 @@ export default function SettingsPage() {
         <div className="profileStatStrip">
           <div><span>Streak</span><strong>{analytics?.overview.streak ?? 0}d</strong></div>
           <div><span>Practice</span><strong>{analytics?.overview.practice_attempts ?? 0}</strong></div>
-          <div><span>Readiness</span><strong>{analytics?.overview.readiness ?? 0}%</strong></div>
-          <div><span>Mastery</span><strong>{analytics?.overview.mastery ?? 0}%</strong></div>
+          <div>
+            <span>{baselinePending ? "Readiness baseline" : "Readiness"}</span>
+            <strong>{readinessLabel}</strong>
+          </div>
+          <div>
+            <span>{baselinePending ? "Mastery baseline" : "Mastery"}</span>
+            <strong>{masteryLabel}</strong>
+          </div>
         </div>
       </section>
 
@@ -248,7 +262,15 @@ export default function SettingsPage() {
             <div className="profileMockHistory">
               {analytics.recent_mocks.slice(0, 6).map((mock) => (
                 <div key={mock.attempt_id}>
-                  <strong>{mock.mode} mock</strong>
+                  <strong>{
+                    mock.mode === "full"
+                      ? "Full Tier-I simulation"
+                      : mock.mode === "sectional"
+                        ? "Section test"
+                        : mock.mode === "mini"
+                          ? "Quick Sprint"
+                          : "Topic test"
+                  }</strong>
                   <span>{mock.score} marks</span>
                   <small>{mock.correct} correct • {mock.incorrect} wrong • {mock.unattempted} skipped</small>
                 </div>
