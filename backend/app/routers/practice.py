@@ -15,12 +15,14 @@ from app.services.practice_selector import select_practice_questions
 
 router = APIRouter(prefix="/practice", tags=["practice"])
 
+PRACTICE_MODES = "^(guided|timed|adaptive|pyq|mixed|weak|speed|ladder)$"
+
 
 @router.get("/questions", response_model=list[QuestionOut])
 def get_practice_questions(
     topic_id: int | None = Query(default=None),
     limit: int = Query(default=10, ge=1, le=50),
-    mode: str = Query(default="adaptive", pattern="^(guided|timed|adaptive)$"),
+    mode: str = Query(default="adaptive", pattern=PRACTICE_MODES),
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
