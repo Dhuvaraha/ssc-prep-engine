@@ -1,0 +1,148 @@
+import { useMemo, useState } from "react";
+
+type Props = {
+  title: string;
+  context?: string;
+  explanation?: string | null;
+  fastMethod?: string | null;
+  commonTrap?: string | null;
+  correctAnswer?: string | null;
+  selectedAnswer?: string | null;
+  onNext?: () => void;
+  onHintUsed?: () => void;
+};
+
+function speak(text: string) {
+  if (!("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 0.94;
+  window.speechSynthesis.speak(utterance);
+}
+
+export default function TeacherCoach({
+  title,
+  context = "",
+  explanation,
+  fastMethod,
+  commonTrap,
+  correctAnswer,
+  selectedAnswer,
+  onNext,
+  onHintUsed,
+}: Props) {
+  const [open, setOpen] = useState(false);
+  const [input, setInput] = useState("");
+  const [answer, setAnswer] = useState("Ask for a hint, explanation, shortcut, common trap, or why an answer is wrong.");
+  const [listening, setListening] = useState(false);
+
+  const quickPrompts = useMemo(
+    () => ["Give me a hint", "Explain simply", "Show shortcut", "Common trap", "Why was I wrong?"],
+    [],
+  );
+
+  function respond(raw: string) {
+    const q = raw.trim().toLowerCase();
+    if (!q) return;
+
+    let next = "";
+    if (q.includes("next")) {
+      next = "Moving to the next question.";
+      onNext?.();
+    } else if (q.includes("hint")) {
+      onHintUsed?.();
+      next = fastMethod
+        ? "Hint: first identify the pattern or rule. " + fastMethod
+        : "Hint: identify what the question is testing, eliminate impossible options, then solve only the remaining choices.";
+    } else if (q.includes("shortcut") || q.includes("fast")) {
+      next = fastMethod || "Use the smallest reliable method: identify the rule, eliminate impossible options, then calculate only what is necessary.";
+    } else if (q.includes("trap") || q.includes("mistake")) {
+      next = commonTrap || "Common trap: rushing into the options before identifying the exact rule or changing the method midway.";
+    } else if (q.includes("wrong") || q.includes("why")) {
+      if (correctAnswer) {
+        next = selectedAnswer
+          ? "You chose " + selectedAnswer + ", while the correct answer is " + correctAnswer + ". " + (explanation || "Re-check the governing rule and compare both options.")
+          : "The correct answer is " + correctAnswer + ". " + (explanation || "Apply the governing rule step by step.");
+      } else {
+        next = explanation || "Re-check the governing rule, the exact wording, and the option that preserves it.";
+      }
+    } else if (q.includes("explain") || q.includes("simple") || q.includes("teach")) {
+      next = explanation || context || "Focus on the core rule for " + title + ", then apply it once before trying the shortcut.";
+    } else if (q.includes("read")) {
+      next = context || explanation || title;
+    } else {
+      next = "For " + title + ", ask me: “give me a hint”, “explain simply”, “show shortcut”, “common trap”, “why was I wrong?”, or “next”.";
+    }
+    setAnswer(next);
+  }
+
+  function startListening() {
+    const w = window as typeof window & {
+      SpeechRecognition?: new () => {
+        lang: string;
+        interimResults: boolean;
+        onresult: (event: any) => void;
+        onend: () => void;
+        onerror: () => void;
+        start: () => void;
+      };
+      webkitSpeechRecognition?: new () => any;
+    };
+    const Recognition = w.SpeechRecognition || w.webkitSpeechRecognition;
+    if (!Recognition) {
+      setAnswer("Voice input is not supported in this browser. You can type the same question below.");
+      return;
+    }
+    const recognition = new Recognition();
+    recognition.lang = "en-IN";
+    recognition.interimResults = false;
+    recognition.onresult = (event: any) => {
+      const transcript = String(event.results?.[0]?.[0]?.transcript ?? "");
+      setInput(transcript);
+      respond(transcript);
+    };
+    recognition.onend = () => setListening(false);
+    recognition.onerror = () => setListening(false);
+    setListening(true);
+    recognition.start();
+  }
+
+  return (
+    <section className="teacherCoach">
+      <button className="teacherCoachToggle" onClick={() => setOpen((value) => !value)}>
+        <span>◉</span>
+        <div>
+          <strong>Teacher Coach</strong>
+          <small>Ask, listen, understand</small>
+        </div>
+        <b>{open ? "−" : "+"}</b>
+      </button>
+
+      {open && (
+        <div className="teacherCoachBody">
+          <p className="teacherAnswer">{answer}</p>
+          <div className="teacherQuickPrompts">
+            {quickPrompts.map((prompt) => (
+              <button key={prompt} onClick={() => { setInput(prompt); respond(prompt); }}>{prompt}</button>
+            ))}
+          </div>
+          <div className="teacherInputRow">
+            <input
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") respond(input);
+              }}
+              placeholder="Ask the teacher..."
+            />
+            <button className={listening ? "teacherMic listening" : "teacherMic"} onClick={startListening} aria-label="Voice question">
+              {listening ? "●" : "🎙"}
+            </button>
+            <button onClick={() => respond(input)}>Ask</button>
+          </div>
+          <button className="teacherSpeak" onClick={() => speak(answer)}>🔊 Read teacher answer</button>
+        </div>
+      )}
+    </section>
+  );
+}
