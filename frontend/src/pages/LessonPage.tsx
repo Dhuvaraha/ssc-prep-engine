@@ -92,6 +92,9 @@ export default function LessonPage() {
               <Link className="primaryLink" to={"/practice?topic_id=" + pkg.topic.id + "&mode=guided&limit=10"}>
                 Start guided practice
               </Link>
+              <Link className="secondaryLink" to={"/mocks?topic_id=" + pkg.topic.id}>
+                Topic test
+              </Link>
             </div>
           </section>
 
@@ -165,6 +168,12 @@ export default function LessonPage() {
             explanation={pkg.lessons[0]?.worked_example ?? pkg.lessons[0]?.concept}
             fastMethod={pkg.lessons[0]?.shortcut}
             commonTrap={pkg.lessons[0]?.common_traps}
+            standardMethod={pkg.archetypes[0]?.canonical_method ?? pkg.lessons[0]?.concept}
+            examples={pkg.lessons.flatMap((lesson) =>
+              lesson.blocks
+                .filter((block) => block.block_type.startsWith("example"))
+                .map((block) => block.body)
+            )}
           />
 
           <section className="archetypeSection">
@@ -215,6 +224,7 @@ export default function LessonPage() {
             <Link className="primaryLink" to={"/practice?topic_id=" + pkg.topic.id + "&mode=guided&limit=10"}>
               Practice this topic →
             </Link>
+            <Link to={"/mocks?topic_id=" + pkg.topic.id}>Take topic test</Link>
           </section>
         </>
       )}
