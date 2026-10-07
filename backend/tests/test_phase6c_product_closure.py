@@ -28,7 +28,7 @@ def test_mock_blueprint_balances_difficulty_and_prefers_official_content():
         db.flush()
 
         for difficulty in (1, 2, 3):
-            for index in range(10):
+            for index in range(15):
                 db.add(
                     Question(
                         exam_id=exam.id,
