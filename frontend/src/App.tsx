@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import GlobalNav from "./components/GlobalNav";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import AuthPage from "./pages/AuthPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -15,6 +16,7 @@ import SettingsPage from "./pages/SettingsPage";
 export default function App() {
   return (
     <BrowserRouter>
+      <GlobalNav />
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/login" element={<AuthPage />} />
