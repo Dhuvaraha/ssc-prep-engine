@@ -4,7 +4,7 @@ from collections import Counter, defaultdict
 from datetime import date
 
 from sqlalchemy import func, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.content.readiness import TopicReadiness, readiness_failures
 from app.models import (
@@ -18,6 +18,7 @@ from app.models import (
     Subject,
     Topic,
 )
+from app.services.question_quality import unique_questions
 
 
 def _count_map(rows) -> dict[int, int]:
@@ -67,13 +68,22 @@ def collect_content_audit(
             .group_by(Question.subject_id)
         ).all()
     )
-    verified_by_topic = _count_map(
-        db.execute(
-            select(Question.topic_id, func.count(Question.id))
-            .where(*verified_filter, Question.topic_id.is_not(None))
-            .group_by(Question.topic_id)
-        ).all()
+    verified_questions = list(
+        db.scalars(
+            select(Question)
+            .options(selectinload(Question.options))
+            .where(*verified_filter, Question.correct_option.is_not(None))
+            .order_by(Question.id)
+        ).unique()
     )
+    verified_questions_by_topic: dict[int, list[Question]] = defaultdict(list)
+    for question in verified_questions:
+        if question.topic_id is not None:
+            verified_questions_by_topic[int(question.topic_id)].append(question)
+    unique_verified_by_topic = {
+        topic_id: len(unique_questions(rows))
+        for topic_id, rows in verified_questions_by_topic.items()
+    }
     visual_by_topic = _count_map(
         db.execute(
             select(Question.topic_id, func.count(Question.id))
@@ -136,7 +146,7 @@ def collect_content_audit(
         item = TopicReadiness(
             subject_slug=subject.slug,
             topic_slug=topic.slug,
-            verified_questions=verified_by_topic.get(topic.id, 0),
+            verified_questions=unique_verified_by_topic.get(topic.id, 0),
             lesson_blocks=lesson_blocks_by_topic.get(topic.id, 0),
             archetypes=archetypes_by_topic.get(topic.id, 0),
             flashcards=flashcards_by_topic.get(topic.id, 0),
@@ -378,6 +388,10 @@ def collect_content_audit(
                 "slug": subject.slug,
                 "topics": len(subject_topics),
                 "verified_questions": verified_by_subject.get(subject.id, 0),
+                "unique_verified_questions": sum(
+                    unique_verified_by_topic.get(topic.id, 0)
+                    for topic in subject_topics
+                ),
                 "ready_topics": len(subject_topics)
                 - sum(1 for row in pending_topics if row["subject"] == subject.slug),
             }
@@ -395,6 +409,7 @@ def collect_content_audit(
         "status": "ready" if critical_issues == 0 and not pending_topics else "attention",
         "critical_issues": critical_issues,
         "verified_questions": total_verified,
+        "unique_verified_questions": sum(unique_verified_by_topic.values()),
         "topics": len(topics),
         "subjects": subject_summary,
         "pending_topic_count": len(pending_topics),

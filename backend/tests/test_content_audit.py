@@ -132,6 +132,7 @@ def test_content_audit_detects_integrity_and_quality_gaps():
     report = collect_content_audit(db, current_year=2026)
 
     assert report["verified_questions"] == 4
+    assert report["unique_verified_questions"] == 4
     assert report["topics"] == 1
     assert report["question_integrity"] == {
         "invalid_option_sets": 1,
@@ -165,6 +166,50 @@ def test_content_audit_detects_integrity_and_quality_gaps():
     assert report["pending_topic_count"] == 1
     assert report["subjects"][0]["slug"] == "reasoning"
     assert report["subjects"][0]["verified_questions"] == 4
+    assert report["subjects"][0]["unique_verified_questions"] == 4
     assert report["status"] == "attention"
 
     db.close()
+
+
+def test_content_audit_does_not_count_exact_duplicate_rows_as_depth():
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    Session = sessionmaker(bind=engine)
+    db = Session()
+    try:
+        exam = Exam(slug="ssc-cgl-tier-1", name="SSC CGL Tier I", duration_minutes=60)
+        db.add(exam)
+        db.flush()
+        subject = Subject(exam_id=exam.id, slug="reasoning", name="Reasoning", sort_order=1)
+        db.add(subject)
+        db.flush()
+        topic = Topic(subject_id=subject.id, slug="analogy", name="Analogy", priority=5)
+        db.add(topic)
+        db.flush()
+
+        for index in range(100):
+            question = Question(
+                exam_id=exam.id,
+                subject_id=subject.id,
+                topic_id=topic.id,
+                question_text="Repeated content",
+                correct_option=1,
+                explanation="Explanation",
+                fast_method="Shortcut",
+                expected_time_seconds=30,
+                pattern_type="analogy-core",
+                verification_status="verified",
+            )
+            db.add(question)
+            db.flush()
+            for position, value in enumerate(["A", "B", "C", "D"], start=1):
+                db.add(QuestionOption(question_id=question.id, position=position, text=value))
+        db.commit()
+
+        report = collect_content_audit(db, current_year=2026)
+        assert report["verified_questions"] == 100
+        assert report["unique_verified_questions"] == 1
+        assert report["pending_topics"][0]["failures"] == ["verified_questions<100", "lesson_blocks<10", "archetypes<8"]
+    finally:
+        db.close()

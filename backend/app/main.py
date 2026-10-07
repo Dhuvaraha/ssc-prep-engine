@@ -26,6 +26,13 @@ async def lifespan(_: FastAPI):
             "PHASE4_CONTENT_AUDIT %s",
             json.dumps(report, separators=(",", ":"), sort_keys=True),
         )
+        if settings.apply_content_repair_on_startup:
+            applied_plan = repair_content_integrity(db, apply=True)
+            logger.info(
+                "PHASE4_CONTENT_REPAIR_APPLIED %s",
+                json.dumps(applied_plan, separators=(",", ":"), sort_keys=True),
+            )
+
         repair_plan = repair_content_integrity(db, apply=False)
         logger.info(
             "PHASE4_CONTENT_REPAIR_PLAN %s",

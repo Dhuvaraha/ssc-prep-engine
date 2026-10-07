@@ -20,7 +20,13 @@ def question_fingerprint(item: ImportedQuestion) -> str:
         for option in sorted(item.options, key=lambda row: row.position)
     )
     payload = "::".join(
-        [item.exam_slug, item.subject_slug, normalize_text(item.question_text), option_text]
+        [
+            item.exam_slug,
+            item.subject_slug,
+            normalize_text(item.question_text),
+            (item.question_image_url or "").strip(),
+            option_text,
+        ]
     )
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
@@ -59,6 +65,13 @@ def validate_question(item: ImportedQuestion) -> None:
 def import_question(db: Session, item: ImportedQuestion) -> tuple[Question, bool]:
     validate_question(item)
     fingerprint = question_fingerprint(item)
+
+    if item.source_question_id:
+        existing = db.scalar(
+            select(Question).where(Question.source_question_id == item.source_question_id)
+        )
+        if existing:
+            return existing, False
 
     existing = db.scalar(select(Question).where(Question.fingerprint == fingerprint))
     if existing:
