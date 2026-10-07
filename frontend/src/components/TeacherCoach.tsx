@@ -18,7 +18,8 @@ function speak(text: string) {
   if (!("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 0.94;
+  utterance.rate = Number(localStorage.getItem("ssc_voice_rate") ?? "0.94");
+  utterance.lang = "en-IN";
   window.speechSynthesis.speak(utterance);
 }
 
@@ -41,10 +42,12 @@ export default function TeacherCoach({
   const [listening, setListening] = useState(false);
   const [exampleIndex, setExampleIndex] = useState(0);
 
-  const quickPrompts = useMemo(
-    () => ["Give me a hint", "Explain simply", "Another example", "Compare methods", "Show shortcut", "Common trap", "Why was I wrong?"],
-    [],
-  );
+  const quickPrompts = useMemo(() => {
+    const tanglish = localStorage.getItem("ssc_preferred_language") === "tanglish";
+    return tanglish
+      ? ["Hint kudu", "Simple ah explain pannu", "Inoru example", "Rendu method compare pannu", "Shortcut kaatu", "Common trap", "En answer en wrong?"]
+      : ["Give me a hint", "Explain simply", "Another example", "Compare methods", "Show shortcut", "Common trap", "Why was I wrong?"];
+  }, []);
 
   function respond(raw: string) {
     const q = raw.trim().toLowerCase();
@@ -90,6 +93,7 @@ export default function TeacherCoach({
       next = "For " + title + ", ask me: “give me a hint”, “explain simply”, “show shortcut”, “another example”, “compare methods”, “common trap”, “why was I wrong?”, or “next”.";
     }
     setAnswer(next);
+    if (localStorage.getItem("ssc_auto_speak") === "true") speak(next);
   }
 
   function startListening() {
