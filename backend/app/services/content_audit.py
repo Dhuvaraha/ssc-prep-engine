@@ -68,14 +68,6 @@ def collect_content_audit(
             .group_by(Question.subject_id)
         ).all()
     )
-    verified_by_topic = _count_map(
-        db.execute(
-            select(Question.topic_id, func.count(Question.id))
-            .where(*verified_filter, Question.topic_id.is_not(None))
-            .group_by(Question.topic_id)
-        ).all()
-    )
-
     verified_questions = list(
         db.scalars(
             select(Question)
