@@ -212,12 +212,12 @@ def load_mock_attempt(
     questions = _hydrate_questions(db, question_ids)
     by_id = {question.id: question for question in questions}
 
-    return [
-        attempt,
-        [(row, by_id[row.question_id]) for row in rows if row.question_id in by_id],
-    ][0], [
-        (row, by_id[row.question_id]) for row in rows if row.question_id in by_id
+    result = [
+        (row, by_id[row.question_id])
+        for row in rows
+        if row.question_id in by_id
     ]
+    return attempt, result
 
 
 def submit_mock_attempt(
