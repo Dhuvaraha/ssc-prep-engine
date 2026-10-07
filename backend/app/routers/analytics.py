@@ -33,6 +33,14 @@ def analytics_summary(
     )
 
     total_attempts = len(attempts)
+    question_ids = {item.question_id for item in attempts}
+    question_cache = {
+        item.id: item
+        for item in db.scalars(
+            select(Question).where(Question.id.in_(question_ids))
+        )
+    } if question_ids else {}
+
     correct = sum(1 for item in attempts if item.is_correct is True)
     incorrect = sum(1 for item in attempts if item.is_correct is False)
     accuracy = _pct(correct, correct + incorrect)
@@ -52,12 +60,8 @@ def analytics_summary(
     confidence_counts = Counter()
     active_dates = set()
 
-    question_cache: dict[int, Question | None] = {}
     for attempt in attempts:
         question = question_cache.get(attempt.question_id)
-        if attempt.question_id not in question_cache:
-            question = db.get(Question, attempt.question_id)
-            question_cache[attempt.question_id] = question
         if not question:
             continue
 
@@ -110,8 +114,13 @@ def analytics_summary(
 
     topic_rows = []
     mastery_lookup = {item.topic_id: item.mastery_score for item in masteries}
+    topic_ids = set(topic_stats)
+    topic_lookup = {
+        item.id: item
+        for item in db.scalars(select(Topic).where(Topic.id.in_(topic_ids)))
+    } if topic_ids else {}
     for topic_id, values in topic_stats.items():
-        topic = db.get(Topic, topic_id)
+        topic = topic_lookup.get(topic_id)
         if not topic:
             continue
         topic_accuracy = _pct(values["correct"], values["attempts"])
@@ -129,8 +138,13 @@ def analytics_summary(
     topic_rows.sort(key=lambda item: (item["mastery"], item["accuracy"], -item["attempts"]))
 
     subject_rows = []
+    subject_ids = set(subject_stats)
+    subject_lookup = {
+        item.id: item
+        for item in db.scalars(select(Subject).where(Subject.id.in_(subject_ids)))
+    } if subject_ids else {}
     for subject_id, values in subject_stats.items():
-        subject = db.get(Subject, subject_id)
+        subject = subject_lookup.get(subject_id)
         if not subject:
             continue
         subject_rows.append(
@@ -236,6 +250,95 @@ def analytics_summary(
             }
         )
 
+    if total_attempts == 0 and not mocks:
+        evidence_level = "baseline"
+        coach = {
+            "evidence_level": evidence_level,
+            "headline": "Build your exam baseline first.",
+            "summary": "No performance history yet. Start with a Quick Sprint, then solve one guided topic set so the planner can learn from real evidence.",
+            "primary_action": {
+                "title": "Take a Quick Sprint",
+                "reason": "Get one signal from every Tier-I section without pretending this is a full mock.",
+                "path": "/mocks",
+            },
+            "secondary_action": {
+                "title": "Start guided practice",
+                "reason": "A short guided set begins topic-level accuracy, speed and confidence tracking.",
+                "path": "/learn",
+            },
+        }
+    elif total_attempts < 40 or not mocks:
+        evidence_level = "developing"
+        focus = topic_rows[0] if topic_rows else None
+        coach = {
+            "evidence_level": evidence_level,
+            "headline": "Your baseline is forming — keep the signal clean.",
+            "summary": (
+                f"You have {total_attempts} practice attempts. "
+                + ("Add a timed section or mock so readiness includes exam-pressure evidence." if not mocks else "Use another focused set before treating any one topic as a stable weakness.")
+            ),
+            "primary_action": {
+                "title": f"Strengthen {focus['topic_name']}" if focus else "Build more topic evidence",
+                "reason": (
+                    f"{focus['attempts']} attempts • {focus['accuracy']}% accuracy. This is still an early signal."
+                    if focus else
+                    "Complete a guided topic set so the coach has enough evidence to rank weaknesses."
+                ),
+                "path": (
+                    f"/practice?topic_id={focus['topic_id']}&mode=guided&limit=10"
+                    if focus else
+                    "/learn"
+                ),
+            },
+            "secondary_action": {
+                "title": "Add timed evidence",
+                "reason": "Sectional or full-test results make readiness and pacing advice more reliable.",
+                "path": "/mocks",
+            },
+        }
+    else:
+        evidence_level = "established"
+        focus = topic_rows[0] if topic_rows else None
+        top_error = mistakes.most_common(1)[0] if mistakes else None
+        if focus:
+            primary_title = f"Repair {focus['topic_name']}"
+            primary_reason = (
+                f"{focus['attempts']} attempts • {focus['accuracy']}% accuracy • "
+                f"{focus['mastery']}% mastery."
+            )
+            primary_path = f"/practice?topic_id={focus['topic_id']}&mode=adaptive&limit=10"
+        else:
+            primary_title = "Protect your strongest sections"
+            primary_reason = "Use mixed timed practice to keep accuracy and speed stable."
+            primary_path = "/practice?mode=mixed&limit=10"
+
+        coach = {
+            "evidence_level": evidence_level,
+            "headline": "Turn your data into the next marks gain.",
+            "summary": (
+                f"Current readiness is {readiness}%. "
+                f"Correcting classified avoidable errors could recover about {potential_gain} marks."
+            ),
+            "primary_action": {
+                "title": primary_title,
+                "reason": primary_reason,
+                "path": primary_path,
+            },
+            "secondary_action": {
+                "title": (
+                    f"Reduce {top_error[0].replace('_', ' ')} errors"
+                    if top_error else
+                    "Take another timed test"
+                ),
+                "reason": (
+                    f"{top_error[1]} classified miss{'es' if top_error[1] != 1 else ''} use this error pattern."
+                    if top_error else
+                    "Refresh exam-pressure evidence and compare section pacing."
+                ),
+                "path": "/revision" if top_error else "/mocks",
+            },
+        }
+
     return {
         "overview": {
             "practice_attempts": total_attempts,
@@ -264,4 +367,5 @@ def analytics_summary(
         "weak_topics": topic_rows[:8],
         "next_actions": next_actions,
         "recent_mocks": recent_mocks,
+        "coach": coach,
     }
