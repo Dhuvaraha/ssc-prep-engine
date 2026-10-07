@@ -1,3 +1,4 @@
+from collections import Counter
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -6,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.db import get_db
 from app.deps import get_current_user
-from app.models import MockAttempt, User
+from app.models import Exam, MockAttempt, User
 from app.schemas import (
     MockQuestionOut,
     MockResponseUpdate,
@@ -83,6 +84,20 @@ def active_mock(
         int((datetime.now(timezone.utc).replace(tzinfo=None) - attempt.started_at).total_seconds()),
     )
     total = attempt.duration_minutes * 60
+    exam = db.get(Exam, attempt.exam_id)
+    positive = float(exam.positive_marks if exam else 2.0)
+    negative = float(exam.negative_marks if exam else 0.5)
+    for section in sections.values():
+        section["score"] = round(
+            float(section["correct"]) * positive - float(section["incorrect"]) * negative,
+            2,
+        )
+        attempted_count = int(section["correct"]) + int(section["incorrect"])
+        section["accuracy"] = round(
+            float(section["correct"]) * 100 / attempted_count,
+            1,
+        ) if attempted_count else 0.0
+
     return {
         "attempt_id": attempt.id,
         "mode": attempt.mode,
@@ -186,6 +201,7 @@ def review_mock(
     questions = []
     easy_missed = 0
     slow_questions = 0
+    missed_patterns = Counter()
 
     for row, question in rows:
         correct = row.selected_option == question.correct_option if row.selected_option is not None else False
@@ -204,6 +220,8 @@ def review_mock(
 
         if question.difficulty == 1 and not correct:
             easy_missed += 1
+        if not correct and question.pattern_type:
+            missed_patterns[question.pattern_type] += 1
         if question.expected_time_seconds and row.time_seconds > question.expected_time_seconds * 1.25:
             slow_questions += 1
 
@@ -231,6 +249,10 @@ def review_mock(
         "sections": sections,
         "easy_missed": easy_missed,
         "slow_questions": slow_questions,
+        "weak_patterns": [
+            {"pattern": pattern, "missed": count}
+            for pattern, count in missed_patterns.most_common(5)
+        ],
         "questions": questions,
     }
 
