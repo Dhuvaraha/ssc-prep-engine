@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { TopicPackage, fetchTopicPackage } from "../api";
 import SpeakButton from "../components/SpeakButton";
+import TeacherCoach from "../components/TeacherCoach";
 
 const blockLabel: Record<string, string> = {
   prerequisite: "Before you start",
@@ -16,6 +17,9 @@ const blockLabel: Record<string, string> = {
   example_hard: "Hard variation",
   trap: "Common trap",
   recall: "Quick recall",
+  memory: "Memory anchor",
+  revision: "Revision rule",
+  practice: "Practice target",
 };
 
 export default function LessonPage() {
@@ -154,6 +158,14 @@ export default function LessonPage() {
               )}
             </article>
           ))}
+
+          <TeacherCoach
+            title={pkg.topic.name}
+            context={pkg.lessons.map((lesson) => lesson.concept).join(". ")}
+            explanation={pkg.lessons[0]?.worked_example ?? pkg.lessons[0]?.concept}
+            fastMethod={pkg.lessons[0]?.shortcut}
+            commonTrap={pkg.lessons[0]?.common_traps}
+          />
 
           <section className="archetypeSection">
             <div className="sectionHeading">
