@@ -17,7 +17,10 @@ import { clearToken, getToken } from "../auth";
 function todayPlusDays(days: number): string {
   const value = new Date();
   value.setDate(value.getDate() + days);
-  return value.toISOString().slice(0, 10);
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, "0");
+  const day = String(value.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 export default function SettingsPage() {
@@ -187,7 +190,7 @@ export default function SettingsPage() {
           <form className="settingsForm" onSubmit={saveStudyPlan}>
             <label>
               SSC CGL exam date
-              <input type="date" value={examDate} onChange={(event) => setExamDate(event.target.value)} required />
+              <input type="date" min={todayPlusDays(0)} value={examDate} onChange={(event) => setExamDate(event.target.value)} required />
             </label>
             <label>
               Daily study minutes
