@@ -34,8 +34,9 @@ Learn → Practice → Test → Analyse → Revise → Improve
 - Phase 3 — Production QA and release validation: **complete**
 - Phase 4A — Real-use & content-quality audit: **complete**
 - Phase 4B — Unique content depth & integrity remediation: **complete**
+- Phase 4C — Adaptive learner validation & production cold-start hardening: **automated/live validation complete; real learner telemetry pending**
 
-Phase 2 completion gates are documented in `docs/PHASE2_FUNCTIONALITY_READINESS.md`. Phase 3 production release gates and live deployment sign-off are documented in `docs/PHASE3_RELEASE_READINESS.md`. Phase 4A audit findings are documented in `docs/PHASE4A_REAL_USE_AUDIT.md`. Phase 4B unique-depth and integrity sign-off is documented in `docs/PHASE4B_UNIQUE_CONTENT_READINESS.md`.
+Phase 2 completion gates are documented in `docs/PHASE2_FUNCTIONALITY_READINESS.md`. Phase 3 production release gates and live deployment sign-off are documented in `docs/PHASE3_RELEASE_READINESS.md`. Phase 4A audit findings are documented in `docs/PHASE4A_REAL_USE_AUDIT.md`. Phase 4B unique-depth and integrity sign-off is documented in `docs/PHASE4B_UNIQUE_CONTENT_READINESS.md`. Phase 4C adaptive learner and cold-start validation is documented in `docs/PHASE4C_LEARNER_VALIDATION.md`.
 
 ## Content note
 
