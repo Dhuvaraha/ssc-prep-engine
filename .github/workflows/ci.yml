@@ -22,6 +22,25 @@ jobs:
           cache-dependency-path: frontend/package.json
       - run: npm install
       - run: npm run build
+      - run: node --check server.mjs
+      - name: Smoke production SPA server
+        run: |
+          PORT=4173 node server.mjs >/tmp/ssc-web.log 2>&1 &
+          WEB_PID=$!
+          trap 'kill $WEB_PID' EXIT
+          for i in {1..20}; do
+            if curl --fail --silent http://127.0.0.1:4173/__health >/dev/null; then
+              break
+            fi
+            sleep 0.25
+          done
+          curl --fail --silent --head http://127.0.0.1:4173/ >/dev/null
+          curl --fail --silent --head http://127.0.0.1:4173/learn >/dev/null
+          curl --fail --silent --head http://127.0.0.1:4173/mocks >/dev/null
+          if curl --fail --silent --head http://127.0.0.1:4173/assets/does-not-exist.js >/dev/null; then
+            echo "missing assets must not fall back to index.html"
+            exit 1
+          fi
 
   backend:
     runs-on: ubuntu-latest
