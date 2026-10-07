@@ -111,6 +111,22 @@ class PracticeResult(BaseModel):
     coaching: PracticeCoaching | None = None
 
 
+class WorkedQuestionOut(BaseModel):
+    id: int
+    question_text: str
+    question_image_url: str | None = None
+    options: list[OptionOut]
+    correct_option: int
+    explanation: str
+    fast_method: str | None = None
+    difficulty: int
+    expected_time_seconds: int | None = None
+    pattern_type: str | None = None
+    year: int | None = None
+
+    model_config = {"from_attributes": True}
+
+
 class LessonOut(BaseModel):
     id: int
     topic_id: int
