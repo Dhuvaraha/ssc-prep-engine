@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { login, register } from "../api";
 import { setToken } from "../auth";
 
+const registrationEnabled = import.meta.env.VITE_REGISTRATION_ENABLED !== "false";
+
 export default function AuthPage() {
   const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
@@ -57,12 +59,14 @@ export default function AuthPage() {
           <button disabled={busy}>{busy ? "Please wait..." : mode === "login" ? "Login" : "Register"}</button>
         </form>
 
-        <button
-          className="textButton"
-          onClick={() => setMode(mode === "login" ? "register" : "login")}
-        >
-          {mode === "login" ? "Need an account? Register" : "Already registered? Login"}
-        </button>
+        {(registrationEnabled || mode === "register") && (
+          <button
+            className="textButton"
+            onClick={() => setMode(mode === "login" ? "register" : "login")}
+          >
+            {mode === "login" ? "Need an account? Register" : "Already registered? Login"}
+          </button>
+        )}
       </section>
     </main>
   );

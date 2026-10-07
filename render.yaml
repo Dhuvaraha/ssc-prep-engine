@@ -17,6 +17,8 @@ services:
         sync: false
       - key: REVIEWER_EMAILS
         sync: false
+      - key: REGISTRATION_ENABLED
+        value: "false"
       - key: PRIVATE_ASSET_DIR
         value: data/private/assets
 
@@ -32,3 +34,5 @@ services:
         value: 22
       - key: VITE_API_BASE_URL
         value: https://ssc-prep-engine-api.onrender.com/api/v1
+      - key: VITE_REGISTRATION_ENABLED
+        value: "false"

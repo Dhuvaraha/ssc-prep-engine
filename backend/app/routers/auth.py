@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.config import get_settings
 from app.core.security import create_access_token, hash_password, verify_password
 from app.db import get_db
 from app.deps import get_current_user
@@ -16,10 +17,13 @@ from app.schemas import (
 )
 
 router = APIRouter(prefix="/auth", tags=["auth"])
+settings = get_settings()
 
 
 @router.post("/register", response_model=AuthResponse, status_code=201)
 def register(payload: RegisterRequest, db: Session = Depends(get_db)):
+    if not settings.registration_enabled:
+        raise HTTPException(status_code=403, detail="Registration is disabled")
     existing = db.scalar(select(User).where(User.email == payload.email.lower()))
     if existing:
         raise HTTPException(status_code=409, detail="Email already registered")

@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
 from app.models import Question, QuestionAttempt, RevisionItem, TopicMastery
+from app.services.question_quality import unique_questions
 
 
 def _round_robin(groups: dict[object, list[Question]], limit: int) -> list[Question]:
@@ -44,7 +45,7 @@ def select_practice_questions(
     if topic_id is not None:
         stmt = stmt.where(Question.topic_id == topic_id)
 
-    questions = list(db.scalars(stmt).unique())
+    questions = unique_questions(list(db.scalars(stmt).unique()))
     if not questions:
         return []
 

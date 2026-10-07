@@ -4,6 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
 from app.models import Exam, MockAttempt, MockAttemptQuestion, Question, Subject, Topic
+from app.services.question_quality import unique_questions
 
 
 SECTION_ORDER = ["reasoning", "general-awareness", "quant", "english"]
@@ -39,9 +40,8 @@ def _questions_for_subject(
             Question.difficulty,
             Question.id,
         )
-        .limit(count)
     )
-    return list(db.scalars(stmt).unique())
+    return unique_questions(list(db.scalars(stmt).unique()))[:count]
 
 
 def _questions_for_topic(
@@ -67,9 +67,8 @@ def _questions_for_topic(
             Question.correct_option.is_not(None),
         )
         .order_by(Question.difficulty, Question.year.desc().nullslast(), Question.id)
-        .limit(count)
     )
-    return subject.slug, list(db.scalars(stmt).unique())
+    return subject.slug, unique_questions(list(db.scalars(stmt).unique()))[:count]
 
 
 def create_mock_attempt(
