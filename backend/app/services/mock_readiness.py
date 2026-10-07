@@ -30,7 +30,9 @@ def collect_mock_readiness(db: Session, *, exam_slug: str = "ssc-cgl-tier-1") ->
                     "ready": False,
                     "failures": ["missing_subject"],
                     "verified_unique": 0,
+                    "exam_ready": 0,
                     "high_fidelity": 0,
+                    "pyq_priority_available": False,
                     "difficulty": {"1": 0, "2": 0, "3": 0},
                 }
             )
@@ -58,6 +60,13 @@ def collect_mock_readiness(db: Session, *, exam_slug: str = "ssc-cgl-tier-1") ->
             question.source_type in HIGH_FIDELITY_SOURCES or question.year is not None
             for question in unique
         )
+        exam_ready = sum(
+            bool(question.pattern_type)
+            and bool(question.explanation and question.explanation.strip())
+            and question.expected_time_seconds is not None
+            and bool(question.source_reference and question.source_reference.strip())
+            for question in unique
+        )
 
         failures: list[str] = []
         if len(unique) < 25:
@@ -65,8 +74,8 @@ def collect_mock_readiness(db: Session, *, exam_slug: str = "ssc-cgl-tier-1") ->
         for level, required in targets.items():
             if difficulty[level] < required:
                 failures.append(f"difficulty_{level}<{required}")
-        if high_fidelity < 25:
-            failures.append("high_fidelity<25")
+        if exam_ready < 25:
+            failures.append("exam_ready<25")
 
         sections.append(
             {
@@ -74,7 +83,9 @@ def collect_mock_readiness(db: Session, *, exam_slug: str = "ssc-cgl-tier-1") ->
                 "ready": not failures,
                 "failures": failures,
                 "verified_unique": len(unique),
+                "exam_ready": exam_ready,
                 "high_fidelity": high_fidelity,
+                "pyq_priority_available": high_fidelity >= 25,
                 "difficulty": {str(level): difficulty[level] for level in (1, 2, 3)},
             }
         )
