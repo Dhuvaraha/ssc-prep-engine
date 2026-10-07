@@ -10,6 +10,7 @@ def _normalize(value: str | None) -> str:
 def question_content_signature(question: Question) -> tuple:
     return (
         _normalize(question.question_text),
+        _normalize(question.question_image_url),
         tuple(
             (option.position, _normalize(option.text), _normalize(option.image_url))
             for option in question.options
