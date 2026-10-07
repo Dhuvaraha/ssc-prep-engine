@@ -2,8 +2,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
+  ActiveMock,
   MockQuestion,
   MockSubmitResult,
+  abandonMock,
+  fetchActiveMock,
+  fetchMockAttempt,
+  fetchMockState,
   saveMockResponse,
   startMock,
   submitMock,
@@ -28,6 +33,7 @@ export default function MockPage() {
   const [mode, setMode] = useState<"mini" | "full" | "sectional">("mini");
   const [subject, setSubject] = useState("reasoning");
   const [attemptId, setAttemptId] = useState<number | null>(null);
+  const [resumeInfo, setResumeInfo] = useState<ActiveMock | null>(null);
   const [questions, setQuestions] = useState<MockQuestion[]>([]);
   const [answers, setAnswers] = useState<Record<number, LocalAnswer>>({});
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -40,7 +46,13 @@ export default function MockPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!getToken()) navigate("/login");
+    if (!getToken()) {
+      navigate("/login");
+      return;
+    }
+    fetchActiveMock()
+      .then((data) => setResumeInfo(data.attempt_id ? data : null))
+      .catch(() => undefined);
   }, [navigate]);
 
   useEffect(() => {
@@ -53,7 +65,7 @@ export default function MockPage() {
 
   useEffect(() => {
     if (running && secondsLeft === 0 && attemptId && questions.length) {
-      void finishMock();
+      void finishMock(true);
     }
   }, [secondsLeft, running, attemptId, questions.length]);
 
@@ -66,6 +78,10 @@ export default function MockPage() {
   );
 
   async function begin() {
+    if (resumeInfo?.attempt_id) {
+      setError("Resume or discard the in-progress mock before starting another test.");
+      return;
+    }
     setBusy(true);
     setError("");
     setResult(null);
@@ -77,9 +93,58 @@ export default function MockPage() {
       setCurrentIndex(0);
       setSecondsLeft(data.duration_minutes * 60);
       setRunning(true);
+      setResumeInfo(null);
       questionOpenedAt.current = Date.now();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not start mock.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function resumeMock() {
+    if (!resumeInfo?.attempt_id) return;
+    setBusy(true);
+    setError("");
+    try {
+      const [attempt, state] = await Promise.all([
+        fetchMockAttempt(resumeInfo.attempt_id),
+        fetchMockState(resumeInfo.attempt_id),
+      ]);
+      const restored: Record<number, LocalAnswer> = {};
+      state.responses.forEach((item) => {
+        restored[item.question_id] = {
+          selected_option: item.selected_option,
+          marked_for_review: item.marked_for_review,
+          time_seconds: item.time_seconds,
+        };
+      });
+      setAttemptId(attempt.attempt_id);
+      setQuestions(attempt.questions);
+      setAnswers(restored);
+      setMode(attempt.mode as "mini" | "full" | "sectional");
+      if (resumeInfo.subject_slug) setSubject(resumeInfo.subject_slug);
+      setCurrentIndex(0);
+      setSecondsLeft(state.seconds_left);
+      setRunning(true);
+      questionOpenedAt.current = Date.now();
+    } catch {
+      setError("Could not resume the saved mock.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function discardActive() {
+    if (!resumeInfo?.attempt_id) return;
+    if (!window.confirm("Discard this in-progress mock? Saved answers in this attempt will be abandoned.")) return;
+    setBusy(true);
+    try {
+      await abandonMock(resumeInfo.attempt_id);
+      setResumeInfo(null);
+      setError("");
+    } catch {
+      setError("Could not discard the in-progress mock.");
     } finally {
       setBusy(false);
     }
@@ -89,28 +154,21 @@ export default function MockPage() {
     return Math.max(0, (Date.now() - questionOpenedAt.current) / 1000);
   }
 
-  function updateLocal(partial: Partial<LocalAnswer>) {
-    if (!current) return;
-    const previous = answers[current.question.id] ?? {
+  function localForCurrent(): LocalAnswer {
+    if (!current) return {selected_option: null, marked_for_review: false, time_seconds: 0};
+    return answers[current.question.id] ?? {
       selected_option: null,
       marked_for_review: false,
       time_seconds: 0,
     };
-    setAnswers((state) => ({
-      ...state,
-      [current.question.id]: {...previous, ...partial},
-    }));
   }
 
-  async function persistCurrent(extraTime = true) {
+  async function persistPatch(partial: Partial<LocalAnswer> = {}, extraTime = true) {
     if (!attemptId || !current) return;
-    const previous = answers[current.question.id] ?? {
-      selected_option: null,
-      marked_for_review: false,
-      time_seconds: 0,
-    };
+    const previous = localForCurrent();
     const next = {
       ...previous,
+      ...partial,
       time_seconds: previous.time_seconds + (extraTime ? elapsedForCurrent() : 0),
     };
     setAnswers((state) => ({...state, [current.question.id]: next}));
@@ -126,18 +184,34 @@ export default function MockPage() {
   async function goTo(index: number) {
     if (index === currentIndex) return;
     try {
-      await persistCurrent();
+      await persistPatch();
     } catch {
-      setError("Answer save failed. Try again.");
+      setError("Answer autosave failed. Try again.");
       return;
     }
     setCurrentIndex(index);
     questionOpenedAt.current = Date.now();
   }
 
+  async function chooseOption(position: number | null) {
+    try {
+      await persistPatch({selected_option: position});
+    } catch {
+      setError("Answer autosave failed. Try again.");
+    }
+  }
+
+  async function toggleReview() {
+    try {
+      await persistPatch({marked_for_review: !currentAnswer?.marked_for_review});
+    } catch {
+      setError("Review flag could not be saved.");
+    }
+  }
+
   async function saveAndNext() {
     try {
-      await persistCurrent();
+      await persistPatch();
       if (currentIndex < questions.length - 1) {
         setCurrentIndex((value) => value + 1);
         questionOpenedAt.current = Date.now();
@@ -147,15 +221,17 @@ export default function MockPage() {
     }
   }
 
-  async function finishMock() {
+  async function finishMock(force = false) {
     if (!attemptId || busy) return;
+    if (!force && !window.confirm("Submit this test now? You cannot change answers after submission.")) return;
     setBusy(true);
     setError("");
     try {
-      if (current) await persistCurrent();
+      if (current) await persistPatch();
       const data = await submitMock(attemptId);
       setResult(data);
       setRunning(false);
+      setResumeInfo(null);
     } catch {
       setError("Could not submit mock.");
     } finally {
@@ -178,6 +254,9 @@ export default function MockPage() {
     const accuracy = result.correct + result.incorrect
       ? Math.round((result.correct / (result.correct + result.incorrect)) * 100)
       : 0;
+    const attemptRate = result.total_questions
+      ? Math.round(((result.correct + result.incorrect) / result.total_questions) * 100)
+      : 0;
     return (
       <main className="mockShell">
         <section className="mockResult">
@@ -188,10 +267,19 @@ export default function MockPage() {
             <article><span>Incorrect</span><strong>{result.incorrect}</strong></article>
             <article><span>Unattempted</span><strong>{result.unattempted}</strong></article>
             <article><span>Accuracy</span><strong>{accuracy}%</strong></article>
+            <article><span>Attempt rate</span><strong>{attemptRate}%</strong></article>
           </div>
+          <p className="muted">Scoring uses the configured SSC CGL marking scheme, including negative marks.</p>
           <div className="mockResultActions">
-            <button onClick={() => { setResult(null); setAttemptId(null); setQuestions([]); }}>Take another test</button>
-            <Link to="/">Back to dashboard</Link>
+            <button onClick={() => {
+              setResult(null);
+              setAttemptId(null);
+              setQuestions([]);
+              setAnswers({});
+            }}>Take another test</button>
+            <Link to="/analytics">Analyse performance</Link>
+            <Link to="/revision">Revision queue</Link>
+            <Link to="/">Dashboard</Link>
           </div>
         </section>
       </main>
@@ -204,10 +292,24 @@ export default function MockPage() {
         <header className="mockLandingHeader">
           <div>
             <p className="brand">SSC Mock Lab</p>
-            <p className="muted">Exam-style practice with timing, review flags and negative marking.</p>
+            <p className="muted">Exam-style practice with autosave, review flags, resume and negative marking.</p>
           </div>
           <Link to="/">Dashboard</Link>
         </header>
+
+        {resumeInfo?.attempt_id && (
+          <section className="resumeMockCard">
+            <div>
+              <p className="eyebrow">In-progress test found</p>
+              <h2>Resume where you stopped.</h2>
+              <p>{resumeInfo.mode} mock • {formatTime(resumeInfo.seconds_left ?? 0)} remaining</p>
+            </div>
+            <div>
+              <button onClick={() => void resumeMock()} disabled={busy}>Resume test</button>
+              <button className="secondary" onClick={() => void discardActive()} disabled={busy}>Discard</button>
+            </div>
+          </section>
+        )}
 
         <section className="mockSetup">
           <p className="eyebrow">Choose test mode</p>
@@ -240,25 +342,28 @@ export default function MockPage() {
           )}
 
           {error && <p className="errorText">{error}</p>}
-          <button className="mockStartButton" onClick={begin} disabled={busy}>
-            {busy ? "Preparing..." : "Start test"}
+          <button className="mockStartButton" onClick={() => void begin()} disabled={busy || Boolean(resumeInfo?.attempt_id)}>
+            {busy ? "Preparing..." : resumeInfo?.attempt_id ? "Resume or discard current test first" : "Start test"}
           </button>
         </section>
       </main>
     );
   }
 
+  const answeredCount = Object.values(answers).filter((item) => item.selected_option !== null).length;
+  const reviewCount = Object.values(answers).filter((item) => item.marked_for_review).length;
+
   return (
     <main className="examShell">
       <header className="examHeader">
         <div>
           <strong>SSC CGL Tier I</strong>
-          <span>{mode === "full" ? "Full mock" : mode === "sectional" ? "Sectional test" : "Mini mock"}</span>
+          <span>{mode === "full" ? "Full mock" : mode === "sectional" ? "Sectional test" : "Mini mock"} • autosaved</span>
         </div>
         <div className={secondsLeft <= 60 ? "examTimer examTimerUrgent" : "examTimer"}>
           {formatTime(secondsLeft)}
         </div>
-        <button className="finishButton" onClick={finishMock} disabled={busy}>Submit test</button>
+        <button className="finishButton" onClick={() => void finishMock(false)} disabled={busy}>Submit test</button>
       </header>
 
       <div className="examSectionTabs">
@@ -289,7 +394,7 @@ export default function MockPage() {
               <button
                 key={option.position}
                 className={currentAnswer?.selected_option === option.position ? "practiceOption practiceSelected" : "practiceOption"}
-                onClick={() => updateLocal({selected_option: option.position})}
+                onClick={() => void chooseOption(option.position)}
               >
                 <strong>{String.fromCharCode(64 + option.position)}</strong>
                 <span>{option.text ?? "Image option"}</span>
@@ -299,14 +404,14 @@ export default function MockPage() {
           </div>
 
           <div className="examQuestionActions">
-            <button className="secondary" onClick={() => updateLocal({selected_option: null})}>Clear response</button>
+            <button className="secondary" onClick={() => void chooseOption(null)}>Clear response</button>
             <button
               className={currentAnswer?.marked_for_review ? "reviewToggle activeReviewToggle" : "reviewToggle"}
-              onClick={() => updateLocal({marked_for_review: !currentAnswer?.marked_for_review})}
+              onClick={() => void toggleReview()}
             >
               {currentAnswer?.marked_for_review ? "Marked for review" : "Mark for review"}
             </button>
-            <button onClick={saveAndNext}>{currentIndex === questions.length - 1 ? "Save response" : "Save & Next"}</button>
+            <button onClick={() => void saveAndNext()}>{currentIndex === questions.length - 1 ? "Save response" : "Save & Next"}</button>
           </div>
           {error && <p className="errorText">{error}</p>}
         </article>
@@ -323,7 +428,7 @@ export default function MockPage() {
               const classNames = [
                 "paletteNumber",
                 index === currentIndex ? "paletteCurrent" : "",
-                answer?.selected_option ? "paletteAnswered" : "",
+                answer?.selected_option !== null && answer?.selected_option !== undefined ? "paletteAnswered" : "",
                 answer?.marked_for_review ? "paletteReview" : "",
               ].filter(Boolean).join(" ");
               return (
@@ -334,9 +439,9 @@ export default function MockPage() {
             })}
           </div>
           <div className="paletteSummary">
-            <span>Answered <strong>{Object.values(answers).filter((item) => item.selected_option).length}</strong></span>
-            <span>Review <strong>{Object.values(answers).filter((item) => item.marked_for_review).length}</strong></span>
-            <span>Remaining <strong>{questions.length - Object.values(answers).filter((item) => item.selected_option).length}</strong></span>
+            <span>Answered <strong>{answeredCount}</strong></span>
+            <span>Review <strong>{reviewCount}</strong></span>
+            <span>Remaining <strong>{questions.length - answeredCount}</strong></span>
           </div>
         </aside>
       </section>
