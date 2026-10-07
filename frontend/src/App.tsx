@@ -10,6 +10,7 @@ import PracticePage from "./pages/PracticePage";
 import PlannerPage from "./pages/PlannerPage";
 import ReviewPage from "./pages/ReviewPage";
 import RevisionPage from "./pages/RevisionPage";
+import SettingsPage from "./pages/SettingsPage";
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/mocks" element={<MockPage />} />
         <Route path="/review" element={<ReviewPage />} />
         <Route path="/revision" element={<RevisionPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
