@@ -268,12 +268,12 @@ def run_production_learner_canary(engine) -> dict:
             raise RuntimeError("Mock autosave/state did not retain all responses")
 
         submitted = submit_mock(attempt_id, db=db, user=user)
-        report["mock_score"] = float(submitted.score)
-        report["mock_correct"] = submitted.correct
-        report["mock_incorrect"] = submitted.incorrect
+        report["mock_score"] = float(submitted["score"])
+        report["mock_correct"] = submitted["correct"]
+        report["mock_incorrect"] = submitted["incorrect"]
         review = review_mock(attempt_id, db=db, user=user)
         report["mock_sections"] = len(review["sections"])
-        if submitted.correct != 3 or submitted.incorrect != 1:
+        if submitted["correct"] != 3 or submitted["incorrect"] != 1:
             raise RuntimeError("Mini mock result mix is not 3 correct / 1 incorrect")
 
         analytics = analytics_summary(db=db, user=user)
