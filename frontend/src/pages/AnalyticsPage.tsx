@@ -123,7 +123,7 @@ export default function AnalyticsPage() {
             <h2>Are repeats fixing the skill, and where is time leaking?</h2>
           </div>
         </div>
-        <div className="learningCurveGrid">
+        <div className="analyticsMetricGrid learningCurveGrid">
           <article>
             <span>First-attempt accuracy</span>
             <strong>{data.learning_curve.first_attempts ? data.learning_curve.first_attempt_accuracy + "%" : "—"}</strong>
