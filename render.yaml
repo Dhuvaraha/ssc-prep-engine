@@ -19,3 +19,16 @@ services:
         sync: false
       - key: PRIVATE_ASSET_DIR
         value: data/private/assets
+
+  - type: web
+    name: ssc-prep-engine-web
+    runtime: node
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: node server.mjs
+    healthCheckPath: /__health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: VITE_API_BASE_URL
+        value: https://ssc-prep-engine-api.onrender.com/api/v1
