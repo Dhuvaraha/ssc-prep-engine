@@ -383,9 +383,12 @@ export type MockReview = {
     incorrect: number;
     unattempted: number;
     time_seconds: number;
+    score: number;
+    accuracy: number;
   }>;
   easy_missed: number;
   slow_questions: number;
+  weak_patterns: Array<{pattern: string; missed: number}>;
   questions: Array<{
     position: number;
     section_slug: string;
