@@ -206,7 +206,7 @@ def review_mock(
 
         if question.difficulty == 1 and not correct:
             easy_missed += 1
-        if not correct and question.pattern_type:
+        if attempted and not correct and question.pattern_type:
             missed_patterns[question.pattern_type] += 1
         if question.expected_time_seconds and row.time_seconds > question.expected_time_seconds * 1.25:
             slow_questions += 1
