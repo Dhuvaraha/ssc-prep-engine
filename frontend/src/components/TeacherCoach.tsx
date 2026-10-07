@@ -45,8 +45,8 @@ export default function TeacherCoach({
   const quickPrompts = useMemo(() => {
     const tanglish = localStorage.getItem("ssc_preferred_language") === "tanglish";
     return tanglish
-      ? ["Hint kudu", "Simple ah explain pannu", "Inoru example", "Rendu method compare pannu", "Shortcut kaatu", "Common trap", "En answer en wrong?"]
-      : ["Give me a hint", "Explain simply", "Another example", "Compare methods", "Show shortcut", "Common trap", "Why was I wrong?"];
+      ? ["Hint kudu", "Simple ah explain pannu", "Inoru example", "Rendu method compare pannu", "Shortcut kaatu", "Common trap", "En answer en wrong?", "Inoru question", "Repeat", "Stop"]
+      : ["Give me a hint", "Explain simply", "Another example", "Compare methods", "Show shortcut", "Common trap", "Why was I wrong?", "One more like this", "Repeat", "Stop"];
   }, []);
 
   function respond(raw: string) {
@@ -54,10 +54,21 @@ export default function TeacherCoach({
     if (!q) return;
 
     let next = "";
-    if (q.includes("next")) {
+    if (q === "stop" || q.includes("stop speaking")) {
+      window.speechSynthesis?.cancel();
+      next = "Voice stopped.";
+    } else if (q === "repeat" || q.includes("repeat that")) {
+      next = answer;
+      speak(answer);
+    } else if (q.includes("one more like this") || q.includes("inoru question") || q.includes("another question")) {
+      next = onNext
+        ? "Okay. Moving to the next question in this same practice flow."
+        : "Open the quick check or guided practice to solve another question using this same skill.";
+      onNext?.();
+    } else if (q.includes("next")) {
       next = "Moving to the next question.";
       onNext?.();
-    } else if (q.includes("another example") || q.includes("one more example")) {
+    } else if (q.includes("another example") || q.includes("one more example") || q.includes("inoru example")) {
       if (examples.length) {
         const picked = examples[exampleIndex % examples.length];
         setExampleIndex((value) => value + 1);
@@ -65,7 +76,7 @@ export default function TeacherCoach({
       } else {
         next = "This screen does not have another verified worked example attached. Use the quick check for a fresh application of the same rule.";
       }
-    } else if (q.includes("compare") && q.includes("method")) {
+    } else if ((q.includes("compare") && q.includes("method")) || q.includes("rendu method")) {
       next = "Standard method: " + (standardMethod || context || "apply the full rule step by step") +
         ". Fast method: " + (fastMethod || "use elimination only after the governing rule is clear") + ".";
     } else if (q.includes("hint")) {
@@ -77,7 +88,7 @@ export default function TeacherCoach({
       next = fastMethod || "Use the smallest reliable method: identify the rule, eliminate impossible options, then calculate only what is necessary.";
     } else if (q.includes("trap") || q.includes("mistake")) {
       next = commonTrap || "Common trap: rushing into the options before identifying the exact rule or changing the method midway.";
-    } else if (q.includes("wrong") || q.includes("why")) {
+    } else if (q.includes("wrong") || q.includes("why") || q.includes("en wrong")) {
       if (correctAnswer) {
         next = selectedAnswer
           ? "You chose " + selectedAnswer + ", while the correct answer is " + correctAnswer + ". " + (explanation || "Re-check the governing rule and compare both options.")
@@ -85,7 +96,7 @@ export default function TeacherCoach({
       } else {
         next = explanation || "Re-check the governing rule, the exact wording, and the option that preserves it.";
       }
-    } else if (q.includes("explain") || q.includes("simple") || q.includes("teach")) {
+    } else if (q.includes("explain") || q.includes("simple") || q.includes("teach") || q.includes("explain pannu")) {
       next = explanation || context || "Focus on the core rule for " + title + ", then apply it once before trying the shortcut.";
     } else if (q.includes("read")) {
       next = context || explanation || title;
