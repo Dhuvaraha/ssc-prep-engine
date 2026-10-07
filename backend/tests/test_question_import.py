@@ -2,7 +2,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.content.import_schema import ImportedOption, ImportedQuestion
+from app.content.import_schema import ImportedQuestion
 from app.db import Base
 from app.models import Exam, Subject, Topic
 from app.services.question_import import import_question, question_fingerprint, validate_question
