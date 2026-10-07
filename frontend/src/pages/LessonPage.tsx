@@ -189,7 +189,7 @@ export default function LessonPage() {
       .map((blueprint) => ({
         ...blueprint,
         blockTypes: [...blueprint.blockTypes],
-        blocks: allBlocks.filter((block) => blueprint.blockTypes.includes(block.blockType as never)),
+        blocks: allBlocks.filter((block) => (blueprint.blockTypes as readonly string[]).includes(block.blockType)),
       }))
       .filter((stage) => stage.blocks.length > 0);
   }, [allBlocks]);
