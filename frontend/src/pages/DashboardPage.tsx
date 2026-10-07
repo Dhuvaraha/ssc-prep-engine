@@ -136,7 +136,7 @@ export default function DashboardPage() {
                 {subject && (
                   <small>{subject.topic_count} topics • {subject.lesson_count} lessons</small>
                 )}
-                <Link className="secondaryLink" to="/learn">Study section</Link>
+                <Link className="secondaryLink" to={"/learn?subject=" + slug}>Study section</Link>
               </article>
             );
           })}
