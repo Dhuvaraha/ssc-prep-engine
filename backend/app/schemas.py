@@ -87,6 +87,19 @@ class PracticeSubmit(BaseModel):
     mistake_type: str | None = None
 
 
+class PracticeCoaching(BaseModel):
+    pattern_name: str | None = None
+    skill: str | None = None
+    recognition_cues: str | None = None
+    standard_method: str | None = None
+    fast_method: str | None = None
+    common_trap: str | None = None
+    difficulty_rule: str | None = None
+    worked_example: str | None = None
+    hint_steps: list[str] = []
+    archetype_exact: bool = False
+
+
 class PracticeResult(BaseModel):
     attempt_id: int
     correct: bool
@@ -95,6 +108,7 @@ class PracticeResult(BaseModel):
     fast_method: str | None = None
     mastery_score: float | None = None
     revision_scheduled: bool = False
+    coaching: PracticeCoaching | None = None
 
 
 class LessonOut(BaseModel):
