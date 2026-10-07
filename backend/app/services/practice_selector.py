@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
-from app.models import Question, QuestionAttempt, TopicMastery
+from app.models import Question, QuestionAttempt, RevisionItem, TopicMastery
 
 
 def _round_robin(groups: dict[object, list[Question]], limit: int) -> list[Question]:
@@ -47,6 +47,26 @@ def select_practice_questions(
     questions = list(db.scalars(stmt).unique())
     if not questions:
         return []
+
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
+
+    if mode == "revision":
+        due_ids = list(
+            db.scalars(
+                select(RevisionItem.question_id)
+                .where(
+                    RevisionItem.user_id == user_id,
+                    RevisionItem.is_active.is_(True),
+                    RevisionItem.next_review_at <= now,
+                )
+                .order_by(RevisionItem.next_review_at, RevisionItem.id)
+            )
+        )
+        if due_ids:
+            by_id = {question.id: question for question in questions}
+            due_questions = [by_id[qid] for qid in due_ids if qid in by_id]
+            if due_questions:
+                return due_questions[:limit]
 
     if mode == "guided":
         grouped: dict[str, list[Question]] = defaultdict(list)
@@ -98,7 +118,7 @@ def select_practice_questions(
                 break
         return selected
 
-    if mode == "mixed":
+    if mode in {"mixed", "topic"}:
         grouped_by_topic: dict[int, list[Question]] = defaultdict(list)
         for question in questions:
             grouped_by_topic[question.topic_id or -question.id].append(question)
@@ -128,8 +148,6 @@ def select_practice_questions(
             select(TopicMastery).where(TopicMastery.user_id == user_id)
         ):
             weak_topics[mastery.topic_id] = float(mastery.mastery_score)
-
-    now = datetime.now(timezone.utc).replace(tzinfo=None)
 
     def priority(question: Question) -> tuple[float, int]:
         history = by_question.get(question.id, [])
