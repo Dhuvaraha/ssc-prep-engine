@@ -12,6 +12,20 @@ from app.services.planner import ensure_exam_target, generate_today_plan, rebuil
 router = APIRouter(prefix="/planner", tags=["planner"])
 
 
+def _task_outcome(task: DailyPlanTask) -> str:
+    if task.activity_type == "learn":
+        return "Understand the rule and recognition cues before attempting the drill."
+    if task.activity_type == "practice":
+        return f"Complete {task.target_questions or 10} focused questions and improve mastery."
+    if task.activity_type == "revision":
+        return "Recall the correct method without repeating the previous mistake."
+    if task.activity_type == "flashcards":
+        return "Finish due recall cards and push remembered facts to the next interval."
+    if task.activity_type == "mock":
+        return "Measure exam-speed accuracy and expose marks lost under time pressure."
+    return "Move today's preparation target forward."
+
+
 def _task_reason(task: DailyPlanTask) -> str:
     if task.activity_type == "revision":
         return "Due from a previous wrong, slow or low-confidence attempt."
@@ -64,6 +78,7 @@ def _serialize(target, tasks):
                 "priority": task.priority,
                 "status": task.status,
                 "reason": _task_reason(task),
+                "expected_outcome": _task_outcome(task),
             }
             for task in tasks
         ],
