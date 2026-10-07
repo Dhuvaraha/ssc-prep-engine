@@ -96,7 +96,7 @@ class PracticeCoaching(BaseModel):
     common_trap: str | None = None
     difficulty_rule: str | None = None
     worked_example: str | None = None
-    hint_steps: list[str] = []
+    hint_steps: list[str] = Field(default_factory=list)
     archetype_exact: bool = False
 
 
