@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Props = {
   title: string;
@@ -12,6 +12,9 @@ type Props = {
   selectedAnswer?: string | null;
   onNext?: () => void;
   onHintUsed?: () => void;
+  defaultOpen?: boolean;
+  lead?: string | null;
+  hintSteps?: string[];
 };
 
 function speak(text: string) {
@@ -35,12 +38,23 @@ export default function TeacherCoach({
   selectedAnswer,
   onNext,
   onHintUsed,
+  defaultOpen = false,
+  lead,
+  hintSteps = [],
 }: Props) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
   const [input, setInput] = useState("");
-  const [answer, setAnswer] = useState("Ask for a hint, explanation, shortcut, common trap, or why an answer is wrong.");
+  const [answer, setAnswer] = useState(
+    lead || "Ask for a hint, explanation, shortcut, common trap, or why an answer is wrong."
+  );
   const [listening, setListening] = useState(false);
   const [exampleIndex, setExampleIndex] = useState(0);
+  const [hintIndex, setHintIndex] = useState(0);
+
+  useEffect(() => {
+    if (lead) setAnswer(lead);
+    setHintIndex(0);
+  }, [lead, title]);
 
   const quickPrompts = useMemo(() => {
     const tanglish = localStorage.getItem("ssc_preferred_language") === "tanglish";
@@ -81,9 +95,15 @@ export default function TeacherCoach({
         ". Fast method: " + (fastMethod || "use elimination only after the governing rule is clear") + ".";
     } else if (q.includes("hint")) {
       onHintUsed?.();
-      next = fastMethod
-        ? "Hint: first identify the pattern or rule. " + fastMethod
-        : "Hint: identify what the question is testing, eliminate impossible options, then solve only the remaining choices.";
+      if (hintSteps.length) {
+        const picked = hintSteps[Math.min(hintIndex, hintSteps.length - 1)];
+        next = "Hint " + (Math.min(hintIndex, hintSteps.length - 1) + 1) + ": " + picked;
+        setHintIndex((value) => Math.min(value + 1, hintSteps.length - 1));
+      } else {
+        next = fastMethod
+          ? "Hint: first identify the pattern or rule. " + fastMethod
+          : "Hint: identify what the question is testing, eliminate impossible options, then solve only the remaining choices.";
+      }
     } else if (q.includes("shortcut") || q.includes("fast")) {
       next = fastMethod || "Use the smallest reliable method: identify the rule, eliminate impossible options, then calculate only what is necessary.";
     } else if (q.includes("trap") || q.includes("mistake")) {
@@ -144,7 +164,7 @@ export default function TeacherCoach({
         <span>◉</span>
         <div>
           <strong>Teacher Coach</strong>
-          <small>Ask, listen, understand</small>
+          <small>Explain • hint • method • trap</small>
         </div>
         <b>{open ? "−" : "+"}</b>
       </button>
