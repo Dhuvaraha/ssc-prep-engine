@@ -7,6 +7,7 @@ from app.db import Base
 from app.models import Exam, Question, QuestionAttempt, Subject, Topic, User
 from app.routers.analytics import analytics_summary
 from app.services.mock_engine import _difficulty_targets, _questions_for_subject
+from app.services.mock_readiness import collect_mock_readiness
 from app.services.practice_selector import select_practice_questions
 
 
@@ -70,6 +71,13 @@ def test_mock_blueprint_balances_difficulty_and_prefers_official_content():
             for difficulty in (1, 2, 3)
         }
         assert actual == expected == {1: 7, 2: 12, 3: 6}
+
+        readiness = collect_mock_readiness(db)
+        section = readiness["sections"][0]
+        assert readiness["status"] == "attention"
+        assert section["subject"] == "reasoning"
+        assert section["ready"] is True
+        assert section["high_fidelity"] >= 25
     finally:
         db.close()
 
