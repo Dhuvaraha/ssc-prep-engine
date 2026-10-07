@@ -15,7 +15,7 @@ from app.services.practice_selector import select_practice_questions
 
 router = APIRouter(prefix="/practice", tags=["practice"])
 
-PRACTICE_MODES = "^(guided|timed|adaptive|pyq|mixed|weak|speed|ladder)$"
+PRACTICE_MODES = "^(guided|topic|timed|adaptive|pyq|mixed|weak|revision|speed|ladder)$"
 
 
 @router.get("/questions", response_model=list[QuestionOut])
