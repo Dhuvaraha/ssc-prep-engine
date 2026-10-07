@@ -141,6 +141,13 @@ def test_teacher_readiness_requires_teacher_blocks_archetype_and_three_verified_
         db.delete(lesson_block)
         db.commit()
         report = collect_teacher_readiness(db)
+        assert report["status"] == "ready"
+        assert "shortcut" in report["items"][0]["archetype_capabilities"]
+
+        archetype = db.query(QuestionArchetype).one()
+        archetype.shortcut_method = None
+        db.commit()
+        report = collect_teacher_readiness(db)
         assert report["status"] == "attention"
         assert report["items"][0]["failures"] == ["missing_blocks:shortcut"]
     finally:

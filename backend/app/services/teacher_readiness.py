@@ -58,19 +58,24 @@ def collect_teacher_readiness(db: Session, *, exam_slug: str = "ssc-cgl-tier-1")
             if topic_id is not None:
                 blocks_by_topic[topic_id].add(str(block_type))
 
-    archetypes = Counter(
-        {
-            int(topic_id): int(count)
-            for topic_id, count in db.execute(
-                select(QuestionArchetype.topic_id, func.count(QuestionArchetype.id))
-                .where(
+    archetypes = Counter()
+    archetype_capabilities: dict[int, set[str]] = {topic.id: set() for topic in topics}
+    if topic_ids:
+        archetype_rows = list(
+            db.scalars(
+                select(QuestionArchetype).where(
                     QuestionArchetype.topic_id.in_(topic_ids),
                     QuestionArchetype.is_published.is_(True),
                 )
-                .group_by(QuestionArchetype.topic_id)
-            ).all()
-        }
-    ) if topic_ids else Counter()
+            )
+        )
+        for archetype in archetype_rows:
+            archetypes[archetype.topic_id] += 1
+            capabilities = archetype_capabilities[archetype.topic_id]
+            if archetype.recognition_cues and archetype.recognition_cues.strip():
+                capabilities.add("recognition")
+            if archetype.shortcut_method and archetype.shortcut_method.strip():
+                capabilities.add("shortcut")
 
     explained_by_difficulty: dict[int, set[int]] = {topic.id: set() for topic in topics}
     if topic_ids:
@@ -94,8 +99,10 @@ def collect_teacher_readiness(db: Session, *, exam_slug: str = "ssc-cgl-tier-1")
         subject = subject_by_id[topic.subject_id]
         required = set(CORE_BLOCKS) | SUBJECT_EXTRA_BLOCKS.get(subject.slug, set())
         block_types = blocks_by_topic.get(topic.id, set())
+        teaching_capabilities = set(block_types)
+        teaching_capabilities.update(archetype_capabilities.get(topic.id, set()))
         failures: list[str] = []
-        missing_blocks = sorted(required - block_types)
+        missing_blocks = sorted(required - teaching_capabilities)
         if missing_blocks:
             failures.append("missing_blocks:" + ",".join(missing_blocks))
         if archetypes[topic.id] < 1:
@@ -113,6 +120,7 @@ def collect_teacher_readiness(db: Session, *, exam_slug: str = "ssc-cgl-tier-1")
                 "ready": not failures,
                 "failures": failures,
                 "published_block_types": sorted(block_types),
+                "archetype_capabilities": sorted(archetype_capabilities.get(topic.id, set())),
                 "published_archetypes": archetypes[topic.id],
                 "verified_example_difficulties": sorted(difficulty_set),
             }
