@@ -148,8 +148,9 @@ class MistakeUpdate(BaseModel):
 
 
 class MockStartRequest(BaseModel):
-    mode: str = Field(pattern="^(mini|full|sectional)$")
+    mode: str = Field(pattern="^(mini|full|sectional|topic)$")
     subject_slug: str | None = None
+    topic_id: int | None = None
 
 
 class MockResponseUpdate(BaseModel):
