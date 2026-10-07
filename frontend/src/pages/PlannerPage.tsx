@@ -177,6 +177,7 @@ export default function PlannerPage() {
                   <div className="plannerTaskBody">
                     <div className="plannerTaskMeta">
                       <span>{task.activity_type}</span>
+                      {task.subject_slug && <span>{task.subject_slug.replaceAll("-", " ")}</span>}
                       <span>{task.target_minutes} min</span>
                       {task.target_questions && <span>{task.target_questions} questions</span>}
                     </div>
