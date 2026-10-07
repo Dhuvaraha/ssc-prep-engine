@@ -9,9 +9,10 @@ import {
   submitPracticeAnswer,
   toggleBookmark,
 } from "../api";
-import { clearToken, getToken } from "../auth";
+import { getToken } from "../auth";
 import SecureImage from "../components/SecureImage";
 import SpeakButton from "../components/SpeakButton";
+import TeacherCoach from "../components/TeacherCoach";
 
 const confidenceOptions = [
   {value: 3, label: "Sure"},
@@ -28,13 +29,28 @@ const mistakeOptions = [
   ["guess", "Risky guess"],
 ];
 
+const practiceModes = [
+  ["adaptive", "Adaptive", "Prioritises unseen, wrong, slow and low-confidence questions."],
+  ["guided", "Guided", "Moves across question patterns from easier to harder."],
+  ["pyq", "PYQ", "Prioritises previous-year and official-source questions."],
+  ["mixed", "Mixed", "Rotates across topics for broader exam recall."],
+  ["weak", "Weak topics", "Targets low-mastery topics and recent misses."],
+  ["speed", "Speed drill", "Prioritises questions with shorter target times."],
+  ["ladder", "Difficulty ladder", "Cycles Easy → Medium → Hard."],
+  ["timed", "Timed", "Per-question countdown using the expected exam time."],
+] as const;
+
+type Mode = typeof practiceModes[number][0];
+
 export default function PracticePage() {
   const [params] = useSearchParams();
-  const topicId = Number(params.get("topic_id"));
-  const requestedMode = params.get("mode") ?? "adaptive";
-  const mode = ["guided", "adaptive", "timed"].includes(requestedMode) ? requestedMode : "adaptive";
-  const requestedLimit = Number(params.get("limit") ?? "5");
-  const limit = Number.isFinite(requestedLimit) ? Math.min(20, Math.max(3, requestedLimit)) : 5;
+  const rawTopicId = Number(params.get("topic_id") ?? "0");
+  const topicId = Number.isFinite(rawTopicId) && rawTopicId > 0 ? rawTopicId : undefined;
+  const requestedMode = params.get("mode") ?? (topicId ? "adaptive" : "mixed");
+  const validModes = practiceModes.map((item) => item[0]) as readonly string[];
+  const mode = (validModes.includes(requestedMode) ? requestedMode : "adaptive") as Mode;
+  const requestedLimit = Number(params.get("limit") ?? "10");
+  const limit = Number.isFinite(requestedLimit) ? Math.min(30, Math.max(3, requestedLimit)) : 10;
 
   const [questions, setQuestions] = useState<PracticeQuestion[]>([]);
   const [index, setIndex] = useState(0);
@@ -43,48 +59,44 @@ export default function PracticePage() {
   const [result, setResult] = useState<PracticeResult | null>(null);
   const [mistakeSaved, setMistakeSaved] = useState<string | null>(null);
   const [elapsed, setElapsed] = useState(0);
+  const [actualSeconds, setActualSeconds] = useState(0);
   const [error, setError] = useState("");
   const [bookmarked, setBookmarked] = useState(false);
+  const [usedHint, setUsedHint] = useState(false);
+  const [outcomes, setOutcomes] = useState<Array<{correct: boolean; seconds: number}>>([]);
   const startedAt = useRef(Date.now());
   const timedOut = useRef(false);
   const navigate = useNavigate();
 
   const question = useMemo(() => questions[index] ?? null, [questions, index]);
   const targetSeconds = question?.expected_time_seconds ?? 45;
+  const currentMode = practiceModes.find((item) => item[0] === mode);
 
   useEffect(() => {
     if (!getToken()) {
       navigate("/login");
       return;
     }
-    if (!Number.isFinite(topicId) || topicId <= 0) {
-      setError("Choose a topic from Learn mode.");
-      return;
-    }
 
     setError("");
     setQuestions([]);
     setIndex(0);
+    setOutcomes([]);
     fetchPracticeQuestions(topicId, limit, mode)
       .then((items) => {
         setQuestions(items);
         startedAt.current = Date.now();
         setElapsed(0);
-        if (!items.length) setError("No verified practice questions are ready for this topic yet.");
+        if (!items.length) setError("No verified questions matched this practice mode yet.");
       })
-      .catch(() => {
-        clearToken();
-        navigate("/login");
-      });
+      .catch(() => setError("Could not load practice. Check your connection and try again."));
   }, [navigate, topicId, mode, limit]);
 
   useEffect(() => {
     if (!question || result) return;
-
     const timer = window.setInterval(() => {
       setElapsed(Math.floor((Date.now() - startedAt.current) / 1000));
     }, 250);
-
     return () => window.clearInterval(timer);
   }, [question, result]);
 
@@ -93,30 +105,40 @@ export default function PracticePage() {
     if (elapsed < targetSeconds) return;
 
     timedOut.current = true;
+    setActualSeconds(targetSeconds);
     submitPracticeAnswer({
       question_id: question.id,
       selected_option: selected,
       time_seconds: targetSeconds,
       confidence: confidence ?? 1,
-      used_hint: false,
+      used_hint: usedHint,
       mistake_type: "time_pressure",
     })
-      .then(setResult)
+      .then((response) => {
+        setResult(response);
+        setOutcomes((items) => [...items, {correct: response.correct, seconds: targetSeconds}]);
+      })
       .catch(() => setError("Could not submit the timed answer."));
-  }, [mode, question, result, elapsed, targetSeconds, selected, confidence]);
+  }, [mode, question, result, elapsed, targetSeconds, selected, confidence, usedHint]);
 
   async function submit() {
     if (!question || selected === null || confidence === null) return;
     const seconds = Math.max(1, (Date.now() - startedAt.current) / 1000);
-    const response = await submitPracticeAnswer({
-      question_id: question.id,
-      selected_option: selected,
-      time_seconds: seconds,
-      confidence,
-      used_hint: false,
-      mistake_type: confidence === 1 ? "guess" : null,
-    });
-    setResult(response);
+    setActualSeconds(seconds);
+    try {
+      const response = await submitPracticeAnswer({
+        question_id: question.id,
+        selected_option: selected,
+        time_seconds: seconds,
+        confidence,
+        used_hint: usedHint,
+        mistake_type: confidence === 1 ? "guess" : null,
+      });
+      setResult(response);
+      setOutcomes((items) => [...items, {correct: response.correct, seconds}]);
+    } catch {
+      setError("Could not submit this answer. Try again.");
+    }
   }
 
   async function saveMistake(type: string) {
@@ -138,29 +160,65 @@ export default function PracticePage() {
     setResult(null);
     setMistakeSaved(null);
     setBookmarked(false);
+    setUsedHint(false);
     setElapsed(0);
+    setActualSeconds(0);
     timedOut.current = false;
     startedAt.current = Date.now();
   }
 
-  if (error) {
+  function modeUrl(nextMode: string) {
+    const next = new URLSearchParams();
+    if (topicId) next.set("topic_id", String(topicId));
+    next.set("mode", nextMode);
+    next.set("limit", String(limit));
+    return "/practice?" + next.toString();
+  }
+
+  if (error && questions.length === 0) {
     return (
       <main className="lessonShell">
-        <header className="lessonTopbar"><Link to="/learn">← Learn</Link><Link to="/">Dashboard</Link></header>
-        <section className="emptyCard">{error}</section>
+        <header className="lessonTopbar">
+          <button className="textBackButton" onClick={() => navigate(-1)}>← Back</button>
+          <Link to="/learn">Learn</Link>
+        </header>
+        <section className="emptyCard">
+          <strong>{error}</strong>
+          <div className="emptyActions">
+            <button onClick={() => window.location.reload()}>Retry</button>
+            <Link to="/learn">Choose a topic</Link>
+          </div>
+        </section>
       </main>
     );
   }
 
   if (index >= questions.length && questions.length > 0) {
+    const correct = outcomes.filter((item) => item.correct).length;
+    const accuracy = outcomes.length ? Math.round((correct / outcomes.length) * 100) : 0;
+    const avgSeconds = outcomes.length
+      ? Math.round(outcomes.reduce((sum, item) => sum + item.seconds, 0) / outcomes.length)
+      : 0;
     return (
       <main className="lessonShell">
-        <header className="lessonTopbar"><Link to="/learn">← Learn</Link><Link to="/">Dashboard</Link></header>
+        <header className="lessonTopbar">
+          <Link to="/practice?mode=mixed&limit=10">← Practice hub</Link>
+          <Link to="/">Dashboard</Link>
+        </header>
         <section className="practiceComplete">
           <p className="eyebrow">Practice set complete</p>
-          <h1>Review the mistakes, not just the score.</h1>
-          <p>Your attempts are saved for mastery, adaptive selection and revision.</p>
-          <Link className="primaryLink" to="/learn">Choose next topic</Link>
+          <h1>{accuracy}% accuracy</h1>
+          <div className="practiceSummaryGrid">
+            <article><span>Correct</span><strong>{correct}/{outcomes.length}</strong></article>
+            <article><span>Average time</span><strong>{avgSeconds}s</strong></article>
+            <article><span>Mode</span><strong>{currentMode?.[1]}</strong></article>
+          </div>
+          <p>Your attempts are saved to mastery, analytics and the revision scheduler.</p>
+          <div className="practiceCompleteActions">
+            <Link className="primaryLink" to={modeUrl(mode)}>Another set</Link>
+            <Link to="/revision">Review due items</Link>
+            <Link to="/analytics">See analytics</Link>
+          </div>
         </section>
       </main>
     );
@@ -169,42 +227,62 @@ export default function PracticePage() {
   if (!question) {
     return (
       <main className="lessonShell">
-        <section className="emptyCard">Loading practice…</section>
+        <section className="emptyCard">Preparing {currentMode?.[1] ?? "practice"}…</section>
       </main>
     );
   }
 
   const remaining = Math.max(0, targetSeconds - elapsed);
+  const selectedOption = question.options.find((option) => option.position === selected);
+  const correctOption = result
+    ? question.options.find((option) => option.position === result.correct_option)
+    : null;
+  const selectedLabel = selectedOption
+    ? String.fromCharCode(64 + selectedOption.position) + ". " + (selectedOption.text ?? "Image option")
+    : null;
+  const correctLabel = correctOption
+    ? String.fromCharCode(64 + correctOption.position) + ". " + (correctOption.text ?? "Image option")
+    : null;
 
   return (
     <main className="practiceShell">
       <header className="practiceTopbar">
-        <Link to="/learn">← Learn</Link>
+        <div>
+          <button className="textBackButton" onClick={() => navigate(-1)}>← Back</button>
+          <span>{topicId ? "Topic practice" : "Mixed syllabus"}</span>
+        </div>
         <span>Question {index + 1} / {questions.length}</span>
       </header>
 
-      <div className="practiceModes">
-        {["guided", "adaptive", "timed"].map((item) => (
-          <Link
-            key={item}
-            className={mode === item ? "modePill activeMode" : "modePill"}
-            to={"/practice?topic_id=" + topicId + "&mode=" + item}
-          >
-            {item[0].toUpperCase() + item.slice(1)}
-          </Link>
-        ))}
-      </div>
+      <section className="practiceModePanel">
+        <div>
+          <p className="eyebrow">{currentMode?.[1]}</p>
+          <p>{currentMode?.[2]}</p>
+        </div>
+        <div className="practiceModes">
+          {practiceModes.map(([value, label]) => (
+            <Link
+              key={value}
+              className={mode === value ? "modePill activeMode" : "modePill"}
+              to={modeUrl(value)}
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
+      </section>
 
       <article className="practiceCard">
         <div className="practiceQuestionToolbar">
           <div className="practiceMeta">
-          {question.subtopic && <span>{question.subtopic}</span>}
-          <span>Difficulty {question.difficulty}</span>
-          {question.expected_time_seconds && <span>Target {question.expected_time_seconds}s</span>}
-          {question.year && <span>PYQ {question.year}</span>}
-          <span className={mode === "timed" && remaining <= 10 ? "urgentTimer" : ""}>
-            {mode === "timed" ? remaining + "s left" : elapsed + "s"}
-          </span>
+            {question.subtopic && <span>{question.subtopic}</span>}
+            {question.pattern_type && <span>{question.pattern_type.replaceAll("-", " ")}</span>}
+            <span>Difficulty {question.difficulty}</span>
+            {question.expected_time_seconds && <span>Target {question.expected_time_seconds}s</span>}
+            {question.year && <span>PYQ {question.year}</span>}
+            <span className={mode === "timed" && remaining <= 10 ? "urgentTimer" : ""}>
+              {mode === "timed" ? remaining + "s left" : elapsed + "s"}
+            </span>
           </div>
           <button className={bookmarked ? "bookmarkButton activeBookmark" : "bookmarkButton"} onClick={() => void bookmarkCurrent()}>
             {bookmarked ? "★ Bookmarked" : "☆ Bookmark"}
@@ -219,6 +297,7 @@ export default function PracticePage() {
             ...question.options.map((option) => option.text ? String.fromCharCode(64 + option.position) + ". " + option.text : ""),
           ].filter(Boolean).join(". ")}
         />
+
         {question.question_image_url && (
           <SecureImage className="practiceQuestionImage" src={question.question_image_url} alt="Question visual" />
         )}
@@ -250,6 +329,12 @@ export default function PracticePage() {
 
         {!result && (
           <>
+            <TeacherCoach
+              title={question.subtopic || question.pattern_type || "this question"}
+              context={question.question_text}
+              onHintUsed={() => setUsedHint(true)}
+            />
+            {usedHint && <p className="hintUsedNote">Hint used — this attempt will be considered by mastery and revision.</p>}
             <div className="confidenceRow">
               <span>How confident are you?</span>
               <div>
@@ -264,7 +349,7 @@ export default function PracticePage() {
                 ))}
               </div>
             </div>
-            <button className="submitAnswer" disabled={selected === null || confidence === null} onClick={submit}>
+            <button className="submitAnswer" disabled={selected === null || confidence === null} onClick={() => void submit()}>
               Check answer
             </button>
           </>
@@ -273,10 +358,33 @@ export default function PracticePage() {
         {result && (
           <section className={result.correct ? "answerPanel correctPanel" : "answerPanel wrongPanel"}>
             <p className="eyebrow">{result.correct ? "Correct" : mode === "timed" && timedOut.current ? "Time up" : "Needs review"}</p>
-            {!result.correct && <p>Correct option: {String.fromCharCode(64 + result.correct_option)}</p>}
+            <div className="answerAudit">
+              <div>
+                <span>Your answer</span>
+                <strong>{selectedLabel ?? "Not answered"}</strong>
+              </div>
+              <div>
+                <span>Correct answer</span>
+                <strong>{correctLabel}</strong>
+              </div>
+              <div>
+                <span>Time</span>
+                <strong className={actualSeconds > targetSeconds * 1.25 ? "slowText" : ""}>
+                  {Math.round(actualSeconds)}s / {targetSeconds}s target
+                </strong>
+              </div>
+            </div>
             {result.explanation && <p>{result.explanation}</p>}
-            {result.explanation && <SpeakButton label="Explain aloud" text={result.explanation + (result.fast_method ? ". Fast method: " + result.fast_method : "")} />}
             {result.fast_method && <p><strong>Fast method:</strong> {result.fast_method}</p>}
+            <TeacherCoach
+              title={question.subtopic || question.pattern_type || "this question"}
+              context={question.question_text}
+              explanation={result.explanation}
+              fastMethod={result.fast_method}
+              correctAnswer={correctLabel}
+              selectedAnswer={selectedLabel}
+              onNext={next}
+            />
 
             {!result.correct && (
               <div className="mistakePicker">
@@ -286,7 +394,7 @@ export default function PracticePage() {
                     <button
                       key={value}
                       className={mistakeSaved === value ? "mistakeChip activeMistake" : "mistakeChip"}
-                      onClick={() => saveMistake(value)}
+                      onClick={() => void saveMistake(value)}
                     >
                       {label}
                     </button>
@@ -297,7 +405,7 @@ export default function PracticePage() {
 
             {result.mastery_score !== null && <p className="muted">Topic mastery: {Math.round(result.mastery_score)}%</p>}
             {result.revision_scheduled && <p className="muted">Added to your revision queue.</p>}
-            <button onClick={next}>{index + 1 === questions.length ? "Finish" : "Next question"}</button>
+            <button onClick={next}>{index + 1 === questions.length ? "Finish set" : "Next question"}</button>
           </section>
         )}
       </article>
