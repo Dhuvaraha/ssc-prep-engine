@@ -7,6 +7,7 @@ import {
   addQuestionToRevision,
   classifyPracticeMistake,
   fetchPracticeQuestions,
+  fetchTopicPackage,
   submitPracticeAnswer,
   toggleBookmark,
 } from "../api";
@@ -56,6 +57,7 @@ export default function PracticePage() {
   const limit = Number.isFinite(requestedLimit) ? Math.min(30, Math.max(3, requestedLimit)) : 10;
 
   const [questions, setQuestions] = useState<PracticeQuestion[]>([]);
+  const [topicContext, setTopicContext] = useState<{subject: string; topic: string} | null>(null);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [confidence, setConfidence] = useState<number | null>(null);
@@ -86,6 +88,13 @@ export default function PracticePage() {
     setQuestions([]);
     setIndex(0);
     setOutcomes([]);
+    if (topicId) {
+      fetchTopicPackage(topicId)
+        .then((pkg) => setTopicContext({subject: pkg.subject.name, topic: pkg.topic.name}))
+        .catch(() => setTopicContext(null));
+    } else {
+      setTopicContext(null);
+    }
     fetchPracticeQuestions(topicId, limit, mode)
       .then((items) => {
         setQuestions(items);
@@ -264,7 +273,13 @@ export default function PracticePage() {
       <header className="practiceTopbar">
         <div>
           <button className="textBackButton" onClick={() => navigate(-1)}>← Back</button>
-          <span>{topicId ? "Topic practice" : "Mixed syllabus"}</span>
+          <span>
+            {topicContext
+              ? topicContext.subject + " • " + topicContext.topic
+              : topicId
+                ? "Topic practice"
+                : "Mixed syllabus"}
+          </span>
         </div>
         <span>Question {index + 1} / {questions.length}</span>
       </header>
