@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AppErrorBoundary from "./components/AppErrorBoundary";
 import GlobalNav from "./components/GlobalNav";
 import OfflineBanner from "./components/OfflineBanner";
+import SessionExpiryGuard from "./components/SessionExpiryGuard";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import AuthPage from "./pages/AuthPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -18,6 +19,7 @@ import SettingsPage from "./pages/SettingsPage";
 export default function App() {
   return (
     <BrowserRouter>
+      <SessionExpiryGuard />
       <GlobalNav />
       <OfflineBanner />
       <AppErrorBoundary>
