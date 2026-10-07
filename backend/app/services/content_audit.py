@@ -187,8 +187,11 @@ def collect_content_audit(
         for _, text_value, image_url in options:
             text_key = " ".join((text_value or "").split()).casefold()
             image_key = (image_url or "").strip()
-            identities.append(text_key or image_key)
-        non_empty = [value for value in identities if value]
+            identities.append(text_key + "\u0000" + image_key)
+        non_empty = [
+            value for value in identities
+            if value != "\u0000"
+        ]
         if len(non_empty) != len(set(non_empty)):
             duplicate_option_count += 1
 
