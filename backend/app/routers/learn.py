@@ -92,7 +92,7 @@ def topic_package(topic_id: int, db: Session = Depends(get_db)):
                     Question.year.desc().nullslast(),
                     Question.id,
                 )
-                .limit(20)
+                .limit(8)
             )
         )
     candidate_questions = []
