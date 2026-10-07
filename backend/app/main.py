@@ -11,7 +11,7 @@ from app.routers import analytics, assets, auth, backup, content, exams, health,
 from app.services.content_audit import collect_content_audit
 
 
-logger = logging.getLogger("ssc_prep.release_audit")
+logger = logging.getLogger("uvicorn.error")
 
 
 @asynccontextmanager
