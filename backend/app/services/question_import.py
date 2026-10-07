@@ -14,7 +14,9 @@ def normalize_text(value: str) -> str:
 
 def question_fingerprint(item: ImportedQuestion) -> str:
     option_text = "|".join(
-        normalize_text(option.text or option.image_url or "")
+        normalize_text(option.text or "")
+        + "\u0000"
+        + (option.image_url or "").strip()
         for option in sorted(item.options, key=lambda row: row.position)
     )
     payload = "::".join(
@@ -31,8 +33,27 @@ def validate_question(item: ImportedQuestion) -> None:
         raise ValueError("Option positions must be unique")
     if item.correct_option is not None and item.correct_option not in positions:
         raise ValueError("correct_option must point to an existing option")
-    if item.verification_status == "verified" and item.correct_option is None:
+
+    if item.verification_status != "verified":
+        return
+
+    if positions != [1, 2, 3, 4]:
+        raise ValueError("Verified SSC questions require exactly four ordered options")
+    if item.correct_option is None:
         raise ValueError("Verified questions require a correct option")
+    if not item.pattern_type or not item.pattern_type.strip():
+        raise ValueError("Verified questions require a pattern_type")
+
+    identities: list[tuple[str, str]] = []
+    for option in item.options:
+        text_key = normalize_text(option.text or "")
+        image_key = (option.image_url or "").strip()
+        if not text_key and not image_key:
+            raise ValueError("Verified options require text or an image")
+        identities.append((text_key, image_key))
+
+    if len(identities) != len(set(identities)):
+        raise ValueError("Verified option payloads must be unique")
 
 
 def import_question(db: Session, item: ImportedQuestion) -> tuple[Question, bool]:
@@ -67,6 +88,8 @@ def import_question(db: Session, item: ImportedQuestion) -> tuple[Question, bool
         topic_id=topic.id if topic else None,
         question_text=item.question_text,
         question_image_url=item.question_image_url,
+        subtopic=item.subtopic,
+        pattern_type=item.pattern_type,
         correct_option=item.correct_option,
         explanation=item.explanation,
         fast_method=item.fast_method,
