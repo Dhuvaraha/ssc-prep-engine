@@ -707,6 +707,7 @@ export type QuestionArchetype = {
 };
 
 export type TopicPackage = {
+  subject: {id: number; slug: string; name: string};
   topic: {id: number; slug: string; name: string; priority: number};
   lessons: Array<Lesson & {blocks: LessonBlock[]}>;
   archetypes: QuestionArchetype[];
