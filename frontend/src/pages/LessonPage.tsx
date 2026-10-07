@@ -62,7 +62,14 @@ export default function LessonPage() {
           <button className="textBackButton" onClick={() => navigate(-1)}>← Back</button>
           <span>/</span>
           <Link to="/learn">Learn</Link>
-          {pkg && <><span>/</span><strong>{pkg.topic.name}</strong></>}
+          {pkg && (
+            <>
+              <span>/</span>
+              <span>{pkg.subject.name}</span>
+              <span>/</span>
+              <strong>{pkg.topic.name}</strong>
+            </>
+          )}
         </div>
         <nav>
           <Link to="/planner">Today</Link>
@@ -78,7 +85,7 @@ export default function LessonPage() {
         <>
           <section className="topicLessonHero">
             <div>
-              <p className="eyebrow">SSC CGL • {pkg.topic.priority >= 5 ? "High priority" : "Topic lesson"}</p>
+              <p className="eyebrow">SSC CGL • {pkg.subject.name} • {pkg.topic.priority >= 5 ? "High priority" : "Topic lesson"}</p>
               <h1>{pkg.topic.name}</h1>
               <p>
                 Learn the pattern, see the method, compare the shortcut and then solve the same skill at multiple difficulty levels.
