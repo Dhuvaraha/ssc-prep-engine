@@ -327,9 +327,15 @@ export type PracticeResult = {
   coaching: PracticeCoaching | null;
 };
 
-export async function fetchPracticeQuestions(topicId: number | undefined, limit = 5, mode = "adaptive"): Promise<PracticeQuestion[]> {
+export async function fetchPracticeQuestions(
+  topicId: number | undefined,
+  limit = 5,
+  mode = "adaptive",
+  similarTo?: number,
+): Promise<PracticeQuestion[]> {
   const params = new URLSearchParams({limit: String(limit), mode});
   if (topicId) params.set("topic_id", String(topicId));
+  if (similarTo) params.set("similar_to", String(similarTo));
   const response = await sessionFetch(
     API_BASE + "/practice/questions?" + params.toString(),
     {headers: authHeaders()},
@@ -561,6 +567,15 @@ export type AnalyticsSummary = {
     guess_accuracy: number;
     guess_rate: number;
     overconfident_errors: number;
+  };
+  learning_curve: {
+    first_attempts: number;
+    first_attempt_accuracy: number;
+    repeat_attempts: number;
+    repeat_attempt_accuracy: number;
+    repeat_gain: number;
+    slow_attempts: number;
+    time_over_target_seconds: number;
   };
   subject_breakdown: Array<{
     subject_slug: string;

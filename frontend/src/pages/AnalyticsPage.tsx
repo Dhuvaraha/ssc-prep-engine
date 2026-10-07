@@ -116,6 +116,44 @@ export default function AnalyticsPage() {
         </article>
       </section>
 
+      <section className="analyticsCard learningCurveCard">
+        <div className="analyticsCardHead">
+          <div>
+            <p className="eyebrow">Learning curve & time leakage</p>
+            <h2>Are repeats fixing the skill, and where is time leaking?</h2>
+          </div>
+        </div>
+        <div className="analyticsMetricGrid learningCurveGrid">
+          <article>
+            <span>First-attempt accuracy</span>
+            <strong>{data.learning_curve.first_attempts ? data.learning_curve.first_attempt_accuracy + "%" : "—"}</strong>
+            <small>{data.learning_curve.first_attempts} first-seen questions</small>
+          </article>
+          <article>
+            <span>Repeat accuracy</span>
+            <strong>{data.learning_curve.repeat_attempts ? data.learning_curve.repeat_attempt_accuracy + "%" : "—"}</strong>
+            <small>{data.learning_curve.repeat_attempts} repeat attempts</small>
+          </article>
+          <article>
+            <span>Repeat gain</span>
+            <strong>{data.learning_curve.repeat_attempts ? (data.learning_curve.repeat_gain >= 0 ? "+" : "") + data.learning_curve.repeat_gain + " pts" : "—"}</strong>
+            <small>Repeat vs first-attempt accuracy</small>
+          </article>
+          <article>
+            <span>Time leakage</span>
+            <strong>{Math.round(data.learning_curve.time_over_target_seconds)}s</strong>
+            <small>{data.learning_curve.slow_attempts} attempts over target</small>
+          </article>
+        </div>
+        <p className="muted">
+          {data.learning_curve.repeat_attempts === 0
+            ? "Repeat evidence appears after you revisit missed or scheduled questions."
+            : data.learning_curve.repeat_gain > 0
+              ? "Repetition is improving accuracy. Keep revising until the gain also arrives within target time."
+              : "Repeat accuracy has not improved yet. Relearn the recognition cue before doing more volume."}
+        </p>
+      </section>
+
       <section className="analyticsCard analyticsTrendCard">
         <div className="analyticsCardHead">
           <div>

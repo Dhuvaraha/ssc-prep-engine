@@ -26,6 +26,7 @@ def get_practice_questions(
     topic_id: int | None = Query(default=None),
     limit: int = Query(default=10, ge=1, le=50),
     mode: str = Query(default="adaptive", pattern=PRACTICE_MODES),
+    similar_to: int | None = Query(default=None, ge=1),
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
@@ -35,6 +36,7 @@ def get_practice_questions(
         topic_id=topic_id,
         limit=limit,
         mode=mode,
+        similar_to_question_id=similar_to,
     )
 
 

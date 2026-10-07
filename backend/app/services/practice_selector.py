@@ -125,8 +125,48 @@ def select_practice_questions(
     topic_id: int | None,
     limit: int,
     mode: str,
+    similar_to_question_id: int | None = None,
 ) -> list[Question]:
     now = datetime.now(timezone.utc).replace(tzinfo=None)
+
+    if similar_to_question_id is not None:
+        anchor = db.get(Question, similar_to_question_id)
+        if anchor and anchor.verification_status == "verified" and anchor.topic_id is not None:
+            similar_stmt = select(Question.id).where(
+                Question.verification_status == "verified",
+                Question.correct_option.is_not(None),
+                Question.topic_id == anchor.topic_id,
+                Question.id != anchor.id,
+            )
+            if anchor.pattern_type:
+                similar_stmt = similar_stmt.where(Question.pattern_type == anchor.pattern_type)
+            ids = list(
+                db.scalars(
+                    similar_stmt
+                    .order_by(*_question_order())
+                    .limit(max(40, limit * 8))
+                )
+            )
+            similar = unique_questions(_hydrate_questions(db, ids))
+            if similar:
+                return similar[:limit]
+
+            fallback_ids = list(
+                db.scalars(
+                    select(Question.id)
+                    .where(
+                        Question.verification_status == "verified",
+                        Question.correct_option.is_not(None),
+                        Question.topic_id == anchor.topic_id,
+                        Question.id != anchor.id,
+                    )
+                    .order_by(*_question_order())
+                    .limit(max(40, limit * 8))
+                )
+            )
+            fallback = unique_questions(_hydrate_questions(db, fallback_ids))
+            if fallback:
+                return fallback[:limit]
 
     if mode == "revision":
         due_ids = list(

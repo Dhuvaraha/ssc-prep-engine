@@ -56,7 +56,7 @@ def _question_order():
         else_=3,
     )
     missing_year = case((Question.year.is_(None), 1), else_=0)
-    return (missing_year, Question.year.desc(), source_rank, Question.difficulty, Question.id)
+    return (source_rank, missing_year, Question.year.desc(), Question.difficulty, Question.id)
 
 
 def _hydrate_questions(db: Session, ids: list[int]) -> list[Question]:
@@ -93,6 +93,86 @@ def _bounded_unique_questions(db: Session, stmt, *, count: int) -> list[Question
     return unique_questions(_hydrate_questions(db, ids))[:count]
 
 
+def _difficulty_targets(count: int) -> dict[int, int]:
+    if count <= 1:
+        return {2: count}
+    easy = max(1, round(count * 0.28))
+    medium = max(1, round(count * 0.48))
+    hard = max(1, count - easy - medium)
+    while easy + medium + hard > count:
+        if medium > 1:
+            medium -= 1
+        elif easy > 1:
+            easy -= 1
+        else:
+            hard -= 1
+    while easy + medium + hard < count:
+        medium += 1
+    return {1: easy, 2: medium, 3: hard}
+
+
+def _balanced_difficulty_questions(db: Session, stmt, *, count: int) -> list[Question]:
+    targets = _difficulty_targets(count)
+    selected: list[Question] = []
+    selected_ids: set[int] = set()
+
+    for difficulty in (1, 2, 3):
+        target = targets.get(difficulty, 0)
+        if target <= 0:
+            continue
+        rows = _bounded_unique_questions(
+            db,
+            stmt.where(Question.difficulty == difficulty),
+            count=target,
+        )
+        for question in rows:
+            if question.id not in selected_ids:
+                selected.append(question)
+                selected_ids.add(question.id)
+
+    selected = unique_questions(selected)
+    if len(selected) < count:
+        fallback_stmt = stmt
+        if selected_ids:
+            fallback_stmt = fallback_stmt.where(Question.id.not_in(selected_ids))
+        fallback = _bounded_unique_questions(
+            db,
+            fallback_stmt,
+            count=count - len(selected),
+        )
+        selected = unique_questions(selected + fallback)
+
+    groups = {
+        difficulty: [q for q in selected if max(1, min(3, q.difficulty)) == difficulty]
+        for difficulty in (1, 2, 3)
+    }
+    mixed: list[Question] = []
+    depth = 0
+    while len(mixed) < min(count, len(selected)):
+        added = False
+        for difficulty in (2, 1, 2, 3):
+            items = groups.get(difficulty, [])
+            index = depth if difficulty != 2 else sum(
+                1 for q in mixed if max(1, min(3, q.difficulty)) == 2
+            )
+            if index < len(items) and items[index] not in mixed:
+                mixed.append(items[index])
+                added = True
+                if len(mixed) >= count:
+                    break
+        if not added:
+            for question in selected:
+                if question not in mixed:
+                    mixed.append(question)
+                    added = True
+                    if len(mixed) >= count:
+                        break
+        if not added:
+            break
+        depth += 1
+    return mixed[:count]
+
+
 def _questions_for_subject(
     db: Session,
     *,
@@ -119,7 +199,7 @@ def _questions_for_subject(
         )
         .order_by(*_question_order())
     )
-    return _bounded_unique_questions(db, stmt, count=count)
+    return _balanced_difficulty_questions(db, stmt, count=count)
 
 
 def _questions_for_topic(
