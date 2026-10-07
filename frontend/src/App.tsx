@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import GlobalNav from "./components/GlobalNav";
+import OfflineBanner from "./components/OfflineBanner";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import AuthPage from "./pages/AuthPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -17,6 +18,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <GlobalNav />
+      <OfflineBanner />
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/login" element={<AuthPage />} />
