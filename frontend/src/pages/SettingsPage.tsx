@@ -25,6 +25,7 @@ export default function SettingsPage() {
   const [user, setUser] = useState<User | null>(null);
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
   const [displayName, setDisplayName] = useState("");
+  const [examName, setExamName] = useState("SSC CGL Tier I");
   const [examDate, setExamDate] = useState(todayPlusDays(8));
   const [dailyMinutes, setDailyMinutes] = useState(180);
   const [currentPassword, setCurrentPassword] = useState("");
@@ -53,6 +54,7 @@ export default function SettingsPage() {
         setDisplayName(account.display_name ?? "");
         setAnalytics(stats);
         if (plan) {
+          setExamName(plan.target.exam_name);
           setExamDate(plan.target.exam_date);
           setDailyMinutes(plan.target.daily_minutes);
         }
@@ -80,7 +82,10 @@ export default function SettingsPage() {
     setError("");
     setMessage("");
     try {
-      await setPlannerConfig(examDate, dailyMinutes);
+      const updatedPlan = await setPlannerConfig(examDate, dailyMinutes);
+      setExamName(updatedPlan.target.exam_name);
+      setExamDate(updatedPlan.target.exam_date);
+      setDailyMinutes(updatedPlan.target.daily_minutes);
       setMessage("Study target updated and today's plan rebuilt.");
     } catch {
       setError("Could not update study target.");
@@ -186,12 +191,17 @@ export default function SettingsPage() {
           <h2>Exam & daily hours</h2>
           <form className="settingsForm" onSubmit={saveStudyPlan}>
             <label>
-              SSC CGL exam date
+              Active exam
+              <input value={examName} disabled />
+            </label>
+            <label>
+              Exam date
               <input type="date" value={examDate} onChange={(event) => setExamDate(event.target.value)} required />
             </label>
             <label>
               Daily study minutes
               <input type="number" min={45} max={720} step={15} value={dailyMinutes} onChange={(event) => setDailyMinutes(Number(event.target.value))} required />
+              <small>{(dailyMinutes / 60).toFixed(1)} hours available per day</small>
             </label>
             <button type="submit">Update plan</button>
           </form>
