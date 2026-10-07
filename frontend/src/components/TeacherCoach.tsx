@@ -6,6 +6,8 @@ type Props = {
   explanation?: string | null;
   fastMethod?: string | null;
   commonTrap?: string | null;
+  standardMethod?: string | null;
+  examples?: string[];
   correctAnswer?: string | null;
   selectedAnswer?: string | null;
   onNext?: () => void;
@@ -26,6 +28,8 @@ export default function TeacherCoach({
   explanation,
   fastMethod,
   commonTrap,
+  standardMethod,
+  examples = [],
   correctAnswer,
   selectedAnswer,
   onNext,
@@ -35,9 +39,10 @@ export default function TeacherCoach({
   const [input, setInput] = useState("");
   const [answer, setAnswer] = useState("Ask for a hint, explanation, shortcut, common trap, or why an answer is wrong.");
   const [listening, setListening] = useState(false);
+  const [exampleIndex, setExampleIndex] = useState(0);
 
   const quickPrompts = useMemo(
-    () => ["Give me a hint", "Explain simply", "Show shortcut", "Common trap", "Why was I wrong?"],
+    () => ["Give me a hint", "Explain simply", "Another example", "Compare methods", "Show shortcut", "Common trap", "Why was I wrong?"],
     [],
   );
 
@@ -49,6 +54,17 @@ export default function TeacherCoach({
     if (q.includes("next")) {
       next = "Moving to the next question.";
       onNext?.();
+    } else if (q.includes("another example") || q.includes("one more example")) {
+      if (examples.length) {
+        const picked = examples[exampleIndex % examples.length];
+        setExampleIndex((value) => value + 1);
+        next = "Example: " + picked;
+      } else {
+        next = "This screen does not have another verified worked example attached. Use the quick check for a fresh application of the same rule.";
+      }
+    } else if (q.includes("compare") && q.includes("method")) {
+      next = "Standard method: " + (standardMethod || context || "apply the full rule step by step") +
+        ". Fast method: " + (fastMethod || "use elimination only after the governing rule is clear") + ".";
     } else if (q.includes("hint")) {
       onHintUsed?.();
       next = fastMethod
@@ -71,7 +87,7 @@ export default function TeacherCoach({
     } else if (q.includes("read")) {
       next = context || explanation || title;
     } else {
-      next = "For " + title + ", ask me: “give me a hint”, “explain simply”, “show shortcut”, “common trap”, “why was I wrong?”, or “next”.";
+      next = "For " + title + ", ask me: “give me a hint”, “explain simply”, “show shortcut”, “another example”, “compare methods”, “common trap”, “why was I wrong?”, or “next”.";
     }
     setAnswer(next);
   }
