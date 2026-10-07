@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
+from app.core.study_time import current_study_date
 from app.db import get_db
 from app.deps import get_current_user
 from app.domain.revision import next_revision_date
@@ -15,6 +16,9 @@ from app.models import (
     RevisionItem,
     User,
 )
+
+from app.services.planner import days_until_active_exam
+
 
 router = APIRouter(prefix="/revision", tags=["revision"])
 
@@ -122,7 +126,7 @@ def review_revision_item(
     if not item or item.user_id != user.id or not item.is_active:
         raise HTTPException(status_code=404, detail="Revision item not found")
 
-    today = datetime.now(timezone.utc).date()
+    today = current_study_date()
     if success:
         item.successful_reviews += 1
         if item.successful_reviews >= 5:
@@ -131,7 +135,7 @@ def review_revision_item(
             due = next_revision_date(
                 today=today,
                 successful_reviews=item.successful_reviews,
-                days_until_exam=10,
+                days_until_exam=days_until_active_exam(db, user_id=user.id, today=today),
             )
             item.next_review_at = datetime.combine(due, datetime.min.time())
     else:
@@ -281,18 +285,19 @@ def review_flashcard(
         db.add(progress)
 
     now = datetime.now(timezone.utc).replace(tzinfo=None)
+    study_today = current_study_date()
     progress.last_reviewed_at = now
     if success:
         progress.successful_reviews += 1
         due = next_revision_date(
-            today=now.date(),
+            today=study_today,
             successful_reviews=progress.successful_reviews,
-            days_until_exam=10,
+            days_until_exam=days_until_active_exam(db, user_id=user.id, today=study_today),
         )
         progress.next_review_at = datetime.combine(due, datetime.min.time())
     else:
         progress.successful_reviews = 0
-        progress.next_review_at = datetime.combine(now.date() + timedelta(days=1), datetime.min.time())
+        progress.next_review_at = datetime.combine(study_today + timedelta(days=1), datetime.min.time())
 
     db.commit()
     return {
