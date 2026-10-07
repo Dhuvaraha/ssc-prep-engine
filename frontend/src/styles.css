@@ -46,6 +46,17 @@ button {
   cursor: pointer;
 }
 
+button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #7c9dd4;
+  outline-offset: 3px;
+}
+
 .metrics, .subjectGrid {
   display: grid;
   gap: 16px;
@@ -2935,4 +2946,23 @@ body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
 .settingsForm input[type="range"] {
   padding: 0;
   accent-color: #172033;
+}
+
+
+/* Phase 3 release hardening */
+@media (max-width: 980px) {
+  .offlineBanner {
+    bottom: 92px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

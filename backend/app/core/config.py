@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     access_token_minutes: int = 120
     private_asset_dir: str = "data/private/assets"
     cors_origins: str = "http://localhost:5173"
+    reviewer_emails: str = ""
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

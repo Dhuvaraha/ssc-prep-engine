@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.content.topic_tagger import suggest_topic
 from app.db import get_db
-from app.deps import get_current_user
+from app.deps import get_content_reviewer
 from app.models import Question, Subject, Topic, User
 
 router = APIRouter(prefix="/review", tags=["content-review"])
@@ -26,7 +26,7 @@ def list_review_questions(
     limit: int = Query(default=50, ge=1, le=200),
     visual_only: bool = Query(default=False),
     db: Session = Depends(get_db),
-    _: User = Depends(get_current_user),
+    _: User = Depends(get_content_reviewer),
 ):
     stmt = (
         select(Question)
@@ -74,7 +74,7 @@ def list_review_questions(
 def auto_tag_question(
     question_id: int,
     db: Session = Depends(get_db),
-    _: User = Depends(get_current_user),
+    _: User = Depends(get_content_reviewer),
 ):
     question = db.get(Question, question_id)
     if not question:
@@ -108,7 +108,7 @@ def update_review_question(
     question_id: int,
     payload: ReviewUpdate,
     db: Session = Depends(get_db),
-    _: User = Depends(get_current_user),
+    _: User = Depends(get_content_reviewer),
 ):
     question = db.get(Question, question_id)
     if not question:
@@ -140,7 +140,7 @@ def update_review_question(
 @router.get("/stats")
 def review_stats(
     db: Session = Depends(get_db),
-    _: User = Depends(get_current_user),
+    _: User = Depends(get_content_reviewer),
 ):
     statuses = ["raw", "parsed", "review_required", "verified", "rejected"]
     totals = {}

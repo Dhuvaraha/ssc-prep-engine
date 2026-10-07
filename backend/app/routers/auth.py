@@ -27,7 +27,7 @@ def register(payload: RegisterRequest, db: Session = Depends(get_db)):
     user = User(
         email=payload.email.lower(),
         password_hash=hash_password(payload.password),
-        display_name=payload.display_name,
+        display_name=payload.display_name.strip() or None if payload.display_name else None,
     )
     db.add(user)
     db.commit()
@@ -41,7 +41,7 @@ def register(payload: RegisterRequest, db: Session = Depends(get_db)):
 @router.post("/login", response_model=AuthResponse)
 def login(payload: LoginRequest, db: Session = Depends(get_db)):
     user = db.scalar(select(User).where(User.email == payload.email.lower()))
-    if not user or not verify_password(payload.password, user.password_hash):
+    if not user or not user.is_active or not verify_password(payload.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
     return AuthResponse(

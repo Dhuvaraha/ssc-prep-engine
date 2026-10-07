@@ -12,16 +12,25 @@ import { getToken } from "../auth";
 
 const activityLinks: Record<string, string> = {
   learn: "/learn",
-  practice: "/learn",
+  practice: "/practice?mode=mixed&limit=10",
   mock: "/mocks",
   revision: "/revision",
   flashcards: "/revision",
 };
 
+function localDatePlusDays(days: number): string {
+  const value = new Date();
+  value.setDate(value.getDate() + days);
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, "0");
+  const day = String(value.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 export default function PlannerPage() {
   const [plan, setPlan] = useState<TodayPlan | null>(null);
   const [needsSetup, setNeedsSetup] = useState(false);
-  const [examDate, setExamDate] = useState("2026-10-15");
+  const [examDate, setExamDate] = useState(() => localDatePlusDays(30));
   const [dailyMinutes, setDailyMinutes] = useState(240);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -118,7 +127,7 @@ export default function PlannerPage() {
           <form onSubmit={saveConfig} className="plannerSetupForm">
             <label>
               SSC CGL exam date
-              <input type="date" value={examDate} onChange={(e) => setExamDate(e.target.value)} required />
+              <input type="date" min={localDatePlusDays(0)} value={examDate} onChange={(e) => setExamDate(e.target.value)} required />
             </label>
             <label>
               Study time available per day

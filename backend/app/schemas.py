@@ -80,7 +80,7 @@ class QuestionOut(BaseModel):
 
 class PracticeSubmit(BaseModel):
     question_id: int
-    selected_option: int | None
+    selected_option: int | None = Field(ge=1, le=4)
     time_seconds: float = Field(ge=0)
     confidence: int | None = Field(default=None, ge=1, le=3)
     used_hint: bool = False
@@ -155,7 +155,7 @@ class MockStartRequest(BaseModel):
 
 class MockResponseUpdate(BaseModel):
     question_id: int
-    selected_option: int | None = None
+    selected_option: int | None = Field(default=None, ge=1, le=4)
     marked_for_review: bool = False
     time_seconds: float = Field(default=0, ge=0)
 

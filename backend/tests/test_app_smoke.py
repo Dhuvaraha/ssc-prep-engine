@@ -6,7 +6,7 @@ def test_application_imports():
 
 def test_all_tables_register():
     from app.db import Base
-    import app.models  # noqa: F401
+    __import__("app.models")
 
     expected = {
         "users",

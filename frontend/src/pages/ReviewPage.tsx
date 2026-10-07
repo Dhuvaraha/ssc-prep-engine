@@ -10,7 +10,7 @@ import {
   suggestReviewTopic,
   updateReviewQuestion,
 } from "../api";
-import { clearToken, getToken } from "../auth";
+import { getToken } from "../auth";
 import SecureImage from "../components/SecureImage";
 
 type TopicSuggestion = {
@@ -48,8 +48,7 @@ export default function ReviewPage() {
         setStatus(items.length ? "" : "No review-required questions.");
       })
       .catch(() => {
-        clearToken();
-        navigate("/login");
+        setStatus("Content review access is not enabled for this account.");
       });
   }, [navigate]);
 

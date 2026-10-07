@@ -1,5 +1,8 @@
 name: CI
 
+permissions:
+  contents: read
+
 on:
   push:
   pull_request:
@@ -11,14 +14,33 @@ jobs:
       run:
         working-directory: frontend
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: frontend/package.json
       - run: npm install
       - run: npm run build
+      - run: node --check server.mjs
+      - name: Smoke production SPA server
+        run: |
+          PORT=4173 node server.mjs >/tmp/ssc-web.log 2>&1 &
+          WEB_PID=$!
+          trap 'kill $WEB_PID' EXIT
+          for i in {1..20}; do
+            if curl --fail --silent http://127.0.0.1:4173/__health >/dev/null; then
+              break
+            fi
+            sleep 0.25
+          done
+          curl --fail --silent --head http://127.0.0.1:4173/ >/dev/null
+          curl --fail --silent --head http://127.0.0.1:4173/learn >/dev/null
+          curl --fail --silent --head http://127.0.0.1:4173/mocks >/dev/null
+          if curl --fail --silent --head http://127.0.0.1:4173/assets/does-not-exist.js >/dev/null; then
+            echo "missing assets must not fall back to index.html"
+            exit 1
+          fi
 
   backend:
     runs-on: ubuntu-latest
@@ -26,12 +48,15 @@ jobs:
       run:
         working-directory: backend
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: backend/requirements.txt
-      - run: pip install -r requirements.txt
+          cache-dependency-path: |
+            backend/requirements.txt
+            backend/requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - run: pyflakes app tests
       - run: python -m compileall app
       - run: PYTHONPATH=. pytest -q
