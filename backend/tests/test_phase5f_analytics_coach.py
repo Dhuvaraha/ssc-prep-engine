@@ -126,8 +126,8 @@ def test_analytics_established_coach_is_actionable_and_batches_question_lookup()
 
     def count_question_selects(_conn, _cursor, statement, _parameters, _context, _executemany):
         nonlocal question_selects
-        normalized = statement.lower()
-        if normalized.lstrip().startswith("select") and " from questions" in normalized:
+        normalized = " ".join(statement.lower().split())
+        if normalized.startswith("select") and " from questions" in normalized:
             question_selects += 1
 
     event.listen(engine, "before_cursor_execute", count_question_selects)
