@@ -1,12 +1,20 @@
 import { FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import { login, register } from "../api";
 import { setToken } from "../auth";
+import {
+  consumeAuthReturnPath,
+  resetSessionExpiryState,
+  safeInternalPath,
+} from "../session";
 
 const registrationEnabled = import.meta.env.VITE_REGISTRATION_ENABLED !== "false";
 
 export default function AuthPage() {
+  const [params] = useSearchParams();
+  const expired = params.get("expired") === "1";
+  const requestedReturn = safeInternalPath(params.get("next"));
   const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,9 +32,11 @@ export default function AuthPage() {
         ? await login(email, password)
         : await register(email, password, displayName || undefined);
       setToken(response.access_token);
-      navigate("/");
+      resetSessionExpiryState();
+      const returnTo = consumeAuthReturnPath(requestedReturn);
+      navigate(returnTo, {replace: true});
     } catch {
-      setError(mode === "login" ? "Login failed." : "Registration failed.");
+      setError(mode === "login" ? "Login failed. Check your email and password." : "Registration failed.");
     } finally {
       setBusy(false);
     }
@@ -35,34 +45,59 @@ export default function AuthPage() {
   return (
     <main className="authShell">
       <section className="authCard">
-        <Link className="backLink" to="/">← Back</Link>
+        <Link className="backLink" to={requestedReturn ?? "/"}>← Back</Link>
         <p className="eyebrow">Private study account</p>
         <h1>{mode === "login" ? "Welcome back" : "Create your account"}</h1>
         <p className="muted">Your attempts, mastery and revision history stay tied to this account.</p>
+
+        {expired && (
+          <div className="sessionExpiredNotice" role="status">
+            <strong>Your study session expired.</strong>
+            <span>Sign in again and we’ll return you to the same screen. Saved progress stays intact.</span>
+          </div>
+        )}
 
         <form onSubmit={submit} className="formStack">
           {mode === "register" && (
             <label>
               Name
-              <input value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+              <input value={displayName} onChange={(event) => setDisplayName(event.target.value)} />
             </label>
           )}
           <label>
             Email
-            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input
+              type="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
           </label>
           <label>
             Password
-            <input type="password" minLength={8} required value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input
+              type="password"
+              autoComplete={mode === "login" ? "current-password" : "new-password"}
+              minLength={8}
+              required
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
           </label>
           {error && <p className="errorText">{error}</p>}
-          <button disabled={busy}>{busy ? "Please wait..." : mode === "login" ? "Login" : "Register"}</button>
+          <button disabled={busy}>
+            {busy ? "Signing in…" : mode === "login" ? "Login" : "Register"}
+          </button>
         </form>
 
         {(registrationEnabled || mode === "register") && (
           <button
             className="textButton"
-            onClick={() => setMode(mode === "login" ? "register" : "login")}
+            onClick={() => {
+              setError("");
+              setMode(mode === "login" ? "register" : "login");
+            }}
           >
             {mode === "login" ? "Need an account? Register" : "Already registered? Login"}
           </button>
