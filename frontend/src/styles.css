@@ -1972,3 +1972,300 @@ input:focus, select:focus, textarea:focus {
     padding-top: 14px;
   }
 }
+
+
+/* Phase 2 product shell */
+.globalNavWrap {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  border-bottom: 1px solid #e6eaf0;
+  background: rgba(248, 250, 252, .94);
+  backdrop-filter: blur(14px);
+}
+
+.globalNav {
+  width: min(1220px, calc(100% - 32px));
+  min-height: 58px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 20px;
+  align-items: center;
+}
+
+.globalBrand {
+  color: #172033;
+  font-weight: 900;
+  letter-spacing: -.02em;
+}
+
+.globalNavLinks {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+.globalNavLinks a,
+.globalAccount {
+  padding: 8px 10px;
+  border-radius: 9px;
+  color: #687487;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.globalNavLinks a:hover,
+.globalAccount:hover,
+.globalNavActive {
+  background: #e9edf3;
+  color: #172033 !important;
+}
+
+.globalAccount {
+  border: 1px solid #dce2ea;
+  background: white;
+}
+
+.practiceModePanel {
+  display: grid;
+  grid-template-columns: minmax(220px, .7fr) minmax(0, 1.3fr);
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  border: 1px solid #e3e8ef;
+  border-radius: 16px;
+  background: white;
+}
+
+.practiceModePanel p {
+  margin: 2px 0;
+  color: #6e798b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.practiceModePanel .practiceModes {
+  margin: 0;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.practiceSummaryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 22px 0;
+}
+
+.practiceSummaryGrid article {
+  padding: 16px;
+  border: 1px solid #e4e9ef;
+  border-radius: 14px;
+  background: #fafbfc;
+}
+
+.practiceSummaryGrid span,
+.answerAudit span {
+  display: block;
+  color: #7a8597;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.practiceSummaryGrid strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 22px;
+}
+
+.practiceCompleteActions,
+.emptyActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.answerAudit {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
+  margin: 12px 0 18px;
+}
+
+.answerAudit > div {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.65);
+}
+
+.answerAudit strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.slowText { color: #a24135; }
+
+.hintUsedNote {
+  margin: 8px 0 0;
+  color: #806429;
+  font-size: 12px;
+}
+
+/* Contextual teacher */
+.teacherCoach {
+  margin: 18px 0;
+  overflow: hidden;
+  border: 1px solid #dce3eb;
+  border-radius: 16px;
+  background: #fbfcfe;
+}
+
+.teacherCoachToggle {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 13px 15px;
+  border-radius: 0;
+  background: #172033;
+  color: white;
+  text-align: left;
+}
+
+.teacherCoachToggle > span {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  color: #172033;
+}
+
+.teacherCoachToggle div {
+  display: grid;
+  gap: 2px;
+}
+
+.teacherCoachToggle small {
+  color: #bdc7d5;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.teacherCoachBody { padding: 15px; }
+
+.teacherAnswer {
+  margin: 0;
+  padding: 14px;
+  border-radius: 12px;
+  background: white;
+  color: #3f4b5e;
+  line-height: 1.65;
+}
+
+.teacherQuickPrompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 12px 0;
+}
+
+.teacherQuickPrompts button,
+.teacherSpeak {
+  padding: 7px 9px;
+  border: 1px solid #dce3eb;
+  background: white;
+  color: #5c6879;
+  font-size: 11px;
+}
+
+.teacherInputRow {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+}
+
+.teacherInputRow input {
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid #dce3eb;
+  border-radius: 10px;
+  font: inherit;
+}
+
+.teacherMic {
+  min-width: 42px;
+  background: #edf1f5;
+  color: #172033;
+}
+
+.teacherMic.listening {
+  background: #fff0ee;
+  color: #a6362d;
+}
+
+.teacherSpeak { margin-top: 10px; }
+
+.plannerTaskReason {
+  max-width: 720px;
+  margin: 8px 0 0;
+  color: #788396;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.resumeMockCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 22px;
+  padding: 22px;
+  border: 1px solid #cfd8e5;
+  border-radius: 18px;
+  background: #f5f8fc;
+}
+
+.resumeMockCard h2 { margin: 3px 0 6px; }
+.resumeMockCard p:last-child { margin: 0; color: #6f7b8d; }
+.resumeMockCard > div:last-child { display: flex; gap: 8px; }
+
+@media (max-width: 900px) {
+  .globalNav {
+    grid-template-columns: auto 1fr;
+  }
+  .globalAccount { display: none; }
+  .globalNavLinks { justify-content: flex-end; }
+  .practiceModePanel { grid-template-columns: 1fr; }
+  .practiceModePanel .practiceModes { justify-content: flex-start; }
+}
+
+@media (max-width: 650px) {
+  .globalNav {
+    width: min(100% - 20px, 1220px);
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 8px 0;
+  }
+  .globalBrand { text-align: center; }
+  .globalNavLinks { justify-content: flex-start; }
+  .practiceSummaryGrid,
+  .answerAudit { grid-template-columns: 1fr; }
+  .teacherInputRow { grid-template-columns: 1fr auto; }
+  .teacherInputRow > button:last-child { grid-column: 1 / -1; }
+  .resumeMockCard { align-items: flex-start; flex-direction: column; }
+  .resumeMockCard > div:last-child { width: 100%; }
+  .resumeMockCard > div:last-child button { flex: 1; }
+}
