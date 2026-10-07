@@ -182,6 +182,7 @@ export default function PlannerPage() {
                     </div>
                     <h2>{task.title}</h2>
                     <p className="plannerTaskReason"><strong>Why this?</strong> {task.reason}</p>
+                    <p className="plannerTaskOutcome"><strong>Expected outcome:</strong> {task.expected_outcome}</p>
                   </div>
                   <Link className="taskOpen" to={link}>Open →</Link>
                 </article>
