@@ -4,7 +4,25 @@ from datetime import datetime, timezone
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
-from app.models import Question, QuestionAttempt
+from app.models import Question, QuestionAttempt, TopicMastery
+
+
+def _round_robin(groups: dict[object, list[Question]], limit: int) -> list[Question]:
+    ordered = [items for _, items in sorted(groups.items(), key=lambda pair: str(pair[0])) if items]
+    selected: list[Question] = []
+    depth = 0
+    while len(selected) < limit:
+        added = False
+        for items in ordered:
+            if depth < len(items):
+                selected.append(items[depth])
+                added = True
+                if len(selected) >= limit:
+                    break
+        if not added:
+            break
+        depth += 1
+    return selected
 
 
 def select_practice_questions(
@@ -35,49 +53,58 @@ def select_practice_questions(
         for question in questions:
             key = question.pattern_type or question.subtopic or f"question-{question.id}"
             grouped[key].append(question)
-
         for items in grouped.values():
-            items.sort(
-                key=lambda q: (
-                    q.difficulty,
-                    -(q.year or 0),
-                    q.id,
-                )
-            )
+            items.sort(key=lambda q: (q.difficulty, -(q.year or 0), q.id))
+        return _round_robin(grouped, limit)
 
-        ordered_groups = sorted(
-            grouped.values(),
-            key=lambda items: (
-                items[0].difficulty,
-                items[0].pattern_type or "",
-                items[0].id,
-            ),
-        )
+    if mode == "pyq":
+        pyqs = [
+            question for question in questions
+            if question.year is not None or question.source_type in {"official", "licensed", "user_private"}
+        ]
+        if not pyqs:
+            pyqs = questions
+        pyqs.sort(key=lambda q: (-(q.year or 0), q.difficulty, q.id))
+        return pyqs[:limit]
 
-        selected: list[Question] = []
-        depth = 0
-        while len(selected) < limit:
-            added = False
-            for items in ordered_groups:
-                if depth < len(items):
-                    selected.append(items[depth])
-                    added = True
-                    if len(selected) == limit:
-                        break
-            if not added:
-                break
-            depth += 1
-        return selected
-
-    if mode == "timed":
+    if mode == "speed":
         return sorted(
             questions,
             key=lambda q: (
+                q.expected_time_seconds or 999,
                 q.difficulty,
                 -(q.year or 0),
                 q.id,
             ),
         )[:limit]
+
+    if mode == "ladder":
+        grouped_by_difficulty: dict[int, list[Question]] = defaultdict(list)
+        for question in questions:
+            grouped_by_difficulty[max(1, min(3, question.difficulty))].append(question)
+        for items in grouped_by_difficulty.values():
+            items.sort(key=lambda q: (-(q.year or 0), q.id))
+        selected: list[Question] = []
+        while len(selected) < limit:
+            added = False
+            for difficulty in (1, 2, 3):
+                items = grouped_by_difficulty.get(difficulty, [])
+                if items:
+                    selected.append(items.pop(0))
+                    added = True
+                    if len(selected) >= limit:
+                        break
+            if not added:
+                break
+        return selected
+
+    if mode == "mixed":
+        grouped_by_topic: dict[int, list[Question]] = defaultdict(list)
+        for question in questions:
+            grouped_by_topic[question.topic_id or -question.id].append(question)
+        for items in grouped_by_topic.values():
+            items.sort(key=lambda q: (q.difficulty, -(q.year or 0), q.id))
+        return _round_robin(grouped_by_topic, limit)
 
     ids = [question.id for question in questions]
     attempts = list(
@@ -94,6 +121,13 @@ def select_practice_questions(
     by_question: dict[int, list[QuestionAttempt]] = defaultdict(list)
     for attempt in attempts:
         by_question[attempt.question_id].append(attempt)
+
+    weak_topics: dict[int, float] = {}
+    if mode == "weak" and topic_id is None:
+        for mastery in db.scalars(
+            select(TopicMastery).where(TopicMastery.user_id == user_id)
+        ):
+            weak_topics[mastery.topic_id] = float(mastery.mastery_score)
 
     now = datetime.now(timezone.utc).replace(tzinfo=None)
 
@@ -121,6 +155,13 @@ def select_practice_questions(
 
             recent_correct = sum(1 for item in history[:3] if item.is_correct)
             score -= recent_correct * 8.0
+
+        if mode == "weak" and topic_id is None and question.topic_id is not None:
+            mastery = weak_topics.get(question.topic_id)
+            if mastery is None:
+                score += 35.0
+            else:
+                score += max(0.0, 100.0 - mastery) * 0.8
 
         if question.year:
             score += max(0, question.year - 2020) * 1.5
