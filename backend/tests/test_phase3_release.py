@@ -91,10 +91,13 @@ def test_mock_review_includes_section_score_and_accuracy():
             subject_slug=None,
             topic_id=topic.id,
         )
-        rows[0][0].selected_option = 1
-        rows[0][0].time_seconds = 10
-        rows[1][0].selected_option = 2
-        rows[1][0].time_seconds = 50
+        # Topic mocks order easier questions first, so miss the first (easy) item
+        # and answer the next item correctly. This also exercises slow-question
+        # and weak-pattern reporting for the same missed question.
+        rows[0][0].selected_option = 2
+        rows[0][0].time_seconds = 50
+        rows[1][0].selected_option = 1
+        rows[1][0].time_seconds = 10
         db.commit()
 
         submit_mock_attempt(db, attempt=attempt, rows=rows)
