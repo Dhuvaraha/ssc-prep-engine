@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   TodayPlan,
   fetchTodayPlan,
+  prefetchTopicPackage,
   rebuildTodayPlan,
   setPlannerConfig,
   updatePlannerTask,
@@ -232,7 +233,18 @@ export default function PlannerPage() {
                     <p className="plannerTaskReason"><strong>Why this?</strong> {task.reason}</p>
                     <p className="plannerTaskOutcome"><strong>Expected outcome:</strong> {task.expected_outcome}</p>
                   </div>
-                  <Link className="taskOpen" to={link}>Open →</Link>
+                  <Link
+                    className="taskOpen"
+                    to={link}
+                    onPointerEnter={() => {
+                      if (task.topic_id) prefetchTopicPackage(task.topic_id);
+                    }}
+                    onFocus={() => {
+                      if (task.topic_id) prefetchTopicPackage(task.topic_id);
+                    }}
+                  >
+                    Open →
+                  </Link>
                 </article>
               );
             })}

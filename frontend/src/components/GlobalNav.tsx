@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { fetchContentTree } from "../api";
+import { fetchContentTree, prefetchStudyPage } from "../api";
 import { getToken } from "../auth";
 
 const links = [
@@ -63,7 +63,14 @@ export default function GlobalNav() {
             const path = to.split("?")[0];
             const active = location.pathname === path || (path !== "/" && location.pathname.startsWith(path));
             return (
-              <Link className={active ? "sidebarLink sidebarLinkActive" : "sidebarLink"} key={to} to={to}>
+              <Link
+                className={active ? "sidebarLink sidebarLinkActive" : "sidebarLink"}
+                key={to}
+                to={to}
+                onPointerEnter={() => prefetchStudyPage(path)}
+                onFocus={() => prefetchStudyPage(path)}
+                onTouchStart={() => prefetchStudyPage(path)}
+              >
                 <i>{icon}</i><span>{label}</span>
               </Link>
             );
@@ -82,7 +89,9 @@ export default function GlobalNav() {
       </aside>
 
       <header className="appContextBar">
-        <button className="contextBack" onClick={() => navigate(-1)} aria-label="Go back">←</button>
+        {location.pathname !== "/" && (
+          <button className="contextBack" onClick={() => navigate(-1)} aria-label="Go back">←</button>
+        )}
         <div>
           <strong>{title}</strong>
           <span>{subtitle}</span>
@@ -99,7 +108,13 @@ export default function GlobalNav() {
           const path = to.split("?")[0];
           const active = location.pathname === path || (path !== "/" && location.pathname.startsWith(path));
           return (
-            <Link className={active ? "mobileNavActive" : ""} key={to} to={to}>
+            <Link
+              className={active ? "mobileNavActive" : ""}
+              key={to}
+              to={to}
+              onTouchStart={() => prefetchStudyPage(path)}
+              onFocus={() => prefetchStudyPage(path)}
+            >
               <i>{icon}</i><span>{label}</span>
             </Link>
           );
