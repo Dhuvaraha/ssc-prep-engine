@@ -120,8 +120,8 @@ export default function DashboardPage() {
       <section className="metrics">
         <article>
           <span>Readiness</span>
-          <strong>{analytics && analytics.coach.evidence_level !== "baseline" ? analytics.overview.readiness + "%" : "—"}</strong>
-          <small>{analytics?.coach.evidence_level === "baseline" ? "Baseline not assessed" : analytics ? "Based on practice + mocks" : "Starts after your first attempts"}</small>
+          <strong>{analytics?.overview.readiness != null ? analytics.overview.readiness + "%" : "—"}</strong>
+          <small>{analytics?.overview.readiness == null ? "Full-test readiness not assessed" : "Provisional — based on exam evidence"}</small>
         </article>
         <article>
           <span>Accuracy</span>
