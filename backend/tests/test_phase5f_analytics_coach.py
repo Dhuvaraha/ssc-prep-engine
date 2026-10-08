@@ -77,6 +77,8 @@ def test_analytics_baseline_does_not_present_zero_as_real_readiness():
         payload = analytics_summary(db=db, user=user)
 
         assert payload["overview"]["practice_attempts"] == 0
+        assert payload["overview"]["readiness"] is None
+        assert payload["overview"]["readiness_source"] == "not_assessed"
         assert payload["coach"]["evidence_level"] == "baseline"
         assert "baseline" in payload["coach"]["headline"].lower()
         assert payload["coach"]["primary_action"]["path"] == "/mocks"
@@ -114,6 +116,7 @@ def test_analytics_developing_signal_is_not_overclaimed_as_established():
         payload = analytics_summary(db=db, user=user)
 
         assert payload["coach"]["evidence_level"] == "developing"
+        assert payload["overview"]["readiness"] is None
         assert "early signal" in payload["coach"]["primary_action"]["reason"].lower()
         assert payload["coach"]["secondary_action"]["path"] == "/mocks"
     finally:
@@ -174,6 +177,8 @@ def test_analytics_established_coach_is_actionable_and_batches_question_lookup()
         payload = analytics_summary(db=db, user=user)
 
         assert payload["coach"]["evidence_level"] == "established"
+        assert payload["overview"]["readiness"] is not None
+        assert payload["overview"]["readiness_source"] == "full_mock"
         assert payload["coach"]["primary_action"]["path"].startswith("/practice?topic_id=")
         assert payload["errors"]["potential_score_gain"] == 25.0
         assert "marks" in payload["coach"]["summary"].lower()
@@ -183,4 +188,70 @@ def test_analytics_established_coach_is_actionable_and_batches_question_lookup()
             event.remove(engine, "before_cursor_execute", count_question_selects)
         except Exception:
             pass
+        db.close()
+
+
+
+def test_many_practice_attempts_cannot_fabricate_exam_readiness():
+    _, db, user, exam, _, questions = _base_db()
+    try:
+        for index in range(60):
+            db.add(
+                QuestionAttempt(
+                    user_id=user.id,
+                    question_id=questions[index % len(questions)].id,
+                    selected_option=1,
+                    is_correct=True,
+                    time_seconds=20,
+                    confidence=3,
+                    attempted_at=datetime.utcnow(),
+                )
+            )
+        db.add(
+            MockAttempt(
+                user_id=user.id, exam_id=exam.id, mode="quick",
+                duration_minutes=5, status="submitted", submitted_at=datetime.utcnow(),
+                correct_count=4, incorrect_count=0, unattempted_count=0,
+            )
+        )
+        db.add(
+            MockAttempt(
+                user_id=user.id, exam_id=exam.id, mode="sectional",
+                duration_minutes=15, status="submitted", submitted_at=datetime.utcnow(),
+                correct_count=20, incorrect_count=5, unattempted_count=0,
+            )
+        )
+        db.commit()
+
+        payload = analytics_summary(db=db, user=user)
+        assert payload["overview"]["accuracy"] == 100.0
+        assert payload["overview"]["readiness"] is None
+        assert payload["overview"]["readiness_source"] == "not_assessed"
+        assert payload["overview"]["full_mock_count"] == 0
+        assert "not been assessed" in payload["coach"]["summary"].lower()
+    finally:
+        db.close()
+
+
+def test_full_mock_must_have_meaningful_answers_before_readiness_unlocks():
+    _, db, user, exam, _, _ = _base_db()
+    try:
+        exam_mock = MockAttempt(
+            user_id=user.id, exam_id=exam.id, mode="full",
+            duration_minutes=60, status="submitted", submitted_at=datetime.utcnow(),
+            correct_count=3, incorrect_count=0, unattempted_count=97,
+        )
+        db.add(exam_mock)
+        db.commit()
+        assert analytics_summary(db=db, user=user)["overview"]["readiness"] is None
+
+        exam_mock.correct_count = 55
+        exam_mock.incorrect_count = 10
+        exam_mock.unattempted_count = 35
+        db.commit()
+        payload = analytics_summary(db=db, user=user)
+        assert payload["overview"]["readiness"] == round(55 / 65 * 100, 1)
+        assert payload["overview"]["readiness_source"] == "full_mock"
+        assert payload["overview"]["full_mock_count"] == 1
+    finally:
         db.close()
