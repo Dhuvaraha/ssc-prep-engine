@@ -21,7 +21,9 @@ const subjects = [
 export default function DashboardPage() {
   const [tree, setTree] = useState<ContentTree | null>(null);
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
-  const [revisionDue, setRevisionDue] = useState(0);
+  const [revisionDue, setRevisionDue] = useState<number | null>(null);
+  const [backupError, setBackupError] = useState("");
+  const [exporting, setExporting] = useState(false);
   const authenticated = Boolean(getToken());
   const navigate = useNavigate();
 
@@ -39,13 +41,25 @@ export default function DashboardPage() {
       navigate("/login");
       return;
     }
-    const blob = await exportBackup();
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "ssc-prep-backup.json";
-    link.click();
-    URL.revokeObjectURL(url);
+    if (exporting) return;
+    setExporting(true);
+    setBackupError("");
+    try {
+      const blob = await exportBackup();
+      const url = URL.createObjectURL(blob);
+      try {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "ssc-prep-backup.json";
+        link.click();
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    } catch {
+      setBackupError("Backup export failed. Your study data is unchanged; please try again.");
+    } finally {
+      setExporting(false);
+    }
   }
 
   function logout() {
@@ -61,15 +75,10 @@ export default function DashboardPage() {
           <p className="muted">CGL study system • lessons, drills, mocks and revision</p>
         </div>
         <nav>
-          <Link to="/planner">Today</Link>
-          <Link to="/learn">Learn</Link>
-          <Link to="/revision">Revision</Link>
-          <Link to="/analytics">Analytics</Link>
-          <Link to="/mocks">Mock tests</Link>
           {authenticated && <Link to="/settings">Settings</Link>}
           {authenticated ? (
             <>
-              <button className="navButton" onClick={() => void saveBackup()}>Export backup</button>
+              <button className="navButton" disabled={exporting} onClick={() => void saveBackup()}>{exporting ? "Exporting..." : "Export backup"}</button>
               <button className="navButton" onClick={logout}>Logout</button>
             </>
           ) : (
@@ -80,17 +89,24 @@ export default function DashboardPage() {
 
       <section className="hero">
         <p className="eyebrow">SSC CGL • Personal preparation engine</p>
-        <h1>Study now. The content is ready.</h1>
+        <h1>
+          {!authenticated
+            ? "Build your SSC preparation, one topic at a time."
+            : analytics?.coach.evidence_level === "baseline"
+              ? "Discover your starting point."
+              : analytics ? "Continue where you left off." : "Your study dashboard."}
+        </h1>
         <p className="lead">
-          Learn a topic, solve its drill set, take timed mocks, analyse mistakes and
-          automatically revisit weak questions.
+          {analytics?.coach.evidence_level === "baseline"
+            ? "Start with a four-question Quick Sprint to sample all sections, then practise a topic. A full baseline diagnostic is coming in Phase 7A."
+            : "Learn a topic, practise its patterns, take a timed test and revisit mistakes. Your study plan adapts as you improve."}
         </p>
         <div className="heroActions">
           <Link className="primaryLink" to={authenticated ? "/planner" : "/login"}>
             {authenticated ? "Open today's plan" : "Login and start"}
           </Link>
           <Link className="secondaryLink" to="/learn">Browse all lessons</Link>
-          {authenticated && <Link className="secondaryLink" to="/mocks">Take a diagnostic mock</Link>}
+          {authenticated && <Link className="secondaryLink" to="/mocks">Open Quick Sprint</Link>}
         </div>
         {tree && (
           <p className="heroContentStatus">
@@ -99,20 +115,22 @@ export default function DashboardPage() {
         )}
       </section>
 
+      {backupError && <p className="errorText" role="alert">{backupError}</p>}
+
       <section className="metrics">
         <article>
           <span>Readiness</span>
-          <strong>{analytics ? analytics.overview.readiness + "%" : "—"}</strong>
-          <small>{analytics ? "Based on your practice + mocks" : "Starts after you practise"}</small>
+          <strong>{analytics && analytics.coach.evidence_level !== "baseline" ? analytics.overview.readiness + "%" : "—"}</strong>
+          <small>{analytics?.coach.evidence_level === "baseline" ? "Baseline not assessed" : analytics ? "Based on practice + mocks" : "Starts after your first attempts"}</small>
         </article>
         <article>
           <span>Accuracy</span>
-          <strong>{analytics ? analytics.overview.accuracy + "%" : "—"}</strong>
+          <strong>{analytics && analytics.overview.practice_attempts > 0 ? analytics.overview.accuracy + "%" : "—"}</strong>
           <small>{analytics ? analytics.overview.practice_attempts + " practice attempts" : "Track correct / attempted"}</small>
         </article>
         <article>
           <span>Revision due</span>
-          <strong>{authenticated ? revisionDue : "—"}</strong>
+          <strong>{authenticated ? (revisionDue ?? "—") : "—"}</strong>
           <small>Wrong, slow & guessed questions</small>
         </article>
       </section>
@@ -152,8 +170,8 @@ export default function DashboardPage() {
         </article>
         <article>
           <p className="eyebrow">If you want an exam check</p>
-          <h3>Take a 4-question quick diagnostic</h3>
-          <p>One question from each section gives the system an initial performance signal without pretending to be a full exam.</p>
+          <h3>Take a 4-question Quick Sprint</h3>
+          <p>Sample one question from each section. This is a warm-up, not a valid 40-question baseline diagnostic.</p>
           <Link to={authenticated ? "/mocks" : "/login"}>Open Mock Lab →</Link>
         </article>
         <article>
