@@ -31,7 +31,7 @@ def test_exact_catalog_and_only_existing_cgl_stage_is_ready():
     ("slug", "total", "minutes", "positive", "negative", "counts"),
     [
         ("ssc-cgl-tier-1", 100, 60, 2.0, 0.5, [25, 25, 25, 25]),
-        ("ssc-cgl-tier-2", 160, 135, 3.0, 1.0, [30, 30, 45, 25, 20]),
+        ("ssc-cgl-tier-2", 150, 135, 3.0, 1.0, [30, 30, 45, 25, 20]),
         ("ssc-je-telecom-paper-1", 200, 120, 1.0, 0.25, [50, 50, 100]),
         ("ssc-je-telecom-paper-2", 100, 120, 3.0, 1.0, [100]),
     ],
