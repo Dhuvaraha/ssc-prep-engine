@@ -45,6 +45,7 @@ export default function MockPage() {
   const [subject, setSubject] = useState("reasoning");
   const [attemptId, setAttemptId] = useState<number | null>(null);
   const [resumeInfo, setResumeInfo] = useState<ActiveMock | null>(null);
+  const [checkingActive, setCheckingActive] = useState(true);
   const [questions, setQuestions] = useState<MockQuestion[]>([]);
   const [answers, setAnswers] = useState<Record<number, LocalAnswer>>({});
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -60,6 +61,8 @@ export default function MockPage() {
   const [review, setReview] = useState<MockReview | null>(null);
   const questionOpenedAt = useRef(Date.now());
   const boundarySyncing = useRef(false);
+  const pendingAnswerSave = useRef<Promise<void> | null>(null);
+  const [savingAnswer, setSavingAnswer] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -74,9 +77,15 @@ export default function MockPage() {
       navigate("/login");
       return;
     }
+    let cancelled = false;
+    setCheckingActive(true);
     fetchActiveMock()
-      .then((data) => setResumeInfo(data.attempt_id ? data : null))
-      .catch(() => undefined);
+      .then((data) => { if (!cancelled) setResumeInfo(data.attempt_id ? data : null); })
+      .catch(() => {
+        if (!cancelled) setError("Could not check for an in-progress test. Starting again will still protect your saved attempt.");
+      })
+      .finally(() => { if (!cancelled) setCheckingActive(false); });
+    return () => { cancelled = true; };
   }, [navigate]);
 
   useEffect(() => {
@@ -226,6 +235,10 @@ export default function MockPage() {
   }
 
   async function begin() {
+    if (checkingActive) {
+      setError("Checking your saved test. Please wait a moment.");
+      return;
+    }
     if (resumeInfo?.attempt_id) {
       setError("Resume or discard the in-progress test before starting another.");
       return;
@@ -240,6 +253,14 @@ export default function MockPage() {
         mode === "sectional" ? subject : undefined,
         mode === "topic" ? topicId : undefined,
       );
+      if (data.resumed_existing) {
+        // Another tab or a delayed active-attempt check can race with Start.
+        // Never initialise an existing attempt as a fresh zero-answer test.
+        const current = await fetchActiveMock().catch(() => null);
+        setResumeInfo(current?.attempt_id ? current : {attempt_id: data.attempt_id, mode: data.mode});
+        setError("An in-progress test already exists. Resume it to restore your saved answers and timer.");
+        return;
+      }
       setAttemptId(data.attempt_id);
       setQuestions(data.questions);
       setAnswers({});
@@ -335,20 +356,38 @@ export default function MockPage() {
 
   async function persistPatch(partial: Partial<LocalAnswer> = {}, extraTime = true) {
     if (!attemptId || !current) return;
+    if (pendingAnswerSave.current) {
+      throw new Error("Your previous answer is still saving. Please try again.");
+    }
+    const questionId = current.question.id;
     const previous = localForCurrent();
     const next = {
       ...previous,
       ...partial,
       time_seconds: previous.time_seconds + (extraTime ? elapsedForCurrent() : 0),
     };
-    await saveMockResponse(attemptId, {
-      question_id: current.question.id,
+    // A question is visually selected immediately, but navigation and further
+    // edits are disabled until the backend acknowledges the save.
+    setAnswers((state) => ({...state, [questionId]: next}));
+    const pending = saveMockResponse(attemptId, {
+      question_id: questionId,
       selected_option: next.selected_option,
       marked_for_review: next.marked_for_review,
       time_seconds: next.time_seconds,
     });
-    setAnswers((state) => ({...state, [current.question.id]: next}));
-    questionOpenedAt.current = Date.now();
+    pendingAnswerSave.current = pending;
+    setSavingAnswer(true);
+    try {
+      await pending;
+      questionOpenedAt.current = Date.now();
+    } catch (error) {
+      // Do not keep displaying an unsaved choice as if it persisted.
+      setAnswers((state) => ({...state, [questionId]: previous}));
+      throw error;
+    } finally {
+      pendingAnswerSave.current = null;
+      setSavingAnswer(false);
+    }
   }
 
   async function goTo(index: number) {
@@ -419,7 +458,13 @@ export default function MockPage() {
     setBusy(true);
     setError("");
     try {
-      if (current) {
+      if (pendingAnswerSave.current) {
+        try {
+          await pendingAnswerSave.current;
+        } catch (err) {
+          if (!force) throw err;
+        }
+      } else if (current) {
         try {
           await persistPatch();
         } catch (err) {
@@ -618,8 +663,8 @@ export default function MockPage() {
           )}
 
           {error && <p className="errorText">{error}</p>}
-          <button className="mockStartButton" onClick={() => void begin()} disabled={busy || Boolean(resumeInfo?.attempt_id)}>
-            {busy ? "Preparing..." : resumeInfo?.attempt_id ? "Resume or discard current test first" : "Start test"}
+          <button className="mockStartButton" onClick={() => void begin()} disabled={busy || checkingActive || Boolean(resumeInfo?.attempt_id)}>
+            {checkingActive ? "Checking saved tests..." : busy ? "Preparing..." : resumeInfo?.attempt_id ? "Resume or discard current test first" : "Start test"}
           </button>
         </section>
       </main>
@@ -637,7 +682,7 @@ export default function MockPage() {
         <div>
           <strong>SSC CGL Tier I</strong>
           <span>
-            {mode === "full" ? "Full Tier-I Simulation" : mode === "sectional" ? "Section Test" : mode === "topic" ? "Topic Test" : "Quick Sprint"} • autosaved
+            {mode === "full" ? "Full Tier-I Simulation" : mode === "sectional" ? "Section Test" : mode === "topic" ? "Topic Test" : "Quick Sprint"} • {savingAnswer ? "Saving answer..." : "Answers saved"}
           </span>
         </div>
         {mode === "full" ? (
@@ -656,7 +701,7 @@ export default function MockPage() {
         <button
           className="finishButton"
           onClick={() => void finishMock(false)}
-          disabled={busy || !canSubmitFull}
+          disabled={busy || savingAnswer || !canSubmitFull}
           title={!canSubmitFull ? "Available in the final 15-minute section" : undefined}
         >
           {mode === "full" && !canSubmitFull ? "Submit in final section" : "Submit test"}
@@ -677,7 +722,7 @@ export default function MockPage() {
                 completed ? "completedSectionTab" : "",
               ].filter(Boolean).join(" ")}
               onClick={() => jumpToSection(slug)}
-              disabled={locked}
+              disabled={locked || savingAnswer}
             >
               {sectionLabels[slug] ?? slug}
               {mode === "full" && locked ? completed ? " ✓" : " 🔒" : ""}
@@ -708,6 +753,7 @@ export default function MockPage() {
               <button
                 key={option.position}
                 className={currentAnswer?.selected_option === option.position ? "practiceOption practiceSelected" : "practiceOption"}
+                disabled={savingAnswer || busy}
                 onClick={() => void chooseOption(option.position)}
               >
                 <strong>{String.fromCharCode(64 + option.position)}</strong>
@@ -718,14 +764,15 @@ export default function MockPage() {
           </div>
 
           <div className="examQuestionActions">
-            <button className="secondary" onClick={() => void chooseOption(null)}>Clear response</button>
+            <button className="secondary" disabled={savingAnswer || busy} onClick={() => void chooseOption(null)}>Clear response</button>
             <button
               className={currentAnswer?.marked_for_review ? "reviewToggle activeReviewToggle" : "reviewToggle"}
+              disabled={savingAnswer || busy}
               onClick={() => void toggleReview()}
             >
               {currentAnswer?.marked_for_review ? "Marked for review" : "Mark for review"}
             </button>
-            <button onClick={() => void saveAndNext()}>
+            <button disabled={savingAnswer || busy} onClick={() => void saveAndNext()}>
               {mode === "full" && currentSectionQuestionNumber === visiblePalette.length
                 ? "Save response"
                 : currentIndex === questions.length - 1
@@ -752,7 +799,7 @@ export default function MockPage() {
                 answer?.marked_for_review ? "paletteReview" : "",
               ].filter(Boolean).join(" ");
               return (
-                <button className={classNames} key={item.question.id} onClick={() => void goTo(index)}>
+                <button className={classNames} key={item.question.id} disabled={savingAnswer || busy} onClick={() => void goTo(index)}>
                   {mode === "full" ? localIndex + 1 : index + 1}
                 </button>
               );

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
@@ -36,6 +36,10 @@ export default function RevisionPage() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [index, setIndex] = useState(0);
   const [error, setError] = useState("");
+  const [loadError, setLoadError] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [grading, setGrading] = useState(false);
+  const gradingRef = useRef(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,42 +47,75 @@ export default function RevisionPage() {
       navigate("/login");
       return;
     }
-    void load();
-  }, [navigate, tab, reason]);
-
-  async function load() {
+    let cancelled = false;
+    setLoading(true);
     setError("");
+    setLoadError("");
     setIndex(0);
     setShowAnswer(false);
-    try {
-      if (tab === "due") setItems(await fetchRevisionQueue(reason || undefined));
-      if (tab === "flashcards") setFlashcards(await fetchDueFlashcards());
-      if (tab === "bookmarks") setBookmarks(await fetchBookmarks());
-    } catch {
-      setError("Could not load revision data.");
+
+    const fail = () => {
+      if (!cancelled) {
+        setLoadError("Could not load revision data. Check your connection and try again.");
+        setLoading(false);
+      }
+    };
+    if (tab === "due") {
+      fetchRevisionQueue(reason || undefined)
+        .then((data) => { if (!cancelled) { setItems(data); setLoading(false); } })
+        .catch(fail);
+    } else if (tab === "flashcards") {
+      fetchDueFlashcards()
+        .then((data) => { if (!cancelled) { setFlashcards(data); setLoading(false); } })
+        .catch(fail);
+    } else {
+      fetchBookmarks()
+        .then((data) => { if (!cancelled) { setBookmarks(data); setLoading(false); } })
+        .catch(fail);
     }
-  }
+    return () => { cancelled = true; };
+  }, [navigate, tab, reason]);
 
   const dueItem = useMemo(() => items[index] ?? null, [items, index]);
   const card = useMemo(() => flashcards[index] ?? null, [flashcards, index]);
   const bookmark = useMemo(() => bookmarks[index] ?? null, [bookmarks, index]);
 
   async function gradeRevision(success: boolean) {
-    if (!dueItem) return;
-    await reviewRevisionItem(dueItem.id, success);
-    const next = items.filter((item) => item.id !== dueItem.id);
-    setItems(next);
-    setIndex((value) => Math.min(value, Math.max(next.length - 1, 0)));
-    setShowAnswer(false);
+    if (!dueItem || gradingRef.current) return;
+    gradingRef.current = true;
+    setGrading(true);
+    setError("");
+    try {
+      await reviewRevisionItem(dueItem.id, success);
+      const next = items.filter((item) => item.id !== dueItem.id);
+      setItems(next);
+      setIndex((value) => Math.min(value, Math.max(next.length - 1, 0)));
+      setShowAnswer(false);
+    } catch {
+      setError("Review could not be saved. This question has not been removed.");
+    } finally {
+      gradingRef.current = false;
+      setGrading(false);
+    }
   }
 
   async function gradeCard(success: boolean) {
-    if (!card) return;
-    await reviewFlashcard(card.id, success);
-    const next = flashcards.filter((item) => item.id !== card.id);
-    setFlashcards(next);
-    setIndex((value) => Math.min(value, Math.max(next.length - 1, 0)));
-    setShowAnswer(false);
+    if (!card || gradingRef.current) return;
+    gradingRef.current = true;
+    setGrading(true);
+    setError("");
+    try {
+      await reviewFlashcard(card.id, success);
+      const next = flashcards.filter((item) => item.id !== card.id);
+      setFlashcards(next);
+      setIndex((value) => Math.min(value, Math.max(next.length - 1, 0)));
+      setShowAnswer(false);
+    } catch {
+      setError("Flashcard review could not be saved. Please retry.");
+    } finally {
+      gradingRef.current = false;
+      setGrading(false);
+    }
   }
 
   function nextBookmark() {
@@ -120,9 +157,15 @@ export default function RevisionPage() {
         </div>
       )}
 
-      {error && <section className="emptyCard">{error}</section>}
+      {loading && (
+        <section className="emptyCard" role="status" aria-live="polite">
+          Loading {tab === "due" ? "due questions" : tab === "flashcards" ? "flashcards" : "bookmarks"}…
+        </section>
+      )}
+      {!loading && loadError && <section className="emptyCard" role="alert">{loadError}</section>}
+      {!loading && error && <section className="emptyCard" role="alert">{error}</section>}
 
-      {!error && tab === "due" && !dueItem && (
+      {!loading && !loadError && tab === "due" && !dueItem && (
         <section className="revisionEmpty">
           <p className="eyebrow">Queue clear</p>
           <h1>No revision due right now.</h1>
@@ -131,7 +174,7 @@ export default function RevisionPage() {
         </section>
       )}
 
-      {!error && tab === "due" && dueItem && (
+      {!loading && !loadError && tab === "due" && dueItem && (
         <section className="revisionCard">
           <div className="revisionMeta">
             <span>{dueItem.reason.replaceAll("_", " ")}</span>
@@ -160,15 +203,15 @@ export default function RevisionPage() {
                 {dueItem.question.fast_method && <p><strong>Fast method:</strong> {dueItem.question.fast_method}</p>}
               </div>
               <div className="revisionGradeRow">
-                <button className="danger" onClick={() => void gradeRevision(false)}>Again tomorrow</button>
-                <button onClick={() => void gradeRevision(true)}>I remembered</button>
+                <button className="danger" disabled={grading} onClick={() => void gradeRevision(false)}>Again tomorrow</button>
+                <button disabled={grading} onClick={() => void gradeRevision(true)}>I remembered</button>
               </div>
             </>
           )}
         </section>
       )}
 
-      {!error && tab === "flashcards" && !card && (
+      {!loading && !loadError && tab === "flashcards" && !card && (
         <section className="revisionEmpty">
           <p className="eyebrow">Flashcards clear</p>
           <h1>No cards due right now.</h1>
@@ -176,7 +219,7 @@ export default function RevisionPage() {
         </section>
       )}
 
-      {!error && tab === "flashcards" && card && (
+      {!loading && !loadError && tab === "flashcards" && card && (
         <section className="flashcardShell">
           <div className="revisionMeta">
             <span>{card.card_type}</span>
@@ -196,14 +239,14 @@ export default function RevisionPage() {
             <button className="revisionReveal" onClick={() => setShowAnswer(true)}>Show answer</button>
           ) : (
             <div className="revisionGradeRow">
-              <button className="danger" onClick={() => void gradeCard(false)}>Forgot</button>
-              <button onClick={() => void gradeCard(true)}>Remembered</button>
+              <button className="danger" disabled={grading} onClick={() => void gradeCard(false)}>Forgot</button>
+              <button disabled={grading} onClick={() => void gradeCard(true)}>Remembered</button>
             </div>
           )}
         </section>
       )}
 
-      {!error && tab === "bookmarks" && !bookmark && (
+      {!loading && !loadError && tab === "bookmarks" && !bookmark && (
         <section className="revisionEmpty">
           <p className="eyebrow">Bookmarks</p>
           <h1>No bookmarked questions yet.</h1>
@@ -211,18 +254,22 @@ export default function RevisionPage() {
         </section>
       )}
 
-      {!error && tab === "bookmarks" && bookmark && (
+      {!loading && !loadError && tab === "bookmarks" && bookmark && (
         <section className="revisionCard">
           <div className="revisionMeta">
             <span>Bookmarked</span>
             <span>{index + 1} / {bookmarks.length}</span>
           </div>
           <h1>{bookmark.question.question_text}</h1>
+          {bookmark.question.question_image_url && (
+            <SecureImage className="practiceQuestionImage" src={bookmark.question.question_image_url} alt="Bookmarked question visual" />
+          )}
           <div className="revisionOptions">
             {bookmark.question.options.map((option) => (
               <div key={option.position} className={showAnswer && option.position === bookmark.question.correct_option ? "revisionOption revisionAnswer" : "revisionOption"}>
                 <strong>{String.fromCharCode(64 + option.position)}</strong>
                 <span>{option.text ?? "Image option"}</span>
+                {option.image_url && <SecureImage src={option.image_url} alt={"Option " + option.position} />}
               </div>
             ))}
           </div>

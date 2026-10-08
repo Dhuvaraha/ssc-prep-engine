@@ -18,11 +18,12 @@ from app.services.mock_engine import SECTION_ORDER, create_mock_attempt, load_mo
 router = APIRouter(prefix="/mocks", tags=["mocks"])
 
 
-def _serialize_attempt(attempt, rows):
+def _serialize_attempt(attempt, rows, *, resumed_existing: bool = False):
     return MockStartResponse(
         attempt_id=attempt.id,
         mode=attempt.mode,
         duration_minutes=attempt.duration_minutes,
+        resumed_existing=resumed_existing,
         questions=[
             MockQuestionOut(
                 position=row.position,
@@ -48,7 +49,7 @@ def start_mock(
     if active:
         try:
             active_attempt, rows = load_mock_attempt(db, attempt_id=active.id, user_id=user.id)
-            return _serialize_attempt(active_attempt, rows)
+            return _serialize_attempt(active_attempt, rows, resumed_existing=True)
         except LookupError:
             pass
 

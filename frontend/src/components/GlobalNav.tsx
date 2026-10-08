@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import { fetchContentTree, prefetchStudyPage } from "../api";
 import { getToken } from "../auth";
@@ -27,7 +27,6 @@ const titles: Array<[RegExp, string, string]> = [
 
 export default function GlobalNav() {
   const location = useLocation();
-  const navigate = useNavigate();
   const hidden = location.pathname === "/login" || location.pathname === "/mocks";
   const authenticated = Boolean(getToken());
 
@@ -46,6 +45,7 @@ export default function GlobalNav() {
   const context = titles.find(([pattern]) => pattern.test(location.pathname));
   const title = context?.[1] ?? "SSC Prep Engine";
   const subtitle = context?.[2] ?? "SSC CGL preparation";
+  const parentPath = location.pathname.startsWith("/learn/topic/") ? "/learn" : "/";
 
   return (
     <>
@@ -90,7 +90,7 @@ export default function GlobalNav() {
 
       <header className="appContextBar">
         {location.pathname !== "/" && (
-          <button className="contextBack" onClick={() => navigate(-1)} aria-label="Go back">←</button>
+          <Link className="contextBack" to={parentPath} aria-label={parentPath === "/learn" ? "Back to lessons" : "Back to dashboard"}>←</Link>
         )}
         <div>
           <strong>{title}</strong>

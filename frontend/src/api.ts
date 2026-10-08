@@ -450,6 +450,7 @@ export type MockStartResponse = {
   mode: string;
   duration_minutes: number;
   questions: MockQuestion[];
+  resumed_existing: boolean;
 };
 
 export type MockStateResponse = {
