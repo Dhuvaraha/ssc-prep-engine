@@ -38,7 +38,8 @@ export default function TeacherGuidedCheck({topicId, example, recognitionCue, co
     && example.options.some((option) => option.position === example.correct_option);
   if (!hasOptions) return null;
 
-  const revealSolution = () => {
+  const revealSolution = (skipAttempt = false) => {
+    if (skipAttempt) setSelected(null);
     setChecked(true);
     setShowSolution(true);
   };
@@ -99,7 +100,7 @@ export default function TeacherGuidedCheck({topicId, example, recognitionCue, co
       </div>
       {!checked && (
         <div className="teacherGuidedActions">
-          <button type="button" onClick={revealSolution} disabled={selected === null}>Check my answer</button>
+          <button type="button" onClick={() => revealSolution()} disabled={selected === null}>Check my answer</button>
           <button type="button" className="secondary" onClick={() => setHintShown(true)} disabled={hintShown || !recognitionCue}>
             {hintShown ? "Hint shown" : "Get a recognition hint"}
           </button>
@@ -114,7 +115,7 @@ export default function TeacherGuidedCheck({topicId, example, recognitionCue, co
       {showSolution && !checked && (
         <div className="teacherGuidedRevealWarning">
           <p>This is a worked teaching example, not a scored attempt.</p>
-          <button type="button" onClick={revealSolution}>Reveal the verified walkthrough</button>
+          <button type="button" onClick={() => revealSolution(true)}>Reveal the verified walkthrough</button>
           <button type="button" className="secondary" onClick={() => setShowSolution(false)}>I want to try first</button>
         </div>
       )}
