@@ -141,3 +141,26 @@ def test_unrelated_exam_stage_cannot_create_learning_evidence_or_see_topic():
         assert error.value.status_code == 400
     finally:
         db.close()
+
+
+
+def test_sparse_advanced_bank_does_not_falsely_unlock_challenge():
+    db, user, exam, _, topic, _ = _session()
+    try:
+        hard_questions = db.query(Question).filter(
+            Question.topic_id == topic.id, Question.difficulty == 3
+        ).order_by(Question.id).all()
+        for question in hard_questions[4:]:
+            db.delete(question)
+        db.commit()
+        _answer(db, user, topic, 1, [True, True, True, True, False])
+        _answer(db, user, topic, 2, [True, True, True, False, True])
+        progress = topic_learning_path(topic_id=topic.id, db=db, user=user)
+        assert progress["levels"][2]["passed"] is True
+        assert progress["available_questions"][3] == 4
+        assert progress["level"] == 2
+        assert progress["content_blocked"] is True
+        assert progress["blocked_level"] == 3
+        assert "verified questions" in progress["next_unlock"]
+    finally:
+        db.close()
