@@ -18,6 +18,7 @@ async function sessionFetch(input: RequestInfo | URL, init: RequestInit = {}): P
 
   if (response.status === 401 && authenticatedRequest) {
     clearToken();
+    invalidatePrivateDataCache();
     const next = window.location.pathname + window.location.search + window.location.hash;
     if (beginSessionExpiry(next)) {
       window.dispatchEvent(
@@ -26,7 +27,66 @@ async function sessionFetch(input: RequestInfo | URL, init: RequestInit = {}): P
     }
   }
 
+  // A successful write makes snapshot APIs stale; never serve stale private
+  // analytics, revision or planner state after a learner action.
+  const method = (init.method ?? "GET").toUpperCase();
+  if (response.ok && authenticatedRequest && method !== "GET" && method !== "HEAD") {
+    invalidatePrivateDataCache();
+  }
+
   return response;
+}
+
+// Authenticated snapshots stay in RAM only and never enter sessionStorage.
+// Repeated visits within a short window reuse the same result, while writes,
+// token changes and expiry invalidate every private snapshot.
+const privateDataCache = new Map<string, CacheEnvelope<unknown>>();
+const privateDataInflight = new Map<string, Promise<unknown>>();
+let privateCacheOwner: string | null = null;
+
+export function invalidatePrivateDataCache(): void {
+  privateDataCache.clear();
+  privateDataInflight.clear();
+  privateCacheOwner = localStorage.getItem("ssc_prep_token");
+}
+
+function privateCacheSession(): string | null {
+  const token = localStorage.getItem("ssc_prep_token");
+  if (token !== privateCacheOwner) {
+    privateDataCache.clear();
+    privateDataInflight.clear();
+    privateCacheOwner = token;
+  }
+  return token;
+}
+
+function fetchPrivateCachedJson<T>(key: string, url: string, ttlMs: number): Promise<T> {
+  const owner = privateCacheSession();
+  if (!owner) return Promise.reject(new Error("Sign in to load this page"));
+
+  const cached = privateDataCache.get(key) as CacheEnvelope<T> | undefined;
+  if (cached && cached.expires_at > Date.now()) return Promise.resolve(cached.value);
+
+  const inflight = privateDataInflight.get(key) as Promise<T> | undefined;
+  if (inflight) return inflight;
+
+  const request = sessionFetch(url, {headers: authHeaders()})
+    .then(async (response) => {
+      if (!response.ok) {
+        const error = await response.json().catch(() => null);
+        throw new Error(error?.detail ?? "Failed to load study data");
+      }
+      const value = await response.json() as T;
+      if (privateCacheSession() === owner) {
+        privateDataCache.set(key, {value, expires_at: Date.now() + ttlMs});
+      }
+      return value;
+    })
+    .finally(() => {
+      if (privateDataInflight.get(key) === request) privateDataInflight.delete(key);
+    });
+  privateDataInflight.set(key, request);
+  return request;
 }
 
 type CacheEnvelope<T> = {
@@ -631,11 +691,11 @@ export type AnalyticsSummary = {
 };
 
 export async function fetchAnalyticsSummary(): Promise<AnalyticsSummary> {
-  const response = await sessionFetch(API_BASE + "/analytics/summary", {
-    headers: authHeaders(),
-  });
-  if (!response.ok) throw new Error("Failed to load analytics");
-  return response.json();
+  return fetchPrivateCachedJson<AnalyticsSummary>(
+    "analytics_summary",
+    API_BASE + "/analytics/summary",
+    45_000,
+  );
 }
 
 
@@ -675,11 +735,11 @@ export type BookmarkItem = {
 
 export async function fetchRevisionQueue(reason?: string): Promise<RevisionItem[]> {
   const suffix = reason ? "?reason=" + encodeURIComponent(reason) : "";
-  const response = await sessionFetch(API_BASE + "/revision/queue" + suffix, {
-    headers: authHeaders(),
-  });
-  if (!response.ok) throw new Error("Failed to load revision queue");
-  return response.json();
+  return fetchPrivateCachedJson<RevisionItem[]>(
+    "revision_queue_" + (reason ?? "all"),
+    API_BASE + "/revision/queue" + suffix,
+    20_000,
+  );
 }
 
 export async function reviewRevisionItem(itemId: number, success: boolean): Promise<void> {
@@ -710,19 +770,19 @@ export async function toggleBookmark(questionId: number): Promise<{bookmarked: b
 }
 
 export async function fetchBookmarks(): Promise<BookmarkItem[]> {
-  const response = await sessionFetch(API_BASE + "/revision/bookmarks", {
-    headers: authHeaders(),
-  });
-  if (!response.ok) throw new Error("Failed to load bookmarks");
-  return response.json();
+  return fetchPrivateCachedJson<BookmarkItem[]>(
+    "revision_bookmarks",
+    API_BASE + "/revision/bookmarks",
+    20_000,
+  );
 }
 
 export async function fetchDueFlashcards(): Promise<FlashcardItem[]> {
-  const response = await sessionFetch(API_BASE + "/revision/flashcards/due", {
-    headers: authHeaders(),
-  });
-  if (!response.ok) throw new Error("Failed to load flashcards");
-  return response.json();
+  return fetchPrivateCachedJson<FlashcardItem[]>(
+    "revision_flashcards",
+    API_BASE + "/revision/flashcards/due",
+    20_000,
+  );
 }
 
 export async function reviewFlashcard(flashcardId: number, success: boolean): Promise<void> {
@@ -766,14 +826,11 @@ export type TodayPlan = {
 };
 
 export async function fetchTodayPlan(): Promise<TodayPlan> {
-  const response = await sessionFetch(API_BASE + "/planner/today", {
-    headers: authHeaders(),
-  });
-  if (!response.ok) {
-    const error = await response.json().catch(() => null);
-    throw new Error(error?.detail ?? "Failed to load plan");
-  }
-  return response.json();
+  return fetchPrivateCachedJson<TodayPlan>(
+    "planner_today",
+    API_BASE + "/planner/today",
+    20_000,
+  );
 }
 
 export async function setPlannerConfig(
