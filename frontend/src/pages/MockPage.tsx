@@ -68,6 +68,7 @@ export default function MockPage() {
   const boundarySyncing = useRef(false);
   const pendingAnswerSave = useRef<Promise<void> | null>(null);
   const [savingAnswer, setSavingAnswer] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -281,6 +282,7 @@ export default function MockPage() {
         setSectionSecondsLeft(null);
       }
       setCurrentIndex(0);
+      setPaletteOpen(false);
       setRunning(true);
       setResumeInfo(null);
       questionOpenedAt.current = Date.now();
@@ -323,6 +325,7 @@ export default function MockPage() {
         ? attempt.questions.findIndex((item) => item.section_slug === state.active_section_slug)
         : 0;
       setCurrentIndex(Math.max(0, firstIndex));
+      setPaletteOpen(false);
       setRunning(true);
       questionOpenedAt.current = Date.now();
     } catch {
@@ -407,6 +410,7 @@ export default function MockPage() {
     try {
       await persistPatch();
       setCurrentIndex(index);
+      setPaletteOpen(false);
       questionOpenedAt.current = Date.now();
       setError("");
     } catch (err) {
@@ -649,27 +653,27 @@ export default function MockPage() {
           <p className="eyebrow">Choose test mode</p>
           <h1>Train in the format you need.</h1>
           <div className="mockModeGrid">
-            <button className={mode === "mini" ? "mockModeCard activeMockMode" : "mockModeCard"} onClick={() => setMode("mini")}>
+            <button className={mode === "mini" ? "mockModeCard activeMockMode" : "mockModeCard"} aria-pressed={mode === "mini"} onClick={() => setMode("mini")}>
               <strong>Quick Sprint</strong>
               <span>4 questions • 4 minutes • one from each section • warm-up only</span>
             </button>
             {!topicId && (
-              <button className={mode === "diagnostic" ? "mockModeCard activeMockMode" : "mockModeCard"} onClick={() => setMode("diagnostic")}>
+              <button className={mode === "diagnostic" ? "mockModeCard activeMockMode" : "mockModeCard"} aria-pressed={mode === "diagnostic"} onClick={() => setMode("diagnostic")}>
                 <strong>Starting Diagnostic</strong>
                 <span>40 questions · 24 minutes · 10 per subject · 3 Easy / 5 Medium / 2 Hard in each</span>
                 <small>Find your initial learning gaps. This does not certify overall readiness.</small>
               </button>
             )}
-            <button className={mode === "sectional" ? "mockModeCard activeMockMode" : "mockModeCard"} onClick={() => setMode("sectional")}>
+            <button className={mode === "sectional" ? "mockModeCard activeMockMode" : "mockModeCard"} aria-pressed={mode === "sectional"} onClick={() => setMode("sectional")}>
               <strong>Section Test</strong>
               <span>25 questions • 15 minutes • one SSC section</span>
             </button>
-            <button className={mode === "full" ? "mockModeCard activeMockMode" : "mockModeCard"} onClick={() => setMode("full")}>
+            <button className={mode === "full" ? "mockModeCard activeMockMode" : "mockModeCard"} aria-pressed={mode === "full"} onClick={() => setMode("full")}>
               <strong>Full Tier-I Simulation</strong>
               <span>100 questions • 60 minutes • 25Q × 4 • strict 15-minute sectional timers • +2 / −0.50</span>
             </button>
             {topicId && (
-              <button className={mode === "topic" ? "mockModeCard activeMockMode" : "mockModeCard"} onClick={() => setMode("topic")}>
+              <button className={mode === "topic" ? "mockModeCard activeMockMode" : "mockModeCard"} aria-pressed={mode === "topic"} onClick={() => setMode("topic")}>
                 <strong>{topicName || "Topic Test"}</strong>
                 <span>Up to 20 questions • 20 minutes • focused assessment</span>
               </button>
@@ -715,7 +719,7 @@ export default function MockPage() {
         <div>
           <strong>SSC CGL Tier I</strong>
           <span>
-            {mode === "full" ? "Full Tier-I Simulation" : mode === "sectional" ? "Section Test" : mode === "topic" ? "Topic Test" : "Quick Sprint"} • {savingAnswer ? "Saving answer..." : "Answers saved"}
+            {mode === "full" ? "Full Tier-I Simulation" : mode === "sectional" ? "Section Test" : mode === "topic" ? "Topic Test" : mode === "diagnostic" ? "Starting Diagnostic" : "Quick Sprint"} • {savingAnswer ? "Saving answer..." : "Answers saved"}
           </span>
         </div>
         {mode === "full" ? (
@@ -816,7 +820,18 @@ export default function MockPage() {
           {error && <p className="errorText">{error}</p>}
         </article>
 
-        <aside className="examPalette">
+        <aside className="examPalette" aria-label="Question navigation">
+          <button
+            type="button"
+            className="paletteToggle"
+            aria-expanded={paletteOpen}
+            aria-controls="exam-palette-content"
+            onClick={() => setPaletteOpen((open) => !open)}
+          >
+            <span>Questions · {answeredCount}/{visiblePalette.length} answered</span>
+            <strong>{paletteOpen ? "Hide numbers −" : "Show numbers +"}</strong>
+          </button>
+          <div id="exam-palette-content" className={paletteOpen ? "paletteContent paletteContentOpen" : "paletteContent"}>
           <div className="paletteLegend">
             <span><i className="legendDot answeredDot" /> Answered</span>
             <span><i className="legendDot reviewDot" /> Review</span>
@@ -832,7 +847,15 @@ export default function MockPage() {
                 answer?.marked_for_review ? "paletteReview" : "",
               ].filter(Boolean).join(" ");
               return (
-                <button className={classNames} key={item.question.id} disabled={savingAnswer || busy} onClick={() => void goTo(index)}>
+                <button
+                  className={classNames}
+                  key={item.question.id}
+                  type="button"
+                  disabled={savingAnswer || busy}
+                  onClick={() => void goTo(index)}
+                  aria-current={index === currentIndex ? "step" : undefined}
+                  aria-label={`Question ${mode === "full" ? localIndex + 1 : index + 1}: ${answer?.selected_option != null ? "answered" : "not answered"}${answer?.marked_for_review ? ", marked for review" : ""}`}
+                >
                   {mode === "full" ? localIndex + 1 : index + 1}
                 </button>
               );
@@ -846,6 +869,7 @@ export default function MockPage() {
           {mode === "full" && (
             <p className="sectionLockHelp">Only the active 25-question section is available during its 15-minute window.</p>
           )}
+          </div>
         </aside>
       </section>
     </main>
