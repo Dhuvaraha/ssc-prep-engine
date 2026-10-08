@@ -142,12 +142,11 @@ export default function SettingsPage() {
     return <main className="settingsShell"><section className="settingsCard"><p>Loading profile…</p></section></main>;
   }
 
-  const baselinePending = analytics?.coach.evidence_level === "baseline";
-  const readinessLabel = analytics
-    ? baselinePending ? "—" : analytics.overview.readiness + "%"
-    : "—";
-  const masteryLabel = analytics
-    ? baselinePending ? "—" : analytics.overview.mastery + "%"
+  const readinessLabel = analytics?.overview.readiness != null
+    ? analytics.overview.readiness + "%"
+    : "Not assessed";
+  const masteryLabel = analytics?.overview.practice_attempts
+    ? analytics.overview.mastery + "%"
     : "—";
 
   return (
@@ -171,11 +170,11 @@ export default function SettingsPage() {
           <div><span>Streak</span><strong>{analytics?.overview.streak ?? 0}d</strong></div>
           <div><span>Practice</span><strong>{analytics?.overview.practice_attempts ?? 0}</strong></div>
           <div>
-            <span>{baselinePending ? "Readiness baseline" : "Readiness"}</span>
+            <span>{analytics?.overview.readiness == null ? "Exam readiness" : "Provisional readiness"}</span>
             <strong>{readinessLabel}</strong>
           </div>
           <div>
-            <span>{baselinePending ? "Mastery baseline" : "Mastery"}</span>
+            <span>{"Practised-topic mastery"}</span>
             <strong>{masteryLabel}</strong>
           </div>
         </div>

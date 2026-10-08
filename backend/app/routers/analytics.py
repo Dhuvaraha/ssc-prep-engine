@@ -228,13 +228,32 @@ def analytics_summary(
     mock_accuracy = _pct(mock_correct, mock_attempted)
     mock_attempt_rate = _pct(mock_attempted, mock_total)
 
-    readiness = round(
-        0.35 * accuracy
-        + 0.25 * mastery_score
-        + 0.20 * speed_score
-        + 0.20 * mock_accuracy,
-        1,
-    )
+    # Practice signals describe sampled skills, not a whole-exam score.
+    # A Quick Sprint or a sectional test must never unlock a numeric
+    # 100-question SSC Tier-I readiness estimate.
+    full_mocks = [
+        item for item in mocks
+        if item.mode == "full"
+        and item.correct_count + item.incorrect_count + item.unattempted_count >= 100
+        and item.correct_count + item.incorrect_count >= 50
+    ]
+    readiness_source = "full_mock" if full_mocks else "not_assessed"
+    if full_mocks:
+        full_attempted = sum(item.correct_count + item.incorrect_count for item in full_mocks)
+        full_accuracy = _pct(sum(item.correct_count for item in full_mocks), full_attempted)
+        # An actual full mock is a cross-section baseline. Practice/micro-drills
+        # only influence the blended estimate when enough timed evidence exists.
+        readiness = full_accuracy
+        if total_attempts >= 40 and timed_count >= 20 and len(topic_stats) >= 4:
+            readiness = round(
+                0.45 * full_accuracy
+                + 0.25 * accuracy
+                + 0.15 * mastery_score
+                + 0.15 * speed_score,
+                1,
+            )
+    else:
+        readiness = None
 
     avoidable_types = {"calculation", "misread", "guess", "time_pressure"}
     avoidable_errors = sum(count for key, count in mistakes.items() if key in avoidable_types)
@@ -340,8 +359,12 @@ def analytics_summary(
             "evidence_level": evidence_level,
             "headline": "Turn your data into the next marks gain.",
             "summary": (
-                f"Current readiness is {readiness}%. "
-                f"Correcting classified avoidable errors could recover about {potential_gain} marks."
+                (
+                    f"Provisional full-mock readiness is {readiness}%. "
+                    if readiness is not None
+                    else "Full-exam readiness has not been assessed. "
+                )
+                + f"Correcting classified avoidable errors could recover about {potential_gain} marks."
             ),
             "primary_action": {
                 "title": primary_title,
@@ -372,6 +395,8 @@ def analytics_summary(
             "mock_accuracy": mock_accuracy,
             "mock_attempt_rate": mock_attempt_rate,
             "readiness": readiness,
+            "readiness_source": readiness_source,
+            "full_mock_count": len(full_mocks),
             "streak": streak,
         },
         "errors": {
