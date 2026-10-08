@@ -235,6 +235,7 @@ def analytics_summary(
         item for item in mocks
         if item.mode == "full"
         and item.correct_count + item.incorrect_count + item.unattempted_count >= 100
+        and item.correct_count + item.incorrect_count >= 50
     ]
     readiness_source = "full_mock" if full_mocks else "not_assessed"
     if full_mocks:
@@ -243,7 +244,7 @@ def analytics_summary(
         # An actual full mock is a cross-section baseline. Practice/micro-drills
         # only influence the blended estimate when enough timed evidence exists.
         readiness = full_accuracy
-        if total_attempts >= 40 and timed_count >= 20:
+        if total_attempts >= 40 and timed_count >= 20 and len(topic_stats) >= 4:
             readiness = round(
                 0.45 * full_accuracy
                 + 0.25 * accuracy
