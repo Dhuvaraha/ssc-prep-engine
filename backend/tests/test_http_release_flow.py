@@ -87,6 +87,34 @@ def test_http_release_flow_register_plan_mock_review_and_permissions():
         assert preflight.status_code == 200
         assert preflight.headers["access-control-allow-origin"] == "http://localhost:5173"
 
+        # Production Vercel requests must not be blocked even if the Render
+        # CORS_ORIGINS variable still contains only the previous frontend host.
+        for url, method, headers in (
+            ("/api/v1/auth/login", "POST", "content-type"),
+            ("/api/v1/revision/queue", "GET", "authorization"),
+        ):
+            production_preflight = client.options(
+                url,
+                headers={
+                    "Origin": "https://ssc-prep-engine.vercel.app",
+                    "Access-Control-Request-Method": method,
+                    "Access-Control-Request-Headers": headers,
+                },
+            )
+            assert production_preflight.status_code == 200
+            assert production_preflight.headers["access-control-allow-origin"] == (
+                "https://ssc-prep-engine.vercel.app"
+            )
+
+        untrusted_preflight = client.options(
+            "/api/v1/auth/login",
+            headers={
+                "Origin": "https://unrelated.example",
+                "Access-Control-Request-Method": "POST",
+            },
+        )
+        assert untrusted_preflight.status_code == 400
+
         registration = client.post(
             "/api/v1/auth/register",
             json={
