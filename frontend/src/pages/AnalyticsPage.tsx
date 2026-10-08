@@ -45,19 +45,19 @@ export default function AnalyticsPage() {
   }
 
   const errorEntries = Object.entries(data.errors.breakdown);
-  const baselinePending = data.coach.evidence_level === "baseline";
+  const baselinePending = data.overview.readiness === null;
   const established = data.coach.evidence_level === "established";
 
   return (
     <main className="shell">
       <section className="analyticsHero">
         <div>
-          <p className="eyebrow">Exam readiness • {data.coach.evidence_level} evidence</p>
-          <h1>{baselinePending ? "Baseline" : data.overview.readiness + "%"}</h1>
+          <p className="eyebrow">Exam readiness • {baselinePending ? "not assessed" : "provisional full-mock estimate"}</p>
+          <h1>{baselinePending ? "Not assessed" : data.overview.readiness + "%"}</h1>
           <p>
             {baselinePending
-              ? "Readiness is intentionally not treated as a real score until you create practice and timed-test evidence."
-              : "Combined from practice accuracy, topic mastery, speed and mock accuracy. Treat it as provisional until your evidence becomes established."}
+              ? "Practice attempts are useful for topic accuracy, but not enough to estimate readiness for the entire SSC exam. Complete a full 100-question test and answer at least 50 questions to unlock a provisional estimate."
+              : "A provisional estimate from completed full-test evidence; diverse practice adjusts it only after sufficient timed, topic-level evidence."}
           </p>
           <div className="analyticsHeroLinks">
             <Link to={data.coach.primary_action.path}>{data.coach.primary_action.title}</Link>
@@ -66,10 +66,10 @@ export default function AnalyticsPage() {
         </div>
         <div
           className={"readinessRing" + (baselinePending ? " readinessPending" : "")}
-          aria-label={baselinePending ? "Readiness baseline pending" : "Readiness " + data.overview.readiness + "%"}
+          aria-label={baselinePending ? "Full exam readiness not assessed" : "Provisional readiness " + data.overview.readiness + "%"}
         >
           <strong>{baselinePending ? "—" : data.overview.readiness + "%"}</strong>
-          <span>{baselinePending ? "baseline pending" : "ready"}</span>
+          <span>{baselinePending ? "full test needed" : "provisional"}</span>
         </div>
       </section>
 
