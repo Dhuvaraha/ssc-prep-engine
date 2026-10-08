@@ -26,7 +26,7 @@ jobs:
         run: |
           set -euo pipefail
           API="https://ssc-prep-engine-api.onrender.com"
-          WEB="https://ssc-prep-engine-web.onrender.com"
+          WEB="https://ssc-prep-engine.vercel.app"
 
           test "$(curl --retry 4 --retry-delay 5 --max-time 20 -sS -o /tmp/health -w '%{http_code}' "$API/health")" = "200"
           grep -q '"status":"ok"' /tmp/health
@@ -39,6 +39,19 @@ jobs:
 
           code="$(curl --max-time 20 -sS -o /tmp/auth -w '%{http_code}' "$API/api/v1/analytics/summary")"
           test "$code" = "401"
+
+          # The real user-facing frontend is Vercel. Prevent silent production
+          # outages caused by outdated Render CORS_ORIGINS values.
+          for request in "POST /api/v1/auth/login content-type" "GET /api/v1/revision/queue authorization"; do
+            read -r method path header <<< "$request"
+            curl --retry 4 --retry-delay 5 --max-time 20 -sS -D /tmp/cors-headers -o /tmp/cors-body \
+              -X OPTIONS "$API$path" \
+              -H "Origin: $WEB" \
+              -H "Access-Control-Request-Method: $method" \
+              -H "Access-Control-Request-Headers: $header"
+            grep -Eq '^HTTP/[0-9.]+ 200' /tmp/cors-headers
+            grep -iq "^access-control-allow-origin: $WEB" /tmp/cors-headers
+          done
 
       - name: Measure warm learner API latency
         shell: bash
