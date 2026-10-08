@@ -174,6 +174,8 @@ def test_duplicate_start_returns_existing_active_attempt_instead_of_creating_two
         second = start_mock(payload, db=db, user=user)
 
         assert first.attempt_id == second.attempt_id
+        assert first.resumed_existing is False
+        assert second.resumed_existing is True
         active = list(
             db.scalars(
                 select(MockAttempt).where(
