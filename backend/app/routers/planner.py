@@ -9,7 +9,8 @@ from sqlalchemy.orm import Session
 from app.db import get_db
 from app.deps import get_current_user
 from app.models import DailyPlanTask, User
-from app.services.planner import ensure_exam_target, generate_today_plan, rebuild_today_plan
+from app.services.planner import ensure_exam_target, generate_today_plan, rebuild_today_plan, get_active_target
+from app.services.exam_scope import current_exam
 
 router = APIRouter(prefix="/planner", tags=["planner"])
 
@@ -101,6 +102,8 @@ def set_planner_config(
     user: User = Depends(get_current_user),
 ):
     try:
+        if payload.exam_slug != current_exam(db, user_id=user.id).slug:
+            raise ValueError("Select this exam stage before configuring its study plan")
         target = ensure_exam_target(
             db,
             user_id=user.id,
@@ -146,7 +149,8 @@ def update_task(
     user: User = Depends(get_current_user),
 ):
     task = db.get(DailyPlanTask, task_id)
-    if not task or task.user_id != user.id:
+    target = get_active_target(db, user_id=user.id)
+    if not task or task.user_id != user.id or not target or target.exam_id != current_exam(db, user_id=user.id).id:
         raise HTTPException(status_code=404, detail="Plan task not found")
     task.status = "completed" if completed else "pending"
     db.commit()
