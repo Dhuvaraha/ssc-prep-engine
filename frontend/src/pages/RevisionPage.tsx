@@ -36,6 +36,7 @@ export default function RevisionPage() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [index, setIndex] = useState(0);
   const [error, setError] = useState("");
+  const [loadError, setLoadError] = useState("");
   const [loading, setLoading] = useState(true);
   const [grading, setGrading] = useState(false);
   const gradingRef = useRef(false);
@@ -49,12 +50,13 @@ export default function RevisionPage() {
     let cancelled = false;
     setLoading(true);
     setError("");
+    setLoadError("");
     setIndex(0);
     setShowAnswer(false);
 
     const fail = () => {
       if (!cancelled) {
-        setError("Could not load revision data. Check your connection and try again.");
+        setLoadError("Could not load revision data. Check your connection and try again.");
         setLoading(false);
       }
     };
@@ -160,9 +162,10 @@ export default function RevisionPage() {
           Loading {tab === "due" ? "due questions" : tab === "flashcards" ? "flashcards" : "bookmarks"}…
         </section>
       )}
+      {!loading && loadError && <section className="emptyCard" role="alert">{loadError}</section>}
       {!loading && error && <section className="emptyCard" role="alert">{error}</section>}
 
-      {!loading && !error && tab === "due" && !dueItem && (
+      {!loading && !loadError && tab === "due" && !dueItem && (
         <section className="revisionEmpty">
           <p className="eyebrow">Queue clear</p>
           <h1>No revision due right now.</h1>
@@ -171,7 +174,7 @@ export default function RevisionPage() {
         </section>
       )}
 
-      {!loading && !error && tab === "due" && dueItem && (
+      {!loading && !loadError && tab === "due" && dueItem && (
         <section className="revisionCard">
           <div className="revisionMeta">
             <span>{dueItem.reason.replaceAll("_", " ")}</span>
@@ -208,7 +211,7 @@ export default function RevisionPage() {
         </section>
       )}
 
-      {!loading && !error && tab === "flashcards" && !card && (
+      {!loading && !loadError && tab === "flashcards" && !card && (
         <section className="revisionEmpty">
           <p className="eyebrow">Flashcards clear</p>
           <h1>No cards due right now.</h1>
@@ -216,7 +219,7 @@ export default function RevisionPage() {
         </section>
       )}
 
-      {!loading && !error && tab === "flashcards" && card && (
+      {!loading && !loadError && tab === "flashcards" && card && (
         <section className="flashcardShell">
           <div className="revisionMeta">
             <span>{card.card_type}</span>
@@ -243,7 +246,7 @@ export default function RevisionPage() {
         </section>
       )}
 
-      {!loading && !error && tab === "bookmarks" && !bookmark && (
+      {!loading && !loadError && tab === "bookmarks" && !bookmark && (
         <section className="revisionEmpty">
           <p className="eyebrow">Bookmarks</p>
           <h1>No bookmarked questions yet.</h1>
@@ -251,7 +254,7 @@ export default function RevisionPage() {
         </section>
       )}
 
-      {!loading && !error && tab === "bookmarks" && bookmark && (
+      {!loading && !loadError && tab === "bookmarks" && bookmark && (
         <section className="revisionCard">
           <div className="revisionMeta">
             <span>Bookmarked</span>
