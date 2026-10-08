@@ -14,10 +14,13 @@ from app.models import (
     FlashcardProgress,
     Question,
     RevisionItem,
+    Subject,
+    Topic,
     User,
 )
 
 from app.services.planner import days_until_active_exam
+from app.services.exam_scope import current_exam
 
 
 router = APIRouter(prefix="/revision", tags=["revision"])
@@ -31,9 +34,12 @@ def get_revision_queue(
     user: User = Depends(get_current_user),
 ):
     now = datetime.now(timezone.utc).replace(tzinfo=None)
+    exam = current_exam(db, user_id=user.id)
     stmt = (
         select(RevisionItem)
+        .join(Question, Question.id == RevisionItem.question_id)
         .where(
+            Question.exam_id == exam.id,
             RevisionItem.user_id == user.id,
             RevisionItem.is_active.is_(True),
             RevisionItem.next_review_at <= now,
@@ -94,7 +100,7 @@ def add_question_to_revision(
     user: User = Depends(get_current_user),
 ):
     question = db.get(Question, question_id)
-    if not question or question.verification_status != "verified":
+    if not question or question.exam_id != current_exam(db, user_id=user.id).id or question.verification_status != "verified":
         raise HTTPException(status_code=404, detail="Verified question not found")
 
     existing = db.scalar(
@@ -128,7 +134,9 @@ def review_revision_item(
     user: User = Depends(get_current_user),
 ):
     item = db.get(RevisionItem, item_id)
-    if not item or item.user_id != user.id or not item.is_active:
+    exam = current_exam(db, user_id=user.id)
+    question = db.get(Question, item.question_id) if item else None
+    if not item or item.user_id != user.id or not item.is_active or not question or question.exam_id != exam.id:
         raise HTTPException(status_code=404, detail="Revision item not found")
 
     today = current_study_date()
@@ -163,7 +171,7 @@ def toggle_bookmark(
     user: User = Depends(get_current_user),
 ):
     question = db.get(Question, question_id)
-    if not question:
+    if not question or question.exam_id != current_exam(db, user_id=user.id).id:
         raise HTTPException(status_code=404, detail="Question not found")
 
     existing = db.scalar(
@@ -187,10 +195,12 @@ def list_bookmarks(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
+    exam = current_exam(db, user_id=user.id)
     rows = list(
         db.scalars(
             select(Bookmark)
-            .where(Bookmark.user_id == user.id)
+            .join(Question, Question.id == Bookmark.question_id)
+            .where(Bookmark.user_id == user.id, Question.exam_id == exam.id)
             .order_by(Bookmark.created_at.desc())
         )
     )
@@ -239,6 +249,10 @@ def due_flashcards(
     user: User = Depends(get_current_user),
 ):
     now = datetime.now(timezone.utc).replace(tzinfo=None)
+    exam = current_exam(db, user_id=user.id)
+    exam_topics = select(Topic.id).join(Subject, Subject.id == Topic.subject_id).where(
+        Subject.exam_id == exam.id
+    )
     # Ask Postgres for due cards in one query instead of fetching every card
     # and issuing a progress lookup for every card in the bank.
     cards_with_progress = db.execute(
@@ -252,6 +266,7 @@ def due_flashcards(
         )
         .where(
             Flashcard.is_published.is_(True),
+            Flashcard.topic_id.in_(exam_topics),
             or_(
                 FlashcardProgress.id.is_(None),
                 FlashcardProgress.next_review_at <= now,
@@ -287,7 +302,13 @@ def review_flashcard(
     user: User = Depends(get_current_user),
 ):
     card = db.get(Flashcard, flashcard_id)
-    if not card or not card.is_published:
+    exam = current_exam(db, user_id=user.id)
+    allowed_topic = db.scalar(
+        select(Topic.id)
+        .join(Subject, Subject.id == Topic.subject_id)
+        .where(Topic.id == card.topic_id, Subject.exam_id == exam.id)
+    ) if card and card.topic_id else None
+    if not card or not card.is_published or allowed_topic is None:
         raise HTTPException(status_code=404, detail="Flashcard not found")
 
     progress = db.scalar(
