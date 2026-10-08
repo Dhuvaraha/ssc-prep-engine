@@ -96,9 +96,22 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Production Vercel aliases are part of the released frontend contract.
+# Merge them with configured CORS_ORIGINS; never replace operator-set origins
+# or allow arbitrary *.vercel.app sites to make credentialed requests.
+PUBLIC_FRONTEND_ORIGINS = {
+    "https://ssc-prep-engine.vercel.app",
+    "https://ssc-prep-engine-tracli-q.vercel.app",
+    "https://ssc-prep-engine-git-main-tracli-q.vercel.app",
+}
+allowed_origins = sorted(
+    PUBLIC_FRONTEND_ORIGINS
+    | {origin.strip().rstrip("/") for origin in settings.cors_origins.split(",") if origin.strip()}
+)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
