@@ -110,6 +110,7 @@ export default function GlobalNav() {
           <span>/</span>
           <b>{title}</b>
         </div>
+        <Link className="contextExamSwitcher" to="/exams" aria-label="Choose examination">Exams ↗</Link>
       </header>
 
       <nav className="mobileBottomNav" aria-label="Mobile navigation">
