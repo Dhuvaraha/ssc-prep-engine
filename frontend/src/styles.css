@@ -4500,3 +4500,61 @@ body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
 @media (max-width: 760px) {
   .topicCardActions .primaryMiniLink { min-height: 44px; }
 }
+
+/* Teacher V3 foundation — a single calm interactive checkpoint instead of
+   another stack of decorative lesson cards. */
+.teacherGuidedCheck {
+  --check-ink: #243249;
+  --check-muted: #53627a;
+  --check-edge: #dbe3ec;
+  border: 1px solid var(--check-edge);
+  background: #fff;
+  padding: clamp(16px, 2.8vw, 26px);
+  border-radius: 16px;
+  color: var(--check-ink);
+  margin: 14px 0 22px;
+}
+.teacherGuidedHeader { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+.teacherGuidedHeader h3 { margin: 0 0 8px; font-size: clamp(19px, 2.5vw, 24px); line-height: 1.25; letter-spacing: -.02em; }
+.teacherGuidedHeader p:not(.eyebrow) { margin: 0; color: var(--check-muted); line-height: 1.55; }
+.teacherGuidedDifficulty { border: 1px solid var(--check-edge); color: var(--check-muted); padding: 5px 9px; font-size: 12px; border-radius: 8px; white-space: nowrap; }
+.teacherGuidedQuestion { margin: 20px 0; font-size: 17px; font-weight: 650; line-height: 1.6; }
+.teacherGuidedQuestion p { margin: 0 0 10px; }
+.teacherGuidedOptions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.teacherGuidedOption {
+  display: flex; gap: 10px; align-items: center; text-align: left; color: var(--check-ink);
+  background: #fff; border: 1px solid var(--check-edge); border-radius: 10px;
+  padding: 13px 15px; min-height: 48px; font-weight: 500; overflow-wrap: anywhere;
+}
+.teacherGuidedOption > span:first-child {
+  display: inline-grid; place-items: center; min-width: 24px; height: 24px;
+  background: #eff3f7; border-radius: 6px; font-weight: 750; flex-shrink: 0;
+}
+.teacherGuidedOption:not(:disabled):hover { border-color: #8197b4; background: #f8fafc; }
+.teacherGuidedOption.teacherGuidedSelected { border: 2px solid #315a8e; padding: 12px 14px; background: #f1f6fc; }
+.teacherGuidedOption.teacherGuidedCorrect { border-color: #2c7958; background: #edf8f2; }
+.teacherGuidedOption.teacherGuidedIncorrect { border-color: #ab5b56; background: #fcf3f2; }
+.teacherGuidedOption:disabled { opacity: 1; cursor: default; }
+.teacherGuidedActions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.teacherGuidedActions button, .teacherGuidedActions .primaryLink { font-size: 13px; min-height: 42px; }
+.teacherGuidedTextAction { background: transparent; color: #315a8e; padding: 11px 6px; font-weight: 700; }
+.teacherGuidedHint { margin: 14px 0 0; padding: 12px; background: #f2f6fa; border-left: 3px solid #8197b4; border-radius: 0 9px 9px 0; line-height: 1.55; }
+.teacherGuidedRevealWarning { margin: 14px 0 0; padding: 14px; background: #f8fafc; border-radius: 10px; }
+.teacherGuidedRevealWarning p { color: var(--check-muted); margin: 0 0 12px; }
+.teacherGuidedRevealWarning button { margin: 0 8px 8px 0; font-size: 13px; }
+.teacherGuidedFeedback { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--check-edge); line-height: 1.7; }
+.teacherGuidedFeedback > strong { font-size: 16px; }
+.teacherGuidedFeedback p { margin: 10px 0; white-space: pre-wrap; }
+.teacherGuidedFeedback details { border-left: 3px solid #39764d; padding-left: 12px; }
+.teacherGuidedFeedback summary { cursor: pointer; font-weight: 700; }
+.teacherGuidedCaveat { display: block; color: var(--check-muted); margin-top: 12px; line-height: 1.45; }
+.teacherMoreExamples { margin-top: 14px; border-top: 1px solid #dbe3ec; padding-top: 14px; }
+.teacherMoreExamples summary { font-size: 14px; color: #315a8e; font-weight: 750; cursor: pointer; }
+.teacherMoreExamplesList { margin-top: 12px; display: grid; gap: 16px; }
+.teacherGuidedOption:focus-visible, .teacherGuidedActions :is(button,a):focus-visible { outline: 3px solid #739ad1; outline-offset: 3px; }
+@media (max-width: 650px) {
+  .teacherGuidedHeader { flex-direction: column; }
+  .teacherGuidedOptions { grid-template-columns: minmax(0,1fr); }
+  .teacherGuidedActions { align-items: stretch; }
+  .teacherGuidedActions button, .teacherGuidedActions .primaryLink { min-height: 44px; }
+}
