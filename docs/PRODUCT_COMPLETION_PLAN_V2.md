@@ -1,3 +1,7 @@
+> **2026 Phase 7 update:** The active post-launch improvement roadmap is
+> [Phase 7 — Learning Intelligence, Teacher V3, Option Knowledge & UI Quality](PHASE7_LEARNING_INTELLIGENCE_MASTER_PLAN.md).
+> This v2 document remains the historical original product scope. The Phase 7 master plan supersedes its earlier generic Phase 7 description; it explicitly covers evidence-valid readiness, sampled diagnostic, grounded teaching, verified option insights, and the complete UI design-system cleanup.
+>
 # SSC Prep Engine — Product Completion Plan v2
 
 ## Why v2 exists
