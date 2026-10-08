@@ -45,6 +45,7 @@ export default function MockPage() {
   const [subject, setSubject] = useState("reasoning");
   const [attemptId, setAttemptId] = useState<number | null>(null);
   const [resumeInfo, setResumeInfo] = useState<ActiveMock | null>(null);
+  const [checkingActive, setCheckingActive] = useState(true);
   const [questions, setQuestions] = useState<MockQuestion[]>([]);
   const [answers, setAnswers] = useState<Record<number, LocalAnswer>>({});
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -76,9 +77,15 @@ export default function MockPage() {
       navigate("/login");
       return;
     }
+    let cancelled = false;
+    setCheckingActive(true);
     fetchActiveMock()
-      .then((data) => setResumeInfo(data.attempt_id ? data : null))
-      .catch(() => undefined);
+      .then((data) => { if (!cancelled) setResumeInfo(data.attempt_id ? data : null); })
+      .catch(() => {
+        if (!cancelled) setError("Could not check for an in-progress test. Starting again will still protect your saved attempt.");
+      })
+      .finally(() => { if (!cancelled) setCheckingActive(false); });
+    return () => { cancelled = true; };
   }, [navigate]);
 
   useEffect(() => {
@@ -228,6 +235,10 @@ export default function MockPage() {
   }
 
   async function begin() {
+    if (checkingActive) {
+      setError("Checking your saved test. Please wait a moment.");
+      return;
+    }
     if (resumeInfo?.attempt_id) {
       setError("Resume or discard the in-progress test before starting another.");
       return;
@@ -242,6 +253,14 @@ export default function MockPage() {
         mode === "sectional" ? subject : undefined,
         mode === "topic" ? topicId : undefined,
       );
+      if (data.resumed_existing) {
+        // Another tab or a delayed active-attempt check can race with Start.
+        // Never initialise an existing attempt as a fresh zero-answer test.
+        const current = await fetchActiveMock().catch(() => null);
+        setResumeInfo(current?.attempt_id ? current : {attempt_id: data.attempt_id, mode: data.mode});
+        setError("An in-progress test already exists. Resume it to restore your saved answers and timer.");
+        return;
+      }
       setAttemptId(data.attempt_id);
       setQuestions(data.questions);
       setAnswers({});
@@ -644,8 +663,8 @@ export default function MockPage() {
           )}
 
           {error && <p className="errorText">{error}</p>}
-          <button className="mockStartButton" onClick={() => void begin()} disabled={busy || Boolean(resumeInfo?.attempt_id)}>
-            {busy ? "Preparing..." : resumeInfo?.attempt_id ? "Resume or discard current test first" : "Start test"}
+          <button className="mockStartButton" onClick={() => void begin()} disabled={busy || checkingActive || Boolean(resumeInfo?.attempt_id)}>
+            {checkingActive ? "Checking saved tests..." : busy ? "Preparing..." : resumeInfo?.attempt_id ? "Resume or discard current test first" : "Start test"}
           </button>
         </section>
       </main>
