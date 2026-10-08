@@ -110,7 +110,9 @@ export default function GlobalNav() {
           <span>/</span>
           <b>{title}</b>
         </div>
-        <Link className="contextExamSwitcher" to="/exams" aria-label="Choose examination">Exams ↗</Link>
+        <Link className="contextExamSwitcher" to={location.pathname === "/exams" ? "/" : "/exams"} aria-label={location.pathname === "/exams" ? "Return to current exam" : "Choose examination"}>
+          {location.pathname === "/exams" ? "Current course ↗" : "Exams ↗"}
+        </Link>
       </header>
 
       <nav className="mobileBottomNav" aria-label="Mobile navigation">
