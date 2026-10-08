@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import select
+from sqlalchemy import and_, or_, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.core.study_time import current_study_date
@@ -45,13 +45,18 @@ def get_revision_queue(
         stmt = stmt.where(RevisionItem.reason == reason)
 
     items = list(db.scalars(stmt))
-    result = []
-    for item in items:
-        question = db.scalar(
+    question_ids = {item.question_id for item in items}
+    questions = {
+        question.id: question
+        for question in db.scalars(
             select(Question)
             .options(selectinload(Question.options))
-            .where(Question.id == item.question_id)
-        )
+            .where(Question.id.in_(question_ids))
+        ).unique()
+    } if question_ids else {}
+    result = []
+    for item in items:
+        question = questions.get(item.question_id)
         if not question:
             continue
         result.append(
@@ -189,13 +194,18 @@ def list_bookmarks(
             .order_by(Bookmark.created_at.desc())
         )
     )
-    result = []
-    for row in rows:
-        question = db.scalar(
+    question_ids = {row.question_id for row in rows}
+    questions = {
+        question.id: question
+        for question in db.scalars(
             select(Question)
             .options(selectinload(Question.options))
-            .where(Question.id == row.question_id)
-        )
+            .where(Question.id.in_(question_ids))
+        ).unique()
+    } if question_ids else {}
+    result = []
+    for row in rows:
+        question = questions.get(row.question_id)
         if not question:
             continue
         result.append(
@@ -229,24 +239,30 @@ def due_flashcards(
     user: User = Depends(get_current_user),
 ):
     now = datetime.now(timezone.utc).replace(tzinfo=None)
-    cards = list(
-        db.scalars(
-            select(Flashcard)
-            .where(Flashcard.is_published.is_(True))
-            .order_by(Flashcard.id)
+    # Ask Postgres for due cards in one query instead of fetching every card
+    # and issuing a progress lookup for every card in the bank.
+    cards_with_progress = db.execute(
+        select(Flashcard, FlashcardProgress)
+        .outerjoin(
+            FlashcardProgress,
+            and_(
+                FlashcardProgress.flashcard_id == Flashcard.id,
+                FlashcardProgress.user_id == user.id,
+            ),
         )
-    )
+        .where(
+            Flashcard.is_published.is_(True),
+            or_(
+                FlashcardProgress.id.is_(None),
+                FlashcardProgress.next_review_at <= now,
+            ),
+        )
+        .order_by(Flashcard.id)
+        .limit(limit)
+    ).all()
 
     due = []
-    for card in cards:
-        progress = db.scalar(
-            select(FlashcardProgress).where(
-                FlashcardProgress.user_id == user.id,
-                FlashcardProgress.flashcard_id == card.id,
-            )
-        )
-        if progress and progress.next_review_at > now:
-            continue
+    for card, progress in cards_with_progress:
         due.append(
             {
                 "id": card.id,
