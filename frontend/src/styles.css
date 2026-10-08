@@ -4558,3 +4558,13 @@ body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
   .teacherGuidedActions { align-items: stretch; }
   .teacherGuidedActions button, .teacherGuidedActions .primaryLink { min-height: 44px; }
 }
+
+/* Reviewed option knowledge: optional teaching detail, no dense extra cards. */
+.optionKnowledgeExplorer { margin: 10px 0 2px; padding-top: 10px; border-top: 1px solid #dfe6ed; }
+.optionKnowledgeExplorer summary { cursor: pointer; font-size: 13px; font-weight: 750; color: #315a8e; line-height: 1.5; }
+.optionKnowledgeExplorer > p { margin: 10px 0; color: #25354a; line-height: 1.65; white-space: pre-wrap; }
+.optionKnowledgeExplorer small { display: block; margin-top: 10px; color: #66768a; line-height: 1.45; overflow-wrap: anywhere; }
+.optionKnowledgeQuestion { border-left: 3px solid #668eb5; background: #f5f8fb; padding: 11px 14px; margin: 12px 0; border-radius: 0 9px 9px 0; }
+.optionKnowledgeQuestion strong { font-size: 13px; }
+.optionKnowledgeQuestion p { margin: 6px 0; color: #263449; line-height: 1.55; }
+.optionKnowledgeExplorer summary:focus-visible { outline: 3px solid #739ad1; outline-offset: 3px; }

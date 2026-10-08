@@ -16,6 +16,7 @@ from app.services.planner import days_until_active_exam
 from app.services.exam_scope import current_exam
 from app.services.learning_path import get_topic_learning_path
 from app.services.practice_coach import build_question_coaching
+from app.services.option_insights import published_option_insights
 from app.services.practice_selector import select_practice_questions
 
 router = APIRouter(prefix="/practice", tags=["practice"])
@@ -171,6 +172,9 @@ def submit_practice(
         revision_scheduled = True
 
     coaching = build_question_coaching(db, question)
+    # Insight context is returned only after the verified answer has been
+    # submitted, never in /practice/questions or live mock payloads.
+    option_insights = published_option_insights(db, question=question)
     db.commit()
 
     return PracticeResult(
@@ -182,6 +186,7 @@ def submit_practice(
         mastery_score=mastery_score,
         revision_scheduled=revision_scheduled,
         coaching=coaching,
+        option_insights=option_insights,
     )
 
 

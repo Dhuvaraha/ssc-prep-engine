@@ -117,6 +117,16 @@ class PracticeCoaching(BaseModel):
     archetype_exact: bool = False
 
 
+class OptionInsightOut(BaseModel):
+    position: int
+    insight_type: str
+    knowledge_text: str
+    related_question: str | None = None
+    related_answer: str | None = None
+    source_reference: str
+    source_year: int | None = None
+
+
 class PracticeResult(BaseModel):
     attempt_id: int
     correct: bool
@@ -126,6 +136,7 @@ class PracticeResult(BaseModel):
     mastery_score: float | None = None
     revision_scheduled: bool = False
     coaching: PracticeCoaching | None = None
+    option_insights: list[OptionInsightOut] = Field(default_factory=list)
 
 
 class LessonOut(BaseModel):

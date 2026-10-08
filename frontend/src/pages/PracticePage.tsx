@@ -576,16 +576,33 @@ export default function PracticePage() {
                     const text = option.text ?? "Image option";
                     const isCorrect = option.position === result.correct_option;
                     const wasSelected = option.position === selected;
+                    const insight = result.option_insights?.find(item => item.position === option.position);
                     return (
                       <div className={isCorrect ? "optionAuditCorrect" : "optionAuditWrong"} key={option.position}>
                         <strong>{label}. {text}</strong>
                         <p>
                           {isCorrect
                             ? "Verified correct answer. It is the option reached by the worked solution above."
-                            : wasSelected
-                              ? "Your selected distractor. It does not match the verified result; compare the worked solution above with the step that led you here."
-                              : "Distractor. The verified worked solution resolves to " + (correctLabel ?? "the marked correct option") + ", not this choice."}
+                            : insight
+                              ? "Not the answer here. There is an independently reviewed learning note for this option."
+                              : wasSelected
+                                ? "Your selected option is not correct here. Compare your reasoning with the verified worked solution above."
+                                : "Not correct for this question. No separate verified fact is published for this option yet."}
                         </p>
+                        {insight && !isCorrect && (
+                          <details className="optionKnowledgeExplorer">
+                            <summary>Learn this option · {insight.insight_type}</summary>
+                            <p>{insight.knowledge_text}</p>
+                            {insight.related_question && insight.related_answer && (
+                              <div className="optionKnowledgeQuestion">
+                                <strong>Where this could be the answer</strong>
+                                <p>{insight.related_question}</p>
+                                <p><strong>Answer:</strong> {insight.related_answer}</p>
+                              </div>
+                            )}
+                            <small>Reviewed source: {insight.source_reference}{insight.source_year ? " · " + insight.source_year : ""}</small>
+                          </details>
+                        )}
                       </div>
                     );
                   })}
