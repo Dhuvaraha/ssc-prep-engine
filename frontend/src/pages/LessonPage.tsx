@@ -342,8 +342,8 @@ export default function LessonPage() {
 
           <section className="lessonProgressHeader">
             <div>
-              <span>Lesson progress</span>
-              <strong>{progress}%</strong>
+              <span>Lesson navigation · not mastery</span>
+              <strong>Step {activeStageIndex + 1} of {stages.length}</strong>
             </div>
             <div className="lessonProgressTrack">
               <span style={{width: progress + "%"}} />
@@ -520,7 +520,9 @@ export default function LessonPage() {
                 fastMethod={shortcuts[0]}
                 commonTrap={traps[0]}
                 standardMethod={methods[0] ?? pkg.archetypes[0]?.canonical_method}
-                examples={examples}
+                examples={activeStage.id === "examples" ? examples.filter(
+                  (item) => !solvedExamples.some((example) => item.startsWith(example.question_text))
+                ) : examples}
                 defaultOpen
                 lead={teacherLead}
                 hintSteps={teacherHints}
@@ -627,7 +629,7 @@ export default function LessonPage() {
 
           <section className="lessonFinishCard">
             <div>
-              <p className="eyebrow">Lesson complete</p>
+              <p className="eyebrow">After reading · check understanding</p>
               <h2>Do not stop at reading.</h2>
               <p>Reading alone is not proof of mastery. Take a quick check, then practise along the Learning Path from Foundation to Challenge.</p>
             </div>
