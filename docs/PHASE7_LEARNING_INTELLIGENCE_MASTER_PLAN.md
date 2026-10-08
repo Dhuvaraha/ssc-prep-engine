@@ -1,3 +1,6 @@
+> **Platform scope extension — 2026 CGL Tier I/II and JE Paper I/II:**
+> Read [Phase 7 Multi-exam Architecture & Rollout](PHASE7_MULTI_EXAM_ARCHITECTURE_ROADMAP.md) before implementing any PR. This adds official 2026 syllabus-gap remediation, a true exam-stage selector, isolated analytics/planner/mocks, CGL Tier II including Computer Knowledge + DEST, and JE Telecom Part G Paper I/II. The original 40Q/24m diagnostic blueprint below applies to **CGL Tier I only**, not every stage. Multi-exam foundations are first, while the Teacher V3, 4-option learning and UI quality objectives below remain mandatory.
+>
 # Phase 7 — Learning Intelligence, Teacher V3, Option Knowledge & UI Quality
 Status: PLANNED — implementation not started by this document.
 Scope: SSC CGL Tier I; preserve existing FastAPI/React/Vite/PostgreSQL systems and all learner data.
