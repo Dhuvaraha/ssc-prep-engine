@@ -60,6 +60,8 @@ export default function MockPage() {
   const [review, setReview] = useState<MockReview | null>(null);
   const questionOpenedAt = useRef(Date.now());
   const boundarySyncing = useRef(false);
+  const pendingAnswerSave = useRef<Promise<void> | null>(null);
+  const [savingAnswer, setSavingAnswer] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -335,20 +337,38 @@ export default function MockPage() {
 
   async function persistPatch(partial: Partial<LocalAnswer> = {}, extraTime = true) {
     if (!attemptId || !current) return;
+    if (pendingAnswerSave.current) {
+      throw new Error("Your previous answer is still saving. Please try again.");
+    }
+    const questionId = current.question.id;
     const previous = localForCurrent();
     const next = {
       ...previous,
       ...partial,
       time_seconds: previous.time_seconds + (extraTime ? elapsedForCurrent() : 0),
     };
-    await saveMockResponse(attemptId, {
-      question_id: current.question.id,
+    // A question is visually selected immediately, but navigation and further
+    // edits are disabled until the backend acknowledges the save.
+    setAnswers((state) => ({...state, [questionId]: next}));
+    const pending = saveMockResponse(attemptId, {
+      question_id: questionId,
       selected_option: next.selected_option,
       marked_for_review: next.marked_for_review,
       time_seconds: next.time_seconds,
     });
-    setAnswers((state) => ({...state, [current.question.id]: next}));
-    questionOpenedAt.current = Date.now();
+    pendingAnswerSave.current = pending;
+    setSavingAnswer(true);
+    try {
+      await pending;
+      questionOpenedAt.current = Date.now();
+    } catch (error) {
+      // Do not keep displaying an unsaved choice as if it persisted.
+      setAnswers((state) => ({...state, [questionId]: previous}));
+      throw error;
+    } finally {
+      pendingAnswerSave.current = null;
+      setSavingAnswer(false);
+    }
   }
 
   async function goTo(index: number) {
@@ -419,7 +439,13 @@ export default function MockPage() {
     setBusy(true);
     setError("");
     try {
-      if (current) {
+      if (pendingAnswerSave.current) {
+        try {
+          await pendingAnswerSave.current;
+        } catch (err) {
+          if (!force) throw err;
+        }
+      } else if (current) {
         try {
           await persistPatch();
         } catch (err) {
@@ -637,7 +663,7 @@ export default function MockPage() {
         <div>
           <strong>SSC CGL Tier I</strong>
           <span>
-            {mode === "full" ? "Full Tier-I Simulation" : mode === "sectional" ? "Section Test" : mode === "topic" ? "Topic Test" : "Quick Sprint"} • autosaved
+            {mode === "full" ? "Full Tier-I Simulation" : mode === "sectional" ? "Section Test" : mode === "topic" ? "Topic Test" : "Quick Sprint"} • {savingAnswer ? "Saving answer..." : "Answers saved"}
           </span>
         </div>
         {mode === "full" ? (
@@ -656,7 +682,7 @@ export default function MockPage() {
         <button
           className="finishButton"
           onClick={() => void finishMock(false)}
-          disabled={busy || !canSubmitFull}
+          disabled={busy || savingAnswer || !canSubmitFull}
           title={!canSubmitFull ? "Available in the final 15-minute section" : undefined}
         >
           {mode === "full" && !canSubmitFull ? "Submit in final section" : "Submit test"}
@@ -677,7 +703,7 @@ export default function MockPage() {
                 completed ? "completedSectionTab" : "",
               ].filter(Boolean).join(" ")}
               onClick={() => jumpToSection(slug)}
-              disabled={locked}
+              disabled={locked || savingAnswer}
             >
               {sectionLabels[slug] ?? slug}
               {mode === "full" && locked ? completed ? " ✓" : " 🔒" : ""}
@@ -708,6 +734,7 @@ export default function MockPage() {
               <button
                 key={option.position}
                 className={currentAnswer?.selected_option === option.position ? "practiceOption practiceSelected" : "practiceOption"}
+                disabled={savingAnswer || busy}
                 onClick={() => void chooseOption(option.position)}
               >
                 <strong>{String.fromCharCode(64 + option.position)}</strong>
@@ -718,14 +745,15 @@ export default function MockPage() {
           </div>
 
           <div className="examQuestionActions">
-            <button className="secondary" onClick={() => void chooseOption(null)}>Clear response</button>
+            <button className="secondary" disabled={savingAnswer || busy} onClick={() => void chooseOption(null)}>Clear response</button>
             <button
               className={currentAnswer?.marked_for_review ? "reviewToggle activeReviewToggle" : "reviewToggle"}
+              disabled={savingAnswer || busy}
               onClick={() => void toggleReview()}
             >
               {currentAnswer?.marked_for_review ? "Marked for review" : "Mark for review"}
             </button>
-            <button onClick={() => void saveAndNext()}>
+            <button disabled={savingAnswer || busy} onClick={() => void saveAndNext()}>
               {mode === "full" && currentSectionQuestionNumber === visiblePalette.length
                 ? "Save response"
                 : currentIndex === questions.length - 1
@@ -752,7 +780,7 @@ export default function MockPage() {
                 answer?.marked_for_review ? "paletteReview" : "",
               ].filter(Boolean).join(" ");
               return (
-                <button className={classNames} key={item.question.id} onClick={() => void goTo(index)}>
+                <button className={classNames} key={item.question.id} disabled={savingAnswer || busy} onClick={() => void goTo(index)}>
                   {mode === "full" ? localIndex + 1 : index + 1}
                 </button>
               );
