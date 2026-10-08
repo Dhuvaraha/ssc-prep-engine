@@ -89,7 +89,9 @@ export default function GlobalNav() {
       </aside>
 
       <header className="appContextBar">
-        <button className="contextBack" onClick={() => navigate(-1)} aria-label="Go back">←</button>
+        {location.pathname !== "/" && (
+          <button className="contextBack" onClick={() => navigate(-1)} aria-label="Go back">←</button>
+        )}
         <div>
           <strong>{title}</strong>
           <span>{subtitle}</span>
