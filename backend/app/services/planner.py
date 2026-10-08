@@ -364,6 +364,11 @@ def generate_today_plan(
 
 def rebuild_today_plan(db: Session, *, user_id: int, today: date | None = None):
     today = today or current_study_date()
+    target = get_active_target(db, user_id=user_id)
+    if not target or target.exam_id != current_exam(db, user_id=user_id).id:
+        # Validate BEFORE deleting pending work; an exam switch cannot erase
+        # another stage's current-day plan.
+        raise ValueError("Set an exam target for the selected stage first")
     tasks = list(
         db.scalars(
             select(DailyPlanTask).where(
