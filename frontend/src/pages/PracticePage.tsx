@@ -366,6 +366,9 @@ export default function PracticePage() {
           <div>
             <strong>Step {learningPath.level}/3 — {learningPath.stage}</strong>
             <p>{learningPath.description}</p>
+            {learningPath.content_blocked && (
+              <p role="status">Next level content is still being verified. Your progress is saved.</p>
+            )}
             <small>{learningPath.next_unlock}</small>
           </div>
           <span className="learningPathEvidence">
