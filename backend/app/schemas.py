@@ -190,7 +190,7 @@ class MistakeUpdate(BaseModel):
 
 
 class MockStartRequest(BaseModel):
-    mode: str = Field(pattern="^(mini|full|sectional|topic)$")
+    mode: str = Field(pattern="^(mini|full|sectional|topic|diagnostic)$")
     subject_slug: str | None = None
     topic_id: int | None = None
 

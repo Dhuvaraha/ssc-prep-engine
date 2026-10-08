@@ -514,7 +514,7 @@ export type MockSubmitResult = {
 };
 
 export async function startMock(
-  mode: "mini" | "full" | "sectional" | "topic",
+  mode: "mini" | "full" | "sectional" | "topic" | "diagnostic",
   subject_slug?: string,
   topic_id?: number,
 ): Promise<MockStartResponse> {
@@ -642,6 +642,46 @@ export async function submitMock(attemptId: number): Promise<MockSubmitResult> {
   return response.json();
 }
 
+
+export type DiagnosticProfile = {
+  attempt_id: number;
+  submitted_at: string | null;
+  evidence_label: "limited_sample" | "initial_sample";
+  readiness: null;
+  readiness_label: string;
+  caution: string;
+  sampled_questions: number;
+  attempted_questions: number;
+  correct: number;
+  accuracy: number | null;
+  sampled_topics: number;
+  attempted_topics: number;
+  total_topics: number;
+  subjects: Record<string, {
+    correct: number;
+    incorrect: number;
+    unattempted: number;
+    attempted: number;
+    accuracy: number | null;
+    easy_attempted: number;
+    medium_attempted: number;
+    hard_attempted: number;
+  }>;
+};
+
+export type DiagnosticBaseline = {
+  status: "not_assessed" | "sampled";
+  readiness: null;
+  baseline: DiagnosticProfile | null;
+  latest: DiagnosticProfile | null;
+  completed_diagnostics: number;
+};
+
+export async function fetchDiagnosticBaseline(): Promise<DiagnosticBaseline> {
+  const response = await sessionFetch(API_BASE + "/diagnostics/baseline", {headers: authHeaders()});
+  if (!response.ok) throw new Error("Unable to load the diagnostic starting profile");
+  return response.json();
+}
 
 export type AnalyticsSummary = {
   overview: {

@@ -241,7 +241,13 @@ def create_mock_attempt(
     if not exam:
         raise ValueError("SSC CGL exam is not seeded")
 
-    if mode == "full":
+    if mode == "diagnostic":
+        # Reuse durable mock attempt/answer machinery without sharing the
+        # official full-mock timing, difficulty selection or readiness status.
+        from app.services.diagnostic_engine import DIAGNOSTIC_MINUTES, select_diagnostic_questions
+        plan = []
+        duration = DIAGNOSTIC_MINUTES
+    elif mode == "full":
         plan = [(slug, 25) for slug in SECTION_ORDER]
         duration = 60
     elif mode == "sectional":
@@ -259,7 +265,9 @@ def create_mock_attempt(
         duration = 4
 
     selected: list[tuple[str, Question]] = []
-    if mode == "topic":
+    if mode == "diagnostic":
+        selected = select_diagnostic_questions(db, exam_id=exam.id, user_id=user_id)
+    elif mode == "topic":
         slug, questions = _questions_for_topic(
             db,
             exam_id=exam.id,

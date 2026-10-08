@@ -4568,3 +4568,37 @@ body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
 .optionKnowledgeQuestion strong { font-size: 13px; }
 .optionKnowledgeQuestion p { margin: 6px 0; color: #263449; line-height: 1.55; }
 .optionKnowledgeExplorer summary:focus-visible { outline: 3px solid #739ad1; outline-offset: 3px; }
+
+/* The baseline is a sampled assessment, intentionally not a readiness score. */
+.diagnosticResultNote {
+  border-left: 3px solid #6b88a9;
+  background: #f4f7fa;
+  padding: 13px 16px;
+  border-radius: 0 10px 10px 0;
+  line-height: 1.55;
+  margin: 12px 0 22px;
+}
+.diagnosticResultNote strong { color: #274366; }
+.diagnosticResultNote p { margin: 7px 0 0; }
+.diagnosticSubjectGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+.diagnosticSubjectGrid article {
+  border-top: 1px solid #dbe3eb;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.diagnosticSubjectGrid strong { font-size: 14px; color: #26354b; }
+.diagnosticSubjectGrid span { color: #315a8e; font-weight: 750; }
+.diagnosticSubjectGrid small { color: #617086; line-height: 1.45; }
+@media (max-width: 800px) {
+  .diagnosticSubjectGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 430px) {
+  .diagnosticSubjectGrid { grid-template-columns: 1fr; }
+}

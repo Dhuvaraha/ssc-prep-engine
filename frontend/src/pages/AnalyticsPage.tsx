@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { AnalyticsSummary, fetchAnalyticsSummary } from "../api";
+import { AnalyticsSummary, DiagnosticBaseline, fetchAnalyticsSummary, fetchDiagnosticBaseline } from "../api";
 import { getToken } from "../auth";
 
 export default function AnalyticsPage() {
   const [data, setData] = useState<AnalyticsSummary | null>(null);
+  const [diagnostic, setDiagnostic] = useState<DiagnosticBaseline | null>(null);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -17,6 +18,7 @@ export default function AnalyticsPage() {
     fetchAnalyticsSummary()
       .then(setData)
       .catch(() => setError("Could not load analytics."));
+    fetchDiagnosticBaseline().then(setDiagnostic).catch(() => undefined);
   }, [navigate]);
 
   const maxTrendAttempts = useMemo(
@@ -61,6 +63,7 @@ export default function AnalyticsPage() {
           </p>
           <div className="analyticsHeroLinks">
             <Link to={data.coach.primary_action.path}>{data.coach.primary_action.title}</Link>
+            <Link to="/mocks?mode=diagnostic">Starting diagnostic</Link>
             <Link to="/mocks">Open Mock Lab</Link>
           </div>
         </div>
@@ -71,6 +74,47 @@ export default function AnalyticsPage() {
           <strong>{baselinePending ? "—" : data.overview.readiness + "%"}</strong>
           <span>{baselinePending ? "full test needed" : "provisional"}</span>
         </div>
+      </section>
+
+      <section className="analyticsCard diagnosticEvidenceCard" aria-label="Diagnostic starting profile">
+        <div className="analyticsCardHead">
+          <div>
+            <p className="eyebrow">Diagnostic evidence · Not exam readiness</p>
+            <h2>Your starting point, measured honestly</h2>
+          </div>
+          <Link to="/mocks?mode=diagnostic">
+            {diagnostic?.baseline ? "Take a fresh assessment →" : "Start 40-question diagnostic →"}
+          </Link>
+        </div>
+        {diagnostic?.baseline ? (
+          <>
+            <p className="muted">
+              First baseline: {diagnostic.baseline.attempted_questions}/40 questions attempted ·
+              {diagnostic.baseline.attempted_topics}/{diagnostic.baseline.total_topics} syllabus topics actually tried.
+              {diagnostic.baseline.evidence_label === "limited_sample" ? " Evidence remains limited." : " This is a sampled starting profile."}
+            </p>
+            <div className="diagnosticSubjectGrid">
+              {Object.entries(diagnostic.baseline.subjects).map(([slug, sample]) => (
+                <article key={slug}>
+                  <strong>{({"general-awareness": "General Awareness", quant: "Quant", reasoning: "Reasoning", english: "English"} as Record<string, string>)[slug] ?? slug}</strong>
+                  <span>{sample.accuracy === null ? "Not assessed" : sample.accuracy + "% sample accuracy"}</span>
+                  <small>{sample.attempted}/10 attempted · E {sample.easy_attempted} · M {sample.medium_attempted} · H {sample.hard_attempted}</small>
+                </article>
+              ))}
+            </div>
+            {diagnostic.completed_diagnostics > 1 && diagnostic.latest && (
+              <p className="muted">
+                Later assessment: {diagnostic.latest.accuracy ?? "Not assessed"}% sampled accuracy.
+                The first baseline stays unchanged; differing question sets are not a proven exam-readiness trend.
+              </p>
+            )}
+            <p className="muted">Untested topics remain unknown, not weak. Sample accuracy is not a prediction of full SSC CGL performance.</p>
+          </>
+        ) : (
+          <p className="muted">
+            No completed starting diagnostic yet. A 40-question sample across all four subjects can help choose what to learn first, but cannot assess all 74 topics.
+          </p>
+        )}
       </section>
 
       <section className="analyticsCoachCard">

@@ -219,6 +219,7 @@ def analytics_summary(
             .where(
                 MockAttempt.user_id == user.id,
                 MockAttempt.exam_id == exam.id,
+                MockAttempt.mode != "diagnostic",
                 MockAttempt.status == "submitted",
             )
             .order_by(MockAttempt.submitted_at.desc())
