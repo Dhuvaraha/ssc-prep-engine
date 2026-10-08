@@ -9,6 +9,7 @@ from app.core.study_time import current_study_date, utc_naive_to_study_date
 from app.db import get_db
 from app.deps import get_current_user
 from app.models import MockAttempt, Question, QuestionAttempt, Subject, Topic, TopicMastery, User
+from app.services.exam_scope import current_exam
 
 router = APIRouter(prefix="/analytics", tags=["analytics"])
 
@@ -24,10 +25,12 @@ def analytics_summary(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
+    exam = current_exam(db, user_id=user.id)
     attempts = list(
         db.scalars(
             select(QuestionAttempt)
-            .where(QuestionAttempt.user_id == user.id)
+            .join(Question, Question.id == QuestionAttempt.question_id)
+            .where(QuestionAttempt.user_id == user.id, Question.exam_id == exam.id)
             .order_by(QuestionAttempt.attempted_at.desc())
         )
     )
@@ -128,9 +131,12 @@ def analytics_summary(
     repeat_attempt_accuracy = _pct(repeat_correct, repeat_attempts)
     repeat_gain = round(repeat_attempt_accuracy - first_attempt_accuracy, 1) if repeat_attempts else 0.0
 
-    masteries = list(
-        db.scalars(select(TopicMastery).where(TopicMastery.user_id == user.id))
-    )
+    masteries = list(db.scalars(
+        select(TopicMastery)
+        .join(Topic, Topic.id == TopicMastery.topic_id)
+        .join(Subject, Subject.id == Topic.subject_id)
+        .where(TopicMastery.user_id == user.id, Subject.exam_id == exam.id)
+    ))
     mastery_score = round(
         sum(item.mastery_score for item in masteries) / len(masteries),
         1,
@@ -212,6 +218,7 @@ def analytics_summary(
             select(MockAttempt)
             .where(
                 MockAttempt.user_id == user.id,
+                MockAttempt.exam_id == exam.id,
                 MockAttempt.status == "submitted",
             )
             .order_by(MockAttempt.submitted_at.desc())

@@ -38,70 +38,80 @@ def _question_order():
     return (missing_year, Question.year.desc(), source_rank, Question.difficulty, Question.id)
 
 
-def _hydrate_questions(db: Session, ids: list[int]) -> list[Question]:
+def _hydrate_questions(db: Session, ids: list[int], *, exam_id: int | None = None) -> list[Question]:
     if not ids:
         return []
-    rows = list(
-        db.scalars(
-            select(Question)
-            .options(selectinload(Question.options))
-            .where(Question.id.in_(ids))
-        ).unique()
-    )
+    stmt = select(Question).options(selectinload(Question.options)).where(Question.id.in_(ids))
+    if exam_id is not None:
+        stmt = stmt.where(Question.exam_id == exam_id)
+    rows = list(db.scalars(stmt).unique())
     by_id = {question.id: question for question in rows}
     return [by_id[qid] for qid in ids if qid in by_id]
 
 
-def _balanced_candidate_ids(db: Session, *, topic_id: int | None, limit: int) -> list[int]:
-    base = (
+def _balanced_candidate_ids(db: Session, *, topic_id: int | None, limit: int, exam_id: int | None = None) -> list[int]:
+    base = [
         Question.verification_status == "verified",
         Question.correct_option.is_not(None),
-    )
+    ]
+    if exam_id is not None:
+        base.append(Question.exam_id == exam_id)
 
     if topic_id is not None:
-        return list(
-            db.scalars(
-                select(Question.id)
-                .where(*base, Question.topic_id == topic_id)
-                .order_by(*_question_order())
-                .limit(max(120, limit * 12))
+        # Do not let a large first-easy block hide the medium/hard bank.
+        # Preserve topic-specific pattern variety while sampling each level.
+        ranked = (
+            select(
+                Question.id.label("qid"),
+                func.row_number().over(
+                    partition_by=Question.difficulty,
+                    order_by=_question_order(),
+                ).label("difficulty_rank"),
+                Question.difficulty.label("difficulty"),
             )
+            .where(*base, Question.topic_id == topic_id)
+            .subquery()
         )
+        per_level = max(40, limit * 4)
+        return list(db.scalars(
+            select(ranked.c.qid)
+            .where(ranked.c.difficulty_rank <= per_level)
+            .order_by(ranked.c.difficulty_rank, ranked.c.difficulty, ranked.c.qid)
+            .limit(max(120, limit * 12))
+        ))
 
-    # Keep broad practice balanced across the syllabus without hydrating the
-    # entire question bank and its option rows. Four candidates per topic gives
-    # ample diversity for 3-30 question learner sets.
+    # Keep candidate hydration bounded, but include every difficulty even
+    # when a large topic has hundreds of easy questions. Across many topics,
+    # first sample one per topic+difficulty before taking second variants.
     ranked = (
         select(
             Question.id.label("question_id"),
-            func.row_number()
-            .over(
-                partition_by=Question.topic_id,
+            Question.topic_id.label("topic_id"),
+            Question.difficulty.label("difficulty"),
+            func.row_number().over(
+                partition_by=(Question.topic_id, Question.difficulty),
                 order_by=_question_order(),
-            )
-            .label("topic_rank"),
+            ).label("topic_rank"),
         )
         .where(*base)
         .subquery()
     )
-    return list(
-        db.scalars(
-            select(ranked.c.question_id)
-            .where(ranked.c.topic_rank <= 4)
-            .limit(max(320, limit * 24))
-        )
-    )
+    return list(db.scalars(
+        select(ranked.c.question_id)
+        .where(ranked.c.topic_rank <= max(4, min(limit, 10)))
+        .order_by(ranked.c.topic_rank, ranked.c.topic_id, ranked.c.difficulty, ranked.c.question_id)
+        .limit(max(320, limit * 24))
+    ))
 
 
-def _recent_attempt_ids(db: Session, *, user_id: int, limit: int) -> list[int]:
-    raw = list(
-        db.scalars(
-            select(QuestionAttempt.question_id)
-            .where(QuestionAttempt.user_id == user_id)
-            .order_by(QuestionAttempt.attempted_at.desc(), QuestionAttempt.id.desc())
-            .limit(max(100, limit * 12))
-        )
-    )
+def _recent_attempt_ids(db: Session, *, user_id: int, limit: int, exam_id: int | None = None) -> list[int]:
+    stmt = select(QuestionAttempt.question_id).where(QuestionAttempt.user_id == user_id)
+    if exam_id is not None:
+        stmt = stmt.join(Question, Question.id == QuestionAttempt.question_id).where(Question.exam_id == exam_id)
+    raw = list(db.scalars(
+        stmt.order_by(QuestionAttempt.attempted_at.desc(), QuestionAttempt.id.desc())
+        .limit(max(100, limit * 12))
+    ))
     # Preserve recency while removing repeated attempts of the same question.
     return list(dict.fromkeys(raw))
 
@@ -126,12 +136,20 @@ def select_practice_questions(
     limit: int,
     mode: str,
     similar_to_question_id: int | None = None,
+    exam_id: int | None = None,
 ) -> list[Question]:
     now = datetime.now(timezone.utc).replace(tzinfo=None)
 
+    def hydrate(ids: list[int]) -> list[Question]:
+        # Preserve the existing selector API and bounded-query test hooks.
+        # Exam-bound requests still enforce the restriction at SQL level.
+        if exam_id is None:
+            return _hydrate_questions(db, ids)
+        return _hydrate_questions(db, ids, exam_id=exam_id)
+
     if similar_to_question_id is not None:
         anchor = db.get(Question, similar_to_question_id)
-        if anchor and anchor.verification_status == "verified" and anchor.topic_id is not None:
+        if anchor and anchor.verification_status == "verified" and anchor.topic_id is not None and (exam_id is None or anchor.exam_id == exam_id):
             similar_stmt = select(Question.id).where(
                 Question.verification_status == "verified",
                 Question.correct_option.is_not(None),
@@ -147,7 +165,7 @@ def select_practice_questions(
                     .limit(max(40, limit * 8))
                 )
             )
-            similar = unique_questions(_hydrate_questions(db, ids))
+            similar = unique_questions(hydrate(ids))
             if similar:
                 return similar[:limit]
 
@@ -164,7 +182,7 @@ def select_practice_questions(
                     .limit(max(40, limit * 8))
                 )
             )
-            fallback = unique_questions(_hydrate_questions(db, fallback_ids))
+            fallback = unique_questions(hydrate(fallback_ids))
             if fallback:
                 return fallback[:limit]
 
@@ -172,29 +190,31 @@ def select_practice_questions(
         due_ids = list(
             db.scalars(
                 select(RevisionItem.question_id)
+                .join(Question, Question.id == RevisionItem.question_id)
                 .where(
                     RevisionItem.user_id == user_id,
                     RevisionItem.is_active.is_(True),
                     RevisionItem.next_review_at <= now,
+                    *([Question.exam_id == exam_id] if exam_id is not None else []),
                 )
                 .order_by(RevisionItem.next_review_at, RevisionItem.id)
                 .limit(max(limit * 3, 30))
             )
         )
-        due_questions = unique_questions(_hydrate_questions(db, due_ids))
+        due_questions = unique_questions(hydrate(due_ids))
         if topic_id is not None:
             due_questions = [question for question in due_questions if question.topic_id == topic_id]
         if due_questions:
             return due_questions[:limit]
 
-    candidate_ids = _balanced_candidate_ids(db, topic_id=topic_id, limit=limit)
+    candidate_ids = _balanced_candidate_ids(db, topic_id=topic_id, limit=limit, exam_id=exam_id)
     if topic_id is None:
         candidate_ids = _merge_ids(
-            _recent_attempt_ids(db, user_id=user_id, limit=limit),
+            _recent_attempt_ids(db, user_id=user_id, limit=limit, exam_id=exam_id),
             candidate_ids,
         )
 
-    questions = unique_questions(_hydrate_questions(db, candidate_ids))
+    questions = unique_questions(hydrate(candidate_ids))
     if not questions:
         return []
 

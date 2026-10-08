@@ -10,9 +10,10 @@ from app.domain.mastery import clamp_mastery, mastery_delta
 from app.domain.models import AttemptOutcome, MasterySignal
 from app.core.study_time import current_study_date
 from app.domain.revision import next_revision_date
-from app.models import Question, QuestionAttempt, RevisionItem, TopicMastery, User
+from app.models import Question, QuestionAttempt, RevisionItem, Subject, Topic, TopicMastery, User
 from app.schemas import MistakeUpdate, PracticeResult, PracticeSubmit, QuestionOut
 from app.services.planner import days_until_active_exam
+from app.services.exam_scope import current_exam
 from app.services.practice_coach import build_question_coaching
 from app.services.practice_selector import select_practice_questions
 
@@ -30,9 +31,20 @@ def get_practice_questions(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
+    exam = current_exam(db, user_id=user.id)
+    if topic_id is not None:
+        topic = db.get(Topic, topic_id)
+        subject = db.get(Subject, topic.subject_id) if topic else None
+        if not subject or subject.exam_id != exam.id:
+            raise HTTPException(status_code=404, detail="Topic not found for selected exam")
+    if similar_to is not None:
+        source = db.get(Question, similar_to)
+        if not source or source.exam_id != exam.id:
+            raise HTTPException(status_code=404, detail="Question not found for selected exam")
     return select_practice_questions(
         db,
         user_id=user.id,
+        exam_id=exam.id,
         topic_id=topic_id,
         limit=limit,
         mode=mode,
@@ -46,8 +58,9 @@ def submit_practice(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
+    exam = current_exam(db, user_id=user.id)
     question = db.get(Question, payload.question_id)
-    if not question or question.verification_status != "verified":
+    if not question or question.exam_id != exam.id or question.verification_status != "verified":
         raise HTTPException(status_code=404, detail="Verified question not found")
     if question.correct_option is None:
         raise HTTPException(status_code=409, detail="Question answer key is not verified")
@@ -177,6 +190,10 @@ def classify_mistake(
     attempt = db.get(QuestionAttempt, attempt_id)
     if not attempt or attempt.user_id != user.id:
         raise HTTPException(status_code=404, detail="Attempt not found")
+    exam = current_exam(db, user_id=user.id)
+    question = db.get(Question, attempt.question_id)
+    if not question or question.exam_id != exam.id:
+        raise HTTPException(status_code=404, detail="Attempt not found for selected exam")
 
     attempt.mistake_type = payload.mistake_type
 
