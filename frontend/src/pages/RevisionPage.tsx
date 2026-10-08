@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
@@ -38,6 +38,7 @@ export default function RevisionPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [grading, setGrading] = useState(false);
+  const gradingRef = useRef(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -78,7 +79,8 @@ export default function RevisionPage() {
   const bookmark = useMemo(() => bookmarks[index] ?? null, [bookmarks, index]);
 
   async function gradeRevision(success: boolean) {
-    if (!dueItem || grading) return;
+    if (!dueItem || gradingRef.current) return;
+    gradingRef.current = true;
     setGrading(true);
     setError("");
     try {
@@ -90,12 +92,14 @@ export default function RevisionPage() {
     } catch {
       setError("Review could not be saved. This question has not been removed.");
     } finally {
+      gradingRef.current = false;
       setGrading(false);
     }
   }
 
   async function gradeCard(success: boolean) {
-    if (!card || grading) return;
+    if (!card || gradingRef.current) return;
+    gradingRef.current = true;
     setGrading(true);
     setError("");
     try {
@@ -107,6 +111,7 @@ export default function RevisionPage() {
     } catch {
       setError("Flashcard review could not be saved. Please retry.");
     } finally {
+      gradingRef.current = false;
       setGrading(false);
     }
   }
