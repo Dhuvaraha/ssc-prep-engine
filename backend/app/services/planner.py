@@ -4,7 +4,9 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.core.study_time import current_study_date
-from app.models import DailyPlanTask, Exam, ExamTarget, MockAttempt, RevisionItem, Subject, Topic, TopicMastery
+from app.models import DailyPlanTask, Exam, ExamTarget, MockAttempt, Question, RevisionItem, Subject, Topic, TopicMastery
+from app.services.exam_scope import current_exam
+from app.services.exam_catalog import is_published_exam
 
 
 def _days_until(target: date, today: date) -> int:
@@ -55,6 +57,8 @@ def ensure_exam_target(
     exam = db.scalar(select(Exam).where(Exam.slug == exam_slug))
     if not exam:
         raise ValueError("Exam not found")
+    if not is_published_exam(exam.slug):
+        raise ValueError("This exam stage is not published yet")
 
     active_targets = list(
         db.scalars(
@@ -172,6 +176,10 @@ def generate_today_plan(
     target = get_active_target(db, user_id=user_id)
     if not target:
         raise ValueError("Set an exam target first")
+    if target.exam_id != current_exam(db, user_id=user_id).id:
+        # Fail closed until per-stage daily-plan storage is migrated. Never
+        # display yesterday's CGL target or tasks in a newly selected exam.
+        raise ValueError("Set an exam target for the selected stage first")
 
     existing = list(
         db.scalars(
@@ -193,21 +201,26 @@ def generate_today_plan(
     days_left = _days_until(target.exam_date, today)
 
     due_revision = db.scalar(
-        select(func.count(RevisionItem.id)).where(
+        select(func.count(RevisionItem.id))
+        .join(Question, Question.id == RevisionItem.question_id)
+        .where(
             RevisionItem.user_id == user_id,
+            Question.exam_id == target.exam_id,
             RevisionItem.is_active.is_(True),
             RevisionItem.next_review_at <= datetime.combine(today, datetime.max.time()),
         )
     ) or 0
 
-    evidence_topic_ids = set(
-        db.scalars(
-            select(TopicMastery.topic_id).where(
-                TopicMastery.user_id == user_id,
-                TopicMastery.attempts > 0,
-            )
+    evidence_topic_ids = set(db.scalars(
+        select(TopicMastery.topic_id)
+        .join(Topic, Topic.id == TopicMastery.topic_id)
+        .join(Subject, Subject.id == Topic.subject_id)
+        .where(
+            TopicMastery.user_id == user_id,
+            Subject.exam_id == target.exam_id,
+            TopicMastery.attempts > 0,
         )
-    )
+    ))
 
     def add_task(
         activity_type: str,
