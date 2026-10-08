@@ -129,6 +129,28 @@ class QuestionOption(Base):
     question: Mapped[Question] = relationship(back_populates="options")
 
 
+class QuestionOptionInsight(Base):
+    """Reviewed knowledge about a *wrong* MCQ option.
+
+    Content stays invisible until human-reviewed and explicitly published.
+    Published insights are returned only after a learner submits an answer.
+    """
+    __tablename__ = "question_option_insights"
+
+    question_id: Mapped[int] = mapped_column(
+        ForeignKey("questions.id", ondelete="CASCADE"), primary_key=True
+    )
+    option_position: Mapped[int] = mapped_column(Integer, primary_key=True)
+    insight_type: Mapped[str] = mapped_column(String(30), default="fact")
+    knowledge_text: Mapped[str] = mapped_column(Text)
+    related_question: Mapped[str | None] = mapped_column(Text, nullable=True)
+    related_answer: Mapped[str | None] = mapped_column(Text, nullable=True)
+    source_reference: Mapped[str] = mapped_column(Text)
+    source_year: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    review_status: Mapped[str] = mapped_column(String(20), default="draft")
+    reviewed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+
+
 class QuestionAttempt(Base):
     __tablename__ = "question_attempts"
 
