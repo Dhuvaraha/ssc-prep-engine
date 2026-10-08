@@ -76,6 +76,9 @@ export default function PracticePage() {
   const [outcomes, setOutcomes] = useState<Array<{correct: boolean; seconds: number}>>([]);
   const startedAt = useRef(Date.now());
   const timedOut = useRef(false);
+  const routeGeneration = useRef(0);
+  const submittingRef = useRef(false);
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const question = useMemo(() => questions[index] ?? null, [questions, index]);
@@ -101,24 +104,41 @@ export default function PracticePage() {
       navigate("/login");
       return;
     }
-
+    let cancelled = false;
+    routeGeneration.current += 1;
     setError("");
     setQuestions([]);
     setIndex(0);
+    setSelected(null);
+    setConfidence(null);
+    setResult(null);
+    setMistakeSaved(null);
+    setBookmarked(false);
+    setUsedHint(false);
+    setRevisionSaved(false);
     setOutcomes([]);
+    setElapsed(0);
+    setActualSeconds(0);
+    timedOut.current = false;
+    setTopicPackage(null);
     if (topicId) {
-      fetchTopicPackage(topicId).then(setTopicPackage).catch(() => setTopicPackage(null));
-    } else {
-      setTopicPackage(null);
+      fetchTopicPackage(topicId)
+        .then((pkg) => { if (!cancelled) setTopicPackage(pkg); })
+        .catch(() => { if (!cancelled) setTopicPackage(null); });
     }
     fetchPracticeQuestions(topicId, limit, mode, similarTo)
       .then((items) => {
+        if (cancelled) return;
         setQuestions(items);
         startedAt.current = Date.now();
         setElapsed(0);
         if (!items.length) setError("No verified questions matched this practice mode yet.");
       })
-      .catch(() => setError("Could not load practice. Check your connection and try again."));
+      .catch(() => {
+        if (!cancelled) setError("Could not load practice. Check your connection and try again.");
+      });
+
+    return () => { cancelled = true; };
   }, [navigate, topicId, mode, limit, similarTo]);
 
   useEffect(() => {
@@ -132,42 +152,49 @@ export default function PracticePage() {
   useEffect(() => {
     if (mode !== "timed" || !question || result || timedOut.current) return;
     if (elapsed < targetSeconds) return;
-
     timedOut.current = true;
-    setActualSeconds(targetSeconds);
-    submitPracticeAnswer({
-      question_id: question.id,
-      selected_option: selected,
-      time_seconds: targetSeconds,
-      confidence: confidence ?? 1,
-      used_hint: usedHint,
-      mistake_type: "time_pressure",
-    })
-      .then((response) => {
-        setResult(response);
-        setOutcomes((items) => [...items, {correct: response.correct, seconds: targetSeconds}]);
-      })
-      .catch(() => setError("Could not submit the timed answer."));
+    void recordAnswer(true);
   }, [mode, question, result, elapsed, targetSeconds, selected, confidence, usedHint]);
 
-  async function submit() {
-    if (!question || selected === null || confidence === null) return;
-    const seconds = Math.max(1, (Date.now() - startedAt.current) / 1000);
+  async function recordAnswer(timedOutSubmission = false) {
+    if (!question || submittingRef.current || result) return;
+    if (!timedOutSubmission && (selected === null || confidence === null)) return;
+
+    submittingRef.current = true;
+    setSubmitting(true);
+    const generation = routeGeneration.current;
+    const seconds = timedOutSubmission
+      ? targetSeconds
+      : Math.max(1, (Date.now() - startedAt.current) / 1000);
+    const answeredQuestionId = question.id;
     setActualSeconds(seconds);
     try {
       const response = await submitPracticeAnswer({
-        question_id: question.id,
+        question_id: answeredQuestionId,
         selected_option: selected,
         time_seconds: seconds,
-        confidence,
+        confidence: confidence ?? 1,
         used_hint: usedHint,
-        mistake_type: confidence === 1 ? "guess" : null,
+        mistake_type: timedOutSubmission ? "time_pressure" : confidence === 1 ? "guess" : null,
       });
+      if (generation !== routeGeneration.current) return;
       setResult(response);
+      setError("");
       setOutcomes((items) => [...items, {correct: response.correct, seconds}]);
     } catch {
-      setError("Could not submit this answer. Try again.");
+      if (generation === routeGeneration.current) {
+        setError(timedOutSubmission
+          ? "Timed answer was not saved. Check your connection and retry."
+          : "Could not submit this answer. Try again.");
+      }
+    } finally {
+      submittingRef.current = false;
+      if (generation === routeGeneration.current) setSubmitting(false);
     }
+  }
+
+  async function submit() {
+    await recordAnswer(false);
   }
 
   async function saveMistake(type: string) {
@@ -365,7 +392,7 @@ export default function PracticePage() {
               <button
                 className={"practiceOption" + selectedClass + resultClass}
                 key={option.position}
-                disabled={Boolean(result)}
+                disabled={Boolean(result) || submitting || timedOut.current}
                 onClick={() => setSelected(option.position)}
               >
                 <strong>{String.fromCharCode(64 + option.position)}</strong>
@@ -399,6 +426,7 @@ export default function PracticePage() {
                   <button
                     key={item.value}
                     className={confidence === item.value ? "confidence activeConfidence" : "confidence"}
+                    disabled={submitting || timedOut.current}
                     onClick={() => setConfidence(item.value)}
                   >
                     {item.label}
@@ -406,9 +434,14 @@ export default function PracticePage() {
                 ))}
               </div>
             </div>
-            <button className="submitAnswer" disabled={selected === null || confidence === null} onClick={() => void submit()}>
-              Check answer
+            <button className="submitAnswer" disabled={selected === null || confidence === null || submitting || timedOut.current} onClick={() => void submit()}>
+              {submitting ? "Saving answer..." : "Check answer"}
             </button>
+            {mode === "timed" && timedOut.current && error && !result && (
+              <button className="secondary" disabled={submitting} onClick={() => void recordAnswer(true)}>
+                Retry saving timed answer
+              </button>
+            )}
           </>
         )}
 
