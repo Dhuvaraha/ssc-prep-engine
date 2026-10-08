@@ -21,8 +21,8 @@ def _fixture():
     topic = Topic(subject_id=subject.id, slug="current-affairs", name="Current Affairs")
     db.add(topic)
     db.flush()
-    db.add(Lesson(topic_id=topic.id, title="Intro", concept="Foundational concepts",
-                  is_published=True))
+    db.add(Lesson(topic_id=topic.id, title="Intro", intro="Start with the basics.",
+                  concept="Foundational concepts", is_published=True))
     db.commit()
     return db, exam, topic
 
