@@ -23,6 +23,7 @@ Both blueprints must be stored with notification year, URL, effective date, vers
 - Current production engine already supports this stage: preserve exact server-side locks/autosave and improve rather than rewrite.
 
 ### CGL Tier II — Paper I for all relevant applicants
+- Session I comprises **150 MCQs: 130 merit-section questions (Math 30 + Reasoning 30 + English 45 + GA 25) plus 20 qualifying Computer Knowledge questions**. DEST is an additional 15-minute typing test, not another MCQ section. Do not confuse the merit-only count with total MCQs.
 Session I:
 - Section I: Mathematical Abilities 30 questions / 30m; Reasoning 30 / 30m.
 - Section II: English 45 / 40m; GA 25 / 20m.
