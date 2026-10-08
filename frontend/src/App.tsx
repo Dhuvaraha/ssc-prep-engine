@@ -8,6 +8,7 @@ import SessionExpiryGuard from "./components/SessionExpiryGuard";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import AuthPage from "./pages/AuthPage";
 import DashboardPage from "./pages/DashboardPage";
+import ExamChooserPage from "./pages/ExamChooserPage";
 import LearnPage from "./pages/LearnPage";
 import LessonPage from "./pages/LessonPage";
 import MockPage from "./pages/MockPage";
@@ -26,6 +27,7 @@ export default function App() {
       <AppErrorBoundary>
         <Routes>
         <Route path="/" element={<DashboardPage />} />
+        <Route path="/exams" element={<ExamChooserPage />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/analytics" element={<RequireAuth><AnalyticsPage /></RequireAuth>} />
         <Route path="/learn" element={<LearnPage />} />
