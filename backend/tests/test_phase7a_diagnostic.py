@@ -36,7 +36,7 @@ def seeded(diagnostics_per_difficulty=2):
         db.add(subject)
         db.flush()
         topics = []
-        for idx in range(5):
+        for idx in range(8):
             topic = Topic(subject_id=subject.id, name=f"{slug} topic {idx}", slug=f"{slug}-{idx}")
             db.add(topic)
             topics.append(topic)
