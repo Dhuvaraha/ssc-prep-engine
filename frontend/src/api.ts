@@ -618,7 +618,9 @@ export type AnalyticsSummary = {
     mastery: number;
     mock_accuracy: number;
     mock_attempt_rate: number;
-    readiness: number;
+    readiness: number | null;
+    readiness_source: "not_assessed" | "full_mock";
+    full_mock_count: number;
     streak: number;
   };
   errors: {
