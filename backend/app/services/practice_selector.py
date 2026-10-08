@@ -80,29 +80,28 @@ def _balanced_candidate_ids(db: Session, *, topic_id: int | None, limit: int, ex
             .limit(max(120, limit * 12))
         ))
 
-    # Keep broad practice balanced across the syllabus without hydrating the
-    # entire question bank and its option rows. Four candidates per topic gives
-    # ample diversity for 3-30 question learner sets.
+    # Keep candidate hydration bounded, but include every difficulty even
+    # when a large topic has hundreds of easy questions. Across many topics,
+    # first sample one per topic+difficulty before taking second variants.
     ranked = (
         select(
             Question.id.label("question_id"),
-            func.row_number()
-            .over(
-                partition_by=Question.topic_id,
+            Question.topic_id.label("topic_id"),
+            Question.difficulty.label("difficulty"),
+            func.row_number().over(
+                partition_by=(Question.topic_id, Question.difficulty),
                 order_by=_question_order(),
-            )
-            .label("topic_rank"),
+            ).label("topic_rank"),
         )
         .where(*base)
         .subquery()
     )
-    return list(
-        db.scalars(
-            select(ranked.c.question_id)
-            .where(ranked.c.topic_rank <= 4)
-            .limit(max(320, limit * 24))
-        )
-    )
+    return list(db.scalars(
+        select(ranked.c.question_id)
+        .where(ranked.c.topic_rank <= max(4, min(limit, 10)))
+        .order_by(ranked.c.topic_rank, ranked.c.topic_id, ranked.c.difficulty, ranked.c.question_id)
+        .limit(max(320, limit * 24))
+    ))
 
 
 def _recent_attempt_ids(db: Session, *, user_id: int, limit: int, exam_id: int | None = None) -> list[int]:
