@@ -4492,3 +4492,11 @@ body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
   .learningPathNotice { display: block; }
   .learningPathEvidence { display: block; margin-top: 10px; white-space: normal; }
 }
+
+
+/* Make the progressive learning route discoverable without another card. */
+.topicCardActions .primaryMiniLink { min-height: 42px; padding: 10px 14px; font-size: 13px; }
+.learningPathHelp { flex-basis: 100%; width: 100%; margin: 0; color: #5b6574; font-size: 12px; line-height: 1.5; }
+@media (max-width: 760px) {
+  .topicCardActions .primaryMiniLink { min-height: 44px; }
+}

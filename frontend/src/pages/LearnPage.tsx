@@ -54,7 +54,7 @@ export default function LearnPage() {
           <h1>Build the pattern before chasing speed.</h1>
         </div>
         <div>
-          <p>Every topic connects lesson → question patterns → quick check → guided practice → topic test.</p>
+          <p>Start with a lesson, then follow the new Learning Path: Foundation (Easy) → Application (Medium) → Challenge (Hard). Harder levels unlock only when you demonstrate understanding.</p>
           {tree && (
             <p className="contentCountLine">
               <strong>{tree.totals?.topics ?? 0}</strong> topics • <strong>{tree.totals?.lessons ?? 0}</strong> lessons
@@ -143,10 +143,10 @@ export default function LearnPage() {
                     <small>{topic.lesson_count ? "Lesson ready" : "Lesson pending"}</small>
                   </div>
                   <h3>{topic.name}</h3>
-                  <p>Concept lesson • verified practice bank • topic assessment</p>
+                  <p>Learn the concept, then practise at your proven level. Harder questions unlock with independent evidence.</p>
                   <div className="topicCardActions">
                     <Link className="secondaryLink" to={"/learn/topic/" + topic.id}>Study lesson</Link>
-                    <Link className="primaryMiniLink" to={"/practice?topic_id=" + topic.id + "&mode=guided&limit=10"}>Practice</Link>
+                    <Link className="primaryMiniLink" to={"/practice?topic_id=" + topic.id + "&mode=path&limit=10"}>Start Learning Path →</Link>
                     <Link className="topicTestLink" to={"/mocks?topic_id=" + topic.id}>Test</Link>
                   </div>
                 </article>
