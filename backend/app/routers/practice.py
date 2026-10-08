@@ -14,12 +14,13 @@ from app.models import Question, QuestionAttempt, RevisionItem, Subject, Topic, 
 from app.schemas import MistakeUpdate, PracticeResult, PracticeSubmit, QuestionOut
 from app.services.planner import days_until_active_exam
 from app.services.exam_scope import current_exam
+from app.services.learning_path import get_topic_learning_path
 from app.services.practice_coach import build_question_coaching
 from app.services.practice_selector import select_practice_questions
 
 router = APIRouter(prefix="/practice", tags=["practice"])
 
-PRACTICE_MODES = "^(guided|topic|timed|adaptive|pyq|mixed|weak|revision|speed|ladder)$"
+PRACTICE_MODES = "^(guided|topic|timed|adaptive|pyq|mixed|weak|revision|speed|ladder|path)$"
 
 
 @router.get("/questions", response_model=list[QuestionOut])
@@ -41,6 +42,8 @@ def get_practice_questions(
         source = db.get(Question, similar_to)
         if not source or source.exam_id != exam.id:
             raise HTTPException(status_code=404, detail="Question not found for selected exam")
+    if mode == "path" and topic_id is None:
+        raise HTTPException(status_code=400, detail="Choose a topic to begin its learning path")
     return select_practice_questions(
         db,
         user_id=user.id,
@@ -50,6 +53,20 @@ def get_practice_questions(
         mode=mode,
         similar_to_question_id=similar_to,
     )
+
+
+@router.get("/learning-path")
+def topic_learning_path(
+    topic_id: int = Query(..., ge=1),
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    exam = current_exam(db, user_id=user.id)
+    topic = db.get(Topic, topic_id)
+    subject = db.get(Subject, topic.subject_id) if topic else None
+    if subject is None or subject.exam_id != exam.id:
+        raise HTTPException(status_code=404, detail="Topic not found for selected exam")
+    return get_topic_learning_path(db, user_id=user.id, topic_id=topic_id, exam_id=exam.id)
 
 
 @router.post("/submit", response_model=PracticeResult)
