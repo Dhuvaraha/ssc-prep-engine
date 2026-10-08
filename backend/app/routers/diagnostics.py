@@ -1,6 +1,4 @@
 """First diagnostic is an immutable sampled starting profile, not exam readiness."""
-from collections import defaultdict
-
 from fastapi import APIRouter, Depends
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
