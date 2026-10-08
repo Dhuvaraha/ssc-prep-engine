@@ -142,12 +142,11 @@ export default function SettingsPage() {
     return <main className="settingsShell"><section className="settingsCard"><p>Loading profile…</p></section></main>;
   }
 
-  const baselinePending = analytics?.coach.evidence_level === "baseline";
-  const readinessLabel = analytics
-    ? baselinePending ? "—" : analytics.overview.readiness + "%"
-    : "—";
-  const masteryLabel = analytics
-    ? baselinePending ? "—" : analytics.overview.mastery + "%"
+  const readinessLabel = analytics?.overview.readiness != null
+    ? analytics.overview.readiness + "%"
+    : "Not assessed";
+  const masteryLabel = analytics?.overview.practice_attempts
+    ? analytics.overview.mastery + "%"
     : "—";
 
   return (
