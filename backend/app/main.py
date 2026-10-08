@@ -96,9 +96,22 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# The production frontend lives on Vercel even when the configured CORS_ORIGINS
+# still contains only the legacy Render web host. Always allow our verified
+# first-party hostname; preserve all additional environment-provided origins.
+PRODUCTION_FRONTEND_ORIGIN = "https://ssc-prep-engine.vercel.app"
+allowed_origins = list(
+    dict.fromkeys(
+        [
+            *(origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()),
+            PRODUCTION_FRONTEND_ORIGIN,
+        ]
+    )
+)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
