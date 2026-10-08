@@ -77,7 +77,7 @@ export default function PracticePage() {
   const startedAt = useRef(Date.now());
   const timedOut = useRef(false);
   const routeGeneration = useRef(0);
-  const submittingRef = useRef(false);
+  const submittingRef = useRef<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
@@ -120,6 +120,7 @@ export default function PracticePage() {
     setElapsed(0);
     setActualSeconds(0);
     timedOut.current = false;
+    setSubmitting(false);
     setTopicPackage(null);
     if (topicId) {
       fetchTopicPackage(topicId)
@@ -157,12 +158,12 @@ export default function PracticePage() {
   }, [mode, question, result, elapsed, targetSeconds, selected, confidence, usedHint]);
 
   async function recordAnswer(timedOutSubmission = false) {
-    if (!question || submittingRef.current || result) return;
+    if (!question || submittingRef.current === routeGeneration.current || result) return;
     if (!timedOutSubmission && (selected === null || confidence === null)) return;
 
-    submittingRef.current = true;
-    setSubmitting(true);
     const generation = routeGeneration.current;
+    submittingRef.current = generation;
+    setSubmitting(true);
     const seconds = timedOutSubmission
       ? targetSeconds
       : Math.max(1, (Date.now() - startedAt.current) / 1000);
@@ -188,8 +189,10 @@ export default function PracticePage() {
           : "Could not submit this answer. Try again.");
       }
     } finally {
-      submittingRef.current = false;
-      if (generation === routeGeneration.current) setSubmitting(false);
+      if (submittingRef.current === generation) {
+        submittingRef.current = null;
+        setSubmitting(false);
+      }
     }
   }
 
