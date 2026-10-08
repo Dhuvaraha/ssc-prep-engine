@@ -14,8 +14,16 @@ from app.schemas import (
     MockSubmitResponse,
 )
 from app.services.mock_engine import SECTION_ORDER, create_mock_attempt, load_mock_attempt, mock_timing, submit_mock_attempt
+from app.services.exam_scope import current_exam
 
 router = APIRouter(prefix="/mocks", tags=["mocks"])
+
+
+def _load_selected_mock(db: Session, *, attempt_id: int, user_id: int):
+    attempt, rows = load_mock_attempt(db, attempt_id=attempt_id, user_id=user_id)
+    if attempt.exam_id != current_exam(db, user_id=user_id).id:
+        raise LookupError("Mock does not belong to selected exam")
+    return attempt, rows
 
 
 def _serialize_attempt(attempt, rows, *, resumed_existing: bool = False):
@@ -41,9 +49,12 @@ def start_mock(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
+    exam = current_exam(db, user_id=user.id)
+    if exam.slug != "ssc-cgl-tier-1":
+        raise HTTPException(status_code=409, detail="The selected stage has no published mock simulator")
     active = db.scalar(
         select(MockAttempt)
-        .where(MockAttempt.user_id == user.id, MockAttempt.status == "in_progress")
+        .where(MockAttempt.user_id == user.id, MockAttempt.exam_id == exam.id, MockAttempt.status == "in_progress")
         .order_by(MockAttempt.started_at.desc())
     )
     if active:
@@ -71,9 +82,10 @@ def active_mock(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
+    exam = current_exam(db, user_id=user.id)
     attempt = db.scalar(
         select(MockAttempt)
-        .where(MockAttempt.user_id == user.id, MockAttempt.status == "in_progress")
+        .where(MockAttempt.user_id == user.id, MockAttempt.exam_id == exam.id, MockAttempt.status == "in_progress")
         .order_by(MockAttempt.started_at.desc())
     )
     if not attempt:
@@ -94,7 +106,7 @@ def get_mock(
     user: User = Depends(get_current_user),
 ):
     try:
-        attempt, rows = load_mock_attempt(db, attempt_id=attempt_id, user_id=user.id)
+        attempt, rows = _load_selected_mock(db, attempt_id=attempt_id, user_id=user.id)
     except LookupError:
         raise HTTPException(status_code=404, detail="Mock attempt not found")
     return _serialize_attempt(attempt, rows)
@@ -108,7 +120,7 @@ def save_mock_response(
     user: User = Depends(get_current_user),
 ):
     try:
-        attempt, rows = load_mock_attempt(db, attempt_id=attempt_id, user_id=user.id)
+        attempt, rows = _load_selected_mock(db, attempt_id=attempt_id, user_id=user.id)
     except LookupError:
         raise HTTPException(status_code=404, detail="Mock attempt not found")
 
@@ -149,7 +161,7 @@ def get_mock_state(
     user: User = Depends(get_current_user),
 ):
     try:
-        attempt, rows = load_mock_attempt(db, attempt_id=attempt_id, user_id=user.id)
+        attempt, rows = _load_selected_mock(db, attempt_id=attempt_id, user_id=user.id)
     except LookupError:
         raise HTTPException(status_code=404, detail="Mock attempt not found")
 
@@ -179,7 +191,7 @@ def review_mock(
     user: User = Depends(get_current_user),
 ):
     try:
-        attempt, rows = load_mock_attempt(db, attempt_id=attempt_id, user_id=user.id)
+        attempt, rows = _load_selected_mock(db, attempt_id=attempt_id, user_id=user.id)
     except LookupError:
         raise HTTPException(status_code=404, detail="Mock attempt not found")
     if attempt.status != "submitted":
@@ -266,7 +278,7 @@ def abandon_mock(
     user: User = Depends(get_current_user),
 ):
     attempt = db.get(MockAttempt, attempt_id)
-    if not attempt or attempt.user_id != user.id:
+    if not attempt or attempt.user_id != user.id or attempt.exam_id != current_exam(db, user_id=user.id).id:
         raise HTTPException(status_code=404, detail="Mock attempt not found")
     if attempt.status == "submitted":
         raise HTTPException(status_code=409, detail="Submitted mock cannot be abandoned")
@@ -282,7 +294,7 @@ def submit_mock(
     user: User = Depends(get_current_user),
 ):
     try:
-        attempt, rows = load_mock_attempt(db, attempt_id=attempt_id, user_id=user.id)
+        attempt, rows = _load_selected_mock(db, attempt_id=attempt_id, user_id=user.id)
     except LookupError:
         raise HTTPException(status_code=404, detail="Mock attempt not found")
 
