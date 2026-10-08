@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.models import Question, QuestionAttempt, RevisionItem, TopicMastery
 from app.services.question_quality import unique_questions
+from app.services.learning_path import get_topic_learning_path
 
 
 def _round_robin(groups: dict[object, list[Question]], limit: int) -> list[Question]:
@@ -217,6 +218,25 @@ def select_practice_questions(
     questions = unique_questions(hydrate(candidate_ids))
     if not questions:
         return []
+
+    if mode == "path":
+        if topic_id is None or exam_id is None:
+            return []
+        progress = get_topic_learning_path(
+            db, user_id=user_id, topic_id=topic_id, exam_id=exam_id,
+        )
+        difficulty = progress["level"]
+        at_level = [q for q in questions if q.difficulty == difficulty]
+        recent = set(_recent_attempt_ids(db, user_id=user_id, limit=limit, exam_id=exam_id))
+        # Novel questions first, with diverse pattern families inside a level.
+        groups: dict[str, list[Question]] = defaultdict(list)
+        for question in at_level:
+            groups[question.pattern_type or question.subtopic or "other"].append(question)
+        for group in groups.values():
+            group.sort(key=lambda q: (q.id in recent, -(q.year or 0), q.id))
+        ordered = _round_robin(groups, len(at_level))
+        ordered.sort(key=lambda q: q.id in recent)
+        return ordered[:limit]
 
     if mode == "guided":
         grouped: dict[str, list[Question]] = defaultdict(list)
