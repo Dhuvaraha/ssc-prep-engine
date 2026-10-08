@@ -4604,6 +4604,15 @@ body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
 }
 
 
+/* Reserve the sidebar's real width: previously main width + left offset
+   exceeded the viewport at common 1024–1440px laptop/tablet sizes. */
+@media (min-width: 981px) {
+  body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
+    max-width: calc(100vw - 270px);
+    margin-left: max(238px, calc(50vw - 473px));
+    margin-right: auto;
+  }
+}
 /* Phase 7D-01: mobile-first navigation + assessment interaction; no exam-state changes. */
 @media (max-width: 980px) {
   .mobileBottomNav {
