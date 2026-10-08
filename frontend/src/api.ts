@@ -408,6 +408,25 @@ export async function fetchPracticeQuestions(
   return response.json();
 }
 
+export type TopicLearningPath = {
+  topic_id: number;
+  exam_id: number;
+  level: 1 | 2 | 3;
+  stage: string;
+  description: string;
+  levels: Record<string, {distinct_attempts: number; independent_correct: number; passed: boolean}>;
+  next_unlock: string;
+};
+
+export async function fetchTopicLearningPath(topicId: number): Promise<TopicLearningPath> {
+  const response = await sessionFetch(
+    API_BASE + "/practice/learning-path?topic_id=" + encodeURIComponent(String(topicId)),
+    {headers: authHeaders()},
+  );
+  if (!response.ok) throw new Error("Could not load the topic learning path");
+  return response.json();
+}
+
 export async function submitPracticeAnswer(payload: {
   question_id: number;
   selected_option: number | null;
