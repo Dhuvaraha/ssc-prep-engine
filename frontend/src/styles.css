@@ -4469,3 +4469,26 @@ body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
   .examChooserFamilyHeading h2 { font-size: 20px; }
   .examChooserFamilyHeading p { margin-top: 4px; }
 }
+
+
+/* Phase 7: concise learning-stage feedback without another nested card wall */
+.learningPathNotice {
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-left: 3px solid #39764d;
+  background: #f4faf5;
+  padding: 13px 16px;
+  border-radius: 0 12px 12px 0;
+  margin: 12px 0 18px;
+  color: #263449;
+}
+.learningPathNotice strong { font-size: 15px; }
+.learningPathNotice p { margin: 5px 0; line-height: 1.5; }
+.learningPathNotice small { display: block; color: #4b596b; line-height: 1.5; }
+.learningPathEvidence { font-size: 12px; white-space: nowrap; color: #39764d; font-weight: 700; }
+@media (max-width: 620px) {
+  .learningPathNotice { display: block; }
+  .learningPathEvidence { display: block; margin-top: 10px; white-space: normal; }
+}
