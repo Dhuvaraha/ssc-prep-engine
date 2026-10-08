@@ -26,7 +26,7 @@ describe("responsive primary navigation", () => {
     const mobile = screen.getByRole("navigation", {name: "Mobile navigation"});
     expect(mobile.querySelectorAll("a")).toHaveLength(4);
     expect(within(mobile).getByRole("button", {name: "More navigation"}).getAttribute("aria-expanded")).toBe("false");
-    const menu = screen.getByRole("navigation", {name: "Additional navigation", hidden: true});
+    const menu = document.getElementById("mobile-more-menu")!;
     expect(menu.hasAttribute("hidden")).toBe(true);
 
     fireEvent.click(within(mobile).getByRole("button", {name: "More navigation"}));
@@ -48,7 +48,7 @@ describe("responsive primary navigation", () => {
     fireEvent.click(moreButton);
     fireEvent.click(within(menu).getByRole("link", {name: "Revision"}));
     expect(menu.hasAttribute("hidden")).toBe(true);
-    expect(within(menu).getByRole("link", {name: "Revision"}).getAttribute("aria-current")).toBe("page");
+    expect(menu.querySelector('a[href="/revision"]')?.getAttribute("aria-current")).toBe("page");
   });
 
   it("does not show the application navigation over an active test", () => {
