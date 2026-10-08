@@ -9,7 +9,9 @@ import {
   safeInternalPath,
 } from "../session";
 
-const registrationEnabled = import.meta.env.VITE_REGISTRATION_ENABLED !== "false";
+// Account creation is opt-in: the backend disables public registration in production.
+// An unset Vite env var must never display an unusable Register form.
+const registrationEnabled = import.meta.env.VITE_REGISTRATION_ENABLED === "true";
 
 export default function AuthPage() {
   const [params] = useSearchParams();
@@ -35,8 +37,13 @@ export default function AuthPage() {
       resetSessionExpiryState();
       const returnTo = consumeAuthReturnPath(requestedReturn);
       navigate(returnTo, {replace: true});
-    } catch {
-      setError(mode === "login" ? "Login failed. Check your email and password." : "Registration failed.");
+    } catch (cause) {
+      const networkFailure = cause instanceof TypeError;
+      setError(networkFailure
+        ? "Cannot reach the study server right now. Check your connection and retry."
+        : mode === "login"
+          ? "Login failed. Check your email and password."
+          : "Registration failed. Please try again.");
     } finally {
       setBusy(false);
     }
