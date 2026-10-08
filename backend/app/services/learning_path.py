@@ -5,7 +5,7 @@ Only verified, distinct practice responses without hints/guesses unlock the
 next level. Timed speed and delayed recall remain separate readiness signals.
 """
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models import Question, QuestionAttempt
@@ -71,6 +71,28 @@ def get_topic_learning_path(
     if level == 2 and details[2]["passed"]:
         level = 3
 
+    availability = {
+        int(difficulty): int(count)
+        for difficulty, count in db.execute(
+            select(Question.difficulty, func.count(Question.id))
+            .where(
+                Question.topic_id == topic_id,
+                Question.exam_id == exam_id,
+                Question.verification_status == "verified",
+                Question.correct_option.is_not(None),
+            )
+            .group_by(Question.difficulty)
+        )
+    }
+    content_blocked = False
+    blocked_level = None
+    if availability.get(level, 0) < 5:
+        # Do not advertise a level that cannot even provide five distinct
+        # qualifying questions. The bank needs editorial expansion first.
+        content_blocked = True
+        blocked_level = level
+        level = max(1, level - 1)
+
     label, description = STAGES[level]
     return {
         "topic_id": topic_id,
@@ -79,7 +101,13 @@ def get_topic_learning_path(
         "stage": label,
         "description": description,
         "levels": details,
+        "available_questions": availability,
+        "content_blocked": content_blocked,
+        "blocked_level": blocked_level,
         "next_unlock": (
+            "The next difficulty needs at least five distinct verified questions. "
+            "Continue related topics or revision while this level is expanded."
+            if content_blocked else
             "Complete 5 different questions at this level with at least 4 independently correct and 75% accuracy. "
             "Hints and guesses help you learn, but do not count as independent passes."
             if level < 3 else
