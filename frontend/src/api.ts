@@ -43,8 +43,10 @@ async function sessionFetch(input: RequestInfo | URL, init: RequestInit = {}): P
 const privateDataCache = new Map<string, CacheEnvelope<unknown>>();
 const privateDataInflight = new Map<string, Promise<unknown>>();
 let privateCacheOwner: string | null = null;
+let privateCacheGeneration = 0;
 
 export function invalidatePrivateDataCache(): void {
+  privateCacheGeneration += 1;
   privateDataCache.clear();
   privateDataInflight.clear();
   privateCacheOwner = localStorage.getItem("ssc_prep_token");
@@ -53,6 +55,7 @@ export function invalidatePrivateDataCache(): void {
 function privateCacheSession(): string | null {
   const token = localStorage.getItem("ssc_prep_token");
   if (token !== privateCacheOwner) {
+    privateCacheGeneration += 1;
     privateDataCache.clear();
     privateDataInflight.clear();
     privateCacheOwner = token;
@@ -62,6 +65,7 @@ function privateCacheSession(): string | null {
 
 function fetchPrivateCachedJson<T>(key: string, url: string, ttlMs: number): Promise<T> {
   const owner = privateCacheSession();
+  const generation = privateCacheGeneration;
   if (!owner) return Promise.reject(new Error("Sign in to load this page"));
 
   const cached = privateDataCache.get(key) as CacheEnvelope<T> | undefined;
@@ -77,7 +81,7 @@ function fetchPrivateCachedJson<T>(key: string, url: string, ttlMs: number): Pro
         throw new Error(error?.detail ?? "Failed to load study data");
       }
       const value = await response.json() as T;
-      if (privateCacheSession() === owner) {
+      if (privateCacheSession() === owner && generation === privateCacheGeneration) {
         privateDataCache.set(key, {value, expires_at: Date.now() + ttlMs});
       }
       return value;
