@@ -164,9 +164,9 @@ export default function DashboardPage() {
       <section className="quickStartGrid">
         <article>
           <p className="eyebrow">If you are starting from zero</p>
-          <h3>Learn one topic first</h3>
-          <p>Open a concise rule sheet, see a worked example, then immediately solve five questions.</p>
-          <Link to="/learn">Start Learn mode →</Link>
+          <h3>Start your Learning Path</h3>
+          <p>Choose a topic, learn the concept, then progress from Easy foundations to Medium application and Hard challenges as your independent answers improve.</p>
+          <Link to="/learn">Choose a topic →</Link>
         </article>
         <article>
           <p className="eyebrow">If you want an exam check</p>
