@@ -5,6 +5,7 @@ import { TopicPackage, fetchTopicPackage } from "../api";
 import SecureImage from "../components/SecureImage";
 import SpeakButton from "../components/SpeakButton";
 import TeacherCoach from "../components/TeacherCoach";
+import TeacherGuidedCheck from "../components/TeacherGuidedCheck";
 
 type TeachingBlock = {
   key: string;
@@ -363,7 +364,7 @@ export default function LessonPage() {
                     <small>{stage.eyebrow}</small>
                     <strong>{stage.title}</strong>
                   </div>
-                  {index < activeStageIndex && <b>✓</b>}
+                  {index < activeStageIndex && <b aria-hidden="true">•</b>}
                 </button>
               ))}
               <div className="lessonRailActions">
@@ -420,10 +421,25 @@ export default function LessonPage() {
                         <span>Verified question bank</span>
                         <h3>Now watch the method on real practice questions.</h3>
                       </div>
-                      <small>Easy → SSC level → harder variation</small>
+                      <small>Try a verified example first, then study more worked variations.</small>
                     </header>
 
-                    {solvedExamples.map((example, exampleIndex) => {
+                    <TeacherGuidedCheck
+                      topicId={pkg.topic.id}
+                      example={solvedExamples[0]}
+                      recognitionCue={pkg.archetypes.find(
+                        item => item.slug === solvedExamples[0]?.pattern_type
+                      )?.recognition_cues ?? pkg.archetypes[0]?.recognition_cues}
+                      commonTrap={pkg.archetypes.find(
+                        item => item.slug === solvedExamples[0]?.pattern_type
+                      )?.common_trap ?? pkg.archetypes[0]?.common_trap}
+                    />
+
+                    {solvedExamples.length > 1 && (
+                      <details className="teacherMoreExamples">
+                        <summary>Study {solvedExamples.length - 1} more solved variations (answers shown)</summary>
+                        <div className="teacherMoreExamplesList">
+                    {solvedExamples.slice(1).map((example, exampleIndex) => {
                       const correct = example.options.find(
                         (option) => option.position === example.correct_option,
                       );
@@ -490,6 +506,9 @@ export default function LessonPage() {
                         </article>
                       );
                     })}
+                        </div>
+                      </details>
+                    )}
                   </section>
                 )}
               </div>
