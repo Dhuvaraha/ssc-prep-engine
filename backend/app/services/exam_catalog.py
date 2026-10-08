@@ -40,7 +40,7 @@ EXAM_CATALOG = (
         "name": "SSC CGL Tier II",
         "subtitle": "Common Paper I · Computer Knowledge + DEST",
         "status": "planned",
-        "total_questions": 160,
+        "total_questions": 150,
         "duration_minutes": 135,
         "positive_marks": 3.0,
         "negative_marks": 1.0,
