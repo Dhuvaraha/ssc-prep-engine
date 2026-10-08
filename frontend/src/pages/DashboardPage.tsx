@@ -98,7 +98,7 @@ export default function DashboardPage() {
         </h1>
         <p className="lead">
           {analytics?.coach.evidence_level === "baseline"
-            ? "Start with a four-question Quick Sprint to sample all sections, then practise a topic. A full baseline diagnostic is coming in Phase 7A."
+            ? "Take the 40-question starting diagnostic to sample all four subjects, then use your Learning Path for deeper topic practice. A diagnostic is not an exam readiness score."
             : "Learn a topic, practise its patterns, take a timed test and revisit mistakes. Your study plan adapts as you improve."}
         </p>
         <div className="heroActions">
@@ -106,7 +106,7 @@ export default function DashboardPage() {
             {authenticated ? "Open today's plan" : "Login and start"}
           </Link>
           <Link className="secondaryLink" to="/learn">Browse all lessons</Link>
-          {authenticated && <Link className="secondaryLink" to="/mocks">Open Quick Sprint</Link>}
+          {authenticated && <Link className="secondaryLink" to="/mocks?mode=diagnostic">Starting Diagnostic (40Q)</Link>}
         </div>
         {tree && (
           <p className="heroContentStatus">
@@ -170,9 +170,9 @@ export default function DashboardPage() {
         </article>
         <article>
           <p className="eyebrow">If you want an exam check</p>
-          <h3>Take a 4-question Quick Sprint</h3>
-          <p>Sample one question from each section. This is a warm-up, not a valid 40-question baseline diagnostic.</p>
-          <Link to={authenticated ? "/mocks" : "/login"}>Open Mock Lab →</Link>
+          <h3>Take the 40-question starting diagnostic</h3>
+          <p>10 questions per subject with Easy, Medium and Hard samples. Results identify early learning signals, not overall exam readiness.</p>
+          <Link to={authenticated ? "/mocks?mode=diagnostic" : "/login"}>Start diagnostic →</Link>
         </article>
         <article>
           <p className="eyebrow">If you made mistakes</p>
