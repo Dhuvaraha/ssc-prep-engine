@@ -3,11 +3,13 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import {
   ActiveMock,
+  DiagnosticBaseline,
   MockQuestion,
   MockReview,
   MockStateResponse,
   MockSubmitResult,
   abandonMock,
+  fetchDiagnosticBaseline,
   fetchActiveMock,
   fetchMockAttempt,
   fetchMockReview,
@@ -40,7 +42,9 @@ export default function MockPage() {
   const [params] = useSearchParams();
   const topicIdParam = Number(params.get("topic_id") ?? "0");
   const topicId = Number.isFinite(topicIdParam) && topicIdParam > 0 ? topicIdParam : undefined;
-  const [mode, setMode] = useState<"mini" | "full" | "sectional" | "topic">(topicId ? "topic" : "mini");
+  const [mode, setMode] = useState<"mini" | "full" | "sectional" | "topic" | "diagnostic">(
+    topicId ? "topic" : params.get("mode") === "diagnostic" ? "diagnostic" : "mini"
+  );
   const [topicName, setTopicName] = useState("");
   const [subject, setSubject] = useState("reasoning");
   const [attemptId, setAttemptId] = useState<number | null>(null);
@@ -59,6 +63,7 @@ export default function MockPage() {
   const [notice, setNotice] = useState("");
   const [result, setResult] = useState<MockSubmitResult | null>(null);
   const [review, setReview] = useState<MockReview | null>(null);
+  const [diagnosticProfile, setDiagnosticProfile] = useState<DiagnosticBaseline | null>(null);
   const questionOpenedAt = useRef(Date.now());
   const boundarySyncing = useRef(false);
   const pendingAnswerSave = useRef<Promise<void> | null>(null);
@@ -247,6 +252,7 @@ export default function MockPage() {
     setError("");
     setNotice("");
     setResult(null);
+    setDiagnosticProfile(null);
     try {
       const data = await startMock(
         mode,
@@ -303,7 +309,7 @@ export default function MockPage() {
           time_seconds: item.time_seconds,
         };
       });
-      const resumedMode = attempt.mode as "mini" | "full" | "sectional" | "topic";
+      const resumedMode = attempt.mode as "mini" | "full" | "sectional" | "topic" | "diagnostic";
       setAttemptId(attempt.attempt_id);
       setQuestions(attempt.questions);
       setAnswers(restored);
@@ -474,6 +480,9 @@ export default function MockPage() {
       const data = await submitMock(attemptId);
       setResult(data);
       setReview(await fetchMockReview(attemptId).catch(() => null));
+      if (mode === "diagnostic") {
+        setDiagnosticProfile(await fetchDiagnosticBaseline().catch(() => null));
+      }
       setRunning(false);
       setResumeInfo(null);
     } catch (err) {
@@ -509,8 +518,21 @@ export default function MockPage() {
     return (
       <main className="mockShell">
         <section className="mockResult">
-          <p className="eyebrow">Test submitted</p>
-          <h1>{result.score} marks</h1>
+          <p className="eyebrow">{mode === "diagnostic" ? "Starting diagnostic submitted" : "Test submitted"}</p>
+          <h1>{mode === "diagnostic" ? "Your starting profile" : result.score + " marks"}</h1>
+          {mode === "diagnostic" && (
+            <div className="diagnosticResultNote" role="status">
+              <strong>Exam readiness: Not assessed</strong>
+              <p>These 40 questions are a sampled starting check, not a prediction of your SSC exam score. Untested topics are unknown, not weak.</p>
+              {diagnosticProfile?.baseline && (
+                <p>
+                  First baseline: {diagnosticProfile.baseline.attempted_questions}/40 attempted ·
+                  {diagnosticProfile.baseline.attempted_topics}/{diagnosticProfile.baseline.total_topics} topics tried ·
+                  {diagnosticProfile.baseline.evidence_label === "limited_sample" ? "Limited sample" : "Initial sample"}
+                </p>
+              )}
+            </div>
+          )}
           <div className="mockResultGrid">
             <article><span>Correct</span><strong>{result.correct}</strong></article>
             <article><span>Incorrect</span><strong>{result.incorrect}</strong></article>
@@ -520,7 +542,11 @@ export default function MockPage() {
             {review && <article><span>Easy marks missed</span><strong>{review.easy_missed}</strong></article>}
             {review && <article><span>Slow questions</span><strong>{review.slow_questions}</strong></article>}
           </div>
-          <p className="muted">Scoring uses +2 for a correct answer and −0.50 for a wrong answer.</p>
+          <p className="muted">
+            {mode === "diagnostic"
+              ? "Diagnostic sample marks use the familiar +2 / −0.50 rule only for feedback. They are not official full-exam marks or exam readiness."
+              : "Scoring uses +2 for a correct answer and −0.50 for a wrong answer."}
+          </p>
 
           {review && (
             <>
@@ -595,7 +621,7 @@ export default function MockPage() {
         <header className="mockLandingHeader">
           <div>
             <p className="brand">SSC Mock Lab</p>
-            <p className="muted">Quick drills, section tests and a strict SSC CGL Tier-I simulation.</p>
+            <p className="muted">Starting diagnostic, practice tests and the official-format SSC CGL Tier-I simulation.</p>
           </div>
           <Link to="/">Dashboard</Link>
         </header>
@@ -625,8 +651,15 @@ export default function MockPage() {
           <div className="mockModeGrid">
             <button className={mode === "mini" ? "mockModeCard activeMockMode" : "mockModeCard"} onClick={() => setMode("mini")}>
               <strong>Quick Sprint</strong>
-              <span>4 questions • 4 minutes • one from each section • diagnostic drill</span>
+              <span>4 questions • 4 minutes • one from each section • warm-up only</span>
             </button>
+            {!topicId && (
+              <button className={mode === "diagnostic" ? "mockModeCard activeMockMode" : "mockModeCard"} onClick={() => setMode("diagnostic")}>
+                <strong>Starting Diagnostic</strong>
+                <span>40 questions · 24 minutes · 10 per subject · 3 Easy / 5 Medium / 2 Hard in each</span>
+                <small>Find your initial learning gaps. This does not certify overall readiness.</small>
+              </button>
+            )}
             <button className={mode === "sectional" ? "mockModeCard activeMockMode" : "mockModeCard"} onClick={() => setMode("sectional")}>
               <strong>Section Test</strong>
               <span>25 questions • 15 minutes • one SSC section</span>
