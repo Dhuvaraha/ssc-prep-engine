@@ -71,6 +71,9 @@ def _fixture():
                 successful_reviews=1,
             ))
     db.commit()
+    # Keep the fixture user loaded; refreshing an expired identity is a separate
+    # test-fixture query and should not count toward the endpoint's SQL budget.
+    db.refresh(user)
     return engine, db, user
 
 
