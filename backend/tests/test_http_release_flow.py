@@ -175,3 +175,42 @@ def test_http_release_flow_register_plan_mock_review_and_permissions():
         app.dependency_overrides.clear()
         client.close()
         db.close()
+
+
+def test_vercel_production_preflights_allow_login_and_private_pages():
+    # The app can render while its API is unusable if CORS rejects Vercel.
+    client = TestClient(app)
+    allowed_origins = (
+        "https://ssc-prep-engine.vercel.app",
+        "https://ssc-prep-engine-tracli-q.vercel.app",
+        "https://ssc-prep-engine-git-main-tracli-q.vercel.app",
+    )
+    for origin in allowed_origins:
+        for path, method in (
+            ("/api/v1/auth/login", "POST"),
+            ("/api/v1/analytics/summary", "GET"),
+            ("/api/v1/planner/today", "GET"),
+        ):
+            response = client.options(
+                path,
+                headers={
+                    "Origin": origin,
+                    "Access-Control-Request-Method": method,
+                    "Access-Control-Request-Headers": "authorization,content-type",
+                },
+            )
+            assert response.status_code == 200, (
+                f"CORS denied {origin} {path}: {response.text}"
+            )
+            assert response.headers["access-control-allow-origin"] == origin
+            assert response.headers["access-control-allow-credentials"] == "true"
+
+    # Do not solve a CORS bug by allowing arbitrary domains.
+    denied = client.options(
+        "/api/v1/auth/login",
+        headers={
+            "Origin": "https://untrusted-ssc-site.vercel.app",
+            "Access-Control-Request-Method": "POST",
+        },
+    )
+    assert denied.status_code == 400
