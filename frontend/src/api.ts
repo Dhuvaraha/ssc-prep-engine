@@ -416,6 +416,9 @@ export type TopicLearningPath = {
   description: string;
   levels: Record<string, {distinct_attempts: number; independent_correct: number; passed: boolean}>;
   next_unlock: string;
+  available_questions: Record<string, number>;
+  content_blocked: boolean;
+  blocked_level: number | null;
 };
 
 export async function fetchTopicLearningPath(topicId: number): Promise<TopicLearningPath> {
