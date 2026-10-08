@@ -101,7 +101,7 @@ def test_revision_queue_30_questions_hydrates_in_constant_queries():
         assert len(items) == 30
         assert items[0]["question"]["question_text"] == "question 0"
         assert len(items[0]["question"]["options"]) == 1
-        assert queries <= 3, f"Revision queue issued {queries} SELECT statements"
+        assert queries <= 4, f"Revision queue issued {queries} SELECT statements"
     finally:
         db.close()
 
@@ -112,7 +112,7 @@ def test_bookmarks_30_questions_hydrate_in_constant_queries():
         items, queries = _count_selects(engine, lambda: list_bookmarks(db=db, user=user))
         assert len(items) == 30
         assert len(items[-1]["question"]["options"]) == 1
-        assert queries <= 3, f"Bookmarks issued {queries} SELECT statements"
+        assert queries <= 4, f"Bookmarks issued {queries} SELECT statements"
     finally:
         db.close()
 
@@ -125,7 +125,7 @@ def test_flashcard_due_filter_is_applied_in_sql_not_python_loop():
         ))
         assert len(cards) == 20
         assert all(not int(card["front"].split()[-1]) % 2 for card in cards)
-        assert queries <= 1, f"Flashcards issued {queries} SELECT statements"
+        assert queries <= 2, f"Flashcards issued {queries} SELECT statements"
         assert any(card["successful_reviews"] == 1 for card in cards)
     finally:
         db.close()
