@@ -962,3 +962,45 @@ export function prefetchStudyPage(path: string): void {
   if (path === "/analytics") void fetchAnalyticsSummary().catch(() => undefined);
   if (path === "/revision") void fetchRevisionQueue().catch(() => undefined);
 }
+
+
+/** M0 catalog: browsing a planned exam must never switch learner data. */
+export type ExamCatalogSection = {
+  slug: string;
+  name: string;
+  questions: number;
+  minutes: number | null;
+  kind: "mcq";
+  qualifying: boolean;
+};
+
+export type ExamCatalogEntry = {
+  slug: string;
+  family: "cgl" | "je";
+  stage: string;
+  stream: string | null;
+  name: string;
+  subtitle: string;
+  status: "ready" | "planned";
+  total_questions: number;
+  duration_minutes: number;
+  positive_marks: number;
+  negative_marks: number;
+  sections: ExamCatalogSection[];
+  extra_assessments: Array<{
+    slug: string;
+    name: string;
+    kind: "typing";
+    minutes: number;
+    qualifying: boolean;
+  }>;
+  notice_url: string;
+};
+
+export async function fetchExamCatalog(): Promise<ExamCatalogEntry[]> {
+  return fetchCachedJson<ExamCatalogEntry[]>(
+    "ssc_exam_catalog_m0_v1",
+    API_BASE + "/exams",
+    30 * 60 * 1000,
+  );
+}

@@ -15,6 +15,7 @@ const links = [
 
 const titles: Array<[RegExp, string, string]> = [
   [/^\/$/, "Dashboard", "Preparation overview"],
+  [/^\/exams$/, "Examinations", "Your current course and upcoming SSC stages"],
   [/^\/planner/, "Today", "Adaptive daily study plan"],
   [/^\/learn\/topic/, "Lesson", "Learn the concept and question patterns"],
   [/^\/learn/, "Learn", "Concepts, methods and shortcuts"],
@@ -57,6 +58,14 @@ export default function GlobalNav() {
             <small>CGL Tier I</small>
           </div>
         </Link>
+        <Link
+          className={location.pathname === "/exams" ? "examSwitcherLink examSwitcherActive" : "examSwitcherLink"}
+          to="/exams"
+          aria-label="View exams and preparation stages"
+        >
+          <span>SSC CGL · Tier I</span>
+          <span aria-hidden="true">Change ↗</span>
+        </Link>
 
         <nav className="sidebarLinks">
           {links.map(([to, label, icon]) => {
@@ -97,10 +106,13 @@ export default function GlobalNav() {
           <span>{subtitle}</span>
         </div>
         <div className="contextCrumb">
-          <Link to="/">SSC CGL</Link>
+          <Link to="/exams">{location.pathname === "/exams" ? "All exams" : "SSC CGL · Tier I"}</Link>
           <span>/</span>
           <b>{title}</b>
         </div>
+        <Link className="contextExamSwitcher" to={location.pathname === "/exams" ? "/" : "/exams"} aria-label={location.pathname === "/exams" ? "Return to current exam" : "Choose examination"}>
+          {location.pathname === "/exams" ? "Current course ↗" : "Exams ↗"}
+        </Link>
       </header>
 
       <nav className="mobileBottomNav" aria-label="Mobile navigation">
