@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
 from app.db import Base, SessionLocal, engine
-from app.routers import analytics, assets, auth, backup, content, exams, health, learn, mocks, planner, practice, review, revision
+from app.routers import analytics, assets, auth, backup, content, diagnostics, exams, health, learn, mocks, planner, practice, review, revision
 from app.services.content_audit import collect_content_audit
 from app.services.content_repair import repair_content_integrity
 from app.services.learner_canary import run_production_learner_canary
@@ -124,6 +124,7 @@ app.include_router(auth.router, prefix="/api/v1")
 app.include_router(content.router, prefix="/api/v1")
 app.include_router(learn.router, prefix="/api/v1")
 app.include_router(mocks.router, prefix="/api/v1")
+app.include_router(diagnostics.router, prefix="/api/v1")
 app.include_router(analytics.router, prefix="/api/v1")
 app.include_router(revision.router, prefix="/api/v1")
 app.include_router(planner.router, prefix="/api/v1")
