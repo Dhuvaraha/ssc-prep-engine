@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import type { SolvedExample } from "../api";
 import SecureImage from "./SecureImage";
 
@@ -137,9 +138,9 @@ export default function TeacherGuidedCheck({topicId, example, recognitionCue, co
               setHintShown(false);
               setShowSolution(false);
             }}>Try this example again</button>
-            <a className="primaryLink" href={"/practice?topic_id=" + topicId + "&mode=path&limit=10"}>
+            <Link className="primaryLink" to={"/practice?topic_id=" + topicId + "&mode=path&limit=10"}>
               Try new independent questions →
-            </a>
+            </Link>
           </div>
           <small className="teacherGuidedCaveat">
             This demonstration does not change your mastery score. The Learning Path measures independent answers to new questions.
