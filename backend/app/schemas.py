@@ -202,6 +202,7 @@ class MockStartResponse(BaseModel):
     mode: str
     duration_minutes: int
     questions: list[MockQuestionOut]
+    resumed_existing: bool = False
 
 
 class MockSubmitResponse(BaseModel):
