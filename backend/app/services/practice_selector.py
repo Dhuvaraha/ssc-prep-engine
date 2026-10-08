@@ -141,6 +141,13 @@ def select_practice_questions(
 ) -> list[Question]:
     now = datetime.now(timezone.utc).replace(tzinfo=None)
 
+    def hydrate(ids: list[int]) -> list[Question]:
+        # Preserve the existing selector API and bounded-query test hooks.
+        # Exam-bound requests still enforce the restriction at SQL level.
+        if exam_id is None:
+            return _hydrate_questions(db, ids)
+        return _hydrate_questions(db, ids, exam_id=exam_id)
+
     if similar_to_question_id is not None:
         anchor = db.get(Question, similar_to_question_id)
         if anchor and anchor.verification_status == "verified" and anchor.topic_id is not None and (exam_id is None or anchor.exam_id == exam_id):
@@ -159,7 +166,7 @@ def select_practice_questions(
                     .limit(max(40, limit * 8))
                 )
             )
-            similar = unique_questions(_hydrate_questions(db, ids, exam_id=exam_id))
+            similar = unique_questions(hydrate(ids))
             if similar:
                 return similar[:limit]
 
@@ -176,7 +183,7 @@ def select_practice_questions(
                     .limit(max(40, limit * 8))
                 )
             )
-            fallback = unique_questions(_hydrate_questions(db, fallback_ids, exam_id=exam_id))
+            fallback = unique_questions(hydrate(fallback_ids))
             if fallback:
                 return fallback[:limit]
 
@@ -195,7 +202,7 @@ def select_practice_questions(
                 .limit(max(limit * 3, 30))
             )
         )
-        due_questions = unique_questions(_hydrate_questions(db, due_ids, exam_id=exam_id))
+        due_questions = unique_questions(hydrate(due_ids))
         if topic_id is not None:
             due_questions = [question for question in due_questions if question.topic_id == topic_id]
         if due_questions:
@@ -208,7 +215,7 @@ def select_practice_questions(
             candidate_ids,
         )
 
-    questions = unique_questions(_hydrate_questions(db, candidate_ids, exam_id=exam_id))
+    questions = unique_questions(hydrate(candidate_ids))
     if not questions:
         return []
 
