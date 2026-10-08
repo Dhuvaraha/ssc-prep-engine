@@ -329,12 +329,13 @@ export default function LessonPage() {
             </div>
             <div className="topicLessonActions">
               <SpeakButton label="Read lesson aloud" text={speakText} />
-              <Link className="primaryLink" to={"/practice?topic_id=" + pkg.topic.id + "&mode=guided&limit=10"}>
-                Start guided practice
+              <Link className="primaryLink" to={"/practice?topic_id=" + pkg.topic.id + "&mode=path&limit=10"}>
+                Start Learning Path →
               </Link>
               <Link className="secondaryLink" to={"/practice?topic_id=" + pkg.topic.id + "&mode=guided&limit=3"}>
                 3-question quick check
               </Link>
+              <p className="learningPathHelp">Easy foundations first · Medium and Hard unlock after independent practice.</p>
             </div>
           </section>
 
@@ -596,8 +597,8 @@ export default function LessonPage() {
                       {activePattern.medium_rule && <div><span>Medium</span><p>{activePattern.medium_rule}</p></div>}
                       {activePattern.hard_rule && <div><span>Hard</span><p>{activePattern.hard_rule}</p></div>}
                     </div>
-                    <Link className="primaryLink" to={"/practice?topic_id=" + pkg.topic.id + "&mode=guided&limit=10"}>
-                      Practise this topic →
+                    <Link className="primaryLink" to={"/practice?topic_id=" + pkg.topic.id + "&mode=path&limit=10"}>
+                      Practise at your learning level →
                     </Link>
                   </article>
                 )}
@@ -609,13 +610,16 @@ export default function LessonPage() {
             <div>
               <p className="eyebrow">Lesson complete</p>
               <h2>Do not stop at reading.</h2>
-              <p>Use a 3-question check to prove recall, then move into guided practice. Reading alone does not raise mastery.</p>
+              <p>Reading alone is not proof of mastery. Take a quick check, then practise along the Learning Path from Foundation to Challenge.</p>
             </div>
             <div>
               <Link className="secondaryLink" to="/learn">Choose another topic</Link>
               <Link className="secondaryLink" to={"/mocks?topic_id=" + pkg.topic.id}>Topic test</Link>
-              <Link className="primaryLink" to={"/practice?topic_id=" + pkg.topic.id + "&mode=guided&limit=3"}>
-                Take quick check →
+              <Link className="primaryLink" to={"/practice?topic_id=" + pkg.topic.id + "&mode=path&limit=10"}>
+                Start Learning Path →
+              </Link>
+              <Link className="secondaryLink" to={"/practice?topic_id=" + pkg.topic.id + "&mode=guided&limit=3"}>
+                3-question quick check
               </Link>
             </div>
           </section>
