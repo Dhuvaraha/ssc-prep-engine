@@ -93,10 +93,10 @@ def test_only_published_reviewed_wrong_option_insight_is_returned_after_answer()
         assert answer.correct is False
         assert len(answer.option_insights) == 1
         insight = answer.option_insights[0]
-        assert insight["position"] == 2
-        assert insight["source_reference"] == "Official reference 1"
-        assert "historical fact" in insight["knowledge_text"]
-        assert insight["related_question"] is not None
+        assert insight.position == 2
+        assert insight.source_reference == "Official reference 1"
+        assert "historical fact" in insight.knowledge_text
+        assert insight.related_question is not None
     finally:
         db.close()
 
