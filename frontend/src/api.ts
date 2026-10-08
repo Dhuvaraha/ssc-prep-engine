@@ -380,6 +380,16 @@ export type PracticeCoaching = {
   archetype_exact: boolean;
 };
 
+export type OptionInsight = {
+  position: number;
+  insight_type: "fact" | "rule" | "misconception" | "comparison";
+  knowledge_text: string;
+  related_question: string | null;
+  related_answer: string | null;
+  source_reference: string;
+  source_year: number | null;
+};
+
 export type PracticeResult = {
   attempt_id: number;
   correct: boolean;
@@ -389,6 +399,7 @@ export type PracticeResult = {
   mastery_score: number | null;
   revision_scheduled: boolean;
   coaching: PracticeCoaching | null;
+  option_insights?: OptionInsight[];
 };
 
 export async function fetchPracticeQuestions(
