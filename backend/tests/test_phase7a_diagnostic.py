@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app.db import Base
 from app.models import (
-    Exam, MockAttemptQuestion, Question, QuestionOption, Subject, Topic, User,
+    Exam, Question, QuestionOption, Subject, Topic, User,
 )
 from app.routers.analytics import analytics_summary
 from app.routers.diagnostics import diagnostic_baseline
