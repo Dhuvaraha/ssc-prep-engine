@@ -939,3 +939,19 @@ export async function fetchTopicPackage(topicId: number): Promise<TopicPackage> 
 export function prefetchTopicPackage(topicId: number): void {
   void fetchTopicPackage(topicId).catch(() => undefined);
 }
+
+/**
+ * Route-intent prefetch. Only fetch one lightweight snapshot for the page the
+ * learner is about to open; never eagerly load the entire authenticated app.
+ */
+export function prefetchStudyPage(path: string): void {
+  if (path === "/learn") {
+    void fetchContentTree().catch(() => undefined);
+    return;
+  }
+  if (!localStorage.getItem("ssc_prep_token")) return;
+
+  if (path === "/planner") void fetchTodayPlan().catch(() => undefined);
+  if (path === "/analytics") void fetchAnalyticsSummary().catch(() => undefined);
+  if (path === "/revision") void fetchRevisionQueue().catch(() => undefined);
+}
