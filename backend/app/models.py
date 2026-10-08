@@ -44,6 +44,23 @@ class Exam(Base):
     negative_marks: Mapped[float] = mapped_column(Float, default=0.5)
 
 
+class UserExamFocus(Base):
+    """Per-user currently selected published exam stage.
+
+    Deliberately additive: existing exam targets, attempts, lessons and
+    progress remain untouched. A later PR will scope their queries.
+    """
+    __tablename__ = "user_exam_focus"
+
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    exam_slug: Mapped[str] = mapped_column(String(120), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+
+
 class Subject(Base):
     __tablename__ = "subjects"
 
