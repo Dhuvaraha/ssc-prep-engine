@@ -5,9 +5,11 @@ import {
   PracticeQuestion,
   PracticeResult,
   TopicPackage,
+  TopicLearningPath,
   addQuestionToRevision,
   classifyPracticeMistake,
   fetchPracticeQuestions,
+  fetchTopicLearningPath,
   fetchTopicPackage,
   submitPracticeAnswer,
   toggleBookmark,
@@ -34,6 +36,7 @@ const mistakeOptions = [
 
 const practiceModes = [
   ["adaptive", "Adaptive", "Prioritises unseen, wrong, slow and low-confidence questions."],
+  ["path", "Learning path", "Start with foundations. Medium and hard questions unlock with independent evidence."],
   ["guided", "Guided", "Moves across question patterns from easier to harder."],
   ["topic", "Topic drill", "Rotates through the different patterns inside the selected topic."],
   ["pyq", "PYQ", "Prioritises previous-year and official-source questions."],
@@ -51,7 +54,7 @@ export default function PracticePage() {
   const [params] = useSearchParams();
   const rawTopicId = Number(params.get("topic_id") ?? "0");
   const topicId = Number.isFinite(rawTopicId) && rawTopicId > 0 ? rawTopicId : undefined;
-  const requestedMode = params.get("mode") ?? (topicId ? "adaptive" : "mixed");
+  const requestedMode = params.get("mode") ?? (topicId ? "path" : "mixed");
   const validModes = practiceModes.map((item) => item[0]) as readonly string[];
   const mode = (validModes.includes(requestedMode) ? requestedMode : "adaptive") as Mode;
   const rawSimilarTo = Number(params.get("similar_to") ?? "0");
@@ -62,6 +65,7 @@ export default function PracticePage() {
 
   const [questions, setQuestions] = useState<PracticeQuestion[]>([]);
   const [topicPackage, setTopicPackage] = useState<TopicPackage | null>(null);
+  const [learningPath, setLearningPath] = useState<TopicLearningPath | null>(null);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [confidence, setConfidence] = useState<number | null>(null);
@@ -122,6 +126,12 @@ export default function PracticePage() {
     timedOut.current = false;
     setSubmitting(false);
     setTopicPackage(null);
+    setLearningPath(null);
+    if (mode === "path" && topicId) {
+      fetchTopicLearningPath(topicId)
+        .then((data) => { if (!cancelled) setLearningPath(data); })
+        .catch(() => { if (!cancelled) setLearningPath(null); });
+    }
     if (topicId) {
       fetchTopicPackage(topicId)
         .then((pkg) => { if (!cancelled) setTopicPackage(pkg); })
@@ -339,7 +349,7 @@ export default function PracticePage() {
           <p>{currentMode?.[2]}</p>
         </div>
         <div className="practiceModes">
-          {practiceModes.map(([value, label]) => (
+          {practiceModes.filter(([value]) => value !== "path" || Boolean(topicId)).map(([value, label]) => (
             <Link
               key={value}
               className={mode === value ? "modePill activeMode" : "modePill"}
@@ -351,12 +361,25 @@ export default function PracticePage() {
         </div>
       </section>
 
+      {mode === "path" && topicId && learningPath && (
+        <section className="learningPathNotice" aria-live="polite">
+          <div>
+            <strong>Step {learningPath.level}/3 — {learningPath.stage}</strong>
+            <p>{learningPath.description}</p>
+            <small>{learningPath.next_unlock}</small>
+          </div>
+          <span className="learningPathEvidence">
+            {learningPath.levels[String(learningPath.level)]?.distinct_attempts ?? 0} different questions attempted
+          </span>
+        </section>
+      )}
+
       <article className="practiceCard">
         <div className="practiceQuestionToolbar">
           <div className="practiceMeta">
             {question.subtopic && <span>{question.subtopic}</span>}
             {question.pattern_type && <span>{question.pattern_type.replaceAll("-", " ")}</span>}
-            <span>Difficulty {question.difficulty}</span>
+            <span>{({1: "Easy · Foundation", 2: "Medium · Application", 3: "Hard · Challenge"} as Record<number,string>)[question.difficulty] ?? "Difficulty " + question.difficulty}</span>
             {question.expected_time_seconds && <span>Target {question.expected_time_seconds}s</span>}
             {question.year && <span>PYQ {question.year}</span>}
             <span className={mode === "timed" && remaining <= 10 ? "urgentTimer" : ""}>
