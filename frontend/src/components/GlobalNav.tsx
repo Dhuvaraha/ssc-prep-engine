@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import { fetchContentTree, prefetchStudyPage } from "../api";
@@ -12,6 +12,8 @@ const links = [
   ["/revision", "Revision", "R"],
   ["/analytics", "Analytics", "A"],
 ] as const;
+
+const mobileLinks = links.slice(0, 4);
 
 const titles: Array<[RegExp, string, string]> = [
   [/^\/$/, "Dashboard", "Preparation overview"],
@@ -30,6 +32,21 @@ export default function GlobalNav() {
   const location = useLocation();
   const hidden = location.pathname === "/login" || location.pathname === "/mocks";
   const authenticated = Boolean(getToken());
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreActive = !mobileLinks.some(([to]) => location.pathname === to.split("?")[0]);
+
+  useEffect(() => {
+    setMoreOpen(false);
+  }, [location.pathname, location.search]);
+
+  useEffect(() => {
+    if (!moreOpen) return;
+    function onEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setMoreOpen(false);
+    }
+    window.addEventListener("keydown", onEscape);
+    return () => window.removeEventListener("keydown", onEscape);
+  }, [moreOpen]);
 
   useEffect(() => {
     document.body.classList.toggle("hasAppSidebar", !hidden);
@@ -74,6 +91,7 @@ export default function GlobalNav() {
             return (
               <Link
                 className={active ? "sidebarLink sidebarLinkActive" : "sidebarLink"}
+                aria-current={active ? "page" : undefined}
                 key={to}
                 to={to}
                 onPointerEnter={() => prefetchStudyPage(path)}
@@ -116,21 +134,44 @@ export default function GlobalNav() {
       </header>
 
       <nav className="mobileBottomNav" aria-label="Mobile navigation">
-        {links.map(([to, label, icon]) => {
+        {mobileLinks.map(([to, label, icon]) => {
           const path = to.split("?")[0];
-          const active = location.pathname === path || (path !== "/" && location.pathname.startsWith(path));
+          const active = location.pathname === path || location.pathname.startsWith(path + "/");
           return (
             <Link
               className={active ? "mobileNavActive" : ""}
               key={to}
               to={to}
+              aria-current={active ? "page" : undefined}
               onTouchStart={() => prefetchStudyPage(path)}
               onFocus={() => prefetchStudyPage(path)}
             >
-              <i>{icon}</i><span>{label}</span>
+              <i aria-hidden="true">{icon}</i><span>{label}</span>
             </Link>
           );
         })}
+        <button
+          type="button"
+          className={moreActive || moreOpen ? "mobileNavActive" : ""}
+          aria-label="More navigation"
+          aria-expanded={moreOpen}
+          aria-controls="mobile-more-menu"
+          onClick={() => setMoreOpen((open) => !open)}
+        >
+          <i aria-hidden="true">···</i><span>More</span>
+        </button>
+      </nav>
+      <nav
+        id="mobile-more-menu"
+        className="mobileMoreMenu"
+        aria-label="Additional navigation"
+        hidden={!moreOpen}
+      >
+        <Link to="/">Dashboard</Link>
+        <Link to="/revision" aria-current={location.pathname === "/revision" ? "page" : undefined}>Revision</Link>
+        <Link to="/analytics" aria-current={location.pathname === "/analytics" ? "page" : undefined}>Analytics</Link>
+        <Link to="/exams" aria-current={location.pathname === "/exams" ? "page" : undefined}>Choose exam</Link>
+        <Link to={authenticated ? "/settings" : "/login"}>{authenticated ? "Profile & settings" : "Sign in"}</Link>
       </nav>
     </>
   );

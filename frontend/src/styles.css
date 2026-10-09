@@ -4602,3 +4602,171 @@ body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
 @media (max-width: 430px) {
   .diagnosticSubjectGrid { grid-template-columns: 1fr; }
 }
+
+
+/* Reserve the sidebar's real width: previously main width + left offset
+   exceeded the viewport at common 1024–1440px laptop/tablet sizes. */
+@media (min-width: 981px) {
+  body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
+    max-width: calc(100vw - 270px);
+    margin-left: max(238px, calc(50vw - 473px));
+    margin-right: auto;
+  }
+}
+/* Phase 7D-01: mobile-first navigation + assessment interaction; no exam-state changes. */
+@media (max-width: 980px) {
+  .mobileBottomNav {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    inset: auto 8px calc(8px + env(safe-area-inset-bottom, 0px));
+    padding: 5px;
+  }
+  .mobileBottomNav a,
+  .mobileBottomNav button {
+    min-width: 0;
+    min-height: 54px;
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 2px;
+    padding: 5px 3px;
+    border-radius: 10px;
+    background: transparent;
+    color: #cbd5e1;
+    font-weight: 750;
+  }
+  .mobileBottomNav :is(a, button).mobileNavActive {
+    background: rgba(255,255,255,.12);
+    color: white;
+  }
+  .mobileBottomNav i {
+    width: 25px;
+    height: 25px;
+    font-size: 13px;
+    background: rgba(255,255,255,.08);
+  }
+  .mobileBottomNav span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .mobileMoreMenu {
+    position: fixed;
+    z-index: 89;
+    right: 9px;
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    display: grid;
+    gap: 3px;
+    width: min(340px, calc(100vw - 18px));
+    max-height: min(70vh, 450px);
+    overflow-y: auto;
+    padding: 8px;
+    border-radius: 14px;
+    border: 1px solid #dfe5ed;
+    background: #fff;
+    box-shadow: 0 15px 48px rgba(16,24,40,.2);
+  }
+  .mobileMoreMenu[hidden] { display: none !important; }
+  .mobileMoreMenu a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 11px 14px;
+    border-radius: 9px;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .mobileMoreMenu a[aria-current="page"] {
+    background: #eaf1fa;
+    color: #1e477b;
+  }
+  body.hasAppSidebar #root > main:not(.mockShell):not(.examShell) {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+    min-width: 0;
+  }
+  .offlineBanner { bottom: calc(92px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (min-width: 981px) {
+  .mobileMoreMenu { display: none !important; }
+}
+@media (max-width: 850px) {
+  .examLayout {
+    width: min(100% - 24px, 720px);
+    gap: 12px;
+    margin-top: 12px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+  .examPalette {
+    padding: 10px 12px;
+    position: static;
+    order: -1;
+  }
+  .paletteToggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 44px;
+    gap: 12px;
+    padding: 8px 3px;
+    border-radius: 8px;
+    background: transparent;
+    color: #28384e;
+    text-align: left;
+  }
+  .paletteToggle strong { white-space: nowrap; font-size: 12px; color: #315a8e; }
+  .paletteContent { display: none; }
+  .paletteContentOpen { display: block; padding: 6px 0 8px; }
+  .questionPaletteGrid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .paletteNumber { aspect-ratio: auto; min-height: 44px; }
+  .paletteLegend { margin-top: 5px; }
+  .analyticsHeroLinks, .mockResultActions { flex-wrap: wrap; }
+}
+@media (min-width: 851px) {
+  .paletteToggle { display: none; }
+  .paletteContent { display: block; }
+}
+@media (min-width: 641px) and (max-width: 850px) {
+  .mockModeGrid, .mockResultGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .questionPaletteGrid { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .appContextBar { min-width: 0; gap: 8px; padding-inline: 12px; }
+  .appContextBar > div:nth-child(2) { min-width: 0; }
+  .appContextBar > div:nth-child(2) strong { overflow-wrap: anywhere; }
+  .contextExamSwitcher { min-height: 40px; align-items: center; }
+  .mobileBottomNav span { font-size: 10px; }
+  .mockShell { width: calc(100% - 24px); padding-top: 18px; }
+  .mockLandingHeader { align-items: flex-start; flex-wrap: wrap; }
+  .mockSetup, .mockResult { margin-top: 16px; padding: 18px; border-radius: 16px; }
+  .mockSetup h1, .mockResult h1 { font-size: clamp(28px, 9vw, 40px); line-height: 1.13; }
+  .mockModeCard { min-height: 0; padding: 16px; }
+  .mockStartButton { width: 100%; min-height: 48px; }
+  .mockResultActions > :is(button, a) { min-height: 44px; display: inline-flex; align-items: center; }
+  .examHeader {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 12px;
+    padding: 10px 12px;
+    align-items: center;
+  }
+  .examHeader > div:first-child { min-width: 0; }
+  .examHeader > div:first-child span { overflow-wrap: anywhere; line-height: 1.4; }
+  .examHeader > .examTimer, .examHeader > .examTimerStack { justify-self: end; }
+  .examHeader > .finishButton { grid-column: 1 / -1; min-height: 44px; }
+  .examSectionTabs { gap: 6px; padding: 8px 12px; }
+  .examSectionTabs button { min-height: 44px; padding-inline: 12px; }
+  .examQuestionCard { padding: 16px; border-radius: 14px; min-width: 0; }
+  .examQuestionCard h1 { overflow-wrap: anywhere; line-height: 1.45; }
+  .examQuestionMeta { flex-wrap: wrap; }
+  .practiceOptions button { min-width: 0; overflow-wrap: anywhere; }
+  .examQuestionActions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .examQuestionActions > button { min-width: 0; min-height: 46px; }
+  .examQuestionActions > button:last-child { grid-column: 1 / -1; }
+  .analyticsHeroLinks a { min-height: 40px; display: inline-flex; align-items: center; }
+}
