@@ -157,7 +157,10 @@ def test_content_review_requires_explicit_reviewer_allowlist(monkeypatch):
     reviewer = User(email="reviewer@example.com", password_hash="x")
     ordinary = User(email="learner@example.com", password_hash="x")
 
-    assert get_content_reviewer(reviewer) is reviewer
+    db, *_ = _build_release_db()
+    db.add(reviewer)
+    db.commit()
+    assert get_content_reviewer(reviewer, db=db) is reviewer
     with pytest.raises(HTTPException) as exc:
         get_content_reviewer(ordinary)
     assert exc.value.status_code == 403

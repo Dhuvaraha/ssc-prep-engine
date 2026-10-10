@@ -25,7 +25,8 @@ def create_access_token(subject: str) -> str:
 
 def decode_access_token(token: str) -> str | None:
     try:
-        payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
-        return payload.get("sub")
+        payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm], options={"require_exp": True, "require_sub": True})
+        subject = payload.get("sub")
+        return subject if isinstance(subject, str) and subject.isdecimal() else None
     except JWTError:
         return None

@@ -5,7 +5,7 @@ const base = process.env.SMOKE_URL ?? "http://127.0.0.1:4173";
 const widths = [320, 360, 390, 430, 768, 1024, 1440];
 const checks = ["/", "/learn", "/exams", "/login"];
 await mkdir("artifacts/browser", { recursive: true });
-const browser = await chromium.launch({headless: true});
+const browser = await chromium.launch({headless: true, channel: process.env.PLAYWRIGHT_CHANNEL || undefined});
 let failures = 0;
 try {
   for (const width of widths) {

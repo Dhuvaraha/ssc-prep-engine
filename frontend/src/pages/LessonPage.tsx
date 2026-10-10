@@ -174,8 +174,12 @@ export default function LessonPage() {
         setActiveStageIndex(0);
         setActivePatternIndex(0);
       })
-      .catch(() => {
-        if (!cancelled) setError("Could not load this topic.");
+      .catch((cause) => {
+        if (!cancelled) setError(cause instanceof Error && cause.message === "Content not available"
+          ? "This topic is not available for your account. Ask the course operator to check your course and source access. Your saved progress is retained."
+          : cause instanceof Error && cause.message === "ASSESSMENT_IN_PROGRESS"
+            ? "Finish or abandon your active assessment before opening this lesson."
+            : "Could not load this topic. Please retry.");
       });
     return () => {
       cancelled = true;

@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.models import Exam, MockAttempt, MockAttemptQuestion, Question, Subject, Topic
 from app.services.question_quality import unique_questions
+from app.services.practice_integrity import expose, question_digest
+from app.access_models import AssessmentDelivery
 
 
 SECTION_ORDER = ["reasoning", "general-awareness", "quant", "english"]
@@ -311,6 +313,8 @@ def create_mock_attempt(
         )
         db.add(row)
         rows.append((row, question))
+        expose(db, user_id, question, "assessment")
+        db.add(AssessmentDelivery(attempt_id=attempt.id, question_id=question.id, content_digest=question_digest(question), correct_option=question.correct_option))
 
     db.commit()
     return attempt, rows
@@ -342,6 +346,16 @@ def load_mock_attempt(
         for row in rows
         if row.question_id in by_id
     ]
+    if attempt.status == "in_progress":
+        bindings = {binding.question_id: binding for binding in db.scalars(select(AssessmentDelivery).where(AssessmentDelivery.attempt_id == attempt.id))}
+        for _, question in result:
+            binding = bindings.get(question.id)
+            if binding and binding.content_digest != question_digest(question):
+                from fastapi import HTTPException
+                raise HTTPException(409, "ASSESSMENT_CONTENT_CHANGED")
+    if len(result) != len(rows):
+        from fastapi import HTTPException
+        raise HTTPException(409, "Assessment content access changed; contact support")
     return attempt, result
 
 
@@ -360,6 +374,10 @@ def submit_mock_attempt(
             "unattempted": attempt.unattempted_count,
             "total_questions": len(rows),
         }
+
+    if attempt.status != "in_progress":
+        from fastapi import HTTPException
+        raise HTTPException(409, "Mock is terminal")
 
     correct = 0
     incorrect = 0

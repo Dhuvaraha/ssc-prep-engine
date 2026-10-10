@@ -63,6 +63,7 @@ class OptionOut(BaseModel):
 
 
 class QuestionOut(BaseModel):
+    delivery_token: str | None = None
     id: int
     topic_id: int | None = None
     subtopic: str | None = None
@@ -96,6 +97,7 @@ class SolvedExampleOut(BaseModel):
 
 
 class PracticeSubmit(BaseModel):
+    delivery_token: str = Field(min_length=36, max_length=36)
     question_id: int
     selected_option: int | None = Field(ge=1, le=4)
     time_seconds: float = Field(ge=0)

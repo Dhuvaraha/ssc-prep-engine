@@ -2,7 +2,7 @@ import json
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
@@ -63,7 +63,13 @@ def run_startup_content_checks(db) -> None:
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    Base.metadata.create_all(engine)
+    if engine.dialect.name == "postgresql":
+        if settings.jwt_secret == "change-me" or len(settings.jwt_secret) < 32:
+            raise RuntimeError("Production requires an operator-configured JWT secret of at least 32 characters")
+        from app.phase_a_migration import verify_rollout
+        verify_rollout(engine, settings.phase_a_reviewed_manifest_sha)
+    else:
+        Base.metadata.create_all(engine)
 
     db = SessionLocal()
     try:
@@ -116,6 +122,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.middleware("http")
+async def private_response_headers(request: Request, call_next):
+    response = await call_next(request)
+    # Include denials; avoid cached anonymous and authenticated error bodies.
+    if request.url.path.startswith("/api/v1/"):
+        response.headers["Cache-Control"] = "private, no-store"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["X-SSC-Release"] = settings.release_sha
+        response.headers["Vary"] = ", ".join(dict.fromkeys([
+            *[value.strip() for value in response.headers.get("Vary", "").split(",") if value.strip()],
+            "Authorization",
+        ]))
+    return response
+
 
 app.include_router(health.router)
 app.include_router(exams.router, prefix="/api/v1")
