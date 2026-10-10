@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     apply_content_repair_on_startup: bool = False
     run_learner_canary_on_startup: bool = False
     run_launch_audit_on_startup: bool = False
+    phase_a_reviewed_manifest_sha: str = ""
+    release_sha: str = "unreleased"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

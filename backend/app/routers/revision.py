@@ -6,7 +6,8 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.core.study_time import current_study_date
 from app.db import get_db
-from app.deps import get_current_user
+from app.services.practice_integrity import expose
+from app.services.content_access import teaching_user as get_current_user
 from app.domain.revision import next_revision_date
 from app.models import (
     Bookmark,
@@ -65,6 +66,7 @@ def get_revision_queue(
         question = questions.get(item.question_id)
         if not question:
             continue
+        expose(db, user.id, question, "revision")
         result.append(
             {
                 "id": item.id,
@@ -90,6 +92,7 @@ def get_revision_queue(
                 },
             }
         )
+    db.commit()
     return result
 
 
@@ -218,6 +221,7 @@ def list_bookmarks(
         question = questions.get(row.question_id)
         if not question:
             continue
+        expose(db, user.id, question, "revision")
         result.append(
             {
                 "bookmark_id": row.id,
@@ -239,6 +243,7 @@ def list_bookmarks(
                 },
             }
         )
+    db.commit()
     return result
 
 

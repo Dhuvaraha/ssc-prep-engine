@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.core.study_time import current_study_date, utc_naive_to_study_date
 from app.db import get_db
-from app.deps import get_current_user
+from app.services.content_access import teaching_user as get_current_user
 from app.models import MockAttempt, Question, QuestionAttempt, Subject, Topic, TopicMastery, User
 from app.services.exam_scope import current_exam
 

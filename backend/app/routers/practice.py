@@ -5,7 +5,9 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.deps import get_current_user
+from app.services.practice_integrity import issue_delivery, load_delivery, expose, digest
+from app.access_models import PracticeDelivery
+from app.services.content_access import teaching_user as get_current_user
 from app.domain.mastery import clamp_mastery, mastery_delta
 from app.domain.models import AttemptOutcome, MasterySignal
 from app.core.study_time import current_study_date
@@ -45,7 +47,7 @@ def get_practice_questions(
             raise HTTPException(status_code=404, detail="Question not found for selected exam")
     if mode == "path" and topic_id is None:
         raise HTTPException(status_code=400, detail="Choose a topic to begin its learning path")
-    return select_practice_questions(
+    questions = select_practice_questions(
         db,
         user_id=user.id,
         exam_id=exam.id,
@@ -54,6 +56,13 @@ def get_practice_questions(
         mode=mode,
         similar_to_question_id=similar_to,
     )
+
+    result = []
+    for question in questions:
+        delivery = issue_delivery(db, user.id, question)
+        result.append(QuestionOut.model_validate(question).model_copy(update={"delivery_token": delivery.id}))
+    db.commit()
+    return result
 
 
 @router.get("/learning-path")
@@ -82,6 +91,14 @@ def submit_practice(
         raise HTTPException(status_code=404, detail="Verified question not found")
     if question.correct_option is None:
         raise HTTPException(status_code=409, detail="Question answer key is not verified")
+
+    delivery = load_delivery(db, user.id, payload.delivery_token, question)
+    request_digest = digest(payload.model_dump())
+    if delivery.result_json:
+        if delivery.request_digest != request_digest:
+            raise HTTPException(409, "IDEMPOTENCY_CONFLICT")
+        return PracticeResult.model_validate_json(delivery.result_json)
+    payload.used_hint = payload.used_hint or delivery.assisted
 
     is_correct = payload.selected_option == question.correct_option
     attempt = QuestionAttempt(
@@ -175,9 +192,7 @@ def submit_practice(
     # Insight context is returned only after the verified answer has been
     # submitted, never in /practice/questions or live mock payloads.
     option_insights = published_option_insights(db, question=question)
-    db.commit()
-
-    return PracticeResult(
+    result = PracticeResult(
         attempt_id=attempt.id,
         correct=is_correct,
         correct_option=question.correct_option,
@@ -188,6 +203,28 @@ def submit_practice(
         coaching=coaching,
         option_insights=option_insights,
     )
+
+    delivery.request_digest = request_digest
+    delivery.result_json = result.model_dump_json()
+    expose(db, user.id, question, "practice_result")
+    db.commit()
+    return result
+
+
+@router.post("/deliveries/{token}/assist")
+def assist_delivery(token: str, action: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    if action not in {"hint", "explain", "shortcut", "compare", "trap", "example"}:
+        raise HTTPException(422, "Unsupported assistance action")
+    delivery = db.get(PracticeDelivery, token)
+    question = db.get(Question, delivery.question_id) if delivery and delivery.user_id == user.id else None
+    if not question:
+        raise HTTPException(404, "Delivery not available")
+    delivery = load_delivery(db, user.id, token, question)
+    delivery.assisted = True
+    coaching = build_question_coaching(db, question)
+    expose(db, user.id, question, "assistance")
+    db.commit()
+    return {"explanation": question.explanation, "fast_method": question.fast_method, "coaching": coaching}
 
 
 @router.patch("/attempts/{attempt_id}/mistake")

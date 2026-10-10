@@ -1,4 +1,11 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { useSyncExternalStore } from "react";
+import { SESSION_CHANGED, sessionGeneration, sessionSuspended } from "./auth";
+
+function subscribeSession(notify: () => void) {
+  window.addEventListener(SESSION_CHANGED, notify);
+  return () => window.removeEventListener(SESSION_CHANGED, notify);
+}
 
 import AppErrorBoundary from "./components/AppErrorBoundary";
 import GlobalNav from "./components/GlobalNav";
@@ -19,19 +26,20 @@ import RevisionPage from "./pages/RevisionPage";
 import SettingsPage from "./pages/SettingsPage";
 
 export default function App() {
+  const session = useSyncExternalStore(subscribeSession, sessionGeneration);
   return (
     <BrowserRouter>
       <SessionExpiryGuard />
       <GlobalNav />
       <OfflineBanner />
       <AppErrorBoundary>
-        <Routes>
+        {sessionSuspended() ? <p>Study session paused.</p> : <Routes key={session}>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/exams" element={<ExamChooserPage />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/analytics" element={<RequireAuth><AnalyticsPage /></RequireAuth>} />
         <Route path="/learn" element={<LearnPage />} />
-        <Route path="/learn/topic/:topicId" element={<LessonPage />} />
+        <Route path="/learn/topic/:topicId" element={<RequireAuth><LessonPage /></RequireAuth>} />
         <Route path="/practice" element={<RequireAuth><PracticePage /></RequireAuth>} />
         <Route path="/planner" element={<RequireAuth><PlannerPage /></RequireAuth>} />
         <Route path="/mocks" element={<RequireAuth><MockPage /></RequireAuth>} />
@@ -39,7 +47,7 @@ export default function App() {
         <Route path="/revision" element={<RequireAuth><RevisionPage /></RequireAuth>} />
         <Route path="/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
         <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        </Routes>}
       </AppErrorBoundary>
     </BrowserRouter>
   );

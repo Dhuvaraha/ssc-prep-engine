@@ -1,4 +1,4 @@
-import { clearToken } from "./auth";
+import { clearToken, getToken, SESSION_CHANGED, sessionGeneration, broadcastScopeChange } from "./auth";
 import {
   SESSION_EXPIRED_EVENT,
   beginSessionExpiry,
@@ -14,7 +14,12 @@ function authHeaders(): HeadersInit {
 async function sessionFetch(input: RequestInfo | URL, init: RequestInit = {}): Promise<Response> {
   const headers = new Headers(init.headers);
   const authenticatedRequest = headers.has("Authorization");
-  const response = await window.fetch(input, init);
+  const owner = getToken();
+  const epoch = sessionGeneration();
+  const response = await window.fetch(input, {...init, cache: "no-store"});
+  if (authenticatedRequest && (owner !== getToken() || epoch !== sessionGeneration())) {
+    throw new Error("Session changed; discard stale response");
+  }
 
   if (response.status === 401 && authenticatedRequest) {
     clearToken();
@@ -32,8 +37,17 @@ async function sessionFetch(input: RequestInfo | URL, init: RequestInit = {}): P
   const method = (init.method ?? "GET").toUpperCase();
   if (response.ok && authenticatedRequest && method !== "GET" && method !== "HEAD") {
     invalidatePrivateDataCache();
+    if (String(input).endsWith("/mocks/start")) broadcastScopeChange(false);
+    if (String(input).endsWith("/exams/focus/current")) broadcastScopeChange();
   }
 
+  const responseEpoch = sessionGeneration();
+  const originalJson = response.json.bind(response);
+  response.json = async () => {
+    const value = await originalJson();
+    if (authenticatedRequest && (owner !== getToken() || responseEpoch !== sessionGeneration())) throw new Error("Session changed");
+    return value;
+  };
   return response;
 }
 
@@ -44,6 +58,18 @@ const privateDataCache = new Map<string, CacheEnvelope<unknown>>();
 const privateDataInflight = new Map<string, Promise<unknown>>();
 let privateCacheOwner: string | null = null;
 let privateCacheGeneration = 0;
+window.addEventListener(SESSION_CHANGED, invalidatePrivateDataCache);
+
+// Only historical lesson cache keys are removed; unrelated preferences survive.
+export function purgeLegacyLessonCaches(): void {
+  for (const storage of [localStorage, sessionStorage]) {
+    for (let i = storage.length - 1; i >= 0; i--) {
+      const key = storage.key(i);
+      if (key && /^ssc_(topic_package|topic_lessons|lesson)_/.test(key)) storage.removeItem(key);
+    }
+  }
+}
+purgeLegacyLessonCaches();
 
 export function invalidatePrivateDataCache(): void {
   privateCacheGeneration += 1;
@@ -81,9 +107,8 @@ function fetchPrivateCachedJson<T>(key: string, url: string, ttlMs: number): Pro
         throw new Error(error?.detail ?? "Failed to load study data");
       }
       const value = await response.json() as T;
-      if (privateCacheSession() === owner && generation === privateCacheGeneration) {
-        privateDataCache.set(key, {value, expires_at: Date.now() + ttlMs});
-      }
+      if (privateCacheSession() !== owner || generation !== privateCacheGeneration) throw new Error("Session changed");
+      privateDataCache.set(key, {value, expires_at: Date.now() + ttlMs});
       return value;
     })
     .finally(() => {
@@ -347,13 +372,14 @@ export async function fetchContentTree(): Promise<ContentTree> {
 }
 
 export async function fetchTopicLessons(topicId: number): Promise<Lesson[]> {
-  const response = await sessionFetch(API_BASE + "/learn/topics/" + topicId + "/lessons");
+  const response = await sessionFetch(API_BASE + "/learn/topics/" + topicId + "/lessons", {headers: authHeaders()});
   if (!response.ok) throw new Error("Failed to load lessons");
   return response.json();
 }
 
 
 export type PracticeQuestion = {
+  delivery_token: string;
   id: number;
   topic_id: number | null;
   subtopic: string | null;
@@ -442,6 +468,7 @@ export async function fetchTopicLearningPath(topicId: number): Promise<TopicLear
 }
 
 export async function submitPracticeAnswer(payload: {
+  delivery_token: string;
   question_id: number;
   selected_option: number | null;
   time_seconds: number;
@@ -1009,10 +1036,10 @@ export type TopicPackage = {
 };
 
 export async function fetchTopicPackage(topicId: number): Promise<TopicPackage> {
-  return fetchCachedJson<TopicPackage>(
-    "ssc_topic_package_v3_" + topicId,
+  return fetchPrivateCachedJson<TopicPackage>(
+    "topic_package_" + topicId,
     API_BASE + "/learn/topics/" + topicId + "/package",
-    30 * 60 * 1000,
+    0,
   );
 }
 
@@ -1076,4 +1103,18 @@ export async function fetchExamCatalog(): Promise<ExamCatalogEntry[]> {
     API_BASE + "/exams",
     30 * 60 * 1000,
   );
+}
+
+export async function requestPracticeAssistance(token: string, prompt: string): Promise<string> {
+  const q = prompt.toLowerCase();
+  const action = q.includes("hint") ? "hint" : q.includes("compare") ? "compare" : q.includes("shortcut") ? "shortcut" : q.includes("trap") ? "trap" : q.includes("example") ? "example" : "explain";
+  const response = await sessionFetch(API_BASE + "/practice/deliveries/" + encodeURIComponent(token) + "/assist?action=" + action, {method: "POST", headers: authHeaders()});
+  if (!response.ok) throw new Error("Teaching unavailable");
+  const data = await response.json();
+  const coaching = data.coaching;
+  if (action === "hint") return coaching?.hint_steps?.[0] ?? "No reviewed hint is available for this question.";
+  if (action === "trap") return coaching?.common_trap ?? "No reviewed trap explanation is available.";
+  if (action === "shortcut") return data.fast_method ?? "No reviewed shortcut is available.";
+  if (action === "compare") return [coaching?.standard_method, data.fast_method].filter(Boolean).join("\n\n") || "No reviewed method comparison is available.";
+  return data.explanation ?? "No reviewed explanation is available.";
 }

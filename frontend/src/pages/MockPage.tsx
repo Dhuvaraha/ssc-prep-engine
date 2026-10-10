@@ -106,7 +106,7 @@ export default function MockPage() {
   }, [running, secondsLeft, mode]);
 
   useEffect(() => {
-    if (running && secondsLeft === 0 && attemptId && questions.length) {
+    if (running && secondsLeft === 0 && attemptId) {
       void finishMock(true);
     }
   }, [secondsLeft, running, attemptId, questions.length]);
@@ -197,6 +197,11 @@ export default function MockPage() {
     if (!attemptId) return;
     try {
       const state = await fetchMockState(attemptId);
+      if (mode === "full" && state.active_section_slug !== activeSectionSlug && state.seconds_left > 0) {
+        const refreshed = await fetchMockAttempt(attemptId);
+        setQuestions(refreshed.questions);
+        setCurrentIndex(0);
+      }
       applyTimingState(state);
       if (state.seconds_left <= 0) {
         await finishMock(true);
@@ -222,7 +227,9 @@ export default function MockPage() {
         return;
       }
 
-      const nextIndex = questions.findIndex((item) => item.section_slug === state.active_section_slug);
+      const refreshed = await fetchMockAttempt(attemptId);
+      setQuestions(refreshed.questions);
+      const nextIndex = refreshed.questions.findIndex((item) => item.section_slug === state.active_section_slug);
       if (nextIndex >= 0) {
         setCurrentIndex(nextIndex);
         questionOpenedAt.current = Date.now();
