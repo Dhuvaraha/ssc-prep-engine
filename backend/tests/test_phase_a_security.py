@@ -358,9 +358,10 @@ def test_phase_a_startup_rejects_empty_approved_grants(secured):
     """A reviewed manifest stamp alone must not silently lock out all learners."""
     from sqlalchemy import update
     from app.access_models import EntitlementAudit
-    from app.phase_a_migration import verify_rollout
+    from app.phase_a_migration import migrate, verify_rollout
     _, factory, _, _ = secured
     engine = factory.kw['bind']
+    migrate(engine)  # PostgreSQL RLS must be installed before startup verification.
     approved_digest = 'a' * 64
     with factory() as db:
         db.add(EntitlementAudit(operator='synthetic-reviewer', reason='synthetic empty-grant gate',
