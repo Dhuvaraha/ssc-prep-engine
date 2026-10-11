@@ -50,13 +50,23 @@ def _hydrate_questions(db: Session, ids: list[int], *, exam_id: int | None = Non
     return [by_id[qid] for qid in ids if qid in by_id]
 
 
-def _balanced_candidate_ids(db: Session, *, topic_id: int | None, limit: int, exam_id: int | None = None) -> list[int]:
+def _balanced_candidate_ids(db: Session, *, topic_id: int | None, limit: int, exam_id: int | None = None, pyq_only: bool = False) -> list[int]:
     base = [
         Question.verification_status == "verified",
         Question.correct_option.is_not(None),
     ]
     if exam_id is not None:
         base.append(Question.exam_id == exam_id)
+    if pyq_only:
+        # Historical provenance can only be *candidate*-screened here.
+        # A source_type label is not proof of SSC PYQ authenticity or rights.
+        # Never silently fill the PYQ mode with authored/generated questions.
+        base.extend([
+            Question.source_type == "official",
+            Question.year.is_not(None),
+            Question.source_reference.is_not(None),
+            Question.source_reference != "",
+        ])
 
     if topic_id is not None:
         # Do not let a large first-easy block hide the medium/hard bank.
@@ -208,7 +218,7 @@ def select_practice_questions(
         if due_questions:
             return due_questions[:limit]
 
-    candidate_ids = _balanced_candidate_ids(db, topic_id=topic_id, limit=limit, exam_id=exam_id)
+    candidate_ids = _balanced_candidate_ids(db, topic_id=topic_id, limit=limit, exam_id=exam_id, pyq_only=(mode == "pyq"))
     if topic_id is None:
         candidate_ids = _merge_ids(
             _recent_attempt_ids(db, user_id=user_id, limit=limit, exam_id=exam_id),
@@ -248,14 +258,11 @@ def select_practice_questions(
         return _round_robin(grouped, limit)
 
     if mode == "pyq":
-        pyqs = [
-            question for question in questions
-            if question.year is not None or question.source_type in {"official", "licensed", "user_private"}
-        ]
-        if not pyqs:
-            pyqs = questions
-        pyqs.sort(key=lambda q: (-(q.year or 0), q.difficulty, q.id))
-        return pyqs[:limit]
+        # This is a conservative *year-attributed official-source candidate*
+        # pool, not independently authenticated PYQs. Editorial provenance
+        # and republication rights still require an explicit source review.
+        # If the pool is empty, return no questions instead of fake PYQs.
+        return sorted(questions, key=lambda q: (-(q.year or 0), q.difficulty, q.id))[:limit]
 
     if mode == "speed":
         return sorted(
