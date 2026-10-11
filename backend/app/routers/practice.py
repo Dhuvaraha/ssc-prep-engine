@@ -87,17 +87,29 @@ def submit_practice(
 ):
     exam = current_exam(db, user_id=user.id)
     question = db.get(Question, payload.question_id)
-    if not question or question.exam_id != exam.id or question.verification_status != "verified":
+    # Scoped question lookup still enforces current source/course entitlements.
+    if not question or question.exam_id != exam.id:
         raise HTTPException(status_code=404, detail="Verified question not found")
-    if question.correct_option is None:
-        raise HTTPException(status_code=409, detail="Question answer key is not verified")
 
-    delivery = load_delivery(db, user.id, payload.delivery_token, question)
+    delivery = db.get(PracticeDelivery, payload.delivery_token)
+    if not delivery or delivery.user_id != user.id or delivery.question_id != question.id:
+        raise HTTPException(404, "Delivery not available")
     request_digest = digest(payload.model_dump())
     if delivery.result_json:
+        # An already committed submission is immutable. Retry must replay that
+        # stored result even if an editor later changes the current question.
+        # Do not re-score or write progress; reject changed request payloads.
         if delivery.request_digest != request_digest:
             raise HTTPException(409, "IDEMPOTENCY_CONFLICT")
         return PracticeResult.model_validate_json(delivery.result_json)
+
+    # New submissions may only use the exact verified question revision seen at
+    # delivery. Content changes and expired tokens still fail before any write.
+    if question.verification_status != "verified":
+        raise HTTPException(status_code=404, detail="Verified question not found")
+    if question.correct_option is None:
+        raise HTTPException(status_code=409, detail="Question answer key is not verified")
+    delivery = load_delivery(db, user.id, payload.delivery_token, question)
     payload.used_hint = payload.used_hint or delivery.assisted
 
     is_correct = payload.selected_option == question.correct_option
