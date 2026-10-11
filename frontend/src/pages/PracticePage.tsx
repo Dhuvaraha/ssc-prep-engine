@@ -39,7 +39,7 @@ const practiceModes = [
   ["path", "Learning path", "Start with foundations. Medium and hard questions unlock with independent evidence."],
   ["guided", "Guided", "Moves across question patterns from easier to harder."],
   ["topic", "Topic drill", "Rotates through the different patterns inside the selected topic."],
-  ["pyq", "PYQ", "Prioritises previous-year and official-source questions."],
+  ["pyq", "PYQ candidates", "Only year-attributed official-source candidates. Exact paper provenance is still under review."],
   ["mixed", "Mixed", "Rotates across topics for broader exam recall."],
   ["weak", "Weak topics", "Targets low-mastery topics and recent misses."],
   ["revision", "Revision drill", "Serves questions that are due from your revision queue."],
@@ -143,7 +143,9 @@ export default function PracticePage() {
         setQuestions(items);
         startedAt.current = Date.now();
         setElapsed(0);
-        if (!items.length) setError("No verified questions matched this practice mode yet.");
+        if (!items.length) setError(mode === "pyq"
+          ? "No year-attributed official-source PYQ candidates are available for this selection yet. We will not substitute generated or unrelated questions."
+          : "No verified questions matched this practice mode yet.");
       })
       .catch(() => {
         if (!cancelled) setError("Could not load practice. Check your connection and try again.");
