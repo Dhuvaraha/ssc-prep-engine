@@ -177,6 +177,9 @@ def test_int_04_server_section_and_stale_save(secured):
     attempt = synthetic_mock(factory, ids)
     response = client.get(f'/api/v1/mocks/{attempt}', headers=headers)
     assert [q['question']['id'] for q in response.json()['questions']] == ids['questions'][:1]
+    state = client.get(f'/api/v1/mocks/{attempt}/state', headers=headers)
+    assert state.status_code == 200
+    assert [item['question_id'] for item in state.json()['responses']] == ids['questions'][:1]
     assert client.patch(f'/api/v1/mocks/{attempt}/response', headers=headers, json={'question_id':ids['questions'][1], 'selected_option':1}).status_code == 409
     from datetime import timedelta
     with factory() as db:
@@ -184,6 +187,9 @@ def test_int_04_server_section_and_stale_save(secured):
         db.commit()
     response = client.get(f'/api/v1/mocks/{attempt}', headers=headers)
     assert [q['question']['id'] for q in response.json()['questions']] == ids['questions'][1:2]
+    state = client.get(f'/api/v1/mocks/{attempt}/state', headers=headers)
+    assert state.status_code == 200
+    assert [item['question_id'] for item in state.json()['responses']] == ids['questions'][1:2]
     assert client.patch(f'/api/v1/mocks/{attempt}/response', headers=headers, json={'question_id':ids['questions'][0], 'selected_option':1}).status_code == 409
 
 
