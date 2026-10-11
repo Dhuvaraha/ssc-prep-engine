@@ -94,4 +94,5 @@ jobs:
 
           measure health "$API/health"
           measure content_tree "$API/api/v1/content/tree?exam_slug=ssc-cgl-tier-1"
-          measure lesson_package "$API/api/v1/learn/topics/28/package"
+          # Private lesson packages are not anonymous latency probes.
+          # LIVE-01 is a separate, bounded operator-approved verification.

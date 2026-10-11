@@ -12,6 +12,7 @@ from app.models import (
 )
 from app.routers.analytics import analytics_summary
 from app.routers.practice import get_practice_questions, submit_practice
+from app.services.practice_integrity import issue_delivery
 from app.schemas import PracticeSubmit
 from app.services.practice_selector import select_practice_questions
 
@@ -61,7 +62,7 @@ def test_cgl_practice_does_not_return_je_questions_even_mixed_or_similar():
 
         mixed = get_practice_questions(topic_id=None, limit=10, mode="mixed", similar_to=None, db=db, user=user)
         assert len(mixed) == 10
-        assert all(item.exam_id == cgl.id for item in mixed)
+        assert all(db.get(Question, item.id).exam_id == cgl.id for item in mixed)
 
         wrong_question = db.query(Question).filter(Question.exam_id == je.id).first()
         assert wrong_question is not None
@@ -75,7 +76,7 @@ def test_cgl_practice_does_not_return_je_questions_even_mixed_or_similar():
         with pytest.raises(HTTPException) as error:
             submit_practice(
                 payload=PracticeSubmit(
-                    question_id=wrong_question.id, selected_option=1,
+                    delivery_token=issue_delivery(db, user.id, wrong_question).id, question_id=wrong_question.id, selected_option=1,
                     time_seconds=15, confidence=3, used_hint=False,
                 ), db=db, user=user,
             )

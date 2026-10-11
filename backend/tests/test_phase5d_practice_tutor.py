@@ -1,3 +1,4 @@
+from app.services.practice_integrity import issue_delivery
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -189,6 +190,7 @@ def test_submit_practice_returns_structured_teacher_review():
     try:
         result = submit_practice(
             PracticeSubmit(
+                delivery_token=issue_delivery(db, user.id, exact_question).id,
                 question_id=exact_question.id,
                 selected_option=1,
                 time_seconds=18,

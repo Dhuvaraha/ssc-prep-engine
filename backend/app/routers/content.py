@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.models import Exam, Lesson, Subject, Topic
+from app.models import Exam, Subject, Topic
 from app.schemas import SubjectOut, TopicOut
 
 router = APIRouter(prefix="/content", tags=["content"])
@@ -52,21 +52,8 @@ def content_tree(exam_slug: str = "ssc-cgl-tier-1", db: Session = Depends(get_db
             .order_by(Subject.sort_order, Topic.priority.desc(), Topic.name)
         )
     )
-    topic_ids = [topic.id for topic in topics]
-
+    # Public catalog deliberately contains no private lesson inventory.
     lesson_counts: dict[int, int] = {}
-    if topic_ids:
-        lesson_counts = {
-            topic_id: int(count)
-            for topic_id, count in db.execute(
-                select(Lesson.topic_id, func.count(Lesson.id))
-                .where(
-                    Lesson.topic_id.in_(topic_ids),
-                    Lesson.is_published.is_(True),
-                )
-                .group_by(Lesson.topic_id)
-            )
-        }
 
     topics_by_subject: dict[int, list[Topic]] = {}
     for topic in topics:

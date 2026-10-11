@@ -140,7 +140,7 @@ export default function LearnPage() {
                 >
                   <div className="topicCardTopline">
                     <span>Priority {topic.priority}</span>
-                    <small>{topic.lesson_count ? "Lesson ready" : "Lesson pending"}</small>
+                    <small>{"Access checked when opened"}</small>
                   </div>
                   <h3>{topic.name}</h3>
                   <p>Learn the concept, then practise at your proven level. Harder questions unlock with independent evidence.</p>

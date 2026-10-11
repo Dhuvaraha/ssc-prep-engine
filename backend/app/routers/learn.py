@@ -3,6 +3,8 @@ from sqlalchemy import case, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.db import get_db
+from app.services.content_access import teaching_user
+from app.models import User
 from app.models import Lesson, LessonBlock, Question, QuestionArchetype, Subject, Topic
 from app.schemas import (
     LessonBlockOut,
@@ -11,6 +13,7 @@ from app.schemas import (
     SolvedExampleOut,
 )
 from app.services.question_quality import unique_questions
+from app.services.practice_integrity import expose
 
 router = APIRouter(prefix="/learn", tags=["learn"])
 
@@ -103,36 +106,39 @@ def _representative_solved_examples(
 
 
 @router.get("/topics/{topic_id}/lessons", response_model=list[LessonOut])
-def topic_lessons(topic_id: int, db: Session = Depends(get_db)):
+def topic_lessons(topic_id: int, db: Session = Depends(get_db), user: User = Depends(teaching_user)):
     topic = db.get(Topic, topic_id)
     if not topic:
-        raise HTTPException(status_code=404, detail="Topic not found")
+        raise HTTPException(status_code=404, detail="Content not available")
 
     stmt = (
         select(Lesson)
         .where(Lesson.topic_id == topic_id, Lesson.is_published.is_(True))
         .order_by(Lesson.sort_order)
     )
-    return list(db.scalars(stmt))
+    lessons = list(db.scalars(stmt))
+    if not lessons:
+        raise HTTPException(404, "Content not available")
+    return lessons
 
 
 @router.get("/lessons/{lesson_id}", response_model=LessonOut)
-def get_lesson(lesson_id: int, db: Session = Depends(get_db)):
+def get_lesson(lesson_id: int, db: Session = Depends(get_db), user: User = Depends(teaching_user)):
     lesson = db.get(Lesson, lesson_id)
     if not lesson or not lesson.is_published:
-        raise HTTPException(status_code=404, detail="Lesson not found")
+        raise HTTPException(status_code=404, detail="Content not available")
     return lesson
 
 
 @router.get("/topics/{topic_id}/package")
-def topic_package(topic_id: int, db: Session = Depends(get_db)):
+def topic_package(topic_id: int, db: Session = Depends(get_db), user: User = Depends(teaching_user)):
     topic = db.get(Topic, topic_id)
     if not topic:
-        raise HTTPException(status_code=404, detail="Topic not found")
+        raise HTTPException(status_code=404, detail="Content not available")
 
     subject = db.get(Subject, topic.subject_id)
     if not subject:
-        raise HTTPException(status_code=404, detail="Subject not found")
+        raise HTTPException(status_code=404, detail="Content not available")
 
     lessons = list(
         db.scalars(
@@ -168,10 +174,17 @@ def topic_package(topic_id: int, db: Session = Depends(get_db)):
     )
     solved_examples = _representative_solved_examples(db, topic_id=topic_id)
 
+    if db.info.get("content_scope"):
+        for question in solved_examples:
+            expose(db, user.id, question, "solved_example")
+        db.commit()
+
     blocks_by_lesson: dict[int, list[LessonBlockOut]] = {}
     for block in blocks:
         blocks_by_lesson.setdefault(block.lesson_id, []).append(LessonBlockOut.model_validate(block))
 
+    if not lessons and not archetypes and not solved_examples:
+        raise HTTPException(404, "Content not available")
     return {
         "subject": {
             "id": subject.id,
@@ -195,7 +208,7 @@ def topic_package(topic_id: int, db: Session = Depends(get_db)):
             for lesson in lessons
         ],
         "archetypes": [
-            QuestionArchetypeOut.model_validate(item).model_dump()
+            QuestionArchetypeOut.model_validate(item).model_dump(exclude={"source_notes"})
             for item in archetypes
         ],
         "solved_examples": [

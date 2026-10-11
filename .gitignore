@@ -21,3 +21,11 @@ data/private/
 
 # Private study content
 backend/data/private/
+
+# Isolated Phase A test tools and evidence logs
+.tools/
+backend/phase-a-test-output.txt
+*.tsbuildinfo
+frontend/test-results/
+frontend/playwright-report/
+frontend/artifacts/browser/

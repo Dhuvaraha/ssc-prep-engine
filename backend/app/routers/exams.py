@@ -49,6 +49,9 @@ def set_exam_focus(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> dict:
+    from app.services.content_access import lock_learner, require_no_assessment
+    lock_learner(db, user.id)
+    require_no_assessment(db, user.id)
     exam = get_exam_blueprint(payload.exam_slug)
     if not exam:
         raise HTTPException(status_code=404, detail="Exam not found")

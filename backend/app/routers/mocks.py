@@ -4,7 +4,8 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.deps import get_current_user
+from app.services.practice_integrity import expose
+from app.services.content_access import content_user as get_current_user, require_no_assessment
 from app.models import Exam, MockAttempt, User
 from app.schemas import (
     MockQuestionOut,
@@ -27,6 +28,10 @@ def _load_selected_mock(db: Session, *, attempt_id: int, user_id: int):
 
 
 def _serialize_attempt(attempt, rows, *, resumed_existing: bool = False):
+    if attempt.status != "in_progress":
+        raise HTTPException(409, "Mock is terminal")
+    timing = mock_timing(attempt)
+    visible = [(row, question) for row, question in rows if timing["seconds_left"] > 0 and (attempt.mode != "full" or row.section_slug == timing["active_section_slug"])]
     return MockStartResponse(
         attempt_id=attempt.id,
         mode=attempt.mode,
@@ -38,7 +43,7 @@ def _serialize_attempt(attempt, rows, *, resumed_existing: bool = False):
                 section_slug=row.section_slug,
                 question=question,
             )
-            for row, question in rows
+            for row, question in visible
         ],
     )
 
@@ -64,6 +69,7 @@ def start_mock(
         except LookupError:
             pass
 
+    require_no_assessment(db, user.id)
     try:
         attempt, rows = create_mock_attempt(
             db,
@@ -124,8 +130,8 @@ def save_mock_response(
     except LookupError:
         raise HTTPException(status_code=404, detail="Mock attempt not found")
 
-    if attempt.status == "submitted":
-        raise HTTPException(status_code=409, detail="Mock already submitted")
+    if attempt.status != "in_progress":
+        raise HTTPException(status_code=409, detail="Mock is terminal")
 
     target = next((row for row, _ in rows if row.question_id == payload.question_id), None)
     if not target:
@@ -180,6 +186,12 @@ def get_mock_state(
                 "time_seconds": row.time_seconds,
             }
             for row, _ in rows
+            # While a full mock is running, even future-section question IDs
+            # remain server-side; the next section is released by the server
+            # when its timing window opens.
+            if attempt.mode != "full"
+            or attempt.status != "in_progress"
+            or row.section_slug == timing["active_section_slug"]
         ],
     }
 
@@ -197,6 +209,7 @@ def review_mock(
     if attempt.status != "submitted":
         raise HTTPException(status_code=409, detail="Submit the mock before reviewing it")
 
+    require_no_assessment(db, user.id)
     sections: dict[str, dict[str, float | int]] = {}
     questions = []
     easy_missed = 0
@@ -204,6 +217,7 @@ def review_mock(
     missed_patterns = Counter()
 
     for row, question in rows:
+        expose(db, user.id, question, "mock_review")
         correct = row.selected_option == question.correct_option if row.selected_option is not None else False
         attempted = row.selected_option is not None
         section = sections.setdefault(
@@ -258,6 +272,7 @@ def review_mock(
             1,
         ) if attempted_count else 0.0
 
+    db.commit()
     return {
         "attempt_id": attempt.id,
         "sections": sections,
@@ -298,6 +313,8 @@ def submit_mock(
     except LookupError:
         raise HTTPException(status_code=404, detail="Mock attempt not found")
 
+    if attempt.status == "abandoned":
+        raise HTTPException(409, "Mock is terminal")
     timing = mock_timing(attempt)
     if (
         attempt.mode == "full"

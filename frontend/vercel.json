@@ -1,4 +1,7 @@
 {
+  "git": {
+    "deploymentEnabled": {"feat/phase-a-security-integrity": false}
+  },
   "rewrites": [
     {"source": "/(.*)", "destination": "/index.html"}
   ]

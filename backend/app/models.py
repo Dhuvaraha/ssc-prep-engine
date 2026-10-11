@@ -329,3 +329,7 @@ class DailyPlanTask(Base):
     priority: Mapped[int] = mapped_column(Integer, default=3)
     status: Mapped[str] = mapped_column(String(30), default="pending")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+# Register additive Phase A tables with Base metadata.
+from app import access_models
+assert access_models.ContentSource.__table__.metadata is Base.metadata

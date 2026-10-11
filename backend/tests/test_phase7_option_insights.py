@@ -12,6 +12,7 @@ from app.models import (
     Subject, Topic, User,
 )
 from app.routers.practice import get_practice_questions, submit_practice
+from app.services.practice_integrity import issue_delivery
 from app.schemas import PracticeSubmit
 from app.services.option_insights import published_option_insights
 
@@ -87,7 +88,7 @@ def test_only_published_reviewed_wrong_option_insight_is_returned_after_answer()
         assert "option_insights" not in questions[0].__dict__
 
         answer = submit_practice(PracticeSubmit(
-            question_id=question.id, selected_option=2,
+            delivery_token=issue_delivery(db, user.id, question).id, question_id=question.id, selected_option=2,
             confidence=3, used_hint=False, time_seconds=30,
         ), db=db, user=user)
         assert answer.correct is False
@@ -113,7 +114,7 @@ def test_unreviewed_or_unsourced_records_do_not_publish_even_with_wrong_flag():
         db.commit()
         assert published_option_insights(db, question=question) == []
         response = submit_practice(PracticeSubmit(
-            question_id=question.id, selected_option=1,
+            delivery_token=issue_delivery(db, user.id, question).id, question_id=question.id, selected_option=1,
             confidence=3, used_hint=False, time_seconds=20,
         ), db=db, user=user)
         assert response.option_insights == []
@@ -126,7 +127,7 @@ def test_je_options_cannot_be_retrieved_with_cgl_focus():
     try:
         with pytest.raises(HTTPException) as error:
             submit_practice(PracticeSubmit(
-                question_id=je_question.id, selected_option=1,
+                delivery_token=issue_delivery(db, user.id, je_question).id, question_id=je_question.id, selected_option=1,
                 confidence=2, used_hint=False, time_seconds=20,
             ), db=db, user=user)
         assert error.value.status_code == 404

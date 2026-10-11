@@ -4,7 +4,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.deps import get_current_user
+from app.services.content_access import teaching_user as get_current_user
 from app.models import MockAttempt, MockAttemptQuestion, Question, Subject, Topic, User
 from app.services.exam_scope import current_exam
 

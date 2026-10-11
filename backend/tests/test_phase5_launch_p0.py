@@ -88,7 +88,7 @@ def test_learn_tree_never_scans_question_bank():
         event.remove(engine, "before_cursor_execute", record)
 
         assert result["totals"]["topics"] == 1
-        assert result["totals"]["lessons"] == 1
+        assert result["totals"]["lessons"] == 0  # Public metadata cannot disclose private inventory.
         assert all("questions" not in statement for statement in statements)
         assert all("question_options" not in statement for statement in statements)
     finally:

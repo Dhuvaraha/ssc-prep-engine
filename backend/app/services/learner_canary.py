@@ -1,3 +1,4 @@
+from app.services.practice_integrity import issue_delivery
 import json
 import logging
 from datetime import datetime, timedelta, timezone
@@ -160,6 +161,7 @@ def run_production_learner_canary(engine) -> dict:
 
             result = submit_practice(
                 PracticeSubmit(
+                    delivery_token=issue_delivery(db, user.id, question).id,
                     question_id=question.id,
                     selected_option=selected,
                     time_seconds=time_seconds,
