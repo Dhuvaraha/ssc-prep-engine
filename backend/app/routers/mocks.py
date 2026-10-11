@@ -186,6 +186,12 @@ def get_mock_state(
                 "time_seconds": row.time_seconds,
             }
             for row, _ in rows
+            # While a full mock is running, even future-section question IDs
+            # remain server-side; the next section is released by the server
+            # when its timing window opens.
+            if attempt.mode != "full"
+            or attempt.status != "in_progress"
+            or row.section_slug == timing["active_section_slug"]
         ],
     }
 
