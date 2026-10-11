@@ -167,6 +167,11 @@ def test_pyq_mode_returns_only_year_attributed_official_candidates_without_fallb
         )
         assert [question.id for question in chosen] == [examples[-1].id]
         assert chosen[0].year == 2023
+        bypass_attempt = select_practice_questions(
+            db, user_id=user.id, topic_id=topic.id, limit=10,
+            mode="pyq", exam_id=cgl.id, similar_to_question_id=examples[0].id,
+        )
+        assert [question.id for question in bypass_attempt] == [examples[-1].id]
 
         examples[-1].year = None
         db.commit()
