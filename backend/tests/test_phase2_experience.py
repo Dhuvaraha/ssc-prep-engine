@@ -59,6 +59,7 @@ def _build_db():
             expected_time_seconds=20 + idx,
             year=2024 if idx % 2 == 0 else None,
             source_type="official" if idx % 2 == 0 else "original",
+            source_reference="synthetic year-attributed source fixture" if idx % 2 == 0 else None,
             pattern_type=f"pattern-{idx % 5}",
         )
         db.add(q)
