@@ -354,6 +354,33 @@ def test_migration_manifest_dry_run_apply_and_history_preservation(secured):
     assert client.get(f'/api/v1/learn/topics/{ids["topic"]}/package',headers=outsider).status_code == 200
 
 
+def test_phase_a_startup_rejects_empty_approved_grants(secured):
+    """A reviewed manifest stamp alone must not silently lock out all learners."""
+    from sqlalchemy import update
+    from app.access_models import EntitlementAudit
+    from app.phase_a_migration import verify_rollout
+    _, factory, _, _ = secured
+    engine = factory.kw['bind']
+    approved_digest = 'a' * 64
+    with factory() as db:
+        db.add(EntitlementAudit(operator='synthetic-reviewer', reason='synthetic empty-grant gate',
+                                manifest_digest=approved_digest))
+        db.execute(update(CourseGrant).values(active=False))
+        db.commit()
+    with pytest.raises(RuntimeError, match='zero active course grants'):
+        verify_rollout(engine, approved_digest)
+    with factory() as db:
+        db.execute(update(CourseGrant).values(active=True))
+        db.execute(update(SourceGrant).values(active=False))
+        db.commit()
+    with pytest.raises(RuntimeError, match='zero active source grants'):
+        verify_rollout(engine, approved_digest)
+    with factory() as db:
+        db.execute(update(SourceGrant).values(active=True))
+        db.commit()
+    verify_rollout(engine, approved_digest)
+
+
 def test_postgres_int_05_08_concurrent_identical_practice_submission(secured):
     from concurrent.futures import ThreadPoolExecutor
     client, factory, _, headers = secured
