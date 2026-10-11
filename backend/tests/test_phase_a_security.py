@@ -219,6 +219,34 @@ def test_int_08_unknown_foreign_changed_delivery_rejected(secured):
         assert not list(db.scalars(select(QuestionAttempt)))
 
 
+def test_int_08_committed_retry_survives_later_question_correction(secured):
+    """Replay the original result, never rescore after content changes."""
+    client, factory, _, headers = secured
+    q = client.get('/api/v1/practice/questions?mode=mixed&limit=1', headers=headers).json()[0]
+    payload = dict(question_id=q['id'], delivery_token=q['delivery_token'],
+                   selected_option=1, time_seconds=4, used_hint=False)
+    original = client.post('/api/v1/practice/submit', headers=headers, json=payload)
+    assert original.status_code == 200, original.text
+    result = original.json()
+    with factory() as db:
+        question = db.get(Question, q['id'])
+        question.correct_option = 2 if question.correct_option != 2 else 3
+        question.explanation = 'Later editorial correction, not the submitted revision'
+        db.commit()
+
+    # Same payload must recover the exactly committed result, not current key.
+    retry = client.post('/api/v1/practice/submit', headers=headers, json=payload)
+    assert retry.status_code == 200, retry.text
+    assert retry.json() == result
+    assert retry.json()['explanation'] != 'Later editorial correction, not the submitted revision'
+    changed = client.post('/api/v1/practice/submit', headers=headers,
+                          json={**payload, 'selected_option': 2})
+    assert changed.status_code == 409
+    assert changed.json()['detail'] == 'IDEMPOTENCY_CONFLICT'
+    with factory() as db:
+        assert len(list(db.scalars(select(QuestionAttempt)))) == 1
+
+
 def test_sec_05_assets_are_referenced_scoped_and_reviewed(secured, tmp_path, monkeypatch):
     from app.routers.assets import settings
     import hashlib
