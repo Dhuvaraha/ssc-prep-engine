@@ -205,3 +205,26 @@ Zero topics have year+shift-attributed questions in this snapshot.
 | reasoning | Venn Diagrams | 205 | 0 | 155 | 12 |
 | reasoning | Word Building | 200 | 0 | 0 | 11 |
 
+
+## Verified continuation checkpoint — 12 October 2026 IST
+
+Draft PR: https://github.com/Dhuvaraha/ssc-prep-engine/pull/53
+Tested implementation commit: `551d44eeda41716f742ee68c00bd806b4c3a6daa`.
+Its tree `ed3231c89bf2e8f17836afe1097a52ec4b589325` is identical to local
+`28550284365966a1040c210a4817e443cc644263`; GitHub publication used the connected
+app because shell Git had no push credential. Both original PR heads are parents
+of the remote implementation commit. No force push or production merge occurred.
+
+- CI run https://github.com/Dhuvaraha/ssc-prep-engine/actions/runs/38172898764:
+  all four jobs successful; backend 157 passed / 6 PostgreSQL-only skips,
+  PostgreSQL 35 passed, frontend 18 passed with build, browser 3 passed.
+- Responsive run https://github.com/Dhuvaraha/ssc-prep-engine/actions/runs/38172898761:
+  28 viewport/route checks plus anonymous mock redirect passed.
+- PostgreSQL synthetic migration/restart/history-preservation and concurrency
+  tests passed. This does not replace actual manifest/role/pool rehearsal.
+- Post-work production SELECT: 10,043 verified-labelled records and the same
+  ordered-ID digest as above; zero records satisfy the tightened paper metadata gate.
+- Pyflakes, compileall and whitespace checks passed.
+- Remaining external gates are unchanged. PR stays draft; Phase A is not released.
+- Continue with confirmed Render workspace and operator source/entitlement evidence.
+  Do not repeat PDF recovery or rebuild implemented Phase A fixes.
