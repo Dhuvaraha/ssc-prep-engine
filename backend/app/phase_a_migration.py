@@ -9,7 +9,7 @@ from sqlalchemy import create_engine, inspect, select, text
 
 from app import access_models
 from app.db import Base, normalize_database_url
-from app.models import MockAttempt
+from app.models import MockAttempt, User
 
 
 TABLES = [table for table in Base.metadata.sorted_tables if table.name in {
@@ -44,6 +44,23 @@ def verify_rollout(engine, approved_digest):
         audit = access_models.EntitlementAudit
         if not connection.scalar(select(audit.id).where(audit.manifest_digest == approved_digest).limit(1)):
             raise RuntimeError("Reviewed Phase A entitlement manifest has not been applied")
+        # An audit stamp alone must not authorize a zero-grant production
+        # cutover. Existing accounts would all lose access even though the
+        # reviewed digest is present. Intentional deny-all requires a separate
+        # operator process, not this learner-facing release path.
+        course = access_models.CourseGrant
+        source_grant = access_models.SourceGrant
+        if connection.scalar(select(User.id).where(User.is_active.is_(True)).limit(1)):
+            if not connection.scalar(
+                select(course.user_id).join(User, User.id == course.user_id)
+                .where(course.active.is_(True), User.is_active.is_(True)).limit(1)
+            ):
+                raise RuntimeError("Phase A cannot cut over active learner accounts with zero active course grants")
+            if not connection.scalar(
+                select(source_grant.user_id).join(User, User.id == source_grant.user_id)
+                .where(source_grant.active.is_(True), User.is_active.is_(True)).limit(1)
+            ):
+                raise RuntimeError("Phase A cannot cut over active learner accounts with zero active source grants")
         # Existing pre-Phase-A running assessments must finish before cutover.
         from app.models import MockAttemptQuestion
         delivery = access_models.AssessmentDelivery
