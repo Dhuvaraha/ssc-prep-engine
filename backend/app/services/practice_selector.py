@@ -158,7 +158,8 @@ def select_practice_questions(
             return _hydrate_questions(db, ids)
         return _hydrate_questions(db, ids, exam_id=exam_id)
 
-    if similar_to_question_id is not None:
+    # Similar-question requests must not bypass the strict PYQ candidate gate.
+    if similar_to_question_id is not None and mode != "pyq":
         anchor = db.get(Question, similar_to_question_id)
         if anchor and anchor.verification_status == "verified" and anchor.topic_id is not None and (exam_id is None or anchor.exam_id == exam_id):
             similar_stmt = select(Question.id).where(
