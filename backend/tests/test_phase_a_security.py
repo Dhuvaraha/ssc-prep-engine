@@ -531,3 +531,65 @@ def test_postgres_int_05_06_concurrent_starts_and_exposure_after_abandon(secured
     assert response.status_code == 200
     with factory() as db:
         assert db.scalar(select(QuestionAttempt)).used_hint
+
+@pytest.mark.parametrize("fault", ["different_user", "different_course", "unapproved_source"])
+def test_rollout_requires_effective_course_source_intersection(secured, fault):
+    from app.access_models import EntitlementAudit
+    from app.phase_a_migration import migrate, verify_rollout
+    _, factory, ids, _ = secured
+    engine = factory.kw['bind']
+    migrate(engine)
+    reviewed = "b" * 64
+    with factory() as db:
+        db.add(EntitlementAudit(operator="synthetic-reviewer", reason="intersection test", manifest_digest=reviewed))
+        if fault == "different_user":
+            grant = db.get(SourceGrant, (ids["user"], "synthetic-original"))
+            grant.active = False
+            db.add(SourceGrant(user_id=ids["outsider"], source_id="synthetic-original", active=True))
+        elif fault == "different_course":
+            other = Exam(slug="synthetic-other", name="Other", duration_minutes=60)
+            db.add(other)
+            db.flush()
+            db.get(ContentSource, "synthetic-original").exam_id = other.id
+        else:
+            db.get(ContentSource, "synthetic-original").private_use_approved = False
+        db.commit()
+    with pytest.raises(RuntimeError, match="zero effective learner source permissions"):
+        verify_rollout(engine, reviewed)
+
+
+def test_postgres_section_save_waits_for_lock_and_rechecks_window(secured):
+    """A queued old-section save must be rejected after the boundary opens."""
+    from concurrent.futures import ThreadPoolExecutor, TimeoutError
+    from datetime import timedelta
+    from threading import Event
+    client, factory, ids, headers = secured
+    if factory.kw["bind"].dialect.name != "postgresql":
+        pytest.skip("PostgreSQL row-lock integration test")
+    attempt = synthetic_mock(factory, ids, elapsed=899)
+    entered = Event()
+    with factory() as db:
+        db.execute(select(User.id).where(User.id == ids["user"]).with_for_update()).one()
+        db.get(MockAttempt, attempt).started_at = datetime.utcnow() - timedelta(seconds=901)
+        db.flush()
+        def save():
+            entered.set()
+            return client.patch(f"/api/v1/mocks/{attempt}/response", headers=headers,
+                                json={"question_id": ids["questions"][0], "selected_option": 1,
+                                      "time_seconds": 5, "marked_for_review": False})
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            pending = pool.submit(save)
+            assert entered.wait(2)
+            with pytest.raises(TimeoutError):
+                pending.result(timeout=.2)
+            state = pool.submit(lambda: client.get(f"/api/v1/mocks/{attempt}/state", headers=headers))
+            db.commit()
+            assert pending.result(timeout=5).status_code == 409
+            response = state.result(timeout=5)
+            assert response.status_code == 200
+            assert [r["question_id"] for r in response.json()["responses"]] == ids["questions"][1:2]
+    with factory() as db:
+        row = db.scalar(select(MockAttemptQuestion).where(
+            MockAttemptQuestion.attempt_id == attempt,
+            MockAttemptQuestion.question_id == ids["questions"][0]))
+        assert row.selected_option is None

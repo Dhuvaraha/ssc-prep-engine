@@ -70,6 +70,8 @@ test("authorized practice and diagnostic remain usable with explicit grants", as
   const practiceLoaded = page.waitForResponse(r=>r.url().includes("/practice/questions?"));
   await page.goto("/practice?topic_id=1&mode=guided&limit=3");
   expect((await practiceLoaded).status()).toBe(200);
+  await expect(page.locator("body")).toContainText("Source year: 2026");
+  await expect(page.locator("body")).not.toContainText("PYQ 2026");
   await page.locator(".practiceOption").first().click();
   await page.getByRole("button",{name:"Sure",exact:true}).click();
   const submitted = page.waitForResponse(r=>r.url().endsWith("/practice/submit"));

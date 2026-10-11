@@ -38,6 +38,7 @@ with factory() as db:
         for i in range(10):
             q = Question(exam_id=exam.id,subject_id=subject.id,topic_id=topic.id,question_text=f"Synthetic {slug} fixture: {i}+1 = ?",correct_option=1,explanation=f"SYNTHETIC_ANSWER: {i}+1={i+1}.",difficulty=1 if i<3 else 2 if i<8 else 3,verification_status="verified",visibility="private")
             db.add(q); db.flush()
+            q.year = 2026  # A source/event year is not an SSC PYQ claim.
             db.add_all([QuestionOption(question_id=q.id,position=j,text=str(i+j)) for j in range(1,5)])
             db.add(ContentBinding(resource_kind="question",resource_id=q.id,source_id=source.id))
     db.commit()

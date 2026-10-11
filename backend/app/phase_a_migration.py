@@ -61,6 +61,23 @@ def verify_rollout(engine, approved_digest):
                 .where(source_grant.active.is_(True), User.is_active.is_(True)).limit(1)
             ):
                 raise RuntimeError("Phase A cannot cut over active learner accounts with zero active source grants")
+            # Independent counts can pass with grants on different accounts or
+            # courses, or with a source whose permission was never approved.
+            # Require an actual learner/course/source intersection. Full
+            # intended-cohort coverage is still an operator release gate.
+            source = access_models.ContentSource
+            effective = (
+                select(course.user_id)
+                .join(User, User.id == course.user_id)
+                .join(source_grant, source_grant.user_id == course.user_id)
+                .join(source, source.id == source_grant.source_id)
+                .where(User.is_active.is_(True), course.active.is_(True),
+                       source_grant.active.is_(True), source.exam_id == course.exam_id,
+                       source.private_use_approved.is_(True))
+                .limit(1)
+            )
+            if not connection.scalar(effective):
+                raise RuntimeError("Phase A cannot cut over with zero effective learner source permissions")
         # Existing pre-Phase-A running assessments must finish before cutover.
         from app.models import MockAttemptQuestion
         delivery = access_models.AssessmentDelivery

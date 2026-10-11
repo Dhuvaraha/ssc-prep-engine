@@ -140,3 +140,52 @@ def test_difficulty_ladder_can_reach_medium_and_hard_after_large_easy_bank():
         assert all(q.exam_id == cgl.id for q in chosen)
     finally:
         db.close()
+
+
+def test_pyq_mode_returns_only_year_attributed_official_candidates_without_fallback():
+    """Do not mislabel authored, generated, or yearless items as actual PYQs."""
+    db, user, cgl, _, topic, _ = _seed()
+    try:
+        examples = []
+        for index, (kind, year, source) in enumerate((
+            ("original", None, "original fixture"),
+            ("original", 2024, "year-tagged original fixture"),
+            ("generated", None, "synthetic generator fixture"),
+            ("official", None, "unattributed fixture"),
+            ("official", 2024, "   "),
+            ("official", 2026, "https://www.pib.gov.in/PressReleasePage.aspx?PRID=synthetic"),
+            ("official", 2023, "synthetic official-labelled candidate"),
+        ), start=1):
+            question = _question(db, cgl, topic, index, (index % 3) + 1)
+            question.source_type = kind
+            question.year = year
+            question.source_reference = source
+            db.add(question)
+            examples.append(question)
+        # Only this row has a paper location; official facts are not PYQs.
+        examples[-1].source_page = 4
+        examples[-1].shift = "synthetic paper shift"
+        examples[-1].source_question_id = "synthetic-paper-item-1"
+        db.commit()
+
+        chosen = select_practice_questions(
+            db, user_id=user.id, topic_id=topic.id, limit=10,
+            mode="pyq", exam_id=cgl.id,
+        )
+        assert [question.id for question in chosen] == [examples[-1].id]
+        assert chosen[0].year == 2023
+        bypass_attempt = select_practice_questions(
+            db, user_id=user.id, topic_id=topic.id, limit=10,
+            mode="pyq", exam_id=cgl.id, similar_to_question_id=examples[0].id,
+        )
+        assert [question.id for question in bypass_attempt] == [examples[-1].id]
+
+        examples[-1].year = None
+        db.commit()
+        no_verified_candidates = select_practice_questions(
+            db, user_id=user.id, topic_id=topic.id, limit=10,
+            mode="pyq", exam_id=cgl.id,
+        )
+        assert no_verified_candidates == []
+    finally:
+        db.close()

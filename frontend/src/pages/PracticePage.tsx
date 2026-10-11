@@ -38,7 +38,7 @@ const practiceModes = [
   ["path", "Learning path", "Start with foundations. Medium and hard questions unlock with independent evidence."],
   ["guided", "Guided", "Moves across question patterns from easier to harder."],
   ["topic", "Topic drill", "Rotates through the different patterns inside the selected topic."],
-  ["pyq", "PYQ", "Prioritises previous-year and official-source questions."],
+  ["pyq", "PYQ candidates", "Only candidates with paper, page, shift and source-item metadata. Authenticity and answer keys still require review."],
   ["mixed", "Mixed", "Rotates across topics for broader exam recall."],
   ["weak", "Weak topics", "Targets low-mastery topics and recent misses."],
   ["revision", "Revision drill", "Serves questions that are due from your revision queue."],
@@ -122,7 +122,9 @@ export default function PracticePage() {
         setQuestions(items);
         startedAt.current = Date.now();
         setElapsed(0);
-        if (!items.length) setError("No verified questions matched this practice mode yet.");
+        if (!items.length) setError(mode === "pyq"
+          ? "No paper-linked PYQ candidates are available for this selection yet. Official news sources and event years do not establish SSC PYQ provenance."
+          : "No verified questions matched this practice mode yet.");
       })
       .catch(() => {
         if (!cancelled) setError("Could not load practice. Check your connection and try again.");
@@ -362,7 +364,7 @@ export default function PracticePage() {
             {question.pattern_type && <span>{question.pattern_type.replaceAll("-", " ")}</span>}
             <span>{({1: "Easy · Foundation", 2: "Medium · Application", 3: "Hard · Challenge"} as Record<number,string>)[question.difficulty] ?? "Difficulty " + question.difficulty}</span>
             {question.expected_time_seconds && <span>Target {question.expected_time_seconds}s</span>}
-            {question.year && <span>PYQ {question.year}</span>}
+            {question.year && <span>Source year: {question.year}</span>}
             <span className={mode === "timed" && remaining <= 10 ? "urgentTimer" : ""}>
               {mode === "timed" ? remaining + "s left" : elapsed + "s"}
             </span>
