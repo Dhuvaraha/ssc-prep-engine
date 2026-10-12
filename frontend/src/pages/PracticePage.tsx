@@ -4,13 +4,12 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   PracticeQuestion,
   PracticeResult,
-  TopicPackage,
   TopicLearningPath,
   addQuestionToRevision,
   classifyPracticeMistake,
   fetchPracticeQuestions,
   fetchTopicLearningPath,
-  fetchTopicPackage,
+  requestPracticeAssistance,
   submitPracticeAnswer,
   toggleBookmark,
 } from "../api";
@@ -39,7 +38,7 @@ const practiceModes = [
   ["path", "Learning path", "Start with foundations. Medium and hard questions unlock with independent evidence."],
   ["guided", "Guided", "Moves across question patterns from easier to harder."],
   ["topic", "Topic drill", "Rotates through the different patterns inside the selected topic."],
-  ["pyq", "PYQ", "Prioritises previous-year and official-source questions."],
+  ["pyq", "PYQ candidates", "Only candidates with paper, page, shift and source-item metadata. Authenticity and answer keys still require review."],
   ["mixed", "Mixed", "Rotates across topics for broader exam recall."],
   ["weak", "Weak topics", "Targets low-mastery topics and recent misses."],
   ["revision", "Revision drill", "Serves questions that are due from your revision queue."],
@@ -64,7 +63,6 @@ export default function PracticePage() {
   const limit = Number.isFinite(requestedLimit) ? Math.min(30, Math.max(minimumLimit, requestedLimit)) : 10;
 
   const [questions, setQuestions] = useState<PracticeQuestion[]>([]);
-  const [topicPackage, setTopicPackage] = useState<TopicPackage | null>(null);
   const [learningPath, setLearningPath] = useState<TopicLearningPath | null>(null);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
@@ -82,26 +80,13 @@ export default function PracticePage() {
   const timedOut = useRef(false);
   const routeGeneration = useRef(0);
   const submittingRef = useRef<number | null>(null);
+  const pendingSubmission = useRef<Parameters<typeof submitPracticeAnswer>[0] | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const question = useMemo(() => questions[index] ?? null, [questions, index]);
   const targetSeconds = question?.expected_time_seconds ?? 45;
   const currentMode = practiceModes.find((item) => item[0] === mode);
-
-  const coachPreview = useMemo(() => {
-    if (!question || !topicPackage || question.topic_id !== topicPackage.topic.id) return null;
-    const exact = topicPackage.archetypes.find((item) => item.slug === question.pattern_type) ?? null;
-    const lesson = topicPackage.lessons[0] ?? null;
-    const recognition = exact?.recognition_cues ?? null;
-    const standardMethod = exact?.canonical_method ?? lesson?.concept ?? null;
-    const fastMethod = exact?.shortcut_method ?? lesson?.shortcut ?? null;
-    const commonTrap = exact?.common_trap ?? lesson?.common_traps ?? null;
-    const hintSteps = [recognition, standardMethod, fastMethod].filter(
-      (value): value is string => Boolean(value)
-    );
-    return {recognition, standardMethod, fastMethod, commonTrap, hintSteps};
-  }, [question, topicPackage]);
 
   useEffect(() => {
     if (!getToken()) {
@@ -125,17 +110,11 @@ export default function PracticePage() {
     setActualSeconds(0);
     timedOut.current = false;
     setSubmitting(false);
-    setTopicPackage(null);
     setLearningPath(null);
     if (mode === "path" && topicId) {
       fetchTopicLearningPath(topicId)
         .then((data) => { if (!cancelled) setLearningPath(data); })
         .catch(() => { if (!cancelled) setLearningPath(null); });
-    }
-    if (topicId) {
-      fetchTopicPackage(topicId)
-        .then((pkg) => { if (!cancelled) setTopicPackage(pkg); })
-        .catch(() => { if (!cancelled) setTopicPackage(null); });
     }
     fetchPracticeQuestions(topicId, limit, mode, similarTo)
       .then((items) => {
@@ -143,7 +122,9 @@ export default function PracticePage() {
         setQuestions(items);
         startedAt.current = Date.now();
         setElapsed(0);
-        if (!items.length) setError("No verified questions matched this practice mode yet.");
+        if (!items.length) setError(mode === "pyq"
+          ? "No paper-linked PYQ candidates are available for this selection yet. Official news sources and event years do not establish SSC PYQ provenance."
+          : "No verified questions matched this practice mode yet.");
       })
       .catch(() => {
         if (!cancelled) setError("Could not load practice. Check your connection and try again.");
@@ -180,14 +161,18 @@ export default function PracticePage() {
     const answeredQuestionId = question.id;
     setActualSeconds(seconds);
     try {
-      const response = await submitPracticeAnswer({
+      // A lost response retries the identical server-issued delivery payload.
+      // Editing an answer requires a new delivery, never reusing this token.
+      if (pendingSubmission.current?.delivery_token !== question.delivery_token) pendingSubmission.current = {
         question_id: answeredQuestionId,
+        delivery_token: question.delivery_token,
         selected_option: selected,
         time_seconds: seconds,
         confidence: confidence ?? 1,
         used_hint: usedHint,
         mistake_type: timedOutSubmission ? "time_pressure" : confidence === 1 ? "guess" : null,
-      });
+      };
+      const response = await submitPracticeAnswer(pendingSubmission.current);
       if (generation !== routeGeneration.current) return;
       setResult(response);
       setError("");
@@ -196,7 +181,7 @@ export default function PracticePage() {
       if (generation === routeGeneration.current) {
         setError(timedOutSubmission
           ? "Timed answer was not saved. Check your connection and retry."
-          : "Could not submit this answer. Try again.");
+          : "Could not confirm this answer. Retry resends your original answer safely.");
       }
     } finally {
       if (submittingRef.current === generation) {
@@ -330,11 +315,7 @@ export default function PracticePage() {
         <div>
           <button className="textBackButton" onClick={() => navigate(-1)}>← Back</button>
           <span>
-            {topicPackage
-              ? topicPackage.subject.name + " / " + topicPackage.topic.name
-              : topicId
-                ? "Topic practice"
-                : "Mixed syllabus"}
+            {topicId ? "Topic practice" : "Mixed syllabus"}
           </span>
         </div>
         <span>Question {index + 1} / {questions.length}</span>
@@ -343,7 +324,6 @@ export default function PracticePage() {
       <section className="practiceModePanel">
         <div>
           <p className="eyebrow">
-            {topicPackage ? topicPackage.subject.name + " • " + topicPackage.topic.name + " • " : ""}
             {currentMode?.[1]}
           </p>
           <p>{currentMode?.[2]}</p>
@@ -384,7 +364,7 @@ export default function PracticePage() {
             {question.pattern_type && <span>{question.pattern_type.replaceAll("-", " ")}</span>}
             <span>{({1: "Easy · Foundation", 2: "Medium · Application", 3: "Hard · Challenge"} as Record<number,string>)[question.difficulty] ?? "Difficulty " + question.difficulty}</span>
             {question.expected_time_seconds && <span>Target {question.expected_time_seconds}s</span>}
-            {question.year && <span>PYQ {question.year}</span>}
+            {question.year && <span>Source year: {question.year}</span>}
             <span className={mode === "timed" && remaining <= 10 ? "urgentTimer" : ""}>
               {mode === "timed" ? remaining + "s left" : elapsed + "s"}
             </span>
@@ -421,7 +401,7 @@ export default function PracticePage() {
               <button
                 className={"practiceOption" + selectedClass + resultClass}
                 key={option.position}
-                disabled={Boolean(result) || submitting || timedOut.current}
+                disabled={Boolean(result) || submitting || timedOut.current || pendingSubmission.current?.delivery_token === question.delivery_token}
                 onClick={() => setSelected(option.position)}
               >
                 <strong>{String.fromCharCode(64 + option.position)}</strong>
@@ -438,11 +418,11 @@ export default function PracticePage() {
               key={"before-" + question.id}
               title={question.subtopic || question.pattern_type || "this question"}
               context={question.question_text}
-              explanation={coachPreview?.recognition}
-              standardMethod={coachPreview?.standardMethod}
-              fastMethod={coachPreview?.fastMethod}
-              commonTrap={coachPreview?.commonTrap}
-              hintSteps={coachPreview?.hintSteps ?? []}
+              onAsk={async (prompt) => {
+                const answer = await requestPracticeAssistance(question.delivery_token, prompt);
+                setUsedHint(true);
+                return answer;
+              }}
               defaultOpen={mode === "guided"}
               lead="Try the question yourself first. If you are stuck, ask for Hint 1; I will reveal the method progressively instead of giving the answer immediately."
               onHintUsed={() => setUsedHint(true)}
@@ -455,7 +435,7 @@ export default function PracticePage() {
                   <button
                     key={item.value}
                     className={confidence === item.value ? "confidence activeConfidence" : "confidence"}
-                    disabled={submitting || timedOut.current}
+                    disabled={submitting || timedOut.current || pendingSubmission.current?.delivery_token === question.delivery_token}
                     onClick={() => setConfidence(item.value)}
                   >
                     {item.label}

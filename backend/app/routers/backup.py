@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.deps import get_current_user
+from app.services.content_access import teaching_user as get_current_user
 from app.models import (
     Bookmark,
     DailyPlanTask,

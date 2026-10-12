@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app.db import Base, get_db
+from app.access_models import CourseGrant, SourceGrant, ContentSource, ContentBinding
 from app.main import app
 from app.models import Exam, Question, Subject, Topic
 
@@ -123,6 +124,14 @@ def test_http_release_flow_register_plan_mock_review_and_permissions():
         assert plan.json()["target"]["days_left"] >= 29
         assert plan.json()["tasks"]
 
+        # Registration deliberately conveys no private source entitlement.
+        db.add(ContentSource(id="release-fixture", exam_id=1, private_use_approved=True, approval_reference="synthetic test"))
+        db.flush()
+        db.add(CourseGrant(user_id=auth["user"]["id"], exam_id=1, active=True))
+        db.add(SourceGrant(user_id=auth["user"]["id"], source_id="release-fixture", active=True))
+        for question in db.query(Question).all():
+            db.add(ContentBinding(resource_kind="question", resource_id=question.id, source_id="release-fixture"))
+        db.commit()
         started = client.post(
             "/api/v1/mocks/start",
             headers=headers,

@@ -32,7 +32,7 @@ def get_current_user(
     return user
 
 
-def get_content_reviewer(user: User = Depends(get_current_user)) -> User:
+def get_content_reviewer(user: User = Depends(get_current_user), db: Session = Depends(get_db)) -> User:
     allowed = {
         email.strip().lower()
         for email in get_settings().reviewer_emails.split(",")
@@ -40,4 +40,7 @@ def get_content_reviewer(user: User = Depends(get_current_user)) -> User:
     }
     if user.email.lower() not in allowed:
         raise HTTPException(status_code=403, detail="Content review access is not enabled")
+    from app.services.content_access import lock_learner, require_no_assessment
+    lock_learner(db, user.id)
+    require_no_assessment(db, user.id)
     return user

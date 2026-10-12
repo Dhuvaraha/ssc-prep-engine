@@ -42,7 +42,7 @@ LESSONS = [
         "intro": "SSC syllogism rewards minimum assumptions.",
         "concept": "Translate statements into simple set relations. 'All A are B' means A is inside B. 'Some A are B' means overlap exists. 'No A is B' means no overlap. A conclusion follows only when every valid diagram makes it true.",
         "shortcut": "For 'some' conclusions, look for a guaranteed common member. For 'no' conclusions, look for an explicit separation or a chain that forces separation.",
-        "worked_example": "Some cartons are papers and some cartons are utensils. Therefore some papers are utensils if the same stated cartons connect both sets; do not invent extra overlap beyond what statements force.",
+        "worked_example": "Some cartons are papers. Some cartons are utensils. Does 'Some papers are utensils' follow? No. Let carton 1 be paper but not a utensil, and carton 2 be a utensil but not paper. Both statements hold while papers and utensils do not overlap. The two 'some' groups need not be the same members. Overlap is possible, but it is not guaranteed. In contrast, 'Some cartons are papers' and 'All papers are utensils' guarantee that those paper cartons are utensils.",
         "memory_rule": "Never convert 'All A are B' into 'All B are A'.",
         "common_traps": "Possibility and definite conclusion are different question types.",
         "estimated_minutes": 12,

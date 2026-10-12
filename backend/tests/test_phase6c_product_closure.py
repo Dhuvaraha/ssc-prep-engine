@@ -18,7 +18,7 @@ def _db():
     return Session()
 
 
-def test_mock_blueprint_balances_difficulty_and_prefers_official_content():
+def test_mock_blueprint_balances_difficulty_without_authenticating_source_labels():
     db = _db()
     try:
         exam = Exam(slug="ssc-cgl-tier-1", name="CGL", duration_minutes=60)
@@ -72,7 +72,7 @@ def test_mock_blueprint_balances_difficulty_and_prefers_official_content():
         )
 
         assert len(selected) == 25
-        assert all(question.source_type == "official" for question in selected)
+        assert len({question.id for question in selected}) == 25
         expected = _difficulty_targets(25)
         actual = {
             difficulty: sum(question.difficulty == difficulty for question in selected)
@@ -85,9 +85,12 @@ def test_mock_blueprint_balances_difficulty_and_prefers_official_content():
         assert readiness["status"] == "attention"
         assert section["subject"] == "reasoning"
         assert section["ready"] is True
-        assert section["exam_ready"] >= 25
-        assert section["high_fidelity"] >= 25
-        assert section["pyq_priority_available"] is True
+        assert section["metadata_complete"] >= 25
+        assert section["exam_ready"] is None
+        assert section["high_fidelity"] is None
+        assert section["pyq_priority_available"] is False
+        assert readiness["status_scope"] == "inventory_only"
+        assert readiness["exam_equivalence_established"] is False
     finally:
         db.close()
 

@@ -19,8 +19,8 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: frontend/package.json
-      - run: npm install
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
       - run: npm run build
       - run: npm test
       - run: node --check server.mjs
@@ -61,3 +61,51 @@ jobs:
       - run: pyflakes app tests
       - run: python -m compileall app
       - run: PYTHONPATH=. pytest -q
+
+  phase-a-postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: phase_a_test
+          POSTGRES_PASSWORD: synthetic-ci-only
+          POSTGRES_DB: ssc_phase_a_test
+        ports:
+          - 55432:5432
+        options: >-
+          --health-cmd "pg_isready -U phase_a_test -d ssc_phase_a_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: pip install -r backend/requirements-dev.txt
+      - name: Create synthetic direct-client roles
+        env:
+          PGPASSWORD: synthetic-ci-only
+        run: psql -h 127.0.0.1 -p 55432 -U phase_a_test -d ssc_phase_a_test -c 'CREATE ROLE anon NOLOGIN; CREATE ROLE authenticated NOLOGIN;'
+      - name: PostgreSQL security, concurrency and migration tests
+        working-directory: backend
+        env:
+          PHASE_A_TEST_DATABASE_URL: postgresql+psycopg://phase_a_test:synthetic-ci-only@127.0.0.1:55432/ssc_phase_a_test
+        run: python -m pytest tests/test_phase_a_security.py -q
+
+  phase-a-browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: pip install -r backend/requirements-dev.txt
+      - run: npm ci
+        working-directory: frontend
+      - run: npx playwright install --with-deps chromium
+        working-directory: frontend
+      - run: npx playwright test
+        working-directory: frontend

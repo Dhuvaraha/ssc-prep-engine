@@ -100,13 +100,13 @@ def test_mock_review_includes_section_score_and_accuracy():
             subject_slug=None,
             topic_id=topic.id,
         )
-        # Topic mocks order easier questions first, so miss the first (easy) item
-        # and answer the next item correctly. This also exercises slow-question
-        # and weak-pattern reporting for the same missed question.
-        rows[0][0].selected_option = 2
-        rows[0][0].time_seconds = 50
-        rows[1][0].selected_option = 1
-        rows[1][0].time_seconds = 10
+        # Selection is randomized; choose the fixture's easy item explicitly.
+        missed = next(row for row, q in rows if q.difficulty == 1)
+        correct = next(row for row, q in rows if q.difficulty == 2)
+        missed.selected_option = 2
+        missed.time_seconds = 50
+        correct.selected_option = 1
+        correct.time_seconds = 10
         db.commit()
 
         submit_mock_attempt(db, attempt=attempt, rows=rows)
@@ -157,7 +157,10 @@ def test_content_review_requires_explicit_reviewer_allowlist(monkeypatch):
     reviewer = User(email="reviewer@example.com", password_hash="x")
     ordinary = User(email="learner@example.com", password_hash="x")
 
-    assert get_content_reviewer(reviewer) is reviewer
+    db, *_ = _build_release_db()
+    db.add(reviewer)
+    db.commit()
+    assert get_content_reviewer(reviewer, db=db) is reviewer
     with pytest.raises(HTTPException) as exc:
         get_content_reviewer(ordinary)
     assert exc.value.status_code == 403

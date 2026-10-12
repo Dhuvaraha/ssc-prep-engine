@@ -12,6 +12,7 @@ type Props = {
   selectedAnswer?: string | null;
   onNext?: () => void;
   onHintUsed?: () => void;
+  onAsk?: (prompt: string) => Promise<string>;
   defaultOpen?: boolean;
   lead?: string | null;
   hintSteps?: string[];
@@ -38,6 +39,7 @@ export default function TeacherCoach({
   selectedAnswer,
   onNext,
   onHintUsed,
+  onAsk,
   defaultOpen = false,
   lead,
   hintSteps = [],
@@ -63,10 +65,15 @@ export default function TeacherCoach({
       : ["Give me a hint", "Explain simply", "Another example", "Compare methods", "Show shortcut", "Common trap", "Why was I wrong?", "One more like this", "Repeat", "Stop"];
   }, []);
 
-  function respond(raw: string) {
+  async function respond(raw: string) {
     const q = raw.trim().toLowerCase();
     if (!q) return;
 
+    if (onAsk && q !== "stop") {
+      try { setAnswer(await onAsk(raw)); }
+      catch { setAnswer("Teaching is unavailable. Finish any active assessment and retry."); }
+      return;
+    }
     let next = "";
     if (q === "stop" || q.includes("stop speaking")) {
       window.speechSynthesis?.cancel();

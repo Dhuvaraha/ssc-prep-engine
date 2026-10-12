@@ -1,0 +1,1320 @@
+{
+  "global_quality_queue": [
+    {
+      "topic": "quant/Number System",
+      "tier": 2,
+      "unlocks_topics": 18,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 105",
+        "template_repeat_candidates: 99"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Simplification",
+      "tier": 2,
+      "unlocks_topics": 16,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 105",
+        "template_repeat_candidates: 99"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Ratio & Proportion",
+      "tier": 2,
+      "unlocks_topics": 11,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 183",
+        "template_repeat_candidates: 194"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Geometry",
+      "tier": 2,
+      "unlocks_topics": 4,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 93",
+        "template_repeat_candidates: 90"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Percentage",
+      "tier": 2,
+      "unlocks_topics": 4,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 175",
+        "template_repeat_candidates: 139"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Average",
+      "tier": 2,
+      "unlocks_topics": 3,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 105",
+        "template_repeat_candidates: 99"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Time, Speed & Distance",
+      "tier": 2,
+      "unlocks_topics": 2,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 105",
+        "template_repeat_candidates: 99"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Algebra",
+      "tier": 2,
+      "unlocks_topics": 1,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 105",
+        "template_repeat_candidates: 99"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Simple Interest",
+      "tier": 2,
+      "unlocks_topics": 1,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 199"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Time & Work",
+      "tier": 2,
+      "unlocks_topics": 1,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 146",
+        "template_repeat_candidates: 178"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Trigonometry",
+      "tier": 2,
+      "unlocks_topics": 1,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 196"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Venn Diagrams",
+      "tier": 2,
+      "unlocks_topics": 1,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 155",
+        "template_repeat_candidates: 197"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "english/Active & Passive Voice",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 105"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "english/Cloze Test",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 105",
+        "template_repeat_candidates: 80"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "english/Direct & Indirect Speech",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 104"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "english/Error Spotting",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 101"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "english/Fill in the Blanks",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 105"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "english/Idioms & Phrases",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 102"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "english/One Word Substitution",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 98"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "english/Para Jumbles",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 80"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "english/Reading Comprehension",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 105"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "english/Sentence Improvement",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 102"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "english/Spelling",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 105",
+        "template_repeat_candidates: 102"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "english/Synonyms & Antonyms",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 102"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "english/Vocabulary",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 105"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "general-awareness/Art & Culture",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 35"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "general-awareness/Awards & Honours",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 13"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "general-awareness/Biology",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 35"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "general-awareness/Books & Authors",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 35"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "general-awareness/Chemistry",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 35"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "general-awareness/Current Affairs",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 9"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "general-awareness/Economics",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 32"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "general-awareness/Environment",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 35"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "general-awareness/Geography",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 34"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "general-awareness/History",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 34"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "general-awareness/Important Days",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 35"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "general-awareness/Indian Polity",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 33"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "general-awareness/Physics",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 35"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "general-awareness/Sports",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 6"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "general-awareness/Static GK",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 35"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Boats & Streams",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 197"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Compound Interest",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 105",
+        "template_repeat_candidates: 99"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Coordinate Geometry",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 200",
+        "template_repeat_candidates: 196"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Data Interpretation",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 198"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Elementary Statistics",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 200",
+        "template_repeat_candidates: 198"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Heights & Distances",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 200",
+        "template_repeat_candidates: 198"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/LCM & HCF",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 198"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Mensuration",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 198"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Mixture & Alligation",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 198"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Pipes & Cisterns",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 198"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Profit, Loss & Discount",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 189",
+        "template_repeat_candidates: 161"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "quant/Trains",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 199"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Analogy",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 104",
+        "template_repeat_candidates: 25"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Blood Relations",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 189"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Classification & Odd One Out",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 105",
+        "template_repeat_candidates: 100"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Clock & Calendar",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 200",
+        "template_repeat_candidates: 192"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Coding-Decoding",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 179"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Counting Figures",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 198"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Dice & Cubes",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 195"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Dictionary Order",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 104",
+        "template_repeat_candidates: 90"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Direction Sense",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 195"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Embedded Figures",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 5",
+        "template_repeat_candidates: 198"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Figure Series",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 198"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Letter Series",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 80"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Mathematical Operations & Sign Interchange",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 105",
+        "template_repeat_candidates: 99"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Mirror & Water Images",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 204",
+        "template_repeat_candidates: 197"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Missing Number & Number Matrix",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 100",
+        "template_repeat_candidates: 95"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Number Series",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 143",
+        "template_repeat_candidates: 183"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Paper Folding & Cutting",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 205",
+        "template_repeat_candidates: 195"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Puzzle",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 200",
+        "template_repeat_candidates: 194"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Ranking & Order",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 105",
+        "template_repeat_candidates: 99"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Seating Arrangement",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 200",
+        "template_repeat_candidates: 194"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Syllogism",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "brief_solution_review: 5",
+        "template_repeat_candidates: 179"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    },
+    {
+      "topic": "reasoning/Word Building",
+      "tier": 2,
+      "unlocks_topics": 0,
+      "confirmed_defects": [],
+      "review_flags": [
+        "template_repeat_candidates: 189"
+      ],
+      "missing_stages": [],
+      "paper_frequency": null,
+      "benchmark_reference": null,
+      "prerequisites_reviewed": false,
+      "uncertainties": [
+        "PYQ frequency unmeasured",
+        "Prerequisite mapping incomplete"
+      ]
+    }
+  ],
+  "learner_study_queue": [],
+  "scope_topics": 74,
+  "changes_daily_pace": false,
+  "exam_equivalence_established": false,
+  "exam_slug": "ssc-cgl-tier-1",
+  "read_only": true,
+  "learner_evidence_supplied": false,
+  "limitations": [
+    "Length and template similarity are screening flags, not proven errors.",
+    "Published lessons do not prove pedagogical completeness.",
+    "Dependency validation does not establish editorial approval."
+  ]
+}

@@ -1,4 +1,17 @@
 # SSC Prep Engine — Unified Phase 0–9 Delivery Plan
+## Recovery override — 12 October 2026
+
+Use [the authoritative execution tracker](EXECUTION_TRACKER.md) for current status,
+release blockers, evidence and next work. Earlier checkpoint reports remain historical.
+
+Active recovery acceptance uses phases A–G from the teaching remediation specification.
+Phase A release remains **BLOCKED**; do not treat historical checkboxes below as launch proof.
+PRs #51/#52 are integrated on `recovery/phase-a-provenance` for testing, not merged to main.
+See [current evidence, defects, all-74-topic inventory and exact continuation](RECOVERY_EVIDENCE_2026-10-11.md).
+The official-labelled 53-question pool cites factual sources, not SSC papers; no authentic
+PYQ count has been established. Source year must not be presented as exam provenance.
+Phase B is pending the Phase A gate; C has read-only source inventory only; D–G remain pending.
+
 **Canonical active execution plan | 2026-10-08**
 
 This document unifies unfinished Phase 7A/7B/7C/7D and M0–M4 initiatives into **ten outcome-gated phases**. The historical `PHASE7_LEARNING_INTELLIGENCE_MASTER_PLAN.md`, `PHASE7_MULTI_EXAM_ARCHITECTURE_ROADMAP.md`, and older product completion plans remain detailed specifications, **not competing execution queues**.

@@ -7,7 +7,7 @@ isolation for the other stages pass release gates.
 
 from copy import deepcopy
 
-SSC_CGL_NOTICE = "https://ssc.gov.in/api/attachment/uploads/masterData/NoticeBoards/Notice_of_adv_cgl_2025.pdf"
+SSC_CGL_NOTICE = "https://ssc.gov.in/api/attachment/uploads/masterData/NoticeBoards/Notice_of_adv_cgl_2026.pdf"
 SSC_JE_NOTICE = "https://ssc.gov.in/api/attachment/uploads/masterData/NoticeBoards/Notice_of_adv_je_2026.pdf"
 
 EXAM_CATALOG = (
