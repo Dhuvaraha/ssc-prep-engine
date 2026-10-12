@@ -1,0 +1,33 @@
+{
+  "mapped_asset_reference_groups": 704,
+  "static_svg_screen_passed": 104,
+  "asset_delivery_tested": false,
+  "asset_mapping_digest": "178d66e6432ebb9ef6abc265394aadcb2ca0d6d485c4e7881596d5753b90347b",
+  "proposal_digest": "9e3af5430734ba681f6677ca93c4941feb406bfc589777c79ebbc573e3fb8653",
+  "synthetic_only": true,
+  "question_count": 10043,
+  "question_options": 40172,
+  "source_groups": 96,
+  "resource_count": 1881,
+  "lesson_blocks": 1007,
+  "legacy_columns_preserved": true,
+  "migration_repeatable": true,
+  "dry_run_rolled_back": true,
+  "scoped_orm_allow_deny_passed": true,
+  "scoped_resource_counts": {
+    "questions": 10043,
+    "lessons": 74,
+    "lesson_blocks": 1007,
+    "question_archetypes": 806,
+    "flashcards": 1001
+  },
+  "tested_learner_accounts": 1,
+  "tested_denied_accounts": 1,
+  "tested_courses": 1,
+  "http_routes_tested_by_this_rehearsal": false,
+  "revocation_transaction_rollback_passed": true,
+  "production_rights_validated": false,
+  "production_assets_validated": false,
+  "production_backend_role_validated": false,
+  "production_ready": false
+}

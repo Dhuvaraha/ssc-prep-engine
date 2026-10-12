@@ -1,0 +1,10 @@
+{
+  "mapped_asset_reference_groups": 704,
+  "static_svg_screen_passed": 104,
+  "asset_delivery_tested": false,
+  "asset_mapping_digest": "3997e71c42f178e177cd9c4ef8c1afd9f2dac57b61d7fa6bd28a2097fe36142d",
+  "proposal_digest": "9e3af5430734ba681f6677ca93c4941feb406bfc589777c79ebbc573e3fb8653",
+  "asset_bytes_bound": true,
+  "production_rights_validated": false,
+  "validation_scope": "Offline byte-bound preflight after successful 96-group synthetic PostgreSQL rehearsal; database rehearsal not repeated"
+}

@@ -32,13 +32,40 @@ def snapshot(connection, tables):
     return result
 
 
-def run(inventory, topology, url):
+def validate_asset_coverage(inventory, proposal, coverage):
+    """Check cached mappings only; never upgrade metadata into asset approval."""
+    bindings = {b['resource_id']: b['source_id'] for b in proposal['bindings']}
+    expected = sorted((a['usage'], tuple(sorted(a['question_ids'])), sha256(a['asset_url'].encode()).hexdigest()) for a in inventory['assets'])
+    actual = sorted((a['usage'], tuple(sorted(a['question_ids'])), a.get('asset_reference_digest')) for a in coverage['assets'])
+    if actual != expected or coverage['proposal_source_groups'] != len(proposal['sources']):
+        raise ValueError('Asset coverage does not match the existing proposal/inventory')
+    for asset in coverage['assets']:
+        if asset['source_ids'] != sorted({bindings[qid] for qid in asset['question_ids']}):
+            raise ValueError('Asset contributor references do not match question bindings')
+        if asset['visual_review_complete'] is not False or asset['rights_approved'] is not False:
+            raise ValueError('Metadata rehearsal must not claim visual or rights approval')
+    return {'mapped_asset_reference_groups': len(actual),
+            'static_svg_screen_passed': sum(a['static_svg_screen_passed'] is True for a in coverage['assets']),
+            'asset_delivery_tested': False, 'asset_mapping_digest': manifest_digest(coverage)}
+
+
+def run(inventory, topology, url, *, proposal=None, coverage=None):
     parsed = make_url(url)
     if parsed.host not in {"127.0.0.1", "localhost"} or parsed.database != "ssc_phase_a_test":
         raise ValueError("Rehearsal requires loopback database ssc_phase_a_test")
     if parsed.drivername != "postgresql+psycopg" or parsed.query:
         raise ValueError("Use postgresql+psycopg without connection query overrides")
-    proposal = propose(inventory)
+    if proposal is None:
+        proposal = propose(inventory)
+    else:
+        expected = {qid for group in inventory["sources"] for qid in group["question_ids"]}
+        bindings = proposal["bindings"]
+        sources = {source["id"] for source in proposal["sources"]}
+        if (len(sources) != len(proposal["sources"]) or len(bindings) != len(expected)
+                or {b["resource_id"] for b in bindings} != expected
+                or any(b["resource_kind"] != "question" or b["source_id"] not in sources for b in bindings)):
+            raise ValueError("Proposal must exactly cover inventory questions with existing source IDs")
+    asset_report = validate_asset_coverage(inventory, proposal, coverage) if coverage is not None else {}
     if len(inventory["users"]) != 1 or len(inventory["exams"]) != 1:
         raise ValueError("This rehearsal currently supports the observed one-account, one-course topology only")
     schema = "phase_a_" + uuid4().hex
@@ -159,7 +186,8 @@ def run(inventory, topology, url):
                 scoped_counts[model.__tablename__] = actual
         with engine.connect() as connection:
             assert before == snapshot(connection, legacy)
-        return {"synthetic_only": True, "question_count": len(question_rows),
+        return {**asset_report, "proposal_digest": manifest_digest(proposal),
+                "synthetic_only": True, "question_count": len(question_rows),
                 "question_options": len(options), "source_groups": len(proposal["sources"]),
                 "resource_count": len(inventory["resources"]), "lesson_blocks": len(inventory["lesson_blocks"]),
                 "legacy_columns_preserved": True, "migration_repeatable": True,
@@ -182,12 +210,16 @@ def main():
     parser.add_argument("inventory", type=Path)
     parser.add_argument("topology", type=Path)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--proposal", type=Path, help="Reuse the existing private proposal without regenerating it")
+    parser.add_argument("--coverage", type=Path, help="Existing private image/source mapping; not approvals")
     args = parser.parse_args()
     url = os.environ.get("PHASE_A_TEST_DATABASE_URL")
     if not url:
         parser.error("Set PHASE_A_TEST_DATABASE_URL to the isolated loopback test database")
     result = run(json.loads(args.inventory.read_text(encoding="utf-8")),
-                 json.loads(args.topology.read_text(encoding="utf-8")), url)
+                 json.loads(args.topology.read_text(encoding="utf-8")), url,
+                 proposal=json.loads(args.proposal.read_text(encoding="utf-8")) if args.proposal else None,
+                 coverage=json.loads(args.coverage.read_text(encoding="utf-8")) if args.coverage else None)
     with args.output.open("x", encoding="utf-8") as handle:
         json.dump(result, handle, indent=2)
         handle.write("\n")

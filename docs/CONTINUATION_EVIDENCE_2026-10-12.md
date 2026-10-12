@@ -1,5 +1,77 @@
 # Phase A and teaching continuation — 12 October 2026
 
+## Subsequent isolated Phase B milestone
+
+Continues `6d90b28` on `feat/phase-b-immutable-history`; the six existing local
+edits were preserved. PR #53 remains the blocked Phase A parent. No production
+write, migration, merge or deployment occurred.
+
+Implemented a local SQLite editorial ledger with immutable question snapshots,
+stable option identities, asset-aware answer-key versions, independent-review
+evidence, append-only publication history, optimistic publication preconditions
+and version-pinned history. Corrections preserve omitted fields and old pins/results.
+Historical pins explicitly retain unknown original versions rather than borrowing
+a present-day snapshot. This is an isolated development foundation, not a migrated
+production database, authenticated review API or live assessment adapter.
+
+Independent review's three findings are fixed:
+
+- Primary-key replacement, unique-index replacement, UPDATE/DELETE and rowid
+  replacement paths cannot replace ledger evidence. New tables use WITHOUT ROWID;
+  older incompatible schemas are rejected without rewriting their evidence.
+- Changed asset bytes change the key-version digest even if asset identity is reused.
+- Pin validation/insertion and editorial publication use immediate transactions.
+  Two concurrent editors produce one publication and one stale-precondition failure.
+
+Focused validation: **67 passed** across ledger, coverage, existing proposal and
+mock-quality tests. Pyflakes/compileall passed for the
+ledger/coverage/rehearsal changes. Independent follow-up review confirmed the three
+blockers resolved; old-schema rejection addresses its compatibility observation.
+Earlier successful unrelated tests were not rerun locally; remote CI is recorded
+in the linked PR after push.
+
+The interrupted 96-group rehearsal completed. The subsequent
+[96-group plus image-map rehearsal](evidence/entitlement_rehearsal_96_groups_assets_2026-10-12.json)
+reuses the exact existing proposal, checks all 704 image-reference mappings and
+their source links, and preserves all synthetic legacy columns. Repeat migration,
+dry-run rollback, ORM coverage/denial and revocation rollback passed for 10,043
+questions, 40,172 options, 1,881 resources and 1,007 blocks. Proposal and mapping
+digests identify the inputs. Follow-up review added byte-bound asset cache validation;
+[offline verification](evidence/asset_mapping_byte_validation_2026-10-12.json) passed
+for the same 704 mappings after the database rehearsal, without repeating that
+successful database run. Changed asset bytes now invalidate cached screening.
+The current private mapping is `coverage-and-asset-map-byte-bound-2026-10-12.json`.
+This still uses hypothetical synthetic permissions:
+it is not final production validation, an HTTP/image-delivery test or rights approval.
+
+Private coverage: 104 of 704 data-URI SVG groups pass the deliberately conservative
+static screen; the other 600 need inspection and are not automatically classified
+as malicious. Zero visual or rights approvals were inferred. All 74 lessons, 806
+archetypes and 1,001 flashcards still lack complete contributor evidence in the
+cached inventory. Topic/difficulty pools and observed course candidates are mapped;
+the draft has zero active grants. The proposal was not regenerated.
+
+Render service identity was reconfirmed in My Workspace, on `main`. Available
+database session metadata does not attribute a role to the deployed backend;
+compatibility remains unverified rather than inferred from the management role.
+
+Continued mock-quality engineering with an offline evaluator that requires reviewed
+section counts and family-variation targets, reasoning and distractor evidence,
+answer/source consistency and visual checks. Difficulty labels cannot pass this
+screen. Even a successful analytic screen does not claim empirical calibration or
+exam equivalence. No live selector was silently changed.
+
+Exact next gates: complete contributor and visual evidence; establish intended
+account/source permissions; obtain actual backend-role verification; rehearse the
+reviewed production manifest and HTTP/assets. Phase B next requires PostgreSQL
+schema/permission migration, full legacy-field snapshot adapters and authenticated
+review/delivery integration, active-mock transition, blueprint/history pinning and
+rollback rehearsal. Eight original questions remain drafts, not complete lessons;
+their learner integration and accessibility/teaching evaluation remain required.
+All 74 Tier I topics, CGL Tier II, JE Telecom and Phases B–G remain in scope.
+
+---
+
 Continues PR #53, including #51/#52. No production writes, merge or deployment.
 The existing master and teaching roadmaps remain authoritative.
 
