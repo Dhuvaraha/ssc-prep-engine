@@ -1,5 +1,8 @@
 # SSC Prep Engine — Unified Phase 0–9 Delivery Plan
-## Recovery override — 11 October 2026
+## Recovery override — 12 October 2026
+
+Use [the authoritative execution tracker](EXECUTION_TRACKER.md) for current status,
+release blockers, evidence and next work. Earlier checkpoint reports remain historical.
 
 Active recovery acceptance uses phases A–G from the teaching remediation specification.
 Phase A release remains **BLOCKED**; do not treat historical checkboxes below as launch proof.

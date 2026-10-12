@@ -1,6 +1,6 @@
 {
   "git": {
-    "deploymentEnabled": {"feat/phase-a-security-integrity": false, "recovery/phase-a-provenance": false}
+    "deploymentEnabled": {"feat/phase-a-security-integrity": false, "recovery/phase-a-provenance": false, "recovery/curriculum-quality": false}
   },
   "rewrites": [
     {"source": "/(.*)", "destination": "/index.html"}

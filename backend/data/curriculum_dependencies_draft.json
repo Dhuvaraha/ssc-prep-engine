@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "status": "draft_for_editorial_review",
+  "scope": "Topic-level draft only; subtopic objectives and missing foundations must be reviewed before learner routing.",
+  "reviewed_topics": [],
+  "dependencies": [
+    {
+      "prerequisite": "quant/Number System",
+      "topic": "quant/Simplification",
+      "rationale": "Arithmetic operations on integers and fractions are needed before multi-operation expressions."
+    },
+    {
+      "prerequisite": "quant/Number System",
+      "topic": "quant/LCM & HCF",
+      "rationale": "Factors, multiples and divisibility support common-factor and common-multiple methods."
+    },
+    {
+      "prerequisite": "quant/Simplification",
+      "topic": "quant/Ratio & Proportion",
+      "rationale": "Ratios require equivalent fractions and arithmetic with a common multiplier."
+    },
+    {
+      "prerequisite": "quant/Ratio & Proportion",
+      "topic": "quant/Percentage",
+      "rationale": "A percentage expresses a ratio with denominator 100."
+    },
+    {
+      "prerequisite": "quant/Simplification",
+      "topic": "quant/Average",
+      "rationale": "The arithmetic mean uses sums and division by the item count."
+    },
+    {
+      "prerequisite": "quant/Percentage",
+      "topic": "quant/Profit, Loss & Discount",
+      "rationale": "Profit, loss and discount rates require an explicitly chosen percentage base."
+    },
+    {
+      "prerequisite": "quant/Percentage",
+      "topic": "quant/Simple Interest",
+      "rationale": "Interest is a percentage of principal per stated time unit."
+    },
+    {
+      "prerequisite": "quant/Simple Interest",
+      "topic": "quant/Compound Interest",
+      "rationale": "Compare fixed-principal interest with interest on an updated balance."
+    },
+    {
+      "prerequisite": "quant/Ratio & Proportion",
+      "topic": "quant/Time & Work",
+      "rationale": "Work problems use rates and reciprocal time per unit work."
+    },
+    {
+      "prerequisite": "quant/Time & Work",
+      "topic": "quant/Pipes & Cisterns",
+      "rationale": "Inlet and outlet rates combine using the same work-rate model with signs."
+    },
+    {
+      "prerequisite": "quant/Ratio & Proportion",
+      "topic": "quant/Time, Speed & Distance",
+      "rationale": "Speed is a ratio of distance to time; proportional changes and units matter."
+    },
+    {
+      "prerequisite": "quant/Time, Speed & Distance",
+      "topic": "quant/Trains",
+      "rationale": "Train problems add object length and relative speed to distance-rate-time."
+    },
+    {
+      "prerequisite": "quant/Time, Speed & Distance",
+      "topic": "quant/Boats & Streams",
+      "rationale": "Ground speed combines the boat's still-water speed with signed stream speed."
+    },
+    {
+      "prerequisite": "quant/Ratio & Proportion",
+      "topic": "quant/Mixture & Alligation",
+      "rationale": "Mixture concentrations are weighted amounts divided by total amount."
+    },
+    {
+      "prerequisite": "quant/Average",
+      "topic": "quant/Mixture & Alligation",
+      "rationale": "Alligation derives from a weighted average, rather than an unexplained cross-rule."
+    },
+    {
+      "prerequisite": "quant/Simplification",
+      "topic": "quant/Algebra",
+      "rationale": "Algebraic manipulation depends on arithmetic operations and signed quantities."
+    },
+    {
+      "prerequisite": "quant/Geometry",
+      "topic": "quant/Mensuration",
+      "rationale": "Area and volume formulas require the dimensions and properties of the shapes."
+    },
+    {
+      "prerequisite": "quant/Geometry",
+      "topic": "quant/Trigonometry",
+      "rationale": "Right-triangle ratios require perpendicular, hypotenuse and angle concepts."
+    },
+    {
+      "prerequisite": "quant/Trigonometry",
+      "topic": "quant/Heights & Distances",
+      "rationale": "Angles of elevation and depression use right-triangle ratios."
+    },
+    {
+      "prerequisite": "quant/Algebra",
+      "topic": "quant/Coordinate Geometry",
+      "rationale": "Coordinate relations and line equations require signed values and algebra."
+    },
+    {
+      "prerequisite": "quant/Geometry",
+      "topic": "quant/Coordinate Geometry",
+      "rationale": "Coordinate geometry connects numerical positions to geometric distances and shapes."
+    },
+    {
+      "prerequisite": "quant/Average",
+      "topic": "quant/Elementary Statistics",
+      "rationale": "Mean and deviations build on sum and count; median/mode need separate instruction."
+    },
+    {
+      "prerequisite": "quant/Percentage",
+      "topic": "quant/Data Interpretation",
+      "rationale": "Chart questions require ratios, percentage bases and percentage change."
+    },
+    {
+      "prerequisite": "quant/Average",
+      "topic": "quant/Data Interpretation",
+      "rationale": "Tabular and chart comparisons often require total-to-average conversion."
+    },
+    {
+      "prerequisite": "reasoning/Venn Diagrams",
+      "topic": "reasoning/Syllogism",
+      "rationale": "Set membership, inclusion, disjointness and distinct witnesses explain categorical conclusions."
+    }
+  ]
+}

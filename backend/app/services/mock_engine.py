@@ -1,12 +1,12 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import case, select
+from sqlalchemy import case, func, or_, select
 from sqlalchemy.orm import Session, selectinload
 
-from app.models import Exam, MockAttempt, MockAttemptQuestion, Question, Subject, Topic
+from app.models import Exam, MockAttempt, MockAttemptQuestion, Question, QuestionAttempt, Subject, Topic
 from app.services.question_quality import unique_questions
-from app.services.practice_integrity import expose, question_digest
-from app.access_models import AssessmentDelivery
+from app.services.practice_integrity import expose, exposure_digest, question_digest
+from app.access_models import AssessmentDelivery, ContentExposure
 
 
 SECTION_ORDER = ["reasoning", "general-awareness", "quant", "english"]
@@ -49,16 +49,21 @@ def mock_timing(attempt: MockAttempt, *, now: datetime | None = None) -> dict:
     }
 
 
-def _question_order():
-    source_rank = case(
-        (Question.source_type == "official", 0),
-        (Question.source_type == "licensed", 1),
-        (Question.source_type == "user_private", 1),
-        (Question.source_type == "original", 2),
-        else_=3,
-    )
-    missing_year = case((Question.year.is_(None), 1), else_=0)
-    return (source_rank, missing_year, Question.year.desc(), Question.difficulty, Question.id)
+def _question_order(user_id: int | None = None):
+    # Source labels and event years are not paper-authenticity or difficulty
+    # evidence. Randomize within exposure tiers instead of always taking low IDs.
+    # Prior exposure includes abandoned mocks, not just completed scores.
+    if user_id is None:
+        return (func.random(),)
+    practiced = select(QuestionAttempt.id).where(
+        QuestionAttempt.user_id == user_id,
+        QuestionAttempt.question_id == Question.id,
+    ).exists()
+    assessed = select(MockAttemptQuestion.id).join(MockAttempt).where(
+        MockAttempt.user_id == user_id,
+        MockAttemptQuestion.question_id == Question.id,
+    ).exists()
+    return (case((or_(practiced, assessed), 1), else_=0), func.random())
 
 
 def _hydrate_questions(db: Session, ids: list[int]) -> list[Question]:
@@ -75,7 +80,24 @@ def _hydrate_questions(db: Session, ids: list[int]) -> list[Question]:
     return [by_id[qid] for qid in ids if qid in by_id]
 
 
-def _bounded_unique_questions(db: Session, stmt, *, count: int) -> list[Question]:
+def _seen_content(db, user_id):
+    if user_id is None:
+        return set(), set()
+    ids = set(db.scalars(select(QuestionAttempt.question_id).where(QuestionAttempt.user_id == user_id)))
+    ids.update(db.scalars(select(MockAttemptQuestion.question_id).join(MockAttempt).where(MockAttempt.user_id == user_id)))
+    digests = set(db.scalars(select(ContentExposure.content_digest).where(ContentExposure.user_id == user_id)))
+    # Legacy attempts predate exposure rows. Resolve current authorized content
+    # for those IDs so duplicate IDs do not become independent evidence. This
+    # cannot reconstruct a pre-edit historical stem; immutable revisions remain
+    # a separate Phase B dependency.
+    ordered_ids = sorted(ids)
+    for offset in range(0, len(ordered_ids), 400):
+        digests.update(exposure_digest(q) for q in
+                       _hydrate_questions(db, ordered_ids[offset:offset + 400]))
+    return ids, digests
+
+
+def _bounded_unique_questions(db: Session, stmt, *, count: int, seen=None) -> list[Question]:
     """
     Fetch a bounded candidate window first, then hydrate only those option rows.
 
@@ -84,15 +106,22 @@ def _bounded_unique_questions(db: Session, stmt, *, count: int) -> list[Question
     mock startup proportional to the requested test size while preserving the
     exact duplicate-content guard.
     """
+    seen_ids, seen_digests = seen or (set(), set())
+
+    def exposed(question):
+        return question.id in seen_ids or exposure_digest(question) in seen_digests
+
     for candidate_limit in (max(80, count * 6), max(200, count * 20)):
         ids = list(db.scalars(stmt.limit(candidate_limit)))
         selected = unique_questions(_hydrate_questions(db, ids))
-        if len(selected) >= count:
-            return selected[:count]
+        fresh = [question for question in selected if not exposed(question)]
+        if len(fresh) >= count:
+            return fresh[:count]
 
     # Safety fallback for an unusually duplicate-heavy subject/topic.
     ids = list(db.scalars(stmt))
-    return unique_questions(_hydrate_questions(db, ids))[:count]
+    selected = unique_questions(_hydrate_questions(db, ids))
+    return sorted(selected, key=exposed)[:count]
 
 
 def _difficulty_targets(count: int) -> dict[int, int]:
@@ -113,7 +142,7 @@ def _difficulty_targets(count: int) -> dict[int, int]:
     return {1: easy, 2: medium, 3: hard}
 
 
-def _balanced_difficulty_questions(db: Session, stmt, *, count: int) -> list[Question]:
+def _balanced_difficulty_questions(db: Session, stmt, *, count: int, seen=None) -> list[Question]:
     targets = _difficulty_targets(count)
     selected: list[Question] = []
     selected_ids: set[int] = set()
@@ -126,6 +155,7 @@ def _balanced_difficulty_questions(db: Session, stmt, *, count: int) -> list[Que
             db,
             stmt.where(Question.difficulty == difficulty),
             count=target,
+            seen=seen,
         )
         for question in rows:
             if question.id not in selected_ids:
@@ -141,6 +171,7 @@ def _balanced_difficulty_questions(db: Session, stmt, *, count: int) -> list[Que
             db,
             fallback_stmt,
             count=count - len(selected),
+            seen=seen,
         )
         selected = unique_questions(selected + fallback)
 
@@ -181,6 +212,7 @@ def _questions_for_subject(
     exam_id: int,
     subject_slug: str,
     count: int,
+    user_id: int | None = None,
 ) -> list[Question]:
     subject = db.scalar(
         select(Subject).where(
@@ -199,9 +231,9 @@ def _questions_for_subject(
             Question.verification_status == "verified",
             Question.correct_option.is_not(None),
         )
-        .order_by(*_question_order())
+        .order_by(*_question_order(user_id))
     )
-    return _balanced_difficulty_questions(db, stmt, count=count)
+    return _balanced_difficulty_questions(db, stmt, count=count, seen=_seen_content(db, user_id))
 
 
 def _questions_for_topic(
@@ -210,6 +242,7 @@ def _questions_for_topic(
     exam_id: int,
     topic_id: int,
     count: int,
+    user_id: int | None = None,
 ) -> tuple[str, list[Question]]:
     topic = db.get(Topic, topic_id)
     if not topic:
@@ -226,9 +259,9 @@ def _questions_for_topic(
             Question.verification_status == "verified",
             Question.correct_option.is_not(None),
         )
-        .order_by(*_question_order())
+        .order_by(*_question_order(user_id))
     )
-    return subject.slug, _bounded_unique_questions(db, stmt, count=count)
+    return subject.slug, _bounded_unique_questions(db, stmt, count=count, seen=_seen_content(db, user_id))
 
 
 def create_mock_attempt(
@@ -275,6 +308,7 @@ def create_mock_attempt(
             exam_id=exam.id,
             topic_id=topic_id,
             count=20,
+            user_id=user_id,
         )
         if len(questions) < 10:
             raise ValueError(f"Not enough verified questions for topic {topic_id}: need at least 10")
@@ -286,6 +320,7 @@ def create_mock_attempt(
                 exam_id=exam.id,
                 subject_slug=slug,
                 count=count,
+                user_id=user_id,
             )
             if len(questions) < count:
                 raise ValueError(

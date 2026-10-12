@@ -1,0 +1,677 @@
+{
+  "exam_slug": "ssc-cgl-tier-1",
+  "observed_date": "2026-10-12",
+  "read_only": true,
+  "limitations": [
+    "Numeric-normalized stem repeats are review candidates, not semantic duplicate proof.",
+    "Explanation length threshold is 90 characters; short does not imply incorrect."
+  ],
+  "topic_reports": [
+    {
+      "subject": "english",
+      "topic": "Active & Passive Voice",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 105,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "english",
+      "topic": "Cloze Test",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 105,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 80
+    },
+    {
+      "subject": "english",
+      "topic": "Direct & Indirect Speech",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 104,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "english",
+      "topic": "Error Spotting",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 101,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "english",
+      "topic": "Fill in the Blanks",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 105,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "english",
+      "topic": "Idioms & Phrases",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 102,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "english",
+      "topic": "One Word Substitution",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 98,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "english",
+      "topic": "Para Jumbles",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 80,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "english",
+      "topic": "Reading Comprehension",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 105,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "english",
+      "topic": "Sentence Improvement",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 102,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "english",
+      "topic": "Spelling",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 105,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 102
+    },
+    {
+      "subject": "english",
+      "topic": "Synonyms & Antonyms",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 102,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "english",
+      "topic": "Vocabulary",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 105,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "general-awareness",
+      "topic": "Art & Culture",
+      "lesson_published": true,
+      "verified_questions": 35,
+      "brief_solution_review": 35,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "general-awareness",
+      "topic": "Awards & Honours",
+      "lesson_published": true,
+      "verified_questions": 23,
+      "brief_solution_review": 13,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "general-awareness",
+      "topic": "Biology",
+      "lesson_published": true,
+      "verified_questions": 35,
+      "brief_solution_review": 35,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "general-awareness",
+      "topic": "Books & Authors",
+      "lesson_published": true,
+      "verified_questions": 35,
+      "brief_solution_review": 35,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "general-awareness",
+      "topic": "Chemistry",
+      "lesson_published": true,
+      "verified_questions": 35,
+      "brief_solution_review": 35,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "general-awareness",
+      "topic": "Current Affairs",
+      "lesson_published": true,
+      "verified_questions": 20,
+      "brief_solution_review": 9,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "general-awareness",
+      "topic": "Economics",
+      "lesson_published": true,
+      "verified_questions": 35,
+      "brief_solution_review": 32,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "general-awareness",
+      "topic": "Environment",
+      "lesson_published": true,
+      "verified_questions": 35,
+      "brief_solution_review": 35,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "general-awareness",
+      "topic": "Geography",
+      "lesson_published": true,
+      "verified_questions": 35,
+      "brief_solution_review": 34,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "general-awareness",
+      "topic": "History",
+      "lesson_published": true,
+      "verified_questions": 35,
+      "brief_solution_review": 34,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "general-awareness",
+      "topic": "Important Days",
+      "lesson_published": true,
+      "verified_questions": 35,
+      "brief_solution_review": 35,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "general-awareness",
+      "topic": "Indian Polity",
+      "lesson_published": true,
+      "verified_questions": 35,
+      "brief_solution_review": 33,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "general-awareness",
+      "topic": "Physics",
+      "lesson_published": true,
+      "verified_questions": 35,
+      "brief_solution_review": 35,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "general-awareness",
+      "topic": "Sports",
+      "lesson_published": true,
+      "verified_questions": 25,
+      "brief_solution_review": 6,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "general-awareness",
+      "topic": "Static GK",
+      "lesson_published": true,
+      "verified_questions": 35,
+      "brief_solution_review": 35,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "quant",
+      "topic": "Algebra",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 105,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 99
+    },
+    {
+      "subject": "quant",
+      "topic": "Average",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 105,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 99
+    },
+    {
+      "subject": "quant",
+      "topic": "Boats & Streams",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 197
+    },
+    {
+      "subject": "quant",
+      "topic": "Compound Interest",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 105,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 99
+    },
+    {
+      "subject": "quant",
+      "topic": "Coordinate Geometry",
+      "lesson_published": true,
+      "verified_questions": 200,
+      "brief_solution_review": 200,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 196
+    },
+    {
+      "subject": "quant",
+      "topic": "Data Interpretation",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 198
+    },
+    {
+      "subject": "quant",
+      "topic": "Elementary Statistics",
+      "lesson_published": true,
+      "verified_questions": 200,
+      "brief_solution_review": 200,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 198
+    },
+    {
+      "subject": "quant",
+      "topic": "Geometry",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 93,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 90
+    },
+    {
+      "subject": "quant",
+      "topic": "Heights & Distances",
+      "lesson_published": true,
+      "verified_questions": 200,
+      "brief_solution_review": 200,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 198
+    },
+    {
+      "subject": "quant",
+      "topic": "LCM & HCF",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 198
+    },
+    {
+      "subject": "quant",
+      "topic": "Mensuration",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 198
+    },
+    {
+      "subject": "quant",
+      "topic": "Mixture & Alligation",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 198
+    },
+    {
+      "subject": "quant",
+      "topic": "Number System",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 105,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 99
+    },
+    {
+      "subject": "quant",
+      "topic": "Percentage",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 175,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 139
+    },
+    {
+      "subject": "quant",
+      "topic": "Pipes & Cisterns",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 198
+    },
+    {
+      "subject": "quant",
+      "topic": "Profit, Loss & Discount",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 189,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 161
+    },
+    {
+      "subject": "quant",
+      "topic": "Ratio & Proportion",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 183,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 194
+    },
+    {
+      "subject": "quant",
+      "topic": "Simple Interest",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 199
+    },
+    {
+      "subject": "quant",
+      "topic": "Simplification",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 105,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 99
+    },
+    {
+      "subject": "quant",
+      "topic": "Time & Work",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 146,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 178
+    },
+    {
+      "subject": "quant",
+      "topic": "Time, Speed & Distance",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 105,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 99
+    },
+    {
+      "subject": "quant",
+      "topic": "Trains",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 199
+    },
+    {
+      "subject": "quant",
+      "topic": "Trigonometry",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 196
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Analogy",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 104,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 25
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Blood Relations",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 189
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Classification & Odd One Out",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 105,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 100
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Clock & Calendar",
+      "lesson_published": true,
+      "verified_questions": 200,
+      "brief_solution_review": 200,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 192
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Coding-Decoding",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 179,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 0
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Counting Figures",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 198
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Dice & Cubes",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 195
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Dictionary Order",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 104,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 90
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Direction Sense",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 195
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Embedded Figures",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 5,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 198
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Figure Series",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 198
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Letter Series",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 80
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Mathematical Operations & Sign Interchange",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 105,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 99
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Mirror & Water Images",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 204,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 197
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Missing Number & Number Matrix",
+      "lesson_published": true,
+      "verified_questions": 100,
+      "brief_solution_review": 100,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 95
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Number Series",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 143,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 183
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Paper Folding & Cutting",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 205,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 195
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Puzzle",
+      "lesson_published": true,
+      "verified_questions": 200,
+      "brief_solution_review": 200,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 194
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Ranking & Order",
+      "lesson_published": true,
+      "verified_questions": 105,
+      "brief_solution_review": 105,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 99
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Seating Arrangement",
+      "lesson_published": true,
+      "verified_questions": 200,
+      "brief_solution_review": 200,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 194
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Syllogism",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 5,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 179
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Venn Diagrams",
+      "lesson_published": true,
+      "verified_questions": 205,
+      "brief_solution_review": 155,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 197
+    },
+    {
+      "subject": "reasoning",
+      "topic": "Word Building",
+      "lesson_published": true,
+      "verified_questions": 200,
+      "brief_solution_review": 0,
+      "source_reference_review": 0,
+      "template_repeat_candidates": 189
+    }
+  ]
+}
