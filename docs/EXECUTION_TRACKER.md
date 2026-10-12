@@ -74,14 +74,18 @@ have prerequisite reach; that is pedagogical dependency evidence, not claimed SS
 frequency. Syllogism seed correction is recorded separately from live-bank flags.
 
 Prior PDF recovery evidence remains in [11 October checkpoint](RECOVERY_EVIDENCE_2026-10-11.md):
-27 files / 20 unique documents / 9,617 pages. Those files are not in this local
-checkout; this session did not reprocess them or certify keys/rights/difficulty.
+27 files / 20 unique documents / 9,617 pages. The latest 16 references resolve to
+15 files under the private PYQS directory (eight obsolete root paths resolved by
+filename there). SHA-256 values are recorded privately. The earlier aggregate
+checkpoint contains no reusable hash manifest, so equality to its 20 documents is
+not asserted. No full metadata extraction was repeated. Targeted page analysis
+and the new content-hash audit cache are recorded in the continuation evidence.
 The official CGL 2026 notice was reopened successfully; full syllabus, corrigenda,
 accommodations and expanded-stage validation remain required.
 
 ## Verification
 
-- Backend: **177 passed, 6 PostgreSQL-only skipped**; pyflakes and compileall pass.
+- Backend: **191 passed, 6 PostgreSQL-only skipped**; pyflakes and compileall pass.
 - Existing isolated loopback PostgreSQL security/migration/concurrency suite:
   **35 passed**, with synthetic `phase_a_test` role/database. First connection
   attempt used nonexistent `postgres` role; corrected without altering roles.
@@ -108,11 +112,20 @@ accommodations and expanded-stage validation remain required.
 | F / 6 UX | Existing responsive groundwork | Integrated learner roadmap/navigation, mobile accessibility and real learner flows |
 | G / 7–9 expansion/launch | Not implemented | Full Tier I expansion, independently correct Tier II and JE Telecom blueprints, learner/paper benchmarking and live release acceptance |
 
-Release approval already exists subject to technical safety; do not ask for generic
-deployment approval again. The genuine missing input is the reviewed rights and
-entitlement manifest (exact permitted sources, complete contributor bindings,
-intended learner/course/source grants and reviewed images). Do not infer these from
-source labels or create blanket grants. Obtain its reference once, then dry-run and
-review coverage. Without it, merging Phase A would fail startup or deny legitimate
-learning access. Keep staging/production cutover closed and continue independent
-non-destructive implementation. Do not loosen authorization to unblock release.
+The user confirmed no approved manifest exists. Do not ask for its location again.
+The private exact-ID proposal now separates 2,400 repository-code-matched originals
+from 7,643 unresolved legacy items, without granting access or certifying PYQ status.
+Independent authorship does not require third-party republication permission.
+Existing question IDs, uncertain lineage, image review, contributor completeness
+and learner/course decisions remain distinct. Resolve technical mappings first;
+present remaining operator decisions and production cutover together once ready.
+No production migration is authorized by the draft. Do not loosen authorization.
+
+## Latest continuation
+
+See [12 October continuation](CONTINUATION_EVIDENCE_2026-10-12.md) for implemented
+manifest guards, actual-sized synthetic rehearsal, targeted paper analysis and
+eight independently reviewed original draft items. These are not eight complete
+pilot lessons or empirical exam calibration. All 74 topics and Phases B–G remain
+in scope, with the existing dependency order and learner pace unchanged.
+Commit `05adde3fe347d27bb74a2fbf132d41ae585a741b` passed both remote CI workflows.

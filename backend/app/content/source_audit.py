@@ -6,6 +6,7 @@ The report contains no candidate identity, stems, options or answer text.
 from __future__ import annotations
 
 from collections import Counter
+from copy import deepcopy
 from hashlib import sha256
 from pathlib import Path
 import re
@@ -64,19 +65,31 @@ def scan_pdf(path: Path) -> dict:
     }
 
 
-def audit_corpus(paths: list[Path]) -> dict:
+def audit_corpus(paths: list[Path], *, previous_report: dict | None = None) -> dict:
     records, duplicates, by_hash = [], [], {}
+    if previous_report is not None and previous_report.get("format_version") != 1:
+        raise ValueError("Unsupported prior audit format")
+    cached = {record["sha256"]: record for record in (previous_report or {}).get("documents", [])}
+    reused = 0
     for path in sorted(paths):
         fingerprint = sha256(path.read_bytes()).hexdigest()
         if fingerprint in by_hash:
             duplicates.append({"filename": path.name, "duplicate_of": by_hash[fingerprint], "sha256": fingerprint})
             continue
-        result = scan_pdf(path)
+        if fingerprint in cached:
+            result = deepcopy(cached[fingerprint])
+            if result["bytes"] != path.stat().st_size:
+                raise ValueError("Prior audit byte count disagrees with identical hash")
+            result["filename"] = path.name
+            reused += 1
+        else:
+            result = scan_pdf(path)
         by_hash[fingerprint] = path.name
         records.append(result)
     return {
         "format_version": 1, "read_only": True,
         "files_supplied": len(paths), "unique_documents": len(records),
+        "reused_document_audits": reused,
         "duplicate_files": duplicates,
         "unique_document_pages": sum(r["page_count"] for r in records),
         "documents": records,

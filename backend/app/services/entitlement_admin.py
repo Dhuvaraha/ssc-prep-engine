@@ -24,6 +24,14 @@ def manifest_digest(manifest):
 
 def apply_manifest(db, manifest, *, approved_digest=None):
     """Dry runs roll back their savepoint. Grants never come from registration."""
+    if manifest.get("approval_status", "reviewed") != "reviewed" or manifest.get("executable") is False:
+        raise ValueError("Draft entitlement proposal cannot be applied; resolve review decisions first")
+    if manifest.get("unresolved_resource_bindings") or manifest.get("assets_pending_crop_and_hash_review"):
+        raise ValueError("Manifest still contains unresolved resource or asset decisions")
+    if any(item.get("complete_contributors_confirmed") is False for item in manifest.get("bindings", [])):
+        raise ValueError("Complete source contributors require review")
+    if any(item.get("review_status", "reviewed") != "reviewed" for item in manifest.get("courses", [])):
+        raise ValueError("Account/course decisions require review")
     fingerprint = manifest_digest(manifest)
     apply = approved_digest is not None
     if apply and approved_digest != fingerprint:
