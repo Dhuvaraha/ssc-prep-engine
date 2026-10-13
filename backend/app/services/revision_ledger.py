@@ -73,7 +73,7 @@ class Ledger:
     def __init__(self, path):
         self.db = sqlite3.connect(path, isolation_level=None)
         self.db.row_factory = sqlite3.Row
-        for row in self.db.execute("SELECT name, sql FROM sqlite_master WHERE type='table' AND name IN ('revisions','reviews','publications','pins')"):
+        for row in self.db.execute("SELECT name, sql FROM sqlite_master WHERE type='table' AND name IN ('revisions','reviews','publications','pins','legacy_captures')"):
             if 'WITHOUT ROWID' not in row['sql'].upper():
                 self.db.close()
                 raise ValueError('Unsupported older ledger schema; preserve it for explicit migration')
@@ -94,11 +94,14 @@ class Ledger:
             attempt_key TEXT NOT NULL, question_id INTEGER NOT NULL, revision_id TEXT REFERENCES revisions(id),
             blueprint TEXT NOT NULL, original_version_unknown INTEGER NOT NULL,
             stored_result TEXT, captured_at TEXT NOT NULL, PRIMARY KEY(attempt_key, question_id)) WITHOUT ROWID;
+          CREATE TABLE IF NOT EXISTS legacy_captures (
+            id TEXT PRIMARY KEY, question_id INTEGER NOT NULL, payload TEXT NOT NULL,
+            content_hash TEXT NOT NULL, operator TEXT NOT NULL, captured_at TEXT NOT NULL) WITHOUT ROWID;
           CREATE UNIQUE INDEX IF NOT EXISTS publication_successor ON publications(previous_id) WHERE previous_id IS NOT NULL;
           CREATE UNIQUE INDEX IF NOT EXISTS publication_root ON publications(question_id) WHERE previous_id IS NULL;
         """)
-        for table in ("revisions", "reviews", "publications", "pins"):
-            keys = {'revisions':('id',), 'reviews':('revision_id',), 'publications':('id',), 'pins':('attempt_key','question_id')}[table]
+        for table in ("revisions", "reviews", "publications", "pins", "legacy_captures"):
+            keys = {'revisions':('id',), 'reviews':('revision_id',), 'publications':('id',), 'pins':('attempt_key','question_id'), 'legacy_captures':('id',)}[table]
             predicate = ' AND '.join(f'{key}=NEW.{key}' for key in keys)
             self.db.execute(f"CREATE TRIGGER IF NOT EXISTS immutable_{table}_replace BEFORE INSERT ON {table} WHEN EXISTS (SELECT 1 FROM {table} WHERE {predicate}) BEGIN SELECT RAISE(ABORT, 'immutable evidence'); END")
             for operation in ("UPDATE", "DELETE"):
@@ -111,6 +114,36 @@ class Ledger:
 
     def close(self):
         self.db.close()
+
+    def capture_legacy(self, snapshot, *, operator):
+        """Store lossless evidence separately from publication-valid candidates."""
+        if not isinstance(operator,str) or not operator.strip():
+            raise ValueError('Capture operator required')
+        if (snapshot.get('capture_kind')!='legacy_capture_at_migration'
+                or snapshot.get('original_version_unknown') is not True
+                or snapshot.get('publication_eligible') is not False):
+            raise ValueError('Legacy capture must retain uncertainty and remain unpublished')
+        qid=snapshot['question']['id']
+        if type(qid) is not int or qid<1:
+            raise ValueError('Persisted question identity required')
+        encoded=canonical(snapshot)
+        fingerprint=digest(snapshot)
+        # Deterministic identity makes restart idempotent without replacement writes.
+        cid='legacy-'+fingerprint
+        with self.transaction():
+            existing=self.db.execute('SELECT id FROM legacy_captures WHERE id=?',(cid,)).fetchone()
+            if existing is None:
+                self.db.execute('INSERT INTO legacy_captures VALUES (?,?,?,?,?,?)',
+                    (cid,qid,encoded,fingerprint,operator,datetime.now(timezone.utc).isoformat()))
+        return cid
+
+    def legacy_capture(self, capture_id):
+        row=self.db.execute('SELECT * FROM legacy_captures WHERE id=?',(capture_id,)).fetchone()
+        if row is None:
+            raise ValueError('Unknown legacy capture')
+        result=dict(row)
+        result['payload']=json.loads(result['payload'])
+        return result
 
     @contextmanager
     def transaction(self):

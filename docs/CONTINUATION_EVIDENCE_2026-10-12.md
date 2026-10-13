@@ -1,5 +1,42 @@
 # Phase A and teaching continuation — 12 October 2026
 
+## 13 October continuation
+
+The working tree was clean at `b78fc20`; the previously reported six local edits
+had already been committed, not lost. The interrupted push succeeded through the
+normal approval path. [Draft PR #54](https://github.com/Dhuvaraha/ssc-prep-engine/pull/54)
+targets PR #53's recovery branch and keeps Phase B isolated from `main`.
+
+Continued Phase B with a lossless legacy snapshot adapter and a separate immutable
+capture table. It preserves every mapped question/option scalar, including nulls,
+original option IDs/order, source fields, solution fields and asset references.
+It rejects unloaded columns/relationships, partial option sets and cross-question
+options rather than issuing hidden database reads. Independent review found that
+loaded relationships can still be filtered; capture now requires independently
+extracted expected option IDs from the same authorized database snapshot and checks
+them explicitly. Inline asset bytes are hashed;
+external image bytes remain explicitly unverified. Captures are idempotent evidence,
+not publication-valid revisions or reconstructed historical delivery versions.
+Existing learner rows, scores and production data are untouched.
+
+Snapshot/ledger regression suite: **42 passed**; pyflakes passed. Initial fixture
+failures exposed unloaded ORM attributes; fixtures now explicitly load their rows
+and relation, matching the adapter's deliberate no-implicit-query contract.
+
+For `b78fc20`, remote backend, frontend and browser jobs passed. PostgreSQL failed
+at container startup because fixed runner port 55432 was occupied; no PostgreSQL
+test ran in that failed job. CI now uses the service's allocated host port for both
+role setup and tests, following GitHub's documented service-container mapping.
+Final-commit CI status is recorded in PR #54. Production release gates below remain
+unchanged. The completed PDF inventory and 96-group rehearsal were not repeated.
+
+Phase B remains in progress: next implement the PostgreSQL evidence schema and
+restricted permissions, then authenticated editorial/delivery adapters, active-mock
+transition and pinned blueprint/history integration. The local ledger and capture
+adapter alone do not satisfy these production acceptance gates.
+
+---
+
 ## Subsequent isolated Phase B milestone
 
 Continues `6d90b28` on `feat/phase-b-immutable-history`; the six existing local
