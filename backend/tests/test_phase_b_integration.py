@@ -314,3 +314,66 @@ def test_active_pinned_asset_survives_locator_edit_but_not_source_revocation(set
         db.get(SourceGrant,(1,'original-fixture')).active=False;db.commit()
         with pytest.raises(HTTPException) as error:get_private_asset('old.svg',db.get(User,1),db)
         assert error.value.status_code==404
+
+
+def test_practice_scores_pinned_key_and_retries_without_regrading(setup):
+    from app.access_models import CourseGrant, SourceGrant
+    from app.routers.practice import submit_practice
+    from app.schemas import PracticeSubmit
+    from app.models import QuestionAttempt
+    from fastapi import HTTPException
+    with Session(setup) as db:
+        db.add_all([CourseGrant(user_id=1,exam_id=1,active=True),SourceGrant(user_id=1,source_id='original-fixture',active=True)])
+        q=question(db);delivery=issue_delivery(db,1,q);token=delivery.id;db.commit()
+        q.correct_option=3;q.explanation='Changed explanation';db.commit()
+        payload=dict(delivery_token=token,question_id=1,selected_option=2,time_seconds=20)
+        result=submit_practice(PracticeSubmit(**payload),db,db.get(User,1))
+        assert result.correct and result.correct_option==2 and result.explanation=='Four'
+        assert result.coaching is None and result.option_insights==[]
+        assert submit_practice(PracticeSubmit(**payload),db,db.get(User,1))==result
+        assert len(db.scalars(select(QuestionAttempt)).all())==1
+        db.get(SourceGrant,(1,'original-fixture')).active=False;db.commit()
+        with pytest.raises(HTTPException) as error:submit_practice(PracticeSubmit(**payload),db,db.get(User,1))
+        assert error.value.status_code==404
+
+
+def test_practice_assistance_uses_original_explanation_and_expiry(setup):
+    from datetime import datetime, timedelta
+    from app.access_models import CourseGrant, SourceGrant
+    from app.routers.practice import assist_delivery
+    from fastapi import HTTPException
+    with Session(setup) as db:
+        db.add_all([CourseGrant(user_id=1,exam_id=1,active=True),SourceGrant(user_id=1,source_id='original-fixture',active=True)])
+        q=question(db);delivery=issue_delivery(db,1,q);db.commit()
+        q.explanation='New';db.commit()
+        result=assist_delivery(delivery.id,'explain',db,db.get(User,1))
+        assert result['explanation']=='Four' and result['coaching'] is None
+        assert delivery.assisted
+        delivery.created_at=datetime.utcnow()-timedelta(hours=5);db.commit()
+        with pytest.raises(HTTPException) as error:assist_delivery(delivery.id,'explain',db,db.get(User,1))
+        assert error.value.detail=='DELIVERY_EXPIRED'
+
+
+def test_pinned_retry_does_not_replay_unversioned_supplements(setup,monkeypatch):
+    import json
+    from app.access_models import CourseGrant, SourceGrant
+    from app.routers import practice
+    from app.schemas import PracticeSubmit
+    with Session(setup) as db:
+        db.add_all([CourseGrant(user_id=1,exam_id=1,active=True),SourceGrant(user_id=1,source_id='original-fixture',active=True)])
+        delivery=issue_delivery(db,1,question(db));db.commit()
+        payload=dict(delivery_token=delivery.id,question_id=1,selected_option=2,time_seconds=20)
+        def forbidden(*args,**kwargs):
+            raise AssertionError('Unversioned supplements must not enter pinned results')
+        monkeypatch.setattr(practice,'build_question_coaching',forbidden)
+        monkeypatch.setattr(practice,'published_option_insights',forbidden)
+        result=practice.submit_practice(PracticeSubmit(**payload),db,db.get(User,1))
+        assert result.coaching is None and not result.option_insights
+        # Simulate a previously saved payload: its contributors were never pinned.
+        stored=json.loads(delivery.result_json)
+        stored['coaching']={'pattern_name':'REVOKED_SUPPLEMENT'}
+        delivery.result_json=json.dumps(stored);db.commit()
+        replay=practice.submit_practice(PracticeSubmit(**payload),db,db.get(User,1))
+        assert replay.coaching is None and not replay.option_insights
+        assert 'REVOKED_SUPPLEMENT' in delivery.result_json
+        assert replay.attempt_id==result.attempt_id and replay.correct==result.correct

@@ -59,7 +59,7 @@ def load_delivery(db, user_id, token, question):
     delivery = db.get(PracticeDelivery, token)
     if not delivery or delivery.user_id != user_id or delivery.question_id != question.id:
         raise HTTPException(404, "Delivery not available")
-    if delivery.content_digest != question_digest(question):
+    if not getattr(question,'delivery_revision_id',None) and delivery.content_digest != question_digest(question):
         raise HTTPException(409, "CONTENT_CHANGED")
     if not delivery.result_json and delivery.created_at < datetime.utcnow() - timedelta(hours=4):
         raise HTTPException(409, "DELIVERY_EXPIRED")

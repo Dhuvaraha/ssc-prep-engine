@@ -1,5 +1,31 @@
 # Phase A and teaching continuation — 12 October 2026
 
+## 14 October continuation — practice revision consumers
+
+Mock milestone `5247ce1` passed remote CI run `38533148170`: **273 backend
+tests, 7 skips; 53 PostgreSQL tests**, frontend and Phase A browser checks.
+Browser QA `38533148093` also passed.
+
+Practice submissions, assistance and idempotent result replay now use authorized
+captured answers/explanations. Source/course/owner checks run before replay;
+expiry and single-attempt behavior remain intact. Learner-facing development
+behavior: later question corrections do not change a delivered practice answer.
+
+Independent review found cached supplementary coaching could outlive contributor
+permissions. Pinned responses now omit unversioned coaching/option insights,
+including read-only filtering of older cached payloads. Saved results are not
+rewritten. Original explanations/fast methods remain. Contributor-bound supplement
+delivery is still a required teaching release gate, not a completed Explorer.
+Follow-up independent review found no remaining blocker in this milestone.
+Practice/security/integration regressions: **52 passed, 7 PostgreSQL-only skips**.
+
+PR #55 (`6bc490d`) is stacked on #54 and adds five new/additive files: offline
+Four-Option readiness, original unpublished polity draft, tests and acceptance
+criteria in the existing master roadmap. Preserve its branch rather than copying
+or replacing it. Its structural tests do not certify facts or a working lesson.
+First complete one reviewed beginner-to-advanced teach/repair/retry/retention
+journey; full 74-topic expansion remains required afterward. No production changes.
+
 ## 14 October continuation — mock revision consumers
 
 Continues `2d41052`; no completed work or private audits repeated.

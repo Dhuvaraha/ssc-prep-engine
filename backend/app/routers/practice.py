@@ -94,6 +94,8 @@ def submit_practice(
     delivery = db.get(PracticeDelivery, payload.delivery_token)
     if not delivery or delivery.user_id != user.id or delivery.question_id != question.id:
         raise HTTPException(404, "Delivery not available")
+    from app.services.revision_capture import delivered_question
+    question=delivered_question(db,kind='practice',delivery_id=delivery.id,user_id=user.id,current=question)
     request_digest = digest(payload.model_dump())
     if delivery.result_json:
         # An already committed submission is immutable. Retry must replay that
@@ -101,10 +103,15 @@ def submit_practice(
         # Do not re-score or write progress; reject changed request payloads.
         if delivery.request_digest != request_digest:
             raise HTTPException(409, "IDEMPOTENCY_CONFLICT")
-        return PracticeResult.model_validate_json(delivery.result_json)
+        result=PracticeResult.model_validate_json(delivery.result_json)
+        if getattr(question,'delivery_revision_id',None):
+            # Supplement contributors are not versioned in this ledger yet.
+            # Never replay their cached text after permissions may have changed.
+            result=result.model_copy(update={'coaching':None,'option_insights':[]})
+        return result
 
     # New submissions may only use the exact verified question revision seen at
-    # delivery. Content changes and expired tokens still fail before any write.
+    # delivery. Unpinned content changes and expired tokens fail before any write.
     if question.verification_status != "verified":
         raise HTTPException(status_code=404, detail="Verified question not found")
     if question.correct_option is None:
@@ -200,10 +207,13 @@ def submit_practice(
             )
         revision_scheduled = True
 
-    coaching = build_question_coaching(db, question)
+    # Supplement contributor permissions are not pinned yet. Preserve the
+    # versioned question explanation/method without caching unversioned text.
+    supplements_available=not getattr(question,'delivery_revision_id',None)
+    coaching = build_question_coaching(db, question) if supplements_available else None
     # Insight context is returned only after the verified answer has been
     # submitted, never in /practice/questions or live mock payloads.
-    option_insights = published_option_insights(db, question=question)
+    option_insights = published_option_insights(db, question=question) if supplements_available else []
     result = PracticeResult(
         attempt_id=attempt.id,
         correct=is_correct,
@@ -231,9 +241,11 @@ def assist_delivery(token: str, action: str, db: Session = Depends(get_db), user
     question = db.get(Question, delivery.question_id) if delivery and delivery.user_id == user.id else None
     if not question:
         raise HTTPException(404, "Delivery not available")
+    from app.services.revision_capture import delivered_question
+    question=delivered_question(db,kind='practice',delivery_id=token,user_id=user.id,current=question)
     delivery = load_delivery(db, user.id, token, question)
     delivery.assisted = True
-    coaching = build_question_coaching(db, question)
+    coaching = build_question_coaching(db, question) if not getattr(question,'delivery_revision_id',None) else None
     expose(db, user.id, question, "assistance")
     db.commit()
     return {"explanation": question.explanation, "fast_method": question.fast_method, "coaching": coaching}

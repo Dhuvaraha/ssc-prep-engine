@@ -104,9 +104,12 @@ def delivered_question(db, *, kind, delivery_id, user_id, current):
             (source.private_use_approved and grant and grant.active))
         if not allowed:
             raise HTTPException(404,'Delivery not available')
-    return SimpleNamespace(**record,options=[SimpleNamespace(**o) for o in data['options']],
-                           delivery_revision_id=pin.revision_id,
-                           delivery_blueprint=json.loads(pin.blueprint))
+    view=SimpleNamespace(**record,options=[SimpleNamespace(**o) for o in data['options']],
+                         delivery_revision_id=pin.revision_id,
+                         delivery_blueprint=json.loads(pin.blueprint))
+    from app.services.practice_integrity import question_digest
+    view.delivery_current_matches=question_digest(view)==question_digest(current)
+    return view
 
 
 def mock_marks(db, attempt, rows):
