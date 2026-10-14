@@ -377,3 +377,105 @@ def test_pinned_retry_does_not_replay_unversioned_supplements(setup,monkeypatch)
         assert replay.coaching is None and not replay.option_insights
         assert 'REVOKED_SUPPLEMENT' in delivery.result_json
         assert replay.attempt_id==result.attempt_id and replay.correct==result.correct
+
+
+def reviewed_candidate(db, explanation='Reviewed correction'):
+    from app.routers.review import create_revision,review_revision,_revision_digest,RevisionDraft,RevisionChanges,RevisionReview
+    if db.get(User,2) is None:
+        db.add(User(id=2,email='independent@example.invalid',password_hash='no-login'));db.commit()
+    payload=RevisionDraft(expected_digest=_revision_digest(db,question(db)),reason='Synthetic correction',
+                          changes=RevisionChanges(verification_status='verified',explanation=explanation,correct_option=3))
+    cid=create_revision(1,payload,db,db.get(User,1))['candidate_id']
+    review_revision(cid,RevisionReview(answer_verified=True,all_options_checked=True,instruction_reviewed=True,
+                                     visual_reviewed=True,reference='Synthetic independent review'),db,db.get(User,2))
+    return cid
+
+
+def test_publication_is_atomic_and_preserves_existing_deliveries(setup,monkeypatch):
+    from app.services.revision_publication import publish_candidate
+    from app.revision_models import EditorialPublication
+    from fastapi import HTTPException
+    with Session(setup) as db:
+        aid=seeded_pinned_mock(db)
+        token=issue_delivery(db,1,question(db)).id;db.commit()
+        cid=reviewed_candidate(db)
+        with pytest.raises(HTTPException):publish_candidate(db,cid,2)
+        monkeypatch.setattr(get_settings(),'phase_b_publication_enabled',True)
+        result=publish_candidate(db,cid,2)
+        assert result['published'] and question(db).correct_option==3
+        db.rollback()
+        assert question(db).correct_option==2 and db.get(EditorialPublication,cid) is None
+        publish_candidate(db,cid,2);db.commit()
+        assert question(db).correct_option==3
+        assert read_evidence(db,'mock',aid,1)['revision']['question']['correct_option']==2
+        assert read_evidence(db,'practice',token,1)['revision']['question']['explanation']=='Four'
+        with pytest.raises(HTTPException) as error:publish_candidate(db,cid,2)
+        assert error.value.detail=='Candidate already published'
+    with pytest.raises(DBAPIError):
+        with setup.begin() as c:c.execute(text('DELETE FROM editorial_publications'))
+
+
+def test_publication_refuses_unpinned_active_delivery(setup,monkeypatch):
+    from app.services.revision_publication import publish_candidate
+    from fastapi import HTTPException
+    with Session(setup) as db:
+        monkeypatch.setattr(get_settings(),'phase_b_capture_enabled',False)
+        issue_delivery(db,1,question(db));db.commit()
+        monkeypatch.setattr(get_settings(),'phase_b_capture_enabled',True)
+        monkeypatch.setattr(get_settings(),'phase_b_publication_enabled',True)
+        cid=reviewed_candidate(db)
+        with pytest.raises(HTTPException) as error:publish_candidate(db,cid,2)
+        assert error.value.detail=='UNPINNED_ACTIVE_DELIVERY'
+        assert question(db).correct_option==2
+
+
+def test_two_reviewed_corrections_cannot_both_publish(setup,monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier
+    from fastapi import HTTPException
+    from app.services.revision_publication import publish_candidate
+    from app.revision_models import EditorialPublication
+    monkeypatch.setattr(get_settings(),'phase_b_publication_enabled',True)
+    with Session(setup) as db:
+        candidates=[reviewed_candidate(db,'First'),reviewed_candidate(db,'Second')]
+    barrier=Barrier(2)
+    def publish(cid):
+        with Session(setup) as db:
+            barrier.wait(timeout=10)
+            try:
+                publish_candidate(db,cid,2);db.commit();return 'published'
+            except HTTPException as error:
+                db.rollback();return error.detail
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results=list(pool.map(publish,candidates))
+    assert sorted(results)==['STALE_REVISION','published']
+    with Session(setup) as db:
+        assert len(db.scalars(select(EditorialPublication)).all())==1
+
+
+def test_practice_batches_lock_consistently_with_opposite_selection_order(setup,monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier
+    from app.routers import practice
+    with Session(setup) as db:
+        db.add(User(id=2,email='other-learner@example.invalid',password_hash='no-login'))
+        db.add(Question(id=2,exam_id=1,subject_id=1,topic_id=1,question_text='Second original',correct_option=2,verification_status='verified'))
+        db.flush()
+        db.add_all([QuestionOption(id=4+i,question_id=2,position=i,text=str(i)) for i in range(1,5)])
+        db.add(ContentBinding(resource_kind='question',resource_id=2,source_id='original-fixture'));db.commit()
+    barrier=Barrier(2)
+    def selected(db,**kwargs):
+        ids=[2,1] if kwargs['user_id']==1 else [1,2]
+        rows={q.id:q for q in db.scalars(select(Question).options(selectinload(Question.options))).unique()}
+        barrier.wait(timeout=10)
+        return [rows[i] for i in ids]
+    monkeypatch.setattr(practice,'select_practice_questions',selected)
+    def request(uid):
+        with Session(setup) as db:
+            result=practice.get_practice_questions(topic_id=1,limit=2,mode='guided',similar_to=None,db=db,user=db.get(User,uid))
+            return [q.id for q in result]
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results=list(pool.map(request,[1,2]))
+    assert results==[[2,1],[1,2]]
+    with Session(setup) as db:
+        assert len(db.scalars(select(DeliveryRevision)).all())==4

@@ -170,12 +170,13 @@ class RevisionReview(BaseModel):
 def create_revision(question_id: int, payload: RevisionDraft, db: Session=Depends(get_db), reviewer: User=Depends(get_content_reviewer)):
     from uuid import uuid4
     from app.revision_models import EditorialCandidate, QuestionRevision
-    from app.services.revision_capture import snapshot
+    from app.services.revision_capture import snapshot, lock_questions
     from app.services.revision_ledger import canonical
     import json
     if not get_settings().phase_b_capture_enabled:
         raise HTTPException(409, 'Phase B rollout is not enabled')
-    question=db.scalar(select(Question).where(Question.id==question_id).options(selectinload(Question.options)).with_for_update())
+    locked=lock_questions(db,[question_id])
+    question=locked[0] if locked else None
     if question is None:
         raise HTTPException(404, 'Question not found')
     if _revision_digest(db,question)!=payload.expected_digest:
@@ -210,7 +211,7 @@ def create_revision(question_id: int, payload: RevisionDraft, db: Session=Depend
 @router.get('/revisions/{candidate_id}')
 def get_revision(candidate_id: str, db: Session=Depends(get_db), reviewer: User=Depends(get_content_reviewer)):
     import json
-    from app.revision_models import EditorialCandidate, EditorialDecision, QuestionRevision
+    from app.revision_models import EditorialCandidate, EditorialDecision, EditorialPublication, QuestionRevision
     if not get_settings().phase_b_capture_enabled:
         raise HTTPException(409, 'Phase B rollout is not enabled')
     candidate=db.get(EditorialCandidate,candidate_id)
@@ -220,7 +221,15 @@ def get_revision(candidate_id: str, db: Session=Depends(get_db), reviewer: User=
     return {'candidate_id':candidate.id,'author_id':candidate.author_id,'reason':candidate.reason,
             'before':json.loads(parent.payload),'after':json.loads(candidate.payload),
             'review_status':'reviewed' if db.get(EditorialDecision,candidate.id) else 'pending_independent_review',
-            'published':False}
+            'published':bool(db.get(EditorialPublication,candidate.id))}
+
+
+@router.post('/revisions/{candidate_id}/publish')
+def publish_revision(candidate_id: str, db: Session=Depends(get_db), reviewer: User=Depends(get_content_reviewer)):
+    from app.services.revision_publication import publish_candidate
+    result=publish_candidate(db,candidate_id,reviewer.id)
+    db.commit()
+    return result
 
 
 @router.post('/revisions/{candidate_id}/review')

@@ -57,6 +57,13 @@ def get_practice_questions(
         similar_to_question_id=similar_to,
     )
 
+    from app.core.config import get_settings
+    if get_settings().phase_b_capture_enabled:
+        from app.services.revision_capture import lock_questions
+        locked={q.id:q for q in lock_questions(db,[q.id for q in questions])}
+        if len(locked)!=len(questions) or any(q.verification_status!='verified' for q in locked.values()):
+            raise HTTPException(409,'QUESTION_CHANGED_DURING_SELECTION')
+        questions=[locked[q.id] for q in questions]
     result = []
     for question in questions:
         delivery = issue_delivery(db, user.id, question)

@@ -46,3 +46,12 @@ class EditorialDecision(Base):
     reviewer_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
     evidence: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class EditorialPublication(Base):
+    __tablename__ = 'editorial_publications'
+    __table_args__ = {'sqlite_with_rowid': False}
+    candidate_id: Mapped[str] = mapped_column(ForeignKey('editorial_candidates.id'), primary_key=True)
+    revision_id: Mapped[str] = mapped_column(ForeignKey('question_revisions.id'))
+    publisher_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

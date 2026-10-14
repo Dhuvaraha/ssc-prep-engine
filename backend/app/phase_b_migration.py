@@ -1,11 +1,11 @@
 """Explicit additive migration; never run automatically against production."""
 from sqlalchemy import inspect, text
 from app.db import Base
-from app.revision_models import QuestionRevision, DeliveryRevision, EditorialCandidate, EditorialDecision
+from app.revision_models import QuestionRevision, DeliveryRevision, EditorialCandidate, EditorialDecision, EditorialPublication
 from app.access_models import AssessmentAsset
 from app.models import Question, User
 
-TABLES = [m.__table__ for m in (QuestionRevision, DeliveryRevision, EditorialCandidate, EditorialDecision)]
+TABLES = [m.__table__ for m in (QuestionRevision, DeliveryRevision, EditorialCandidate, EditorialDecision, EditorialPublication)]
 IMMUTABLE_TABLES = [*TABLES, AssessmentAsset.__table__]
 LEGACY_DEPENDENCIES = {Question.__tablename__, User.__tablename__, AssessmentAsset.__tablename__}
 

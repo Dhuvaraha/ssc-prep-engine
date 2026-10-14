@@ -38,6 +38,13 @@ def expose(db, user_id, question, reason):
 
 
 def issue_delivery(db, user_id, question):
+    from app.core.config import get_settings
+    if get_settings().phase_b_capture_enabled:
+        from app.services.revision_capture import lock_questions
+        locked=lock_questions(db,[question.id])
+        if not locked or locked[0].verification_status!='verified':
+            raise HTTPException(409,'QUESTION_CHANGED_DURING_SELECTION')
+        question=locked[0]
     previously_seen = db.get(ContentExposure, (user_id, exposure_digest(question))) is not None
     # Compatibility: historical practice and mocks remain usable history, never
     # retroactively rewritten as fresh independent evidence.

@@ -328,6 +328,14 @@ def create_mock_attempt(
                 )
             selected.extend((slug, question) for question in questions)
 
+    from app.core.config import get_settings
+    if get_settings().phase_b_capture_enabled:
+        from app.services.revision_capture import lock_questions
+        locked={q.id:q for q in lock_questions(db,[q.id for _,q in selected])}
+        if len(locked)!=len(selected) or any(q.verification_status!='verified' for q in locked.values()):
+            raise ValueError('Questions changed during selection; retry the mock')
+        selected=[(slug,locked[q.id]) for slug,q in selected]
+
     attempt = MockAttempt(
         user_id=user_id,
         exam_id=exam.id,

@@ -1,5 +1,36 @@
 # Phase A and teaching continuation — 12 October 2026
 
+## 14 October continuation — gated reviewed publication
+
+Practice milestone `b0c8b88` passed remote CI `38595493739` and browser QA
+`38595493832`. The next implementation adds an immutable publication event and a
+separate `phase_b_publication_enabled=false` gate. The authenticated endpoint
+requires an independently reviewed, verified candidate and an unchanged parent.
+It updates the current question projection, captures the new revision and records
+publication in one transaction; rollback leaves both history and current content
+unchanged. Existing IDs and delivered snapshots remain intact. Option/image
+correction publication is explicitly unsupported rather than implicitly trusted.
+
+Publication refuses unpinned active mocks and live practice deliveries. Practice,
+mock creation, candidate creation and publication share question locking and
+refresh loaded state after locking. Independent review found opposite-order
+practice batches could deadlock; all selected questions now lock in sorted order
+before issuing tokens. The concurrent two-editor test produces exactly one
+publication and one stale conflict. Opposite-order learner batches both complete.
+Follow-up independent review found no remaining blocker in this scoped milestone.
+
+Validation: focused integration **24 passed, 1 PostgreSQL-only skip**; full backend
+before the final batch regression **279 passed, 7 skipped**; pyflakes passed.
+Final PostgreSQL and full-suite CI results will be recorded against the commit.
+The expanded evidence schema needs explicit migration even in staging; startup
+verification rejects a prior schema missing publication guards. Production is
+untouched and both rollout flags remain disabled.
+
+Learner-facing deliverable remains revision-safe practice/mock feedback, not new
+teaching content. Still unfinished: editorial browser flow, pinned timing/complete
+transition validation, contributor-bound supplements and broader history routes.
+Phase B is not declared complete; Phase A release and full A–G gates remain.
+
 ## 14 October continuation — practice revision consumers
 
 Mock milestone `5247ce1` passed remote CI run `38533148170`: **273 backend

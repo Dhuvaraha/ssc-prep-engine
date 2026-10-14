@@ -10,6 +10,20 @@ from app.services.legacy_snapshot import capture_question
 from app.services.revision_ledger import canonical, digest
 
 
+def lock_questions(db, question_ids):
+    """Serialize delivery/publication and refresh pre-lock ORM state."""
+    from sqlalchemy import update
+    from sqlalchemy.orm import selectinload
+    from app.models import Question
+    ids=sorted(set(question_ids))
+    if db.bind.dialect.name=='sqlite':
+        # SQLite has no row locks; acquire its writer lock before the read.
+        db.execute(update(Question).where(Question.id.in_(ids)).values(id=Question.id))
+    return list(db.scalars(select(Question).where(Question.id.in_(ids)).order_by(Question.id)
+        .options(selectinload(Question.options)).with_for_update()
+        .execution_options(populate_existing=True)).unique())
+
+
 def capture_state(db, question, *, kind='delivery_capture'):
     expected=list(db.scalars(select(QuestionOption.id).where(QuestionOption.question_id==question.id)))
     data=capture_question(question,question.options,expected_option_ids=expected)
