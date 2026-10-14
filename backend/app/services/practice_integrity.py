@@ -49,6 +49,9 @@ def issue_delivery(db, user_id, question):
                                 content_digest=question_digest(question), assisted=previously_seen)
     db.add(delivery)
     db.flush()
+    from app.services.revision_capture import pin_delivery
+    pin_delivery(db, kind='practice', delivery_id=delivery.id, user_id=user_id, question=question,
+                 blueprint={'version':'practice-v1','scoring':'independent_correctness','expiry_seconds':14400})
     return delivery
 
 

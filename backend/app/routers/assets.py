@@ -56,5 +56,9 @@ def get_private_asset(
             raise HTTPException(404, "Asset not found")
         data = candidate.read_bytes()
     import mimetypes
+    if settings.phase_b_capture_enabled:
+        versioned = db.get(AssessmentAsset, asset_key)
+        if not versioned or hashlib.sha256(data).hexdigest() != versioned.content_sha256:
+            raise HTTPException(409, "ASSET_REVIEW_REQUIRED")
     return Response(data, media_type=mimetypes.guess_type(candidate.name)[0] or "application/octet-stream",
                     headers={"Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff"})

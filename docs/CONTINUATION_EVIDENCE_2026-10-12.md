@@ -1,5 +1,47 @@
 # Phase A and teaching continuation — 12 October 2026
 
+## 14 October continuation — gated application capture
+
+Preserved and completed the twelve uncommitted files after `4c46f43` on draft
+PR #54. Added explicit PostgreSQL/SQLite evidence migration, immutable delivery
+snapshots and answer-key digests, practice/mock delivery pins with source bindings
+and blueprint evidence, and authenticated unpublished editorial candidates with
+independent review and inspectable before/after payloads. Capture defaults off.
+Existing question IDs, attempts and scores are not rewritten. Omitted fields in
+the legacy review endpoint are now preserved.
+
+Database guards reject evidence updates/deletes/replacement and PostgreSQL
+truncate; startup checks schema, trigger shape, backend access, RLS and denied
+client privileges. Migration requires the existing legacy/Phase A schema and is
+never invoked automatically. In-place repair is rejected when capture is enabled.
+Review requires strict boolean attestations, a distinct reviewer and an immutable
+decision; stale candidates and duplicate decisions return conflicts.
+
+Independent review found and verified fixes for mutable asset hashes and missing
+candidate inspection. The migration also freezes the existing asset registry:
+this persists when capture is disabled. Changed bytes require a new asset locator
+and review record, retaining old bytes. The gated asset gateway checks served
+bytes against the immutable hash. Metadata binding does not establish rights.
+
+Validation: full backend **269 passed, 7 skipped**; focused SQLite integration
+**13 passed, 1 PostgreSQL-only skip**; PostgreSQL integration **14 passed** before
+the final missing-schema guard (subsequently exercised by the SQLite suite).
+Pyflakes passed. Final independent read-only review found no blockers in this
+limited capture/editorial scope. Remote CI for the new commit remains to be checked.
+
+Exact remaining Phase B work: publication/activation, transactional transition
+for active mocks, scoring and authorized history consumers using pinned versions,
+and learner/editor UI integration. Current pins are capture evidence, not a claim
+that existing grading or history has switched to revisions. No phase is complete.
+Continue these consumers before activation; preserve unknown historical versions.
+
+Phase A release gates remain: reviewed source/contributor and image permissions,
+intended account/course/source coverage, deployed backend-role verification, and
+final reviewed-manifest HTTP/access/rollback validation. Reuse the existing
+96-group proposal, 704 asset mappings and prior rehearsal; none was regenerated.
+No production migration, data write, merge or deployment occurred. The existing
+A–G roadmap and complete curriculum/teaching scope remain authoritative.
+
 ## 13 October continuation
 
 The working tree was clean at `b78fc20`; the previously reported six local edits

@@ -350,6 +350,12 @@ def create_mock_attempt(
         rows.append((row, question))
         expose(db, user_id, question, "assessment")
         db.add(AssessmentDelivery(attempt_id=attempt.id, question_id=question.id, content_digest=question_digest(question), correct_option=question.correct_option))
+        from app.services.revision_capture import pin_delivery
+        pin_delivery(db, kind='mock', delivery_id=attempt.id, user_id=user_id, question=question,
+                     blueprint={'version':'mock-v1','mode':mode,'duration_minutes':duration,
+                                'positive_marks':exam.positive_marks,'negative_marks':exam.negative_marks,
+                                'section_order':SECTION_ORDER,'full_section_seconds':FULL_SECTION_SECONDS,
+                                'section_slug':slug,'position':position})
 
     db.commit()
     return attempt, rows

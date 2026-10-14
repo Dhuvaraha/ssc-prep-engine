@@ -71,6 +71,12 @@ async def lifespan(_: FastAPI):
     else:
         Base.metadata.create_all(engine)
 
+    if settings.phase_b_capture_enabled:
+        from app.phase_b_migration import verify
+        verify(engine)
+        if settings.apply_content_repair_on_startup:
+            raise RuntimeError('Phase B forbids in-place startup repair')
+
     db = SessionLocal()
     try:
         run_startup_content_checks(db)
