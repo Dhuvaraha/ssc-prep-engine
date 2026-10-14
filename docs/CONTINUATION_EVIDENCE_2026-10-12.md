@@ -27,7 +27,12 @@ Validation: full backend **269 passed, 7 skipped**; focused SQLite integration
 **13 passed, 1 PostgreSQL-only skip**; PostgreSQL integration **14 passed** before
 the final missing-schema guard (subsequently exercised by the SQLite suite).
 Pyflakes passed. Final independent read-only review found no blockers in this
-limited capture/editorial scope. Remote CI for the new commit remains to be checked.
+limited capture/editorial scope. Pushed implementation commit `3ff610b` to PR #54.
+Remote [CI run 38528297676](https://github.com/Dhuvaraha/ssc-prep-engine/actions/runs/38528297676)
+passed: **269 backend tests, 7 skips; 49 PostgreSQL tests** (including all 14
+new integration tests on the final code), frontend build/tests and Phase A browser
+flows. [Browser QA run 38528297854](https://github.com/Dhuvaraha/ssc-prep-engine/actions/runs/38528297854)
+also passed. These supersede the local pre-final PostgreSQL qualification above.
 
 Exact remaining Phase B work: publication/activation, transactional transition
 for active mocks, scoring and authorized history consumers using pinned versions,

@@ -8,7 +8,8 @@ No phase is complete, and no launch or exam-equivalence claim is justified.
 
 Latest isolated milestone: PR #54 adds gated application revision capture and
 unpublished independent editorial review. Full backend: 269 passed, 7 skipped;
-PostgreSQL integration: 14 passed. Capture remains disabled and production untouched.
+Remote PostgreSQL suite: 49 passed, including 14 integration tests. CI and browser
+QA passed at `3ff610b`. Capture remains disabled and production untouched.
 See the [14 October checkpoint](CONTINUATION_EVIDENCE_2026-10-12.md) for exact scope,
 asset immutability implications, remaining integration and unchanged release gates.
 
