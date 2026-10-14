@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.db import get_db
 from app.services.content_access import content_user, require_no_assessment
-from app.services.mock_engine import mock_timing
+from app.services.mock_engine import mock_timing, load_mock_attempt
 from app.access_models import AssessmentAsset
 from app.models import MockAttempt, MockAttemptQuestion, Question, QuestionOption, User
 
@@ -46,7 +46,18 @@ def get_private_asset(
         rows = select(MockAttemptQuestion.question_id).where(MockAttemptQuestion.attempt_id == active.id)
         if active.mode == "full":
             rows = rows.where(MockAttemptQuestion.section_slug == timing["active_section_slug"])
-        if not reviewed or timing["seconds_left"] <= 0 or not db.scalar(referenced.where(Question.id.in_(rows)).limit(1)):
+        if settings.phase_b_capture_enabled:
+            # Authorize through the same historical dependency set as the resumed
+            # question. Current locators alone can lose old images or bypass a
+            # revoked historical source after a question is rebound.
+            _, delivered=load_mock_attempt(db,attempt_id=active.id,user_id=user.id)
+            allowed=any(
+                (active.mode!='full' or row.section_slug==timing['active_section_slug']) and
+                (q.question_image_url==locator or any(o.image_url==locator for o in q.options))
+                for row,q in delivered)
+        else:
+            allowed=db.scalar(referenced.where(Question.id.in_(rows)).limit(1)) is not None
+        if not reviewed or timing["seconds_left"] <= 0 or not allowed:
             require_no_assessment(db, user.id)
         data = candidate.read_bytes()
         if hashlib.sha256(data).hexdigest() != reviewed.content_sha256:

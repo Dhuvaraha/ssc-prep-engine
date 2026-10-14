@@ -645,6 +645,7 @@ export type MockReview = {
     pattern_type: string | null;
     explanation: string | null;
     fast_method: string | null;
+    original_version_unknown?: boolean;
   }>;
 };
 

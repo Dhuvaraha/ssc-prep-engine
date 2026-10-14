@@ -65,3 +65,61 @@ def read_evidence(db, kind, delivery_id, question_id):
     revision=db.get(QuestionRevision,pin.revision_id)
     return {'original_version_unknown':False,'revision':json.loads(revision.payload),
             'answer_version':revision.answer_version,'blueprint':json.loads(pin.blueprint)}
+
+
+def delivered_question(db, *, kind, delivery_id, user_id, current):
+    """Detached delivery view; authorize both current and historical dependencies.
+
+    Never attach the snapshot to the ORM or reconstruct an absent historical pin.
+    The caller still enforces assessment windows and answer visibility.
+    """
+    from types import SimpleNamespace
+    from fastapi import HTTPException
+    from app.access_models import ContentSource, CourseGrant, SourceGrant
+    from app.models import Question
+    from app.services.content_access import question_policy
+    if not get_settings().phase_b_capture_enabled:
+        return current
+    pin=db.get(DeliveryRevision,(kind,str(delivery_id),current.id))
+    if pin is None:
+        return current
+    course=db.get(CourseGrant,(user_id,current.exam_id))
+    if pin.user_id!=user_id or not course or not course.active or not db.scalar(
+        select(Question.id).where(Question.id==current.id,question_policy(user_id,current.exam_id))
+    ):
+        raise HTTPException(404,'Delivery not available')
+    revision=db.get(QuestionRevision,pin.revision_id)
+    data=json.loads(revision.payload)
+    record=data['question']
+    if record['id']!=current.id or record['exam_id']!=current.exam_id:
+        raise HTTPException(409,'DELIVERY_REVISION_INVALID')
+    sources=json.loads(pin.source_ids)
+    if not sources:
+        raise HTTPException(409,'DELIVERY_REVISION_INVALID')
+    for source_id in sources:
+        source=db.get(ContentSource,source_id)
+        grant=db.get(SourceGrant,(user_id,source_id))
+        allowed=source and source.exam_id==current.exam_id and (
+            (record['visibility']=='public' and source.public_use_approved) or
+            (source.private_use_approved and grant and grant.active))
+        if not allowed:
+            raise HTTPException(404,'Delivery not available')
+    return SimpleNamespace(**record,options=[SimpleNamespace(**o) for o in data['options']],
+                           delivery_revision_id=pin.revision_id,
+                           delivery_blueprint=json.loads(pin.blueprint))
+
+
+def mock_marks(db, attempt, rows):
+    """One coherent pinned marking scheme, with explicit legacy compatibility."""
+    from fastapi import HTTPException
+    from app.models import Exam
+    blueprints=[getattr(q,'delivery_blueprint',None) for _,q in rows]
+    pinned=[b for b in blueprints if b is not None]
+    if pinned:
+        schemes={(b['positive_marks'],b['negative_marks']) for b in pinned}
+        if len(pinned)!=len(rows) or len(schemes)!=1:
+            raise HTTPException(409,'INCONSISTENT_DELIVERY_BLUEPRINT')
+        positive,negative=next(iter(schemes))
+        return float(positive),float(negative)
+    exam=db.get(Exam,attempt.exam_id)
+    return float(exam.positive_marks if exam else 2),float(exam.negative_marks if exam else 0.5)

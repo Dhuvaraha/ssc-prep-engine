@@ -1,5 +1,36 @@
 # Phase A and teaching continuation — 12 October 2026
 
+## 14 October continuation — mock revision consumers
+
+Continues `2d41052`; no completed work or private audits repeated.
+
+Learner-facing development deliverable: gated mock resume, submission and review
+now use captured stems/options/keys/explanations and captured positive/negative
+marks after subsequent question or exam edits. Old attempts without a capture
+show a clear original-version-unknown notice; saved scores are not rewritten.
+This is implemented in the existing mock flow, not deployed to learners yet.
+
+Backend: detached snapshot views cannot mutate legacy rows. Both current access
+and every historical source dependency are checked, including course and owner.
+Independent review caught the active image endpoint still relying on current
+references; it now uses authorized pinned references and current-section windows,
+and retains immutable byte-hash checks. Regression proves old images survive a
+locator correction, changed bytes fail, and historical source revocation after
+current rebinding denies direct asset access. Follow-up review found no blocker.
+
+Validation: focused integration **17 passed, 1 PostgreSQL-only skip**; full backend
+before the final image regression **272 passed, 7 skipped**. Pyflakes passed.
+Frontend TypeScript/build passed (esbuild required normal sandbox escalation).
+Final remote PostgreSQL/full/backend/browser results belong to this milestone's
+commit and will be recorded in PR #54.
+
+Remaining Phase B: practice consumers, publication/activation, pinned timing and
+complete active-mock transition, editorial UI and broader history integration.
+No Phase B completion claim. Capture remains off; no production writes, migration,
+merge or deployment. Phase A operator/rights/coverage/role gates below persist.
+Phases C–G, eight full teaching pilots and all 74 topics remain active; this
+milestone does not claim new lessons, calibrated mocks or curriculum completion.
+
 ## 14 October continuation — gated application capture
 
 Preserved and completed the twelve uncommitted files after `4c46f43` on draft

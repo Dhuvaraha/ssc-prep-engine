@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.db import get_db
 from app.services.practice_integrity import expose
 from app.services.content_access import content_user as get_current_user, require_no_assessment
-from app.models import Exam, MockAttempt, User
+from app.models import MockAttempt, User
 from app.schemas import (
     MockQuestionOut,
     MockResponseUpdate,
@@ -255,12 +255,12 @@ def review_mock(
                 "pattern_type": question.pattern_type,
                 "explanation": question.explanation,
                 "fast_method": question.fast_method,
+                "original_version_unknown": not bool(getattr(question,'delivery_revision_id',None)),
             }
         )
 
-    exam = db.get(Exam, attempt.exam_id)
-    positive = float(exam.positive_marks if exam else 2.0)
-    negative = float(exam.negative_marks if exam else 0.5)
+    from app.services.revision_capture import mock_marks
+    positive,negative=mock_marks(db,attempt,rows)
     for section in sections.values():
         section["score"] = round(
             float(section["correct"]) * positive - float(section["incorrect"]) * negative,

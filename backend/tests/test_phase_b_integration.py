@@ -216,3 +216,101 @@ def test_legacy_review_patch_preserves_omitted_fields(setup,monkeypatch):
         q=question(db)
         assert q.topic_id==1 and q.correct_option==2
         assert q.review_notes=='Synthetic note'
+
+
+def seeded_pinned_mock(db):
+    from app.models import MockAttempt, MockAttemptQuestion
+    from app.access_models import CourseGrant, SourceGrant, AssessmentDelivery
+    from app.services.revision_capture import pin_delivery
+    from app.services.practice_integrity import question_digest
+    db.add_all([CourseGrant(user_id=1,exam_id=1,active=True),
+                SourceGrant(user_id=1,source_id='original-fixture',active=True)])
+    attempt=MockAttempt(user_id=1,exam_id=1,mode='topic',duration_minutes=20)
+    db.add(attempt);db.flush()
+    q=question(db)
+    db.add(MockAttemptQuestion(attempt_id=attempt.id,question_id=1,section_slug='quant',position=1,selected_option=2))
+    db.add(AssessmentDelivery(attempt_id=attempt.id,question_id=1,content_digest=question_digest(q),correct_option=2))
+    pin_delivery(db,kind='mock',delivery_id=attempt.id,user_id=1,question=q,
+                 blueprint={'positive_marks':2,'negative_marks':0.5})
+    db.commit()
+    return attempt.id
+
+
+def test_mock_resume_grade_and_review_use_original_revision(setup):
+    from app.services.mock_engine import load_mock_attempt,submit_mock_attempt
+    from app.routers.mocks import review_mock, _serialize_attempt
+    from app.models import QuestionOption
+    with Session(setup) as db:
+        aid=seeded_pinned_mock(db)
+        q=question(db);q.correct_option=3;q.explanation='Later correction';q.question_text='Changed stem'
+        db.get(QuestionOption,1).text='Changed option'
+        db.get(Exam,1).positive_marks=10;db.commit()
+        attempt,rows=load_mock_attempt(db,attempt_id=aid,user_id=1)
+        response=_serialize_attempt(attempt,rows).model_dump()
+        assert response['questions'][0]['question']['question_text']=='Original fixture 2+2?'
+        assert 'correct_option' not in response['questions'][0]['question']
+        assert rows[0][1].options[0].text=='3'
+        result=submit_mock_attempt(db,attempt=attempt,rows=rows)
+        assert result['score']==2 and result['correct']==1
+        reviewed=review_mock(aid,db,db.get(User,1))
+        assert reviewed['questions'][0]['explanation']=='Four'
+        assert reviewed['questions'][0]['correct_option']==2
+        assert not reviewed['questions'][0]['original_version_unknown']
+        assert reviewed['sections']['quant']['score']==2
+        assert db.get(Question,1).explanation=='Later correction'
+
+
+def test_pinned_dependencies_remain_required_after_rebinding(setup):
+    from fastapi import HTTPException
+    from app.access_models import SourceGrant
+    from app.services.mock_engine import load_mock_attempt
+    with Session(setup) as db:
+        aid=seeded_pinned_mock(db)
+        db.delete(db.get(ContentBinding,('question',1,'original-fixture')))
+        db.add(ContentSource(id='replacement',exam_id=1,public_use_approved=True,approval_reference='synthetic-only'))
+        db.flush();db.add(ContentBinding(resource_kind='question',resource_id=1,source_id='replacement'))
+        question(db).visibility='public'
+        db.get(SourceGrant,(1,'original-fixture')).active=False;db.commit()
+        with pytest.raises(HTTPException) as error:load_mock_attempt(db,attempt_id=aid,user_id=1)
+        assert error.value.status_code==404
+
+
+def test_pinned_delivery_rejects_wrong_owner_and_revoked_course(setup):
+    from fastapi import HTTPException
+    from app.access_models import CourseGrant
+    from app.services.revision_capture import delivered_question
+    with Session(setup) as db:
+        aid=seeded_pinned_mock(db)
+        with pytest.raises(HTTPException):
+            delivered_question(db,kind='mock',delivery_id=aid,user_id=2,current=question(db))
+        db.get(CourseGrant,(1,1)).active=False;db.commit()
+        with pytest.raises(HTTPException):
+            delivered_question(db,kind='mock',delivery_id=aid,user_id=1,current=question(db))
+
+
+def test_active_pinned_asset_survives_locator_edit_but_not_source_revocation(setup,tmp_path,monkeypatch):
+    import hashlib
+    from fastapi import HTTPException
+    from app.access_models import AssessmentAsset, SourceGrant
+    from app.routers.assets import get_private_asset
+    data=b'<svg xmlns="http://www.w3.org/2000/svg"><circle r="3"/></svg>'
+    (tmp_path/'old.svg').write_bytes(data)
+    monkeypatch.setattr(get_settings(),'private_asset_dir',str(tmp_path))
+    with Session(setup) as db:
+        question(db).question_image_url='private://old.svg'
+        db.add(AssessmentAsset(asset_key='old.svg',content_sha256=hashlib.sha256(data).hexdigest(),review_reference='synthetic-only'))
+        db.commit();seeded_pinned_mock(db)
+        question(db).question_image_url='private://new.svg';db.commit()
+        assert get_private_asset('old.svg',db.get(User,1),db).body==data
+        (tmp_path/'old.svg').write_bytes(b'changed bytes')
+        with pytest.raises(HTTPException) as error:get_private_asset('old.svg',db.get(User,1),db)
+        assert error.value.status_code==409
+        (tmp_path/'old.svg').write_bytes(data)
+        # Current access remains valid after rebinding, but old-source access ends.
+        db.delete(db.get(ContentBinding,('question',1,'original-fixture')))
+        db.add(ContentSource(id='new-source',exam_id=1,public_use_approved=True,approval_reference='synthetic-only'))
+        db.flush();db.add(ContentBinding(resource_kind='question',resource_id=1,source_id='new-source'))
+        question(db).visibility='public'
+        db.get(SourceGrant,(1,'original-fixture')).active=False;db.commit()
+        with pytest.raises(HTTPException) as error:get_private_asset('old.svg',db.get(User,1),db)
+        assert error.value.status_code==404
