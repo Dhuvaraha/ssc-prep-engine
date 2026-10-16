@@ -119,3 +119,41 @@ Scope: all exam-stage end-to-end workflows and multi-user security, migrations, 
 | 7 CGL Tier II | NOT_STARTED | architecture roadmap only |
 | 8 JE Telecom I & II | NOT_STARTED | architecture roadmap only |
 | 9 Final integrated launch | NOT_STARTED | final go-live gate depends on phases 0–8 |
+
+---
+
+## 14 October 2026 — Teaching-first acceptance clarification (additive; no phase reset)
+
+This extends **existing** M0–M4 and master Phases 2–6; it is not a new roadmap, scope reset or permission to merge blocked Phase A/B work. Recovery PR #53 and Phase B PR #54 remain the active dependencies. Current production (read-only observation) has **zero** `question_option_insights` rows, so the existing post-answer four-option UI is a framework without published subject-specific option teaching. No learner-facing readiness claim follows from the frontend component alone.
+
+| Approved scope | Already available foundation | Unfinished acceptance contract |
+| --- | --- | --- |
+| Phase 2 curriculum | 74 top-level topics, lesson stage UI and prerequisite draft | Review actual subtopic objectives/prerequisites and full beginner-to-exam lesson quality; preserve learner pace |
+| Phase 3 diagnostics | 40Q diagnostic, confidence/time/mistake/mastery data | Distinguish observed from inferred misconceptions; post-mock teach→retry→revision journey and genuine unseen evidence |
+| Phase 4 Teacher V3 | TeacherCoach, hint stages, basic voice/language controls, worked check | Quick/Detailed/Teach-from-Basics control, verified misconception-specific alternative explanation, 1–2 micro-checks, offline deterministic fallback and resume/accessibility |
+| Phase 5 Four-Option Explorer | Post-submit UI, `QuestionOptionInsight` draft/published model | Per-revision editorially reviewed correct and three distractor meanings, why choice does/doesn't answer the specific stem, useful related distinctions and fresh recall question; no invented explanations |
+| Phase 5 knowledge retention | Revision and notebook groundwork | Verified concept links, spaced recall and mistake repair driven by independent answers, never lesson opens or assisted repeats |
+| Phase 6 teaching UX | Responsive foundations and lesson/practice screens | Demonstrable beginner journey; accessible option comparison; actionable repair after mock; no new answer leakage |
+| Phase 7–8 exam expansion | Exam-scoped scaffolding | Preserve official 2026 CGL Tier II computer/DEST and JE Telecom stage-specific rules, validity and content coverage |
+
+### Four-option readiness contract (Phase 5)
+
+1. **Before rendering:** never reveal answer-level teaching while an examination-mode mock is active. Use only a completed, authorized delivered revision. Keep grading/history tied to its captured answer/option/asset version (Phase B).
+2. **Correct option:** provide a reviewed solution and rule; additional context only if factually relevant.
+3. **Wrong options — GA/English:** independently review the factual meaning/rule, why it is wrong for this stem, a useful distinction where supported, and supporting provenance. All three matter for the *fully teaching-ready* badge. Examples of source-backed related concepts should be eligible for recall, not automatic mastery.
+4. **Wrong options — Quant/Reasoning:** explain an identifiable error path or elimination reason. For arbitrary numbers without a supportable misconception, an editor may explicitly mark that distractor as **not diagnostic**, with a rationale; never manufacture a false explanation.
+5. **Revision-aware editorial signoff:** verify the actual 4 distinct option positions, captured question and key versions, reviewer evidence and references; invalidate stale wrong-option notes when text, correct key, or image bytes change. Unreviewed legacy notes are not automatically eligible.
+6. **Deterministic fallback:** clearly show an unavailable/awaiting review state. Do not use AI to hallucinate missing notes and do not present structural field completeness as factual certification.
+
+`backend/app/services/four_option_readiness.py` introduces a non-publishing **offline** structural QA checker and focused tests. It does not change production responses, fill the empty note table, certify facts or activate a feature. Editorial accuracy, integrated authorized post-answer API/UI, real example coverage and human validation are still required.
+
+### Acceptance demonstrations before Phase 4/5 closure
+
+- A reviewed Constitution remedies MCQ (Arts. 14/19/21/32) teaches *all four* accurately, plus Art. 226 when appropriate; presents a fresh question and schedules revision only on genuine learner evidence. Validate the legal content against official constitutional text at time of publication.
+- English wrong-choice reasoning cites the specific rule, justified exception and two valid practice examples.
+- Quant percentage error gets a correct worked derivation, a valid fast method and a fresh check; no invented distractor story.
+- Repeated errors trigger **reviewed prerequisite teaching**; guesses, assisted attempts, repeated stems and unread topics cannot count as independent mastery.
+- Timed mocks hide live answers but provide revision-pinned solutions and a personalized **post-submit** teach→micro-check→revision path.
+- Representative audited content exists in all four Tier I subjects, passes editorial review and is exercised through actual backend/API/browser/mobile acceptance. A passed unit test or generated draft alone never closes a phase.
+
+Implementation sequencing remains **Phase A security release gates → B immutable delivery/history integration → C verified syllabus & content pipeline → D teaching pilot → E Teacher V3 → F learner UX → G expansion/launch**, with independently safe non-production editorial QA work allowed alongside blocked cutover. Do not publish legacy content, change grants or migrate live databases as part of this clarification.
