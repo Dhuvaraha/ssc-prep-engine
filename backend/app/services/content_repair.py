@@ -316,6 +316,9 @@ def repair_content_integrity(
     exam_slug: str = "ssc-cgl-tier-1",
     apply: bool = False,
 ) -> dict:
+    from app.core.config import get_settings
+    if apply and get_settings().phase_b_capture_enabled:
+        raise ValueError('Phase B requires reviewed revision candidates; in-place repair is disabled')
     plan = build_content_repair_plan(db, exam_slug=exam_slug)
     public_plan = serialise_repair_plan(plan)
 

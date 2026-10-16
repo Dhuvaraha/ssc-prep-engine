@@ -328,6 +328,14 @@ def create_mock_attempt(
                 )
             selected.extend((slug, question) for question in questions)
 
+    from app.core.config import get_settings
+    if get_settings().phase_b_capture_enabled:
+        from app.services.revision_capture import lock_questions
+        locked={q.id:q for q in lock_questions(db,[q.id for _,q in selected])}
+        if len(locked)!=len(selected) or any(q.verification_status!='verified' for q in locked.values()):
+            raise ValueError('Questions changed during selection; retry the mock')
+        selected=[(slug,locked[q.id]) for slug,q in selected]
+
     attempt = MockAttempt(
         user_id=user_id,
         exam_id=exam.id,
@@ -350,6 +358,12 @@ def create_mock_attempt(
         rows.append((row, question))
         expose(db, user_id, question, "assessment")
         db.add(AssessmentDelivery(attempt_id=attempt.id, question_id=question.id, content_digest=question_digest(question), correct_option=question.correct_option))
+        from app.services.revision_capture import pin_delivery
+        pin_delivery(db, kind='mock', delivery_id=attempt.id, user_id=user_id, question=question,
+                     blueprint={'version':'mock-v1','mode':mode,'duration_minutes':duration,
+                                'positive_marks':exam.positive_marks,'negative_marks':exam.negative_marks,
+                                'section_order':SECTION_ORDER,'full_section_seconds':FULL_SECTION_SECONDS,
+                                'section_slug':slug,'position':position})
 
     db.commit()
     return attempt, rows
@@ -381,11 +395,14 @@ def load_mock_attempt(
         for row in rows
         if row.question_id in by_id
     ]
+    from app.services.revision_capture import delivered_question
+    result=[(row,delivered_question(db,kind='mock',delivery_id=attempt.id,
+                                   user_id=user_id,current=question)) for row,question in result]
     if attempt.status == "in_progress":
         bindings = {binding.question_id: binding for binding in db.scalars(select(AssessmentDelivery).where(AssessmentDelivery.attempt_id == attempt.id))}
         for _, question in result:
             binding = bindings.get(question.id)
-            if binding and binding.content_digest != question_digest(question):
+            if binding and not getattr(question,'delivery_revision_id',None) and binding.content_digest != question_digest(question):
                 from fastapi import HTTPException
                 raise HTTPException(409, "ASSESSMENT_CONTENT_CHANGED")
     if len(result) != len(rows):
@@ -418,6 +435,11 @@ def submit_mock_attempt(
     incorrect = 0
     unattempted = 0
 
+    from app.services.revision_capture import delivered_question, mock_marks
+    rows=[(row,delivered_question(db,kind='mock',delivery_id=attempt.id,
+                                 user_id=attempt.user_id,current=question)) for row,question in rows]
+    positive,negative=mock_marks(db,attempt,rows)
+
     for row, question in rows:
         if row.selected_option is None:
             unattempted += 1
@@ -426,9 +448,6 @@ def submit_mock_attempt(
         else:
             incorrect += 1
 
-    exam = db.get(Exam, attempt.exam_id)
-    positive = float(exam.positive_marks if exam else 2.0)
-    negative = float(exam.negative_marks if exam else 0.5)
     score = round(correct * positive - incorrect * negative, 2)
 
     attempt.status = "submitted"

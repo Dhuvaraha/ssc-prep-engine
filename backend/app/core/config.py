@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     run_learner_canary_on_startup: bool = False
     run_launch_audit_on_startup: bool = False
     phase_a_reviewed_manifest_sha: str = ""
+    phase_b_capture_enabled: bool = False
+    phase_b_publication_enabled: bool = False
     release_sha: str = "unreleased"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")

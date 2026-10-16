@@ -1,10 +1,18 @@
 # SSC recovery execution tracker
 
-Authoritative execution status, 12 October 2026 IST. Requirements remain in
+Authoritative execution status, updated 16 October 2026 IST. Requirements remain in
 [master phases 0–9](MASTER_EXECUTION_PHASES_0_TO_9.md) and
 [teaching phases A–G](SSC_TEACHING_REMEDIATION_SPEC_2026-10-09.md).
 Historical evidence documents are checkpoints, not competing task queues.
 No phase is complete, and no launch or exam-equivalence claim is justified.
+
+Latest isolated milestone: PR #54 includes revision-based practice/mock consumers,
+gated atomic publication and an editorial browser flow with candidate-specific
+image access. Local validation: 25 integration tests passed, one PostgreSQL skip;
+21 frontend tests and four real browser flows passed. Capture/publication remain
+disabled outside synthetic tests. Production is untouched.
+See the [16 October checkpoint](CONTINUATION_EVIDENCE_2026-10-12.md) for exact scope,
+asset immutability implications, remaining integration and unchanged release gates.
 
 ## Reconciled state
 
@@ -105,7 +113,7 @@ accommodations and expanded-stage validation remain required.
 | Teaching / master phases | State | Next acceptance requirement |
 |---|---|---|
 | A / 0 release foundation | Engineering validated locally; release blocked | Reviewed rights/bindings/grants, actual-role compatibility, pool/asset coverage and representative migration rehearsal, then coordinated release and live verification |
-| B / 0–2 historical integrity | Not implemented | Immutable item/key/blueprint revisions; historical unknown-version flags, no rescoring or original-ID replacement; editorial approval and rollback |
+| B / 0–2 historical integrity | Isolated local ledger implemented; not production-integrated | PostgreSQL migration/permissions, complete legacy snapshot adapters, authenticated editorial and assessment integration, active-mock transition and rollback |
 | C / 1–2 curriculum | Aggregate audit and draft graph only | All 74 topic/subtopic objectives, reviewed dependencies, authentic paper mappings, misconception/variation coverage |
 | D / 2 teaching pilot | Seed correction and logic validator only | Eight representative complete lessons with independent educational/usability evaluation |
 | E / 3–5 Teacher V3 | Not complete | Guided reasoning and wrong-option diagnosis, prerequisite remediation, unseen mastery and retention, active-mock confidentiality |

@@ -1,6 +1,38 @@
 import { test, expect } from "@playwright/test";
 
 const api = "http://127.0.0.1:8811/api/v1";
+test("reviewed correction uses independent editor UI and publication gate", async ({page, request}) => {
+  const tokens = [];
+  for (const email of ["editor-a@example.com", "editor-b@example.com"]) {
+    const login = await request.post(api+"/auth/login", {data:{email,password:"Synthetic-test-only-123!"}});
+    expect(login.status()).toBe(200);
+    tokens.push((await login.json()).access_token);
+  }
+  const headers={Authorization:"Bearer "+tokens[0]};
+  const listed=await request.get(api+"/review/questions?status=verified",{headers});
+  const question=(await listed.json())[0];
+  const created=await request.post(api+`/review/questions/${question.id}/revisions`,{headers,data:{
+    expected_digest:question.revision_digest,reason:"Synthetic browser correction",
+    changes:{verification_status:"verified",review_notes:"Browser evidence",explanation:question.explanation+" Reviewed correction."},
+  }});
+  expect(created.status()).toBe(200);
+  const id=(await created.json()).candidate_id;
+  await page.goto("/login");
+  await page.evaluate(token=>localStorage.setItem("ssc_prep_token",token),tokens[1]);
+  await page.goto("/review?candidate="+id);
+  await page.getByRole("button",{name:"Open candidate"}).click();
+  await expect(page.getByRole("table")).toContainText("Reviewed correction.");
+  const publish=page.getByRole("button",{name:"Publish reviewed correction"});
+  await expect(publish).toBeDisabled();
+  for (const checkbox of await page.getByRole("checkbox").all()) await checkbox.check();
+  await page.getByLabel("Review evidence reference").fill("Independent synthetic browser check");
+  await page.getByRole("button",{name:"Record independent review"}).click();
+  await expect(page.getByRole("status")).toContainText("Independent review recorded");
+  await expect(publish).toBeEnabled();
+  await publish.click();
+  await expect(page.getByRole("status")).toContainText("Reviewed correction published.");
+  await expect(publish).toBeDisabled();
+});
 test("SEC-06 real browser: scoped lesson, no persistent cache, logout/back and account switch", async ({page, request}) => {
   const a = await request.post(api+"/auth/login", {data:{email:"browser-a@example.com",password:"Synthetic-test-only-123!"}});
   const tokenA = (await a.json()).access_token;

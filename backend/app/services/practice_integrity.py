@@ -38,6 +38,13 @@ def expose(db, user_id, question, reason):
 
 
 def issue_delivery(db, user_id, question):
+    from app.core.config import get_settings
+    if get_settings().phase_b_capture_enabled:
+        from app.services.revision_capture import lock_questions
+        locked=lock_questions(db,[question.id])
+        if not locked or locked[0].verification_status!='verified':
+            raise HTTPException(409,'QUESTION_CHANGED_DURING_SELECTION')
+        question=locked[0]
     previously_seen = db.get(ContentExposure, (user_id, exposure_digest(question))) is not None
     # Compatibility: historical practice and mocks remain usable history, never
     # retroactively rewritten as fresh independent evidence.
@@ -49,6 +56,9 @@ def issue_delivery(db, user_id, question):
                                 content_digest=question_digest(question), assisted=previously_seen)
     db.add(delivery)
     db.flush()
+    from app.services.revision_capture import pin_delivery
+    pin_delivery(db, kind='practice', delivery_id=delivery.id, user_id=user_id, question=question,
+                 blueprint={'version':'practice-v1','scoring':'independent_correctness','expiry_seconds':14400})
     return delivery
 
 
@@ -56,7 +66,7 @@ def load_delivery(db, user_id, token, question):
     delivery = db.get(PracticeDelivery, token)
     if not delivery or delivery.user_id != user_id or delivery.question_id != question.id:
         raise HTTPException(404, "Delivery not available")
-    if delivery.content_digest != question_digest(question):
+    if not getattr(question,'delivery_revision_id',None) and delivery.content_digest != question_digest(question):
         raise HTTPException(409, "CONTENT_CHANGED")
     if not delivery.result_json and delivery.created_at < datetime.utcnow() - timedelta(hours=4):
         raise HTTPException(409, "DELIVERY_EXPIRED")
