@@ -479,3 +479,40 @@ def test_practice_batches_lock_consistently_with_opposite_selection_order(setup,
     assert results==[[2,1],[1,2]]
     with Session(setup) as db:
         assert len(db.scalars(select(DeliveryRevision)).all())==4
+
+
+def test_editor_can_inspect_exact_candidate_asset_without_learner_grants(setup,tmp_path,monkeypatch):
+    import hashlib
+    from fastapi.testclient import TestClient
+    from app.main import app
+    from app.db import get_db
+    from app.access_models import AssessmentAsset
+    from app.core.security import create_access_token
+    raw=b'<svg xmlns="http://www.w3.org/2000/svg"><circle r="4"/></svg>'
+    (tmp_path/'review.svg').write_bytes(raw)
+    (tmp_path/'unrelated.svg').write_bytes(raw)
+    monkeypatch.setattr(get_settings(),'private_asset_dir',str(tmp_path))
+    monkeypatch.setattr(get_settings(),'reviewer_emails','independent@example.invalid')
+    with Session(setup) as db:
+        q=question(db);q.question_image_url='private://review.svg';q.verification_status='review_required'
+        db.add(AssessmentAsset(asset_key='review.svg',content_sha256=hashlib.sha256(raw).hexdigest(),review_reference='synthetic'))
+        db.commit();cid=reviewed_candidate(db)
+        q.question_image_url=None;db.commit()
+    def dependency():
+        with Session(setup) as db:yield db
+    app.dependency_overrides[get_db]=dependency
+    try:
+        client=TestClient(app)
+        path=f'/api/v1/review/revisions/{cid}/assets/'
+        reviewer={'Authorization':'Bearer '+create_access_token('2')}
+        outsider={'Authorization':'Bearer '+create_access_token('1')}
+        assert client.get(path+'review.svg').status_code==401
+        assert client.get(path+'review.svg',headers=outsider).status_code==403
+        response=client.get(path+'review.svg',headers=reviewer)
+        assert response.status_code==200 and response.content==raw
+        assert response.headers['cache-control']=='private, no-store'
+        assert client.get(path+'unrelated.svg',headers=reviewer).status_code==404
+        (tmp_path/'review.svg').write_bytes(b'altered')
+        assert client.get(path+'review.svg',headers=reviewer).status_code==409
+    finally:
+        app.dependency_overrides.pop(get_db,None)

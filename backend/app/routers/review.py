@@ -221,7 +221,8 @@ def get_revision(candidate_id: str, db: Session=Depends(get_db), reviewer: User=
     return {'candidate_id':candidate.id,'author_id':candidate.author_id,'reason':candidate.reason,
             'before':json.loads(parent.payload),'after':json.loads(candidate.payload),
             'review_status':'reviewed' if db.get(EditorialDecision,candidate.id) else 'pending_independent_review',
-            'published':bool(db.get(EditorialPublication,candidate.id))}
+            'published':bool(db.get(EditorialPublication,candidate.id)),
+            'publication_enabled':get_settings().phase_b_publication_enabled}
 
 
 @router.post('/revisions/{candidate_id}/publish')
@@ -230,6 +231,40 @@ def publish_revision(candidate_id: str, db: Session=Depends(get_db), reviewer: U
     result=publish_candidate(db,candidate_id,reviewer.id)
     db.commit()
     return result
+
+
+@router.get('/revisions/{candidate_id}/assets/{asset_key:path}')
+def revision_asset(candidate_id: str, asset_key: str, db: Session=Depends(get_db), reviewer: User=Depends(get_content_reviewer)):
+    import hashlib
+    import json
+    import mimetypes
+    from pathlib import Path
+    from fastapi.responses import Response
+    from app.revision_models import EditorialCandidate, QuestionRevision
+    if not get_settings().phase_b_capture_enabled:
+        raise HTTPException(409,'Phase B rollout is not enabled')
+    candidate=db.get(EditorialCandidate,candidate_id)
+    if candidate is None:
+        raise HTTPException(404,'Candidate not found')
+    parent=db.get(QuestionRevision,candidate.parent_revision_id)
+    refs=[ref for payload in (parent.payload,candidate.payload)
+          for ref in json.loads(payload)['asset_refs'] if ref['reference']=='private://'+asset_key]
+    if not refs:
+        raise HTTPException(404,'Candidate asset not found')
+    hashes={ref['content_sha256'] for ref in refs if ref['bytes_verified'] and ref['content_sha256']}
+    if len(hashes)!=1 or any(not ref['bytes_verified'] for ref in refs):
+        raise HTTPException(409,'Candidate asset bytes are not versioned')
+    root=Path(get_settings().private_asset_dir).resolve()
+    path=(root/asset_key).resolve()
+    if not path.is_relative_to(root):
+        raise HTTPException(400,'Invalid asset path')
+    if not path.is_file():
+        raise HTTPException(404,'Candidate asset not found')
+    data=path.read_bytes()
+    if hashlib.sha256(data).hexdigest() not in hashes:
+        raise HTTPException(409,'ASSET_REVIEW_REQUIRED')
+    return Response(data,media_type=mimetypes.guess_type(path.name)[0] or 'application/octet-stream',
+                    headers={'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'})
 
 
 @router.post('/revisions/{candidate_id}/review')

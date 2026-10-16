@@ -1,5 +1,46 @@
 # Phase A and teaching continuation — 12 October 2026
 
+## 16 October continuation — editorial UI and reviewer images
+
+Resumed from `6dbda19` with nine uncommitted files; preceding practice/publication
+changes were already committed. Preserved all current edits. Added the editorial
+browser flow: candidate authoring instead of in-place changes under the capture
+gate, complete before/after inspection, explicit independent checkboxes and review
+reference, separate publication action and release-gate/conflict messages.
+
+Reviewer images use a candidate-specific authenticated endpoint, not learner
+asset permissions. It permits only captured before/after references with a known
+consistent hash, enforces path containment and byte matching, and returns no-store.
+Unknown or changed bytes fail closed. HTTP regression verifies reviewer access
+without learner grants, removed current locators, unauthorized users, unrelated
+assets and changed bytes. Independent follow-up review found no remaining blocker
+in this fix. This does not approve image rights or broaden learner access.
+
+The interrupted browser failure was a fixture-only login validation issue:
+reserved `.invalid` emails were replaced with synthetic `example.com` addresses.
+The isolated browser server explicitly migrates its temporary database and enables
+the test gates; normal app defaults and production remain unchanged.
+
+Validation: **4 real browser flows passed**, including independent editor review
+and publication, account isolation, stale-response protection and learner practice/
+mock use. Focused backend integration: **25 passed, 1 PostgreSQL-only skip**;
+pyflakes passed. Frontend: **21 tests passed** and TypeScript/Vite build passed.
+A test-only unsupported `exact` selector option was corrected to an anchored
+accessible-name match. Final commit CI is tracked in PR #54.
+Earlier publication commit `6dbda19` passed CI `38596264415` and browser QA
+`38596265017`; no old tests or inventories were rerun to rebuild their evidence.
+
+Learner-facing delivery: no new educational material or production release in this
+milestone. Editor-facing delivery: usable independent-review flow and exact
+candidate visuals. Backend delivery: narrowly authorized image access and verified
+publication integration. Remaining Phase B gates include pinned timing/complete
+transition, contributor-bound supplementary material and broader history routes.
+PR #55 remains the additive Four-Option readiness/teaching acceptance dependency;
+its draft is not a completed beginner-to-advanced journey. Finish one such reviewed
+teach/repair/retry/retention journey before scaling to all 74 topics. The full A–G
+roadmap and unresolved Phase A permissions/access/cutover gates remain unchanged.
+No production data writes, migrations, merges or deployments were performed.
+
 ## 14 October continuation — gated reviewed publication
 
 Practice milestone `b0c8b88` passed remote CI `38595493739` and browser QA
