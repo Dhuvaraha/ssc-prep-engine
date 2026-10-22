@@ -1,5 +1,5 @@
 """Explicit additive migration; never run automatically against production."""
-from sqlalchemy import inspect, text
+from sqlalchemy import inspect, select, text
 from app.db import Base
 from app.revision_models import QuestionRevision, DeliveryRevision, EditorialCandidate, EditorialDecision, EditorialPublication
 from app.access_models import AssessmentAsset
@@ -8,6 +8,31 @@ from app.models import Question, User
 TABLES = [m.__table__ for m in (QuestionRevision, DeliveryRevision, EditorialCandidate, EditorialDecision, EditorialPublication)]
 IMMUTABLE_TABLES = [*TABLES, AssessmentAsset.__table__]
 LEGACY_DEPENDENCIES = {Question.__tablename__, User.__tablename__, AssessmentAsset.__tablename__}
+
+
+def verify_capture_rollback(engine, *, capture_enabled):
+    """This build cannot disable revision readers once delivery history exists."""
+    if capture_enabled:
+        return
+    existing = set(inspect(engine).get_table_names())
+    with engine.connect() as connection:
+        for model in (DeliveryRevision, EditorialPublication):
+            if model.__tablename__ not in existing:
+                continue
+            if engine.dialect.name == 'postgresql':
+                visible = connection.scalar(text("""SELECT NOT c.relrowsecurity OR
+                    r.rolsuper OR r.rolbypassrls OR
+                    (NOT c.relforcerowsecurity AND pg_has_role(current_user,c.relowner,'USAGE'))
+                    FROM pg_class c CROSS JOIN pg_roles r
+                    WHERE c.oid=to_regclass(:name) AND r.rolname=current_user"""),
+                    {'name': model.__tablename__})
+                if not visible:
+                    raise RuntimeError('Phase B rollback requires proven history visibility')
+            if connection.execute(select(model.__table__).limit(1)).first() is not None:
+                raise RuntimeError(
+                    'Phase B history exists: keep revision capture enabled; '
+                    'rollback requires a revision-compatible release'
+                )
 
 
 def migrate(engine):

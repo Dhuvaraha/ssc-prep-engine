@@ -68,6 +68,55 @@ def test_practice_delivery_captures_and_preserves_version(setup):
         assert read_evidence(db,'practice',other.id,1)['answer_version']!=before['answer_version']
 
 
+def test_capture_rollback_refuses_existing_history_without_mutation(setup):
+    from app.phase_b_migration import verify_capture_rollback
+    verify_capture_rollback(setup, capture_enabled=False)
+    with Session(setup) as db:
+        delivery=issue_delivery(db,1,question(db));db.commit()
+        token=delivery.id
+        before=read_evidence(db,'practice',token,1)
+    with pytest.raises(RuntimeError,match='revision-compatible release'):
+        verify_capture_rollback(setup, capture_enabled=False)
+    verify_capture_rollback(setup, capture_enabled=True)
+    with Session(setup) as db:
+        assert read_evidence(db,'practice',token,1)==before
+
+
+def test_capture_disabled_supports_database_without_phase_b_tables(tmp_path):
+    from app.phase_b_migration import verify_capture_rollback
+    engine=create_engine('sqlite:///'+str(tmp_path/'legacy.sqlite'))
+    try:
+        verify_capture_rollback(engine, capture_enabled=False)
+    finally:
+        engine.dispose()
+
+
+def test_capture_rollback_rejects_rls_hidden_history(setup):
+    from sqlalchemy import event
+    from app.phase_b_migration import verify_capture_rollback
+    if setup.dialect.name != 'postgresql':
+        pytest.skip('PostgreSQL RLS role regression')
+    with Session(setup) as db:
+        issue_delivery(db,1,question(db));db.commit()
+    with setup.begin() as connection:
+        if not connection.scalar(text("SELECT EXISTS(SELECT 1 FROM pg_roles WHERE rolname='anon')")):
+            pytest.skip('Requires isolated CI anon role')
+        schema=connection.scalar(text('SELECT current_schema()'))
+        quoted=setup.dialect.identifier_preparer.quote(schema)
+        connection.execute(text(f'GRANT USAGE ON SCHEMA {quoted} TO anon'))
+        connection.execute(text(f'GRANT SELECT ON {DeliveryRevision.__tablename__} TO anon'))
+    def restricted(connection):
+        connection.execute(text('SET LOCAL ROLE anon'))
+    event.listen(setup,'begin',restricted)
+    try:
+        with setup.connect() as connection:
+            assert not connection.execute(select(DeliveryRevision.__table__)).first()
+        with pytest.raises(RuntimeError,match='proven history visibility'):
+            verify_capture_rollback(setup,capture_enabled=False)
+    finally:
+        event.remove(setup,'begin',restricted)
+
+
 def test_capture_deduplicates_without_mutation(setup):
     with Session(setup) as db:
         q=question(db)

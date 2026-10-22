@@ -73,6 +73,8 @@ async def lifespan(_: FastAPI):
 
     if settings.phase_b_publication_enabled and not settings.phase_b_capture_enabled:
         raise RuntimeError('Phase B publication requires revision capture')
+    from app.phase_b_migration import verify_capture_rollback
+    verify_capture_rollback(engine, capture_enabled=settings.phase_b_capture_enabled)
     if settings.phase_b_capture_enabled:
         from app.phase_b_migration import verify
         verify(engine)

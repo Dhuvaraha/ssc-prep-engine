@@ -2,6 +2,20 @@
 
 ## 22 October continuation — diagnostic and timing version pinning
 
+Follow-on rollback safeguard: startup refuses capture-disabled operation when
+delivery/publication evidence exists. PostgreSQL must prove history visibility
+before an empty result is accepted; independent review caught and resolved the
+RLS-hidden-history case. Local integration **31 passed, 2 PostgreSQL-only skips**;
+pyflakes passed. A PostgreSQL regression exercises a SELECT-authorized role whose
+rows are hidden by RLS. Final CI validates it. This is a startup guard, not a
+coordinated rollback protocol: **mixed capture-enabled/disabled instances are
+prohibited during rollout**. A revision-compatible rollback and coordinated
+transition rehearsal remain required. No evidence is deleted or rewritten.
+
+Diagnostic commit `a6f01fc` remote backend passed **285 tests, 7 skips**, PostgreSQL
+passed **65 tests**, and frontend/build and separate Browser QA passed. Its combined
+CI browser job was still running when this checkpoint was updated.
+
 Continued from `34e8464`, preserving all six uncommitted files. Diagnostic profiles
 now read authorized delivered revisions for keys, difficulty and topic identity.
 New mock blueprints also capture the curriculum topic count so later curriculum
