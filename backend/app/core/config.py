@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     phase_a_reviewed_manifest_sha: str = ""
     phase_b_capture_enabled: bool = False
     phase_b_publication_enabled: bool = False
+    phase_b_transition_mode: bool = False
     release_sha: str = "unreleased"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")

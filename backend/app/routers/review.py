@@ -156,6 +156,7 @@ class RevisionDraft(BaseModel):
     expected_digest: str = Field(min_length=64, max_length=64)
     reason: str = Field(min_length=1)
     changes: RevisionChanges
+    option_order: list[int] | None = None
 
 
 class RevisionReview(BaseModel):
@@ -164,6 +165,70 @@ class RevisionReview(BaseModel):
     instruction_reviewed: StrictBool
     visual_reviewed: StrictBool
     reference: str = Field(min_length=1)
+
+
+from app.services.versioned_supplements import SupplementDraft
+
+
+@router.post('/questions/{question_id}/supplements')
+def create_supplement(question_id: int, payload: SupplementDraft, db: Session=Depends(get_db),
+                      reviewer: User=Depends(get_content_reviewer)):
+    from app.services.revision_capture import lock_questions
+    from app.services.versioned_supplements import draft_supplement
+    if not get_settings().phase_b_capture_enabled:
+        raise HTTPException(409, 'Phase B rollout is not enabled')
+    questions = lock_questions(db, [question_id])
+    if not questions:
+        raise HTTPException(404, 'Question not found')
+    row = draft_supplement(db, questions[0], reviewer.id, payload)
+    db.commit()
+    return {'supplement_id': row.id, 'review_status': 'pending_independent_review'}
+
+
+@router.get('/supplements/{supplement_id}')
+def inspect_supplement(supplement_id: str, db: Session=Depends(get_db),
+                       reviewer: User=Depends(get_content_reviewer)):
+    import json
+    from app.revision_models import TeachingSupplement, SupplementReview
+    if not get_settings().phase_b_capture_enabled:
+        raise HTTPException(409, 'Phase B rollout is not enabled')
+    row = db.get(TeachingSupplement, supplement_id)
+    if not row:
+        raise HTTPException(404, 'Supplement not found')
+    return {'supplement_id': row.id, 'question_id': row.question_id,
+        'question_fingerprint': row.question_fingerprint, 'author_id': row.author_id,
+        'payload': json.loads(row.payload), 'source_ids': json.loads(row.source_ids),
+        'contributors': json.loads(row.contributors),
+        'reviewed': db.get(SupplementReview, row.id) is not None}
+
+
+@router.post('/supplements/{supplement_id}/review')
+def approve_supplement(supplement_id: str, payload: RevisionReview, db: Session=Depends(get_db),
+                       reviewer: User=Depends(get_content_reviewer)):
+    import json
+    from app.revision_models import TeachingSupplement, SupplementReview
+    from app.services.revision_capture import lock_questions, capture_state
+    from app.services.versioned_supplements import fingerprint, sources_allowed, contributors_current
+    from app.services.revision_ledger import canonical
+    if not get_settings().phase_b_capture_enabled or not get_settings().phase_b_publication_enabled:
+        raise HTTPException(409, 'Revision publication is not enabled')
+    row = db.get(TeachingSupplement, supplement_id)
+    if not row:
+        raise HTTPException(404, 'Supplement not found')
+    questions = lock_questions(db, [row.question_id])
+    if row.author_id == reviewer.id or db.get(SupplementReview, row.id):
+        raise HTTPException(409, 'New independent review required')
+    values = payload.model_dump()
+    if not payload.reference.strip() or any(v is not True for k,v in values.items() if k != 'reference'):
+        raise HTTPException(422, 'Complete independent review required')
+    if not questions or fingerprint(capture_state(db, questions[0], kind='editorial_base')) != row.question_fingerprint:
+        raise HTTPException(409, 'STALE_REVISION')
+    if not contributors_current(db, row, questions[0].exam_id) or not sources_allowed(db, json.loads(row.source_ids), questions[0].exam_id):
+        raise HTTPException(409, 'Supplement permissions require review')
+    db.add(SupplementReview(supplement_id=row.id, reviewer_id=reviewer.id, reference=payload.reference,
+                            evidence=canonical(values)))
+    db.commit()
+    return {'supplement_id': row.id, 'reviewed': True}
 
 
 @router.post('/questions/{question_id}/revisions')
@@ -201,6 +266,13 @@ def create_revision(question_id: int, payload: RevisionDraft, db: Session=Depend
     parent=snapshot(db,question,kind='editorial_base')
     captured=json.loads(db.get(QuestionRevision,parent).payload)
     captured['question'].update(changes)
+    if payload.option_order is not None:
+        ids = {o['id'] for o in captured['options']}
+        if len(payload.option_order) != 4 or set(payload.option_order) != ids or 'correct_option' not in changes:
+            raise HTTPException(422, 'Option reordering requires all four existing IDs and an explicit reviewed key')
+        positions = {oid: position for position,oid in enumerate(payload.option_order, 1)}
+        for option in captured['options']:
+            option['position'] = positions[option['id']]
     captured.update(capture_kind='editorial_candidate',publication_eligible=False)
     candidate=EditorialCandidate(id=str(uuid4()),question_id=question.id,parent_revision_id=parent,
         author_id=reviewer.id,payload=canonical(captured),reason=payload.reason)

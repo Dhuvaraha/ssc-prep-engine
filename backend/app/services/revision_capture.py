@@ -37,7 +37,7 @@ def capture_state(db, question, *, kind='delivery_capture'):
         if kind=='delivery_capture' and not asset['bytes_verified']:
             raise ValueError('Delivery revision requires versioned asset bytes')
     # This is present delivery evidence, not retroactive history reconstruction.
-    data.update(capture_kind=kind, original_version_unknown=False)
+    data.update(capture_kind=kind, original_version_unknown=kind == 'legacy_capture_at_migration')
     return data
 
 
@@ -62,6 +62,10 @@ def pin_delivery(db, *, kind, delivery_id, user_id, question, blueprint):
     if not get_settings().phase_b_capture_enabled:
         return
     rid=snapshot(db,question)
+    if kind == 'practice':
+        from app.services.versioned_supplements import choose_supplement
+        blueprint = {**blueprint, 'supplement_revision_id': choose_supplement(
+            db, question, json.loads(db.get(QuestionRevision, rid).payload), user_id)}
     source_ids=sorted(db.scalars(select(ContentBinding.source_id).where(
         ContentBinding.resource_kind=='question',ContentBinding.resource_id==question.id)))
     if not source_ids:
@@ -118,9 +122,12 @@ def delivered_question(db, *, kind, delivery_id, user_id, current):
             (source.private_use_approved and grant and grant.active))
         if not allowed:
             raise HTTPException(404,'Delivery not available')
-    view=SimpleNamespace(**record,options=[SimpleNamespace(**o) for o in data['options']],
+    view=SimpleNamespace(**record,options=[SimpleNamespace(**o) for o in sorted(data['options'], key=lambda o:o['position'])],
                          delivery_revision_id=pin.revision_id,
                          delivery_blueprint=json.loads(pin.blueprint))
+    from app.services.versioned_supplements import fingerprint
+    view.delivery_fingerprint = fingerprint(data)
+    view.original_version_unknown = data.get('original_version_unknown', True)
     from app.services.practice_integrity import question_digest
     view.delivery_current_matches=question_digest(view)==question_digest(current)
     return view

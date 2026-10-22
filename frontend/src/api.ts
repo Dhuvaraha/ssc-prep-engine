@@ -750,6 +750,7 @@ export async function fetchDiagnosticBaseline(): Promise<DiagnosticBaseline> {
 }
 
 export type AnalyticsSummary = {
+  history?: { unknown_original_attempts: number; legacy_details_basis: string };
   overview: {
     practice_attempts: number;
     accuracy: number;

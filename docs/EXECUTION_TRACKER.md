@@ -131,6 +131,14 @@ No production migration is authorized by the draft. Do not loosen authorization.
 
 ## Latest continuation
 
+Phase B scope frozen and remaining engineering implemented from `d332d4a`:
+see [closure matrix and transition procedure](PHASE_B_CLOSURE.md). Local validation:
+**299 backend passed / 8 skipped, 80 PostgreSQL passed, 21 frontend passed,
+4 browser flows passed**, build/static checks passed. Independent review reports
+no scoped code blockers after fixes. Final commit CI is tracked in PR #54.
+Phase A production authorization remains separate. Continue PR #55/PYQ teaching
+after CI; do not reopen Phase B for Phase C–G features.
+
 22 October: continued PR #54 from `34e8464`, preserving six pending files.
 Captured mock timing and diagnostic key/difficulty/topic/curriculum coverage now
 survive later changes; Analytics displays explicit historical uncertainty.

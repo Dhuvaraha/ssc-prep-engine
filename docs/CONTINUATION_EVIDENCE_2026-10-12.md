@@ -1,5 +1,45 @@
 # Phase A and teaching continuation — 12 October 2026
 
+## 22 October — frozen Phase B closure milestone
+
+Continued from `d332d4a`, preserving the 19 pending files. The frozen acceptance
+matrix and coordinated operator procedure are in [Phase B closure](PHASE_B_CLOSURE.md).
+Implemented the remaining revision-aware practice analytics/learning-path views,
+immutable attempt receipts, explicit current-study queue/bookmark labels and
+provenance-only export. Legacy uncertainty is visible in Analytics and exported
+migration-time captures retain their unknown-original flag.
+
+Reviewed supplements now have immutable payloads and independent attestations,
+exact question fingerprints and all declared contributor sources. They are pinned
+at delivery, rendered in the existing practice UI after submission and reauthorized
+on assistance/replay; changed contributor bindings fail closed. No legacy lesson
+or option note was automatically approved, imported or published.
+
+Active-mock transition is bounded, exam-scoped and guarded by coordinated admission
+freeze, backend-role verification and database locks. Dry-run, restart, compatible
+publication-off rollback, unchanged legacy checksums and eventual score are tested,
+including two courses with equal durations but different marks. All instances must
+be drained before migration; no pre-Phase-B binary rollback is supported.
+Publication uses one structural/source/asset gate; direct verified import and
+in-place repair are refused. Reviewed option reordering preserves stable IDs and
+old deliveries. Unsupported text/asset replacements remain refused.
+
+Final local validation: **299 backend passed, 8 PostgreSQL-only skipped; 80
+PostgreSQL passed; 21 frontend passed; 4 real browser flows passed**; build,
+pyflakes and compileall passed. Independent review found and resolved contributor
+rebinding, verified-import bypass, export uncertainty and cross-course blueprint
+findings, then reported no remaining scoped code blockers. Final commit CI is
+recorded in PR #54 and the private closure checkpoint.
+
+Learner-facing delivery: history-consistent analytics and reviewed versioned
+practice supplements in the existing interface, with honest historical cautions.
+Backend delivery: coordinated transition, additive immutable supplement governance,
+history receipts and publication guards. This is Phase B engineering closure,
+subject to final commit CI; it is not a full teaching journey or production release.
+Do not extend Phase B with C–G work. Next is the existing PR #55/PYQ-based teaching
+dependency. Phase A rights, exact access, actual deployed-role/final-manifest checks
+and production cutover authorization remain separate. No production was changed.
+
 ## 22 October continuation — diagnostic and timing version pinning
 
 Follow-on rollback safeguard: startup refuses capture-disabled operation when

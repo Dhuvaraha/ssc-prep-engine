@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from fastapi import APIRouter, Depends
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.core.study_time import current_study_date, utc_naive_to_study_date
 from app.db import get_db
@@ -40,9 +40,11 @@ def analytics_summary(
     question_cache = {
         item.id: item
         for item in db.scalars(
-            select(Question).where(Question.id.in_(question_ids))
+            select(Question).options(selectinload(Question.options)).where(Question.id.in_(question_ids))
         )
     } if question_ids else {}
+    from app.services.revision_history import attempt_views
+    historical_questions = attempt_views(db, attempts, question_cache)
 
     correct = sum(1 for item in attempts if item.is_correct is True)
     incorrect = sum(1 for item in attempts if item.is_correct is False)
@@ -71,7 +73,7 @@ def analytics_summary(
     active_dates = set()
 
     for attempt in sorted(attempts, key=lambda item: (item.attempted_at, item.id)):
-        question = question_cache.get(attempt.question_id)
+        question = historical_questions.get(attempt.id)
         if not question:
             continue
 
@@ -395,6 +397,9 @@ def analytics_summary(
         }
 
     return {
+        "history": {"unknown_original_attempts": sum(
+            not bool(getattr(historical_questions.get(a.id), 'delivery_revision_id', None)) for a in attempts),
+            "legacy_details_basis": "current content where the original revision is unknown"},
         "overview": {
             "practice_attempts": total_attempts,
             "accuracy": accuracy,

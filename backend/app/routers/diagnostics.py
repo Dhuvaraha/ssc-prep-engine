@@ -60,7 +60,7 @@ def _profile(db: Session, attempt: MockAttempt) -> dict:
         row["accuracy"] = round(100 * row["correct"] / answered, 1) if answered else None
         row["attempted"] = answered
 
-    original_unknown=any(not getattr(q,'delivery_revision_id',None) for _,q in rows)
+    original_unknown=any(getattr(q,'original_version_unknown',True) for _,q in rows)
 
     return {
         "attempt_id": attempt.id,

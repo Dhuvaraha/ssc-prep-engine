@@ -257,7 +257,7 @@ def review_mock(
                 "pattern_type": question.pattern_type,
                 "explanation": question.explanation,
                 "fast_method": question.fast_method,
-                "original_version_unknown": not bool(getattr(question,'delivery_revision_id',None)),
+                "original_version_unknown": getattr(question, 'original_version_unknown', True),
             }
         )
 

@@ -637,3 +637,251 @@ def test_diagnostic_baseline_uses_pinned_key_difficulty_and_taxonomy(setup):
         db.get(SourceGrant,(1,'original-fixture')).active=False;db.commit()
         with pytest.raises(HTTPException) as error:diagnostic_baseline(db,db.get(User,1))
         assert error.value.status_code==404
+
+
+def test_analytics_uses_each_attempt_revision_and_export_keeps_results(setup):
+    from app.access_models import CourseGrant, SourceGrant
+    from app.routers.practice import submit_practice
+    from app.routers.analytics import analytics_summary
+    from app.routers.backup import export_user_data
+    from app.schemas import PracticeSubmit
+    with Session(setup) as db:
+        db.add_all([CourseGrant(user_id=1,exam_id=1,active=True),SourceGrant(user_id=1,source_id='original-fixture',active=True)])
+        q=question(db);q.expected_time_seconds=60;db.commit()
+        token=issue_delivery(db,1,q).id;db.commit()
+        submit_practice(PracticeSubmit(delivery_token=token,question_id=1,selected_option=2,time_seconds=30),db,db.get(User,1))
+        before=analytics_summary(db,db.get(User,1))
+        db.add(Topic(id=2,subject_id=1,slug='changed',name='Changed'));db.flush()
+        q.topic_id=2;q.expected_time_seconds=10;q.correct_option=3;db.commit()
+        after=analytics_summary(db,db.get(User,1))
+        assert before==after
+        exported=export_user_data(db,db.get(User,1))
+        assert exported['question_attempts'][0]['is_correct'] is True
+        assert exported['revision_references'][0]['delivery_id']==token
+        assert 'payload' not in exported['revision_references'][0]
+
+
+def test_active_mock_transition_dry_run_restart_and_compatible_rollback(setup,monkeypatch):
+    from app.services.phase_b_transition import transition_active_mocks, legacy_checksum
+    from app.services.mock_engine import load_mock_attempt, submit_mock_attempt, mock_timing
+    from app.routers.mocks import review_mock
+    from app.models import MockAttempt
+    settings=get_settings()
+    monkeypatch.setattr(settings,'phase_b_capture_enabled',False)
+    monkeypatch.setattr(settings,'phase_b_publication_enabled',False)
+    with Session(setup) as db:
+        aid=seeded_pinned_mock(db,mode='full')
+        before=legacy_checksum(db)
+        started=db.get(MockAttempt,aid).started_at
+    monkeypatch.setattr(settings,'phase_b_capture_enabled',True)
+    monkeypatch.setattr(settings,'phase_b_transition_mode',True)
+    blueprint={'full':{'duration_minutes':60,'positive_marks':2,'negative_marks':0.5,
+        'section_order':['reasoning','general-awareness','quant','english'],'full_section_seconds':900}}
+    with Session(setup) as db:
+        with pytest.raises(ValueError,match='Coordinated'):
+            transition_active_mocks(db,blueprint,exam_id=1,admission_frozen=False)
+        report=transition_active_mocks(db,blueprint,exam_id=1,admission_frozen=True)
+        assert report['legacy_checksums']==before and report['transitioned_attempt_ids']==[aid]
+        db.rollback()
+        assert not db.scalars(select(DeliveryRevision)).all()
+        assert legacy_checksum(db)==before
+    with Session(setup) as db:
+        transition_active_mocks(db,blueprint,exam_id=1,admission_frozen=True);db.commit()
+    verify(setup)  # Restart with the additive schema retained.
+    with Session(setup) as db:
+        assert transition_active_mocks(db,blueprint,exam_id=1,admission_frozen=True)['transitioned_attempt_ids']==[]
+        assert legacy_checksum(db)==before
+        db.rollback()
+    monkeypatch.setattr(settings,'phase_b_transition_mode',False)
+    # Compatible rollback keeps capture/readers on and publication off.
+    with Session(setup) as db:
+        question(db).correct_option=3;db.commit()
+        attempt,rows=load_mock_attempt(db,attempt_id=aid,user_id=1)
+        assert attempt.started_at==started and rows[0][0].selected_option==2
+        assert mock_timing(attempt,now=started)['seconds_left']==3600
+        assert rows[0][1].original_version_unknown is True
+        assert submit_mock_attempt(db,attempt=attempt,rows=rows)['score']==2
+        assert review_mock(aid,db,db.get(User,1))['questions'][0]['original_version_unknown']
+
+
+def test_transition_refuses_changed_legacy_content(setup,monkeypatch):
+    from app.services.phase_b_transition import transition_active_mocks
+    monkeypatch.setattr(get_settings(),'phase_b_capture_enabled',False)
+    with Session(setup) as db:
+        seeded_pinned_mock(db)
+        question(db).correct_option=3;db.commit()
+    monkeypatch.setattr(get_settings(),'phase_b_capture_enabled',True)
+    monkeypatch.setattr(get_settings(),'phase_b_transition_mode',True)
+    monkeypatch.setattr(get_settings(),'phase_b_publication_enabled',False)
+    with Session(setup) as db:
+        with pytest.raises(ValueError,match='adjudication'):
+            transition_active_mocks(db,{'topic':{'duration_minutes':20,'positive_marks':2,'negative_marks':0.5}},exam_id=1,admission_frozen=True)
+        db.rollback()
+        assert not db.scalars(select(DeliveryRevision)).all()
+
+
+def test_reviewed_supplements_pin_payload_and_recheck_every_contributor(setup,monkeypatch):
+    from datetime import datetime
+    from fastapi import HTTPException
+    from app.access_models import CourseGrant, SourceGrant
+    from app.models import Lesson
+    from app.routers.review import create_supplement,approve_supplement,RevisionReview
+    from app.routers.practice import submit_practice,assist_delivery
+    from app.schemas import PracticeSubmit
+    from app.services.versioned_supplements import SupplementDraft
+    from app.revision_models import TeachingSupplement
+    monkeypatch.setattr(get_settings(),'phase_b_publication_enabled',True)
+    with Session(setup) as db:
+        db.add(User(id=2,email='supplement-reviewer@example.invalid',password_hash='no-login'))
+        db.add(ContentSource(id='lesson-source',exam_id=1,private_use_approved=True,approval_reference='synthetic-only'))
+        db.flush()
+        db.add_all([CourseGrant(user_id=1,exam_id=1,active=True),SourceGrant(user_id=1,source_id='original-fixture',active=True),
+            SourceGrant(user_id=1,source_id='lesson-source',active=True),
+            Lesson(id=1,topic_id=1,title='Synthetic',intro='Intro',concept='Concept',is_published=True)])
+        db.flush();db.add(ContentBinding(resource_kind='lesson',resource_id=1,source_id='lesson-source'));db.commit()
+        draft=SupplementDraft(coaching={'standard_method':'REVIEWED_METHOD'},
+            option_insights=[{'position':1,'insight_type':'misconception','knowledge_text':'REVIEWED_TRAP','source_reference':'synthetic'}],
+            source_ids=['original-fixture'],contributors=[{'kind':'lesson','resource_id':1}])
+        sid=create_supplement(1,draft,db,db.get(User,1))['supplement_id']
+        evidence=RevisionReview(answer_verified=True,all_options_checked=True,instruction_reviewed=True,visual_reviewed=True,reference='synthetic independent check')
+        with pytest.raises(HTTPException):approve_supplement(sid,evidence,db,db.get(User,1))
+        approve_supplement(sid,evidence,db,db.get(User,2))
+        delivery=issue_delivery(db,1,question(db));db.commit()
+        assert assist_delivery(delivery.id,'hint',db,db.get(User,1))['coaching']['standard_method']=='REVIEWED_METHOD'
+        payload=PracticeSubmit(delivery_token=delivery.id,question_id=1,selected_option=2,time_seconds=20)
+        result=submit_practice(payload,db,db.get(User,1))
+        assert result.coaching.standard_method=='REVIEWED_METHOD' and result.option_insights[0].knowledge_text=='REVIEWED_TRAP'
+        db.get(Lesson,1).concept='Later correction';db.commit()
+        assert submit_practice(payload,db,db.get(User,1))==result
+        with pytest.raises(DBAPIError):
+            db.execute(text('UPDATE teaching_supplements SET payload=:payload WHERE id=:id'),{'payload':'{}','id':sid});db.commit()
+        db.rollback()
+        assert db.get(TeachingSupplement,sid).created_at <= datetime.utcnow()
+        db.get(SourceGrant,(1,'lesson-source')).active=False;db.commit()
+        replay=submit_practice(payload,db,db.get(User,1))
+        assert replay.correct and replay.explanation=='Four' and replay.coaching is None and replay.option_insights==[]
+        db.get(SourceGrant,(1,'lesson-source')).active=True
+        db.add(ContentSource(id='new-dependency',exam_id=1,private_use_approved=True,approval_reference='synthetic'))
+        db.flush();db.add(ContentBinding(resource_kind='lesson',resource_id=1,source_id='new-dependency'));db.commit()
+        assert submit_practice(payload,db,db.get(User,1)).coaching is None
+        # A dependency change before independent approval also requires a new draft.
+        pending=create_supplement(1,draft,db,db.get(User,1))['supplement_id']
+        db.delete(db.get(ContentBinding,('lesson',1,'new-dependency')));db.commit()
+        with pytest.raises(HTTPException,match='permissions'):
+            approve_supplement(pending,evidence,db,db.get(User,2))
+
+
+@pytest.mark.parametrize('mutation', ['equivalent_options','missing_solution','unapproved_source'])
+def test_common_publication_gate_rejects_invalid_candidate(setup,monkeypatch,mutation):
+    from fastapi import HTTPException
+    from app.services.revision_publication import publish_candidate
+    monkeypatch.setattr(get_settings(),'phase_b_publication_enabled',True)
+    with Session(setup) as db:
+        if mutation=='equivalent_options':
+            q=question(db);q.options[0].text='1/2';q.options[1].text='0.5';db.commit()
+        if mutation=='missing_solution':
+            question(db).explanation='';db.commit()
+        cid=reviewed_candidate(db, explanation='' if mutation=='missing_solution' else 'Reviewed correction')
+        if mutation=='unapproved_source':
+            db.get(ContentSource,'original-fixture').private_use_approved=False;db.commit()
+        with pytest.raises(HTTPException) as error:publish_candidate(db,cid,2)
+        assert error.value.status_code==422
+
+
+def test_phase_b_refuses_direct_verified_import(setup):
+    from app.content.import_schema import ImportedQuestion
+    from app.services.question_import import import_question
+    item=ImportedQuestion(exam_slug='ssc-cgl-tier-1',subject_slug='quant',question_text='Synthetic import',
+        pattern_type='synthetic',correct_option=1,verification_status='verified',
+        options=[{'position':i,'text':str(i)} for i in range(1,5)])
+    with Session(setup) as db:
+        with pytest.raises(ValueError,match='independently reviewed publication'):import_question(db,item)
+        assert len(db.scalars(select(Question)).all())==1
+
+
+def test_transition_http_admission_blocks_reads_and_writes(setup,monkeypatch):
+    from fastapi.testclient import TestClient
+    from app.main import app
+    monkeypatch.setattr(get_settings(),'phase_b_transition_mode',True)
+    client=TestClient(app)
+    for method,path in [('get','/api/v1/practice/questions'),('post','/api/v1/mocks/start'),('get','/api/v1/review/questions')]:
+        response=getattr(client,method)(path)
+        assert response.status_code==503 and response.json()['detail']=='MAINTENANCE_TRANSITION'
+        assert response.headers['cache-control']=='no-store'
+    assert client.get('/health').status_code==200
+
+
+def test_reviewed_option_reordering_preserves_old_delivery_identity(setup,monkeypatch):
+    from app.routers.review import create_revision,review_revision,_revision_digest,RevisionDraft,RevisionChanges,RevisionReview
+    from app.services.revision_publication import publish_candidate
+    from app.services.revision_capture import delivered_question
+    from app.access_models import CourseGrant,SourceGrant
+    monkeypatch.setattr(get_settings(),'phase_b_publication_enabled',True)
+    with Session(setup) as db:
+        db.add(User(id=2,email='order-review@example.invalid',password_hash='no-login'))
+        db.add_all([CourseGrant(user_id=1,exam_id=1,active=True),SourceGrant(user_id=1,source_id='original-fixture',active=True)])
+        db.commit()
+        old=issue_delivery(db,1,question(db)).id;db.commit()
+        draft=RevisionDraft(expected_digest=_revision_digest(db,question(db)),reason='Reviewed ordering correction',
+            changes=RevisionChanges(verification_status='verified',correct_option=1),option_order=[2,1,3,4])
+        cid=create_revision(1,draft,db,db.get(User,1))['candidate_id']
+        review_revision(cid,RevisionReview(answer_verified=True,all_options_checked=True,instruction_reviewed=True,
+            visual_reviewed=True,reference='Independent ordering check'),db,db.get(User,2))
+        publish_candidate(db,cid,2);db.commit()
+        new=issue_delivery(db,1,question(db)).id;db.commit()
+        prior=delivered_question(db,kind='practice',delivery_id=old,user_id=1,current=question(db))
+        latest=delivered_question(db,kind='practice',delivery_id=new,user_id=1,current=question(db))
+        assert prior.correct_option==2 and [o.id for o in prior.options]==[1,2,3,4]
+        assert latest.correct_option==1 and [o.id for o in latest.options]==[2,1,3,4]
+        assert {o.id for o in latest.options}=={o.id for o in prior.options}
+
+
+def test_additive_supplement_upgrade_preserves_existing_delivery_history(setup):
+    from app.revision_models import TeachingSupplement,SupplementReview
+    with Session(setup) as db:
+        token=issue_delivery(db,1,question(db)).id;db.commit()
+        before=read_evidence(db,'practice',token,1)
+    # Model the previous Phase B schema, which had no supplement tables.
+    with setup.begin() as connection:
+        SupplementReview.__table__.drop(connection)
+        TeachingSupplement.__table__.drop(connection)
+    migrate(setup);migrate(setup);verify(setup)
+    with Session(setup) as db:
+        assert read_evidence(db,'practice',token,1)==before
+
+
+def test_transition_keeps_same_duration_course_blueprints_separate(setup,monkeypatch):
+    import json
+    from app.models import MockAttempt,MockAttemptQuestion
+    from app.access_models import CourseGrant,SourceGrant
+    from app.services.phase_b_transition import transition_active_mocks
+    from app.services.mock_engine import load_mock_attempt,submit_mock_attempt
+    monkeypatch.setattr(get_settings(),'phase_b_capture_enabled',False)
+    monkeypatch.setattr(get_settings(),'phase_b_publication_enabled',False)
+    monkeypatch.setattr(get_settings(),'phase_b_transition_mode',True)
+    with Session(setup) as db:
+        first=seeded_pinned_mock(db,mode='full')
+        db.add_all([Exam(id=2,slug='other-course',name='Other course',duration_minutes=60,positive_marks=5),
+            User(id=2,email='other-course@example.invalid',password_hash='no-login')]);db.flush()
+        db.add(Subject(id=2,exam_id=2,slug='other',name='Other'));db.flush()
+        db.add(Question(id=2,exam_id=2,subject_id=2,question_text='Other course synthetic',correct_option=1,explanation='One',verification_status='verified'));db.flush()
+        db.add_all([QuestionOption(id=i+4,question_id=2,position=i,text=str(i)) for i in range(1,5)])
+        db.add(ContentSource(id='other-source',exam_id=2,private_use_approved=True,approval_reference='synthetic'));db.flush()
+        db.add_all([ContentBinding(resource_kind='question',resource_id=2,source_id='other-source'),
+            CourseGrant(user_id=2,exam_id=2,active=True),SourceGrant(user_id=2,source_id='other-source',active=True)])
+        second=MockAttempt(user_id=2,exam_id=2,mode='full',duration_minutes=60);db.add(second);db.flush()
+        second_id=second.id
+        db.add(MockAttemptQuestion(attempt_id=second.id,question_id=2,section_slug='other',position=1,selected_option=1));db.commit()
+    monkeypatch.setattr(get_settings(),'phase_b_capture_enabled',True)
+    base={'duration_minutes':60,'positive_marks':2,'negative_marks':0.5,
+        'section_order':['reasoning','general-awareness','quant','english'],'full_section_seconds':900}
+    with Session(setup) as db:
+        transition_active_mocks(db,{'full':base},exam_id=1,admission_frozen=True);db.commit()
+        assert db.get(DeliveryRevision,('mock',str(second_id),2)) is None
+        transition_active_mocks(db,{'full':{**base,'positive_marks':5,'section_order':['other'],'full_section_seconds':3600}},
+                                exam_id=2,admission_frozen=True);db.commit()
+        assert json.loads(db.get(DeliveryRevision,('mock',str(first),1)).blueprint)['positive_marks']==2
+        assert json.loads(db.get(DeliveryRevision,('mock',str(second_id),2)).blueprint)['positive_marks']==5
+        for aid,uid,score in [(first,1,2),(second_id,2,5)]:
+            attempt,rows=load_mock_attempt(db,attempt_id=aid,user_id=uid)
+            assert submit_mock_attempt(db,attempt=attempt,rows=rows)['score']==score

@@ -112,9 +112,9 @@ def submit_practice(
             raise HTTPException(409, "IDEMPOTENCY_CONFLICT")
         result=PracticeResult.model_validate_json(delivery.result_json)
         if getattr(question,'delivery_revision_id',None):
-            # Supplement contributors are not versioned in this ledger yet.
-            # Never replay their cached text after permissions may have changed.
-            result=result.model_copy(update={'coaching':None,'option_insights':[]})
+            from app.services.versioned_supplements import delivered_supplements
+            result=PracticeResult.model_validate({**result.model_dump(),
+                **delivered_supplements(db, question, user.id)})
         return result
 
     # New submissions may only use the exact verified question revision seen at
@@ -124,7 +124,7 @@ def submit_practice(
     if question.correct_option is None:
         raise HTTPException(status_code=409, detail="Question answer key is not verified")
     delivery = load_delivery(db, user.id, payload.delivery_token, question)
-    payload.used_hint = payload.used_hint or delivery.assisted
+    payload = payload.model_copy(update={'used_hint': payload.used_hint or delivery.assisted})
 
     is_correct = payload.selected_option == question.correct_option
     attempt = QuestionAttempt(
@@ -139,6 +139,8 @@ def submit_practice(
     )
     db.add(attempt)
     db.flush()
+    from app.services.revision_history import record_attempt_receipt
+    record_attempt_receipt(db, attempt, delivery)
 
     mastery_score = None
     if question.topic_id is not None:
@@ -221,6 +223,10 @@ def submit_practice(
     # Insight context is returned only after the verified answer has been
     # submitted, never in /practice/questions or live mock payloads.
     option_insights = published_option_insights(db, question=question) if supplements_available else []
+    if not supplements_available:
+        from app.services.versioned_supplements import delivered_supplements
+        supplements = delivered_supplements(db, question, user.id)
+        coaching, option_insights = supplements['coaching'], supplements['option_insights']
     result = PracticeResult(
         attempt_id=attempt.id,
         correct=is_correct,
@@ -253,6 +259,9 @@ def assist_delivery(token: str, action: str, db: Session = Depends(get_db), user
     delivery = load_delivery(db, user.id, token, question)
     delivery.assisted = True
     coaching = build_question_coaching(db, question) if not getattr(question,'delivery_revision_id',None) else None
+    if getattr(question,'delivery_revision_id',None):
+        from app.services.versioned_supplements import delivered_supplements
+        coaching = delivered_supplements(db, question, user.id)['coaching']
     expose(db, user.id, question, "assistance")
     db.commit()
     return {"explanation": question.explanation, "fast_method": question.fast_method, "coaching": coaching}

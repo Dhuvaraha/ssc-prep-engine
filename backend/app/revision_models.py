@@ -55,3 +55,26 @@ class EditorialPublication(Base):
     revision_id: Mapped[str] = mapped_column(ForeignKey('question_revisions.id'))
     publisher_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class TeachingSupplement(Base):
+    __tablename__ = 'teaching_supplements'
+    __table_args__ = {'sqlite_with_rowid': False}
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    question_id: Mapped[int] = mapped_column(ForeignKey('questions.id'), index=True)
+    question_fingerprint: Mapped[str] = mapped_column(String(64), index=True)
+    author_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    payload: Mapped[str] = mapped_column(Text)
+    source_ids: Mapped[str] = mapped_column(Text)
+    contributors: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class SupplementReview(Base):
+    __tablename__ = 'supplement_reviews'
+    __table_args__ = {'sqlite_with_rowid': False}
+    supplement_id: Mapped[str] = mapped_column(ForeignKey('teaching_supplements.id'), primary_key=True)
+    reviewer_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    reference: Mapped[str] = mapped_column(Text)
+    evidence: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

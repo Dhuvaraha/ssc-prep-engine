@@ -52,6 +52,12 @@ export default function AnalyticsPage() {
 
   return (
     <main className="shell">
+      {!!data.history?.unknown_original_attempts && (
+        <p role="note">
+          Original question versions are unknown for {data.history.unknown_original_attempts} older practice attempts.
+          Their topic and timing details use current content; saved answers and scores are unchanged.
+        </p>
+      )}
       <section className="analyticsHero">
         <div>
           <p className="eyebrow">Exam readiness • {baselinePending ? "not assessed" : "provisional full-mock estimate"}</p>

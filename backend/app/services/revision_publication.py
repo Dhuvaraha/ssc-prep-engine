@@ -45,9 +45,15 @@ def publish_candidate(db, candidate_id, publisher_id):
         raise HTTPException(409,'UNPINNED_ACTIVE_DELIVERY')
     parent=json.loads(db.get(QuestionRevision,candidate.parent_revision_id).payload)
     proposed=json.loads(candidate.payload)
+    from app.services.publication_validation import validate_publication
+    validate_publication(db, proposed, visual_reviewed=json.loads(decision.evidence).get('visual_reviewed') is True)
     before,after=parent['question'],proposed['question']
-    if proposed['options']!=parent['options'] or proposed['asset_refs']!=parent['asset_refs']:
-        raise HTTPException(409,'Unsupported option or asset correction')
+    old_options = {o['id']: o for o in parent['options']}
+    new_options = {o['id']: o for o in proposed['options']}
+    if (old_options.keys() != new_options.keys() or proposed['asset_refs'] != parent['asset_refs'] or
+        any({k:v for k,v in new_options[oid].items() if k != 'position'} !=
+            {k:v for k,v in old.items() if k != 'position'} for oid,old in old_options.items())):
+        raise HTTPException(409,'Unsupported option identity, text or asset correction')
     if set(before)!=set(after) or any(after[k]!=before[k] for k in before if k not in EDITABLE):
         raise HTTPException(409,'Unsupported question identity correction')
     if after['verification_status']!='verified' or after['correct_option'] not in {o.position for o in question.options}:
@@ -58,6 +64,8 @@ def publish_candidate(db, candidate_id, publisher_id):
             raise HTTPException(409,'Candidate topic no longer valid')
     for key in EDITABLE:
         setattr(question,key,after[key])
+    for option in question.options:
+        option.position = new_options[option.id]['position']
     db.flush()
     revision_id=snapshot(db,question,kind='editorial_base')
     db.add(EditorialPublication(candidate_id=candidate.id,revision_id=revision_id,publisher_id=publisher_id))

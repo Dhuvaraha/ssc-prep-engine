@@ -164,6 +164,17 @@ app.include_router(review.router, prefix="/api/v1")
 app.include_router(assets.router, prefix="/api/v1")
 
 
+@app.middleware('http')
+async def phase_b_transition_admission(request: Request, call_next):
+    # Operator must drain every instance before the offline transition. Reads are
+    # blocked too: some learning GETs issue deliveries or record exposure.
+    if settings.phase_b_transition_mode and request.url.path.startswith('/api/v1/'):
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=503, content={'detail': 'MAINTENANCE_TRANSITION'},
+                            headers={'Retry-After': '60', 'Cache-Control': 'no-store'})
+    return await call_next(request)
+
+
 @app.get("/")
 def root() -> dict[str, str]:
     return {"name": "SSC Prep Engine API", "status": "running"}
