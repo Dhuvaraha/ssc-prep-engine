@@ -218,20 +218,23 @@ def test_legacy_review_patch_preserves_omitted_fields(setup,monkeypatch):
         assert q.review_notes=='Synthetic note'
 
 
-def seeded_pinned_mock(db):
+def seeded_pinned_mock(db, *, mode='topic'):
     from app.models import MockAttempt, MockAttemptQuestion
     from app.access_models import CourseGrant, SourceGrant, AssessmentDelivery
     from app.services.revision_capture import pin_delivery
     from app.services.practice_integrity import question_digest
     db.add_all([CourseGrant(user_id=1,exam_id=1,active=True),
                 SourceGrant(user_id=1,source_id='original-fixture',active=True)])
-    attempt=MockAttempt(user_id=1,exam_id=1,mode='topic',duration_minutes=20)
+    duration=60 if mode=='full' else 20
+    attempt=MockAttempt(user_id=1,exam_id=1,mode=mode,duration_minutes=duration)
     db.add(attempt);db.flush()
     q=question(db)
     db.add(MockAttemptQuestion(attempt_id=attempt.id,question_id=1,section_slug='quant',position=1,selected_option=2))
     db.add(AssessmentDelivery(attempt_id=attempt.id,question_id=1,content_digest=question_digest(q),correct_option=2))
     pin_delivery(db,kind='mock',delivery_id=attempt.id,user_id=1,question=q,
-                 blueprint={'positive_marks':2,'negative_marks':0.5})
+                 blueprint={'positive_marks':2,'negative_marks':0.5,'mode':mode,'duration_minutes':duration,
+                            'section_order':['reasoning','general-awareness','quant','english'],'full_section_seconds':900,
+                            'curriculum_topic_count':1})
     db.commit()
     return attempt.id
 
@@ -516,3 +519,72 @@ def test_editor_can_inspect_exact_candidate_asset_without_learner_grants(setup,t
         assert client.get(path+'review.svg',headers=reviewer).status_code==409
     finally:
         app.dependency_overrides.pop(get_db,None)
+
+
+def test_pinned_mock_timing_survives_changed_runtime_defaults(setup,monkeypatch):
+    from datetime import timedelta
+    from app.services import mock_engine
+    from app.services.revision_capture import bind_mock_timing
+    from app.models import MockAttempt
+    from app.routers.mocks import active_mock
+    with Session(setup) as db:
+        aid=seeded_pinned_mock(db,mode='full')
+        attempt=db.get(MockAttempt,aid)
+        start=attempt.started_at
+        bind_mock_timing(db,attempt)
+        monkeypatch.setattr(mock_engine,'SECTION_ORDER',['english','quant'])
+        monkeypatch.setattr(mock_engine,'FULL_SECTION_SECONDS',60)
+        monkeypatch.setattr(mock_engine,'FULL_TOTAL_SECONDS',120)
+        timing=mock_engine.mock_timing(attempt,now=start+timedelta(seconds=901))
+        assert timing['active_section_slug']=='general-awareness'
+        assert timing['section_duration_seconds']==900 and timing['seconds_left']==2699
+        assert mock_engine.mock_timing(attempt,now=start+timedelta(seconds=3600))['seconds_left']==0
+        attempt.started_at-=timedelta(seconds=901);db.commit()
+        status=active_mock(db,db.get(User,1))
+        assert status['active_section_slug']=='general-awareness'
+        assert status['section_duration_seconds']==900
+
+
+def test_partial_mock_pins_fail_closed_without_backfilling(setup):
+    from fastapi import HTTPException
+    from app.models import MockAttempt, MockAttemptQuestion
+    from app.services.revision_capture import bind_mock_timing
+    with Session(setup) as db:
+        aid=seeded_pinned_mock(db)
+        db.add(Question(id=2,exam_id=1,subject_id=1,topic_id=1,question_text='Other',correct_option=1));db.flush()
+        db.add(MockAttemptQuestion(attempt_id=aid,question_id=2,position=2,section_slug='quant'));db.commit()
+        with pytest.raises(HTTPException) as error:bind_mock_timing(db,db.get(MockAttempt,aid))
+        assert error.value.detail=='INCOMPLETE_DELIVERY_BLUEPRINT'
+        assert len(db.scalars(select(DeliveryRevision)).all())==1
+
+
+def test_legacy_mock_timing_is_not_reconstructed(setup):
+    from app.models import MockAttempt
+    from app.services.revision_capture import bind_mock_timing
+    with Session(setup) as db:
+        attempt=MockAttempt(user_id=1,exam_id=1,mode='topic',duration_minutes=20)
+        db.add(attempt);db.commit()
+        bind_mock_timing(db,attempt)
+        assert not hasattr(attempt,'delivery_timing')
+        assert not db.scalars(select(DeliveryRevision)).all()
+
+
+def test_diagnostic_baseline_uses_pinned_key_difficulty_and_taxonomy(setup):
+    from app.services.mock_engine import load_mock_attempt,submit_mock_attempt
+    from app.routers.diagnostics import diagnostic_baseline
+    from app.access_models import SourceGrant
+    from fastapi import HTTPException
+    with Session(setup) as db:
+        aid=seeded_pinned_mock(db,mode='diagnostic')
+        attempt,rows=load_mock_attempt(db,attempt_id=aid,user_id=1)
+        submit_mock_attempt(db,attempt=attempt,rows=rows)
+        before=diagnostic_baseline(db,db.get(User,1))
+        q=question(db);q.correct_option=3;q.difficulty=3;q.topic_id=None
+        db.add(Topic(id=2,subject_id=1,slug='new-curriculum-topic',name='New topic'));db.commit()
+        after=diagnostic_baseline(db,db.get(User,1))
+        assert before==after
+        assert after['baseline']['correct']==1 and after['baseline']['sampled_topics']==1
+        assert not after['baseline']['original_version_unknown']
+        db.get(SourceGrant,(1,'original-fixture')).active=False;db.commit()
+        with pytest.raises(HTTPException) as error:diagnostic_baseline(db,db.get(User,1))
+        assert error.value.status_code==404

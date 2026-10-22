@@ -131,6 +131,15 @@ No production migration is authorized by the draft. Do not loosen authorization.
 
 ## Latest continuation
 
+22 October: continued PR #54 from `34e8464`, preserving six pending files.
+Captured mock timing and diagnostic key/difficulty/topic/curriculum coverage now
+survive later changes; Analytics displays explicit historical uncertainty.
+Focused backend/security **58 passed, 7 skipped**, pyflakes passed; independent
+review found no blockers. Full backend before the last curriculum/UI refinement
+was **285 passed, 7 skipped**. Final frontend/CI evidence is tracked in PR #54.
+This is historical-integrity delivery, not a completed educational journey.
+Production and the existing A–G release gates remain unchanged.
+
 See [12 October continuation](CONTINUATION_EVIDENCE_2026-10-12.md) for implemented
 manifest guards, actual-sized synthetic rehearsal, targeted paper analysis and
 eight independently reviewed original draft items. These are not eight complete

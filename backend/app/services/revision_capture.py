@@ -140,3 +140,30 @@ def mock_marks(db, attempt, rows):
         return float(positive),float(negative)
     exam=db.get(Exam,attempt.exam_id)
     return float(exam.positive_marks if exam else 2),float(exam.negative_marks if exam else 0.5)
+
+
+def bind_mock_timing(db, attempt):
+    """Use a complete, consistent delivered blueprint; never backfill old attempts."""
+    from fastapi import HTTPException
+    from app.models import MockAttemptQuestion
+    if not get_settings().phase_b_capture_enabled:
+        return
+    pins=db.scalars(select(DeliveryRevision).where(DeliveryRevision.kind=='mock',
+        DeliveryRevision.delivery_id==str(attempt.id))).all()
+    if not pins:
+        return
+    rows=db.scalars(select(MockAttemptQuestion).where(MockAttemptQuestion.attempt_id==attempt.id)).all()
+    if len(pins)!=len(rows) or {p.question_id for p in pins}!={r.question_id for r in rows} or any(p.user_id!=attempt.user_id for p in pins):
+        raise HTTPException(409,'INCOMPLETE_DELIVERY_BLUEPRINT')
+    fields=('mode','duration_minutes','section_order','full_section_seconds')
+    blueprints=[json.loads(p.blueprint) for p in pins]
+    timing={key:blueprints[0].get(key) for key in fields}
+    if any({key:b.get(key) for key in fields}!=timing for b in blueprints):
+        raise HTTPException(409,'INCONSISTENT_DELIVERY_BLUEPRINT')
+    duration,order,seconds=timing['duration_minutes'],timing['section_order'],timing['full_section_seconds']
+    if (timing['mode']!=attempt.mode or duration!=attempt.duration_minutes or
+        type(duration) is not int or duration<=0 or type(seconds) is not int or seconds<=0 or
+        not isinstance(order,list) or not order or any(not isinstance(s,str) or not s for s in order) or
+        len(set(order))!=len(order) or (attempt.mode=='full' and len(order)*seconds!=duration*60)):
+        raise HTTPException(409,'INVALID_DELIVERY_BLUEPRINT')
+    attempt.delivery_timing=timing

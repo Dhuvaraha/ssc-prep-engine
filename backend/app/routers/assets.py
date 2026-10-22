@@ -41,6 +41,8 @@ def get_private_asset(
     ))
     active = db.scalar(select(MockAttempt).where(MockAttempt.user_id == user.id, MockAttempt.status == "in_progress"))
     if active:
+        from app.services.revision_capture import bind_mock_timing
+        bind_mock_timing(db,active)
         timing = mock_timing(active)
         reviewed = db.get(AssessmentAsset, asset_key)
         rows = select(MockAttemptQuestion.question_id).where(MockAttemptQuestion.attempt_id == active.id)

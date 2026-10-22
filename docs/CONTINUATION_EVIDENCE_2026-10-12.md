@@ -1,5 +1,36 @@
 # Phase A and teaching continuation — 12 October 2026
 
+## 22 October continuation — diagnostic and timing version pinning
+
+Continued from `34e8464`, preserving all six uncommitted files. Diagnostic profiles
+now read authorized delivered revisions for keys, difficulty and topic identity.
+New mock blueprints also capture the curriculum topic count so later curriculum
+growth does not rewrite baseline coverage. Historical missing versions/counts are
+explicitly marked unknown; the Analytics page displays the applicable caution.
+Revoked historical sources deny access rather than silently changing the sample.
+
+Mock timing, section transitions and active asset access now use the complete
+captured timing blueprint. Inconsistent or partial pins fail closed. Legacy
+attempts are not backfilled with invented historical timing. Regression tests
+cover changed runtime timing, partial pins, legacy fallback and a submitted
+diagnostic whose key, topic, difficulty and curriculum subsequently change.
+
+Validation: full backend before the final curriculum/UI refinement: **285 passed,
+7 PostgreSQL-only skips**. After that refinement, focused Phase B integration and
+Phase A security: **58 passed, 7 skips**; pyflakes passed. Independent read-only
+review found no blockers, including follow-up review of the curriculum count and
+learner caution. Frontend: **21 tests passed**, TypeScript/Vite build passed
+(esbuild required the permitted subprocess rerun). Remote CI is tracked in PR #54.
+
+Learner-facing delivery: stable diagnostic evidence and honest legacy-history
+cautions in the local gated implementation; no new lesson or production release.
+Backend delivery: captured timing and diagnostic integration. Phase B still needs
+transition/rollback validation, broader history adapters and versioned teaching
+supplements. PR #55 and the first complete teach → diagnose → repair → retry →
+revise journey remain next educational dependencies. Phase A source/image rights,
+intended access, actual deployed-role compatibility and final release rehearsal
+remain gates. No production writes, merges or deployments were performed.
+
 ## 16 October continuation — editorial UI and reviewer images
 
 Resumed from `6dbda19` with nine uncommitted files; preceding practice/publication
