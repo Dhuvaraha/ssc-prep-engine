@@ -596,6 +596,7 @@ export default function MockPage() {
                       <small>{Math.round(item.time_seconds)}s{item.expected_time_seconds ? " / " + item.expected_time_seconds + "s target" : ""}</small>
                     </summary>
                     <div>
+                      {item.original_version_unknown && <p role="note">The original question version was not recorded for this attempt. This review shows current content; your saved score is unchanged.</p>}
                       <p>{item.question_text}</p>
                       <p><strong>Your answer:</strong> {item.selected_option ? String.fromCharCode(64 + item.selected_option) : "Not answered"} • <strong>Correct:</strong> {String.fromCharCode(64 + item.correct_option)}</p>
                       {item.pattern_type && <p><strong>Pattern:</strong> {item.pattern_type.replaceAll("-", " ")}</p>}

@@ -6,7 +6,7 @@ next level. Timed speed and delayed recall remain separate readiness signals.
 """
 
 from sqlalchemy import func, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.models import Question, QuestionAttempt
 
@@ -23,17 +23,18 @@ def get_topic_learning_path(
 ) -> dict:
     # Most recent independent question attempts only, bounded per learner/topic.
     rows = db.execute(
-        select(QuestionAttempt, Question.difficulty)
+        select(QuestionAttempt, Question).options(selectinload(Question.options))
         .join(Question, Question.id == QuestionAttempt.question_id)
         .where(
             QuestionAttempt.user_id == user_id,
-            Question.topic_id == topic_id,
             Question.exam_id == exam_id,
-            Question.verification_status == "verified",
         )
         .order_by(QuestionAttempt.attempted_at.desc(), QuestionAttempt.id.desc())
-        .limit(240)
     ).all()
+    from app.services.revision_history import attempt_views
+    views = attempt_views(db, [a for a,q in rows], {q.id:q for a,q in rows})
+    rows = [(a, views[a.id].difficulty) for a,q in rows if views.get(a.id) and
+            views[a.id].topic_id == topic_id and views[a.id].verification_status == 'verified'][:240]
 
     per_level: dict[int, list[QuestionAttempt]] = {1: [], 2: [], 3: []}
     seen: set[int] = set()

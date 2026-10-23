@@ -199,6 +199,7 @@ export type Topic = {
 };
 
 export type ReviewQuestion = {
+  revision_digest?: string | null;
   id: number;
   subject_id: number;
   topic_id: number | null;
@@ -316,6 +317,43 @@ export async function updateReviewQuestion(
   });
   if (!response.ok) throw new Error("Failed to update review question");
   return response.json();
+}
+
+export type EditorialRevision = {
+  candidate_id: string;
+  author_id: number;
+  reason: string;
+  before: {question: Record<string, unknown>; options: Array<Record<string, unknown>>};
+  after: {question: Record<string, unknown>; options: Array<Record<string, unknown>>};
+  review_status: string;
+  published: boolean;
+  publication_enabled: boolean;
+};
+
+async function revisionRequest(path: string, payload?: unknown) {
+  const response = await sessionFetch(API_BASE + "/review/" + path, {
+    method: payload === undefined ? "GET" : "POST",
+    headers: {...authHeaders(), "Content-Type": "application/json"},
+    ...(payload === undefined ? {} : {body: JSON.stringify(payload)}),
+  });
+  if (!response.ok) {
+    const body = await response.json().catch(() => null);
+    throw new Error(typeof body?.detail === "string" ? body.detail : "Revision request failed");
+  }
+  return response.json();
+}
+
+export function createReviewRevision(questionId: number, expectedDigest: string, reason: string, changes: unknown): Promise<{candidate_id: string}> {
+  return revisionRequest(`questions/${questionId}/revisions`, {expected_digest: expectedDigest, reason, changes});
+}
+export function fetchEditorialRevision(id: string): Promise<EditorialRevision> {
+  return revisionRequest(`revisions/${encodeURIComponent(id)}`);
+}
+export function reviewEditorialRevision(id: string, evidence: Record<string, boolean | string>) {
+  return revisionRequest(`revisions/${encodeURIComponent(id)}/review`, evidence);
+}
+export function publishEditorialRevision(id: string) {
+  return revisionRequest(`revisions/${encodeURIComponent(id)}/publish`, {});
 }
 
 
@@ -645,6 +683,7 @@ export type MockReview = {
     pattern_type: string | null;
     explanation: string | null;
     fast_method: string | null;
+    original_version_unknown?: boolean;
   }>;
 };
 
@@ -711,6 +750,7 @@ export async function fetchDiagnosticBaseline(): Promise<DiagnosticBaseline> {
 }
 
 export type AnalyticsSummary = {
+  history?: { unknown_original_attempts: number; legacy_details_basis: string };
   overview: {
     practice_attempts: number;
     accuracy: number;

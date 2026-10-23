@@ -71,6 +71,16 @@ async def lifespan(_: FastAPI):
     else:
         Base.metadata.create_all(engine)
 
+    if settings.phase_b_publication_enabled and not settings.phase_b_capture_enabled:
+        raise RuntimeError('Phase B publication requires revision capture')
+    from app.phase_b_migration import verify_capture_rollback
+    verify_capture_rollback(engine, capture_enabled=settings.phase_b_capture_enabled)
+    if settings.phase_b_capture_enabled:
+        from app.phase_b_migration import verify
+        verify(engine)
+        if settings.apply_content_repair_on_startup:
+            raise RuntimeError('Phase B forbids in-place startup repair')
+
     db = SessionLocal()
     try:
         run_startup_content_checks(db)
@@ -152,6 +162,17 @@ app.include_router(planner.router, prefix="/api/v1")
 app.include_router(backup.router, prefix="/api/v1")
 app.include_router(review.router, prefix="/api/v1")
 app.include_router(assets.router, prefix="/api/v1")
+
+
+@app.middleware('http')
+async def phase_b_transition_admission(request: Request, call_next):
+    # Operator must drain every instance before the offline transition. Reads are
+    # blocked too: some learning GETs issue deliveries or record exposure.
+    if settings.phase_b_transition_mode and request.url.path.startswith('/api/v1/'):
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=503, content={'detail': 'MAINTENANCE_TRANSITION'},
+                            headers={'Retry-After': '60', 'Cache-Control': 'no-store'})
+    return await call_next(request)
 
 
 @app.get("/")

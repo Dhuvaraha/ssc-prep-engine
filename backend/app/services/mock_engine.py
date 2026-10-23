@@ -17,7 +17,11 @@ FULL_TOTAL_SECONDS = len(SECTION_ORDER) * FULL_SECTION_SECONDS
 def mock_timing(attempt: MockAttempt, *, now: datetime | None = None) -> dict:
     now = now or datetime.now(timezone.utc).replace(tzinfo=None)
     elapsed = max(0, int((now - attempt.started_at).total_seconds()))
-    total_seconds = attempt.duration_minutes * 60
+    blueprint=getattr(attempt,'delivery_timing',None)
+    order=blueprint['section_order'] if blueprint else SECTION_ORDER
+    section_seconds=blueprint['full_section_seconds'] if blueprint else FULL_SECTION_SECONDS
+    full_seconds=blueprint['duration_minutes']*60 if blueprint else FULL_TOTAL_SECONDS
+    total_seconds = (blueprint['duration_minutes'] if blueprint else attempt.duration_minutes) * 60
     seconds_left = max(0, total_seconds - elapsed)
 
     if attempt.mode != "full":
@@ -29,23 +33,23 @@ def mock_timing(attempt: MockAttempt, *, now: datetime | None = None) -> dict:
             "section_duration_seconds": None,
         }
 
-    if elapsed >= FULL_TOTAL_SECONDS:
+    if elapsed >= full_seconds:
         return {
             "seconds_left": 0,
             "active_section_slug": None,
             "section_index": None,
             "section_seconds_left": 0,
-            "section_duration_seconds": FULL_SECTION_SECONDS,
+            "section_duration_seconds": section_seconds,
         }
 
-    section_index = min(elapsed // FULL_SECTION_SECONDS, len(SECTION_ORDER) - 1)
-    section_elapsed = elapsed - section_index * FULL_SECTION_SECONDS
+    section_index = min(elapsed // section_seconds, len(order) - 1)
+    section_elapsed = elapsed - section_index * section_seconds
     return {
-        "seconds_left": max(0, FULL_TOTAL_SECONDS - elapsed),
-        "active_section_slug": SECTION_ORDER[section_index],
+        "seconds_left": max(0, full_seconds - elapsed),
+        "active_section_slug": order[section_index],
         "section_index": section_index,
-        "section_seconds_left": max(0, FULL_SECTION_SECONDS - section_elapsed),
-        "section_duration_seconds": FULL_SECTION_SECONDS,
+        "section_seconds_left": max(0, section_seconds - section_elapsed),
+        "section_duration_seconds": section_seconds,
     }
 
 
@@ -328,6 +332,17 @@ def create_mock_attempt(
                 )
             selected.extend((slug, question) for question in questions)
 
+    from app.core.config import get_settings
+    curriculum_topic_count=None
+    if get_settings().phase_b_capture_enabled:
+        from app.services.revision_capture import lock_questions
+        locked={q.id:q for q in lock_questions(db,[q.id for _,q in selected])}
+        if len(locked)!=len(selected) or any(q.verification_status!='verified' for q in locked.values()):
+            raise ValueError('Questions changed during selection; retry the mock')
+        selected=[(slug,locked[q.id]) for slug,q in selected]
+        curriculum_topic_count=db.scalar(select(func.count(Topic.id)).join(Subject,Subject.id==Topic.subject_id)
+            .where(Subject.exam_id==exam.id)) or 0
+
     attempt = MockAttempt(
         user_id=user_id,
         exam_id=exam.id,
@@ -350,7 +365,15 @@ def create_mock_attempt(
         rows.append((row, question))
         expose(db, user_id, question, "assessment")
         db.add(AssessmentDelivery(attempt_id=attempt.id, question_id=question.id, content_digest=question_digest(question), correct_option=question.correct_option))
+        from app.services.revision_capture import pin_delivery
+        pin_delivery(db, kind='mock', delivery_id=attempt.id, user_id=user_id, question=question,
+                     blueprint={'version':'mock-v1','mode':mode,'duration_minutes':duration,
+                                'positive_marks':exam.positive_marks,'negative_marks':exam.negative_marks,
+                                'section_order':SECTION_ORDER,'full_section_seconds':FULL_SECTION_SECONDS,
+                                'section_slug':slug,'position':position,'curriculum_topic_count':curriculum_topic_count})
 
+    from app.services.revision_capture import bind_mock_timing
+    bind_mock_timing(db,attempt)
     db.commit()
     return attempt, rows
 
@@ -364,6 +387,9 @@ def load_mock_attempt(
     attempt = db.get(MockAttempt, attempt_id)
     if not attempt or attempt.user_id != user_id:
         raise LookupError("Mock attempt not found")
+
+    from app.services.revision_capture import bind_mock_timing
+    bind_mock_timing(db,attempt)
 
     rows = list(
         db.scalars(
@@ -381,11 +407,14 @@ def load_mock_attempt(
         for row in rows
         if row.question_id in by_id
     ]
+    from app.services.revision_capture import delivered_question
+    result=[(row,delivered_question(db,kind='mock',delivery_id=attempt.id,
+                                   user_id=user_id,current=question)) for row,question in result]
     if attempt.status == "in_progress":
         bindings = {binding.question_id: binding for binding in db.scalars(select(AssessmentDelivery).where(AssessmentDelivery.attempt_id == attempt.id))}
         for _, question in result:
             binding = bindings.get(question.id)
-            if binding and binding.content_digest != question_digest(question):
+            if binding and not getattr(question,'delivery_revision_id',None) and binding.content_digest != question_digest(question):
                 from fastapi import HTTPException
                 raise HTTPException(409, "ASSESSMENT_CONTENT_CHANGED")
     if len(result) != len(rows):
@@ -418,6 +447,11 @@ def submit_mock_attempt(
     incorrect = 0
     unattempted = 0
 
+    from app.services.revision_capture import delivered_question, mock_marks
+    rows=[(row,delivered_question(db,kind='mock',delivery_id=attempt.id,
+                                 user_id=attempt.user_id,current=question)) for row,question in rows]
+    positive,negative=mock_marks(db,attempt,rows)
+
     for row, question in rows:
         if row.selected_option is None:
             unattempted += 1
@@ -426,9 +460,6 @@ def submit_mock_attempt(
         else:
             incorrect += 1
 
-    exam = db.get(Exam, attempt.exam_id)
-    positive = float(exam.positive_marks if exam else 2.0)
-    negative = float(exam.negative_marks if exam else 0.5)
     score = round(correct * positive - incorrect * negative, 2)
 
     attempt.status = "submitted"

@@ -63,6 +63,9 @@ def validate_question(item: ImportedQuestion) -> None:
 
 
 def import_question(db: Session, item: ImportedQuestion) -> tuple[Question, bool]:
+    from app.core.config import get_settings
+    if get_settings().phase_b_capture_enabled and item.verification_status == 'verified':
+        raise ValueError('Phase B requires review_required import and independently reviewed publication')
     validate_question(item)
     fingerprint = question_fingerprint(item)
 

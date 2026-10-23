@@ -1,6 +1,38 @@
 import { test, expect } from "@playwright/test";
 
 const api = "http://127.0.0.1:8811/api/v1";
+test("reviewed correction uses independent editor UI and publication gate", async ({page, request}) => {
+  const tokens = [];
+  for (const email of ["editor-a@example.com", "editor-b@example.com"]) {
+    const login = await request.post(api+"/auth/login", {data:{email,password:"Synthetic-test-only-123!"}});
+    expect(login.status()).toBe(200);
+    tokens.push((await login.json()).access_token);
+  }
+  const headers={Authorization:"Bearer "+tokens[0]};
+  const listed=await request.get(api+"/review/questions?status=verified",{headers});
+  const question=(await listed.json())[0];
+  const created=await request.post(api+`/review/questions/${question.id}/revisions`,{headers,data:{
+    expected_digest:question.revision_digest,reason:"Synthetic browser correction",
+    changes:{verification_status:"verified",review_notes:"Browser evidence",explanation:question.explanation+" Reviewed correction."},
+  }});
+  expect(created.status()).toBe(200);
+  const id=(await created.json()).candidate_id;
+  await page.goto("/login");
+  await page.evaluate(token=>localStorage.setItem("ssc_prep_token",token),tokens[1]);
+  await page.goto("/review?candidate="+id);
+  await page.getByRole("button",{name:"Open candidate"}).click();
+  await expect(page.getByRole("table")).toContainText("Reviewed correction.");
+  const publish=page.getByRole("button",{name:"Publish reviewed correction"});
+  await expect(publish).toBeDisabled();
+  for (const checkbox of await page.getByRole("checkbox").all()) await checkbox.check();
+  await page.getByLabel("Review evidence reference").fill("Independent synthetic browser check");
+  await page.getByRole("button",{name:"Record independent review"}).click();
+  await expect(page.getByRole("status")).toContainText("Independent review recorded");
+  await expect(publish).toBeEnabled();
+  await publish.click();
+  await expect(page.getByRole("status")).toContainText("Reviewed correction published.");
+  await expect(publish).toBeDisabled();
+});
 test("SEC-06 real browser: scoped lesson, no persistent cache, logout/back and account switch", async ({page, request}) => {
   const a = await request.post(api+"/auth/login", {data:{email:"browser-a@example.com",password:"Synthetic-test-only-123!"}});
   const tokenA = (await a.json()).access_token;
@@ -60,11 +92,34 @@ test("SEC-06 stale in-flight package cannot render after logout", async ({page, 
 });
 
 test("authorized practice and diagnostic remain usable with explicit grants", async ({page, request}) => {
+  test.setTimeout(90000); // Includes independent review of ten synthetic payloads.
+  const editors: string[] = [];
+  for (const email of ["editor-a@example.com", "editor-b@example.com"]) {
+    const response = await request.post(api+"/auth/login", {data:{email,password:"Synthetic-test-only-123!"}});
+    editors.push((await response.json()).access_token);
+  }
+  const author = {Authorization:"Bearer "+editors[0]};
+  const reviewer = {Authorization:"Bearer "+editors[1]};
+  const listed = await request.get(api+"/review/questions?status=verified", {headers:author});
+  for (const question of (await listed.json()).filter((q: {topic_id:number})=>q.topic_id===1)) {
+    const draft = await request.post(api+`/review/questions/${question.id}/supplements`, {headers:author,data:{
+      coaching:{standard_method:"SYNTHETIC_VERSIONED_METHOD: add one to the given whole number."},
+      source_ids:["browser-original"],contributors:[{kind:"lesson",resource_id:1}],
+      option_insights:[{position:2,insight_type:"misconception",knowledge_text:"SYNTHETIC_VERSIONED_TRAP",source_reference:"Synthetic author check"}],
+    }});
+    expect(draft.status()).toBe(200);
+    const id = (await draft.json()).supplement_id;
+    const evidence = {answer_verified:true,all_options_checked:true,instruction_reviewed:true,visual_reviewed:true,reference:"Synthetic independent review"};
+    expect((await request.post(api+`/review/supplements/${id}/review`, {headers:author,data:evidence})).status()).toBe(409);
+    expect((await request.post(api+`/review/supplements/${id}/review`, {headers:reviewer,data:evidence})).status()).toBe(200);
+    expect((await request.get(api+`/review/supplements/${id}`)).status()).toBe(401);
+  }
   const login = await request.post(api+"/auth/login", {data:{email:"browser-a@example.com",password:"Synthetic-test-only-123!"}});
   const token = (await login.json()).access_token;
   const headers = {Authorization:"Bearer "+token};
   const precheck = await request.get(api+"/practice/questions?topic_id=1&mode=guided&limit=3",{headers});
   expect(precheck.status()).toBe(200);
+  expect(JSON.stringify(await precheck.json())).not.toContain("SYNTHETIC_VERSIONED_METHOD");
   await page.goto("/login");
   await page.evaluate(token=>localStorage.setItem("ssc_prep_token",token),token);
   const practiceLoaded = page.waitForResponse(r=>r.url().includes("/practice/questions?"));
@@ -78,6 +133,7 @@ test("authorized practice and diagnostic remain usable with explicit grants", as
   await page.getByRole("button",{name:"Check answer",exact:true}).click();
   expect((await submitted).status()).toBe(200);
   await expect(page.locator("body")).toContainText("SYNTHETIC_ANSWER");
+  await expect(page.locator("body")).toContainText("SYNTHETIC_VERSIONED_METHOD");
   const diagnostic = await request.post(api+"/mocks/start",{headers,data:{mode:"diagnostic"}});
   expect(diagnostic.status()).toBe(200);
   const assessment = await diagnostic.json();
