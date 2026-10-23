@@ -96,6 +96,8 @@ def active_mock(
     )
     if not attempt:
         return {"attempt_id": None}
+    from app.services.revision_capture import bind_mock_timing
+    bind_mock_timing(db,attempt)
     timing = mock_timing(attempt)
     return {
         "attempt_id": attempt.id,
@@ -255,7 +257,7 @@ def review_mock(
                 "pattern_type": question.pattern_type,
                 "explanation": question.explanation,
                 "fast_method": question.fast_method,
-                "original_version_unknown": not bool(getattr(question,'delivery_revision_id',None)),
+                "original_version_unknown": getattr(question, 'original_version_unknown', True),
             }
         )
 
@@ -320,7 +322,7 @@ def submit_mock(
         attempt.mode == "full"
         and timing["seconds_left"] > 0
         and timing["section_index"] is not None
-        and timing["section_index"] < len(SECTION_ORDER) - 1
+        and timing["section_index"] < len(getattr(attempt,'delivery_timing',{}).get('section_order',SECTION_ORDER)) - 1
     ):
         raise HTTPException(
             status_code=409,

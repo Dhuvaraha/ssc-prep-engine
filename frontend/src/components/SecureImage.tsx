@@ -7,9 +7,10 @@ type Props = {
   src: string;
   alt: string;
   className?: string;
+  candidateId?: string;
 };
 
-export default function SecureImage({ src, alt, className }: Props) {
+export default function SecureImage({ src, alt, className, candidateId }: Props) {
   const [resolvedSrc, setResolvedSrc] = useState<string | null>(null);
 
   useEffect(() => {
@@ -25,7 +26,8 @@ export default function SecureImage({ src, alt, className }: Props) {
     const token = getToken();
     const generation = sessionGeneration();
 
-    fetch(API_BASE + "/assets/" + encodeURI(key), {
+    const assetPath = candidateId ? `/review/revisions/${encodeURIComponent(candidateId)}/assets/` : "/assets/";
+    fetch(API_BASE + assetPath + encodeURIComponent(key), {
       headers: token ? { Authorization: "Bearer " + token } : {},
       signal: controller.signal,
       cache: "no-store",
@@ -47,7 +49,7 @@ export default function SecureImage({ src, alt, className }: Props) {
       controller.abort();
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [src]);
+  }, [src, candidateId]);
 
   if (!resolvedSrc) return <div className="imagePlaceholder">Image unavailable</div>;
   return <img className={className} src={resolvedSrc} alt={alt} />;

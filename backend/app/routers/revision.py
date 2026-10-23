@@ -70,6 +70,7 @@ def get_revision_queue(
         result.append(
             {
                 "id": item.id,
+                "content_basis": "current_study_revision_not_historical_attempt",
                 "reason": item.reason,
                 "successful_reviews": item.successful_reviews,
                 "next_review_at": item.next_review_at.isoformat(),
@@ -225,6 +226,7 @@ def list_bookmarks(
         result.append(
             {
                 "bookmark_id": row.id,
+                "content_basis": "current_study_revision_not_historical_attempt",
                 "question": {
                     "id": question.id,
                     "question_text": question.question_text,

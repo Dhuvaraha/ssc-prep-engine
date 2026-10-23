@@ -10,6 +10,20 @@ from app.services.legacy_snapshot import capture_question
 from app.services.revision_ledger import canonical, digest
 
 
+def lock_questions(db, question_ids):
+    """Serialize delivery/publication and refresh pre-lock ORM state."""
+    from sqlalchemy import update
+    from sqlalchemy.orm import selectinload
+    from app.models import Question
+    ids=sorted(set(question_ids))
+    if db.bind.dialect.name=='sqlite':
+        # SQLite has no row locks; acquire its writer lock before the read.
+        db.execute(update(Question).where(Question.id.in_(ids)).values(id=Question.id))
+    return list(db.scalars(select(Question).where(Question.id.in_(ids)).order_by(Question.id)
+        .options(selectinload(Question.options)).with_for_update()
+        .execution_options(populate_existing=True)).unique())
+
+
 def capture_state(db, question, *, kind='delivery_capture'):
     expected=list(db.scalars(select(QuestionOption.id).where(QuestionOption.question_id==question.id)))
     data=capture_question(question,question.options,expected_option_ids=expected)
@@ -23,7 +37,7 @@ def capture_state(db, question, *, kind='delivery_capture'):
         if kind=='delivery_capture' and not asset['bytes_verified']:
             raise ValueError('Delivery revision requires versioned asset bytes')
     # This is present delivery evidence, not retroactive history reconstruction.
-    data.update(capture_kind=kind, original_version_unknown=False)
+    data.update(capture_kind=kind, original_version_unknown=kind == 'legacy_capture_at_migration')
     return data
 
 
@@ -48,6 +62,10 @@ def pin_delivery(db, *, kind, delivery_id, user_id, question, blueprint):
     if not get_settings().phase_b_capture_enabled:
         return
     rid=snapshot(db,question)
+    if kind == 'practice':
+        from app.services.versioned_supplements import choose_supplement
+        blueprint = {**blueprint, 'supplement_revision_id': choose_supplement(
+            db, question, json.loads(db.get(QuestionRevision, rid).payload), user_id)}
     source_ids=sorted(db.scalars(select(ContentBinding.source_id).where(
         ContentBinding.resource_kind=='question',ContentBinding.resource_id==question.id)))
     if not source_ids:
@@ -104,9 +122,15 @@ def delivered_question(db, *, kind, delivery_id, user_id, current):
             (source.private_use_approved and grant and grant.active))
         if not allowed:
             raise HTTPException(404,'Delivery not available')
-    return SimpleNamespace(**record,options=[SimpleNamespace(**o) for o in data['options']],
-                           delivery_revision_id=pin.revision_id,
-                           delivery_blueprint=json.loads(pin.blueprint))
+    view=SimpleNamespace(**record,options=[SimpleNamespace(**o) for o in sorted(data['options'], key=lambda o:o['position'])],
+                         delivery_revision_id=pin.revision_id,
+                         delivery_blueprint=json.loads(pin.blueprint))
+    from app.services.versioned_supplements import fingerprint
+    view.delivery_fingerprint = fingerprint(data)
+    view.original_version_unknown = data.get('original_version_unknown', True)
+    from app.services.practice_integrity import question_digest
+    view.delivery_current_matches=question_digest(view)==question_digest(current)
+    return view
 
 
 def mock_marks(db, attempt, rows):
@@ -123,3 +147,30 @@ def mock_marks(db, attempt, rows):
         return float(positive),float(negative)
     exam=db.get(Exam,attempt.exam_id)
     return float(exam.positive_marks if exam else 2),float(exam.negative_marks if exam else 0.5)
+
+
+def bind_mock_timing(db, attempt):
+    """Use a complete, consistent delivered blueprint; never backfill old attempts."""
+    from fastapi import HTTPException
+    from app.models import MockAttemptQuestion
+    if not get_settings().phase_b_capture_enabled:
+        return
+    pins=db.scalars(select(DeliveryRevision).where(DeliveryRevision.kind=='mock',
+        DeliveryRevision.delivery_id==str(attempt.id))).all()
+    if not pins:
+        return
+    rows=db.scalars(select(MockAttemptQuestion).where(MockAttemptQuestion.attempt_id==attempt.id)).all()
+    if len(pins)!=len(rows) or {p.question_id for p in pins}!={r.question_id for r in rows} or any(p.user_id!=attempt.user_id for p in pins):
+        raise HTTPException(409,'INCOMPLETE_DELIVERY_BLUEPRINT')
+    fields=('mode','duration_minutes','section_order','full_section_seconds')
+    blueprints=[json.loads(p.blueprint) for p in pins]
+    timing={key:blueprints[0].get(key) for key in fields}
+    if any({key:b.get(key) for key in fields}!=timing for b in blueprints):
+        raise HTTPException(409,'INCONSISTENT_DELIVERY_BLUEPRINT')
+    duration,order,seconds=timing['duration_minutes'],timing['section_order'],timing['full_section_seconds']
+    if (timing['mode']!=attempt.mode or duration!=attempt.duration_minutes or
+        type(duration) is not int or duration<=0 or type(seconds) is not int or seconds<=0 or
+        not isinstance(order,list) or not order or any(not isinstance(s,str) or not s for s in order) or
+        len(set(order))!=len(order) or (attempt.mode=='full' and len(order)*seconds!=duration*60)):
+        raise HTTPException(409,'INVALID_DELIVERY_BLUEPRINT')
+    attempt.delivery_timing=timing

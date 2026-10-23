@@ -9,9 +9,11 @@ import {
   fetchTopics,
   suggestReviewTopic,
   updateReviewQuestion,
+  createReviewRevision,
 } from "../api";
 import { getToken } from "../auth";
 import SecureImage from "../components/SecureImage";
+import EditorialRevisionPanel from "../components/EditorialRevisionPanel";
 
 type TopicSuggestion = {
   topic_id: number | null;
@@ -29,6 +31,7 @@ export default function ReviewPage() {
   const [patternType, setPatternType] = useState("");
   const [subtopic, setSubtopic] = useState("");
   const [notes, setNotes] = useState("");
+  const [explanation, setExplanation] = useState("");
   const [suggestion, setSuggestion] = useState<TopicSuggestion | null>(null);
   const [status, setStatus] = useState("Loading...");
   const [stats, setStats] = useState<{by_status: Record<string, number>; visual_pending: number} | null>(null);
@@ -59,6 +62,7 @@ export default function ReviewPage() {
     setPatternType(question.pattern_type ?? "");
     setSubtopic(question.subtopic ?? "");
     setNotes(question.review_notes ?? "");
+    setExplanation(question.explanation ?? "");
     setSuggestion(null);
     fetchTopics(question.subject_id).then(setTopics);
   }, [question]);
@@ -72,14 +76,26 @@ export default function ReviewPage() {
 
   async function save(verification_status: "verified" | "rejected" | "review_required") {
     if (!question) return;
-    await updateReviewQuestion(question.id, {
+    const changes = {
       topic_id: topicId,
       correct_option: correctOption,
       subtopic: subtopic || null,
       pattern_type: patternType || null,
       review_notes: notes || null,
       verification_status,
-    });
+    };
+    try {
+      if (question.revision_digest) {
+        if (!notes.trim()) { setStatus("Describe the correction in review notes before creating a draft."); return; }
+        const draft = await createReviewRevision(question.id, question.revision_digest, notes, {...changes, explanation: explanation || null});
+        setStatus(`Draft created: ${draft.candidate_id}. Share this reference with an independent reviewer. Current content is unchanged.`);
+        return;
+      }
+      await updateReviewQuestion(question.id, changes);
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Review could not be saved.");
+      return;
+    }
 
     if (verification_status !== "review_required") {
       const next = questions.filter((q) => q.id !== question.id);
@@ -182,9 +198,10 @@ export default function ReviewPage() {
               Review notes
               <textarea rows={5} value={notes} onChange={(e) => setNotes(e.target.value)} />
             </label>
+            {question.revision_digest && <label>Proposed explanation<textarea rows={6} value={explanation} onChange={event => setExplanation(event.target.value)} /></label>}
 
             <div className="reviewActions">
-              <button onClick={() => save("verified")}>Verify</button>
+              <button onClick={() => save("verified")}>{question.revision_digest ? "Draft verified correction" : "Verify"}</button>
               <button className="secondary" onClick={() => save("review_required")}>Save</button>
               <button className="danger" onClick={() => save("rejected")}>Reject</button>
             </div>
@@ -192,6 +209,7 @@ export default function ReviewPage() {
           </aside>
         </section>
       )}
+      <EditorialRevisionPanel />
     </main>
   );
 }

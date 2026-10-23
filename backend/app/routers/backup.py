@@ -53,8 +53,23 @@ def export_user_data(
         )
     ) if mock_ids else []
 
+    # Export revision identifiers only, never private source or question payloads.
+    from app.core.config import get_settings
+    import json
+    from app.revision_models import DeliveryRevision, QuestionRevision
+    evidence = list(db.scalars(select(DeliveryRevision).where(
+        DeliveryRevision.user_id == user.id))) if get_settings().phase_b_capture_enabled else []
+    captures = {r.id: json.loads(r.payload) for r in db.scalars(select(QuestionRevision).where(
+        QuestionRevision.id.in_({p.revision_id for p in evidence})))} if evidence else {}
+
     return {
         "exported_at": datetime.utcnow().isoformat() + "Z",
+        "revision_references": [
+            {"kind": p.kind, "delivery_id": p.delivery_id, "question_id": p.question_id,
+             "question_revision_id": p.revision_id,
+             "capture_basis": captures[p.revision_id]['capture_kind'],
+             "original_version_unknown": captures[p.revision_id]['original_version_unknown']} for p in evidence],
+        "history_caution": "Absent references and migration-time captures have unknown original versions; saved results are unchanged.",
         "user": {
             "id": user.id,
             "email": user.email,

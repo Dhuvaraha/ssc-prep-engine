@@ -8,6 +8,8 @@ from sqlalchemy.orm import sessionmaker
 
 from app.access_models import ContentBinding, ContentSource, CourseGrant, SourceGrant
 from app.core.security import hash_password
+from app.core.config import get_settings
+from app.phase_b_migration import migrate, verify
 from app.db import Base, get_db
 from app.main import app
 from app.models import Exam, Lesson, Question, QuestionOption, Subject, Topic, User
@@ -16,6 +18,11 @@ from app.models import Exam, Lesson, Question, QuestionOption, Subject, Topic, U
 fixture_directory = TemporaryDirectory(prefix="ssc_phase_a_browser_")
 engine = create_engine("sqlite:///" + (Path(fixture_directory.name)/"synthetic.db").as_posix(), connect_args={"check_same_thread":False})
 Base.metadata.create_all(engine)
+migrate(engine)
+verify(engine)
+get_settings().phase_b_capture_enabled=True
+get_settings().phase_b_publication_enabled=True
+get_settings().reviewer_emails='editor-a@example.com,editor-b@example.com'
 factory = sessionmaker(engine)
 with factory() as db:
     exam = Exam(slug="ssc-cgl-tier-1", name="Synthetic CGL", duration_minutes=60)
@@ -23,6 +30,8 @@ with factory() as db:
     user = User(email="browser-a@example.com", password_hash=hash_password("Synthetic-test-only-123!"))
     outsider = User(email="browser-b@example.com", password_hash=hash_password("Synthetic-test-only-123!"))
     db.add_all([user, outsider]); db.flush()
+    db.add_all([User(email=email,password_hash=hash_password('Synthetic-test-only-123!'))
+                for email in ('editor-a@example.com','editor-b@example.com')]);db.flush()
     source = ContentSource(id="browser-original", exam_id=exam.id, private_use_approved=True, approval_reference="original arithmetic fixture reviewed by construction")
     db.add(source); db.flush()
     db.add(CourseGrant(user_id=user.id, exam_id=exam.id, active=True))

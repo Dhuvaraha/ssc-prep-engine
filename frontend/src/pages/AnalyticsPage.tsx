@@ -52,6 +52,12 @@ export default function AnalyticsPage() {
 
   return (
     <main className="shell">
+      {!!data.history?.unknown_original_attempts && (
+        <p role="note">
+          Original question versions are unknown for {data.history.unknown_original_attempts} older practice attempts.
+          Their topic and timing details use current content; saved answers and scores are unchanged.
+        </p>
+      )}
       <section className="analyticsHero">
         <div>
           <p className="eyebrow">Exam readiness • {baselinePending ? "not assessed" : "provisional full-mock estimate"}</p>
@@ -105,10 +111,10 @@ export default function AnalyticsPage() {
             {diagnostic.completed_diagnostics > 1 && diagnostic.latest && (
               <p className="muted">
                 Later assessment: {diagnostic.latest.accuracy ?? "Not assessed"}% sampled accuracy.
-                The first baseline stays unchanged; differing question sets are not a proven exam-readiness trend.
+                Differing question sets are not a proven exam-readiness trend.
               </p>
             )}
-            <p className="muted">Untested topics remain unknown, not weak. Sample accuracy is not a prediction of full SSC CGL performance.</p>
+            <p className="muted">{diagnostic.baseline.caution}</p>
           </>
         ) : (
           <p className="muted">

@@ -1,5 +1,188 @@
 # Phase A and teaching continuation — 12 October 2026
 
+## 22 October — frozen Phase B closure milestone
+
+Continued from `d332d4a`, preserving the 19 pending files. The frozen acceptance
+matrix and coordinated operator procedure are in [Phase B closure](PHASE_B_CLOSURE.md).
+Implemented the remaining revision-aware practice analytics/learning-path views,
+immutable attempt receipts, explicit current-study queue/bookmark labels and
+provenance-only export. Legacy uncertainty is visible in Analytics and exported
+migration-time captures retain their unknown-original flag.
+
+Reviewed supplements now have immutable payloads and independent attestations,
+exact question fingerprints and all declared contributor sources. They are pinned
+at delivery, rendered in the existing practice UI after submission and reauthorized
+on assistance/replay; changed contributor bindings fail closed. No legacy lesson
+or option note was automatically approved, imported or published.
+
+Active-mock transition is bounded, exam-scoped and guarded by coordinated admission
+freeze, backend-role verification and database locks. Dry-run, restart, compatible
+publication-off rollback, unchanged legacy checksums and eventual score are tested,
+including two courses with equal durations but different marks. All instances must
+be drained before migration; no pre-Phase-B binary rollback is supported.
+Publication uses one structural/source/asset gate; direct verified import and
+in-place repair are refused. Reviewed option reordering preserves stable IDs and
+old deliveries. Unsupported text/asset replacements remain refused.
+
+Final local validation: **299 backend passed, 8 PostgreSQL-only skipped; 80
+PostgreSQL passed; 21 frontend passed; 4 real browser flows passed**; build,
+pyflakes and compileall passed. Independent review found and resolved contributor
+rebinding, verified-import bypass, export uncertainty and cross-course blueprint
+findings, then reported no remaining scoped code blockers. Final commit CI is
+recorded in PR #54 and the private closure checkpoint.
+
+Learner-facing delivery: history-consistent analytics and reviewed versioned
+practice supplements in the existing interface, with honest historical cautions.
+Backend delivery: coordinated transition, additive immutable supplement governance,
+history receipts and publication guards. This is Phase B engineering closure,
+subject to final commit CI; it is not a full teaching journey or production release.
+Do not extend Phase B with C–G work. Next is the existing PR #55/PYQ-based teaching
+dependency. Phase A rights, exact access, actual deployed-role/final-manifest checks
+and production cutover authorization remain separate. No production was changed.
+
+## 22 October continuation — diagnostic and timing version pinning
+
+Follow-on rollback safeguard: startup refuses capture-disabled operation when
+delivery/publication evidence exists. PostgreSQL must prove history visibility
+before an empty result is accepted; independent review caught and resolved the
+RLS-hidden-history case. Local integration **31 passed, 2 PostgreSQL-only skips**;
+pyflakes passed. A PostgreSQL regression exercises a SELECT-authorized role whose
+rows are hidden by RLS. Final CI validates it. This is a startup guard, not a
+coordinated rollback protocol: **mixed capture-enabled/disabled instances are
+prohibited during rollout**. A revision-compatible rollback and coordinated
+transition rehearsal remain required. No evidence is deleted or rewritten.
+
+Diagnostic commit `a6f01fc` remote backend passed **285 tests, 7 skips**, PostgreSQL
+passed **65 tests**, and frontend/build and separate Browser QA passed. Its combined
+CI browser job was still running when this checkpoint was updated.
+
+Continued from `34e8464`, preserving all six uncommitted files. Diagnostic profiles
+now read authorized delivered revisions for keys, difficulty and topic identity.
+New mock blueprints also capture the curriculum topic count so later curriculum
+growth does not rewrite baseline coverage. Historical missing versions/counts are
+explicitly marked unknown; the Analytics page displays the applicable caution.
+Revoked historical sources deny access rather than silently changing the sample.
+
+Mock timing, section transitions and active asset access now use the complete
+captured timing blueprint. Inconsistent or partial pins fail closed. Legacy
+attempts are not backfilled with invented historical timing. Regression tests
+cover changed runtime timing, partial pins, legacy fallback and a submitted
+diagnostic whose key, topic, difficulty and curriculum subsequently change.
+
+Validation: full backend before the final curriculum/UI refinement: **285 passed,
+7 PostgreSQL-only skips**. After that refinement, focused Phase B integration and
+Phase A security: **58 passed, 7 skips**; pyflakes passed. Independent read-only
+review found no blockers, including follow-up review of the curriculum count and
+learner caution. Frontend: **21 tests passed**, TypeScript/Vite build passed
+(esbuild required the permitted subprocess rerun). Remote CI is tracked in PR #54.
+
+Learner-facing delivery: stable diagnostic evidence and honest legacy-history
+cautions in the local gated implementation; no new lesson or production release.
+Backend delivery: captured timing and diagnostic integration. Phase B still needs
+transition/rollback validation, broader history adapters and versioned teaching
+supplements. PR #55 and the first complete teach → diagnose → repair → retry →
+revise journey remain next educational dependencies. Phase A source/image rights,
+intended access, actual deployed-role compatibility and final release rehearsal
+remain gates. No production writes, merges or deployments were performed.
+
+## 16 October continuation — editorial UI and reviewer images
+
+Resumed from `6dbda19` with nine uncommitted files; preceding practice/publication
+changes were already committed. Preserved all current edits. Added the editorial
+browser flow: candidate authoring instead of in-place changes under the capture
+gate, complete before/after inspection, explicit independent checkboxes and review
+reference, separate publication action and release-gate/conflict messages.
+
+Reviewer images use a candidate-specific authenticated endpoint, not learner
+asset permissions. It permits only captured before/after references with a known
+consistent hash, enforces path containment and byte matching, and returns no-store.
+Unknown or changed bytes fail closed. HTTP regression verifies reviewer access
+without learner grants, removed current locators, unauthorized users, unrelated
+assets and changed bytes. Independent follow-up review found no remaining blocker
+in this fix. This does not approve image rights or broaden learner access.
+
+The interrupted browser failure was a fixture-only login validation issue:
+reserved `.invalid` emails were replaced with synthetic `example.com` addresses.
+The isolated browser server explicitly migrates its temporary database and enables
+the test gates; normal app defaults and production remain unchanged.
+
+Validation: **4 real browser flows passed**, including independent editor review
+and publication, account isolation, stale-response protection and learner practice/
+mock use. Focused backend integration: **25 passed, 1 PostgreSQL-only skip**;
+pyflakes passed. Frontend: **21 tests passed** and TypeScript/Vite build passed.
+A test-only unsupported `exact` selector option was corrected to an anchored
+accessible-name match. Final commit CI is tracked in PR #54.
+Earlier publication commit `6dbda19` passed CI `38596264415` and browser QA
+`38596265017`; no old tests or inventories were rerun to rebuild their evidence.
+
+Learner-facing delivery: no new educational material or production release in this
+milestone. Editor-facing delivery: usable independent-review flow and exact
+candidate visuals. Backend delivery: narrowly authorized image access and verified
+publication integration. Remaining Phase B gates include pinned timing/complete
+transition, contributor-bound supplementary material and broader history routes.
+PR #55 remains the additive Four-Option readiness/teaching acceptance dependency;
+its draft is not a completed beginner-to-advanced journey. Finish one such reviewed
+teach/repair/retry/retention journey before scaling to all 74 topics. The full A–G
+roadmap and unresolved Phase A permissions/access/cutover gates remain unchanged.
+No production data writes, migrations, merges or deployments were performed.
+
+## 14 October continuation — gated reviewed publication
+
+Practice milestone `b0c8b88` passed remote CI `38595493739` and browser QA
+`38595493832`. The next implementation adds an immutable publication event and a
+separate `phase_b_publication_enabled=false` gate. The authenticated endpoint
+requires an independently reviewed, verified candidate and an unchanged parent.
+It updates the current question projection, captures the new revision and records
+publication in one transaction; rollback leaves both history and current content
+unchanged. Existing IDs and delivered snapshots remain intact. Option/image
+correction publication is explicitly unsupported rather than implicitly trusted.
+
+Publication refuses unpinned active mocks and live practice deliveries. Practice,
+mock creation, candidate creation and publication share question locking and
+refresh loaded state after locking. Independent review found opposite-order
+practice batches could deadlock; all selected questions now lock in sorted order
+before issuing tokens. The concurrent two-editor test produces exactly one
+publication and one stale conflict. Opposite-order learner batches both complete.
+Follow-up independent review found no remaining blocker in this scoped milestone.
+
+Validation: focused integration **24 passed, 1 PostgreSQL-only skip**; full backend
+before the final batch regression **279 passed, 7 skipped**; pyflakes passed.
+Final PostgreSQL and full-suite CI results will be recorded against the commit.
+The expanded evidence schema needs explicit migration even in staging; startup
+verification rejects a prior schema missing publication guards. Production is
+untouched and both rollout flags remain disabled.
+
+Learner-facing deliverable remains revision-safe practice/mock feedback, not new
+teaching content. Still unfinished: editorial browser flow, pinned timing/complete
+transition validation, contributor-bound supplements and broader history routes.
+Phase B is not declared complete; Phase A release and full A–G gates remain.
+
+## 14 October continuation — practice revision consumers
+
+Mock milestone `5247ce1` passed remote CI run `38533148170`: **273 backend
+tests, 7 skips; 53 PostgreSQL tests**, frontend and Phase A browser checks.
+Browser QA `38533148093` also passed.
+
+Practice submissions, assistance and idempotent result replay now use authorized
+captured answers/explanations. Source/course/owner checks run before replay;
+expiry and single-attempt behavior remain intact. Learner-facing development
+behavior: later question corrections do not change a delivered practice answer.
+
+Independent review found cached supplementary coaching could outlive contributor
+permissions. Pinned responses now omit unversioned coaching/option insights,
+including read-only filtering of older cached payloads. Saved results are not
+rewritten. Original explanations/fast methods remain. Contributor-bound supplement
+delivery is still a required teaching release gate, not a completed Explorer.
+Follow-up independent review found no remaining blocker in this milestone.
+Practice/security/integration regressions: **52 passed, 7 PostgreSQL-only skips**.
+
+PR #55 (`6bc490d`) is stacked on #54 and adds five new/additive files: offline
+Four-Option readiness, original unpublished polity draft, tests and acceptance
+criteria in the existing master roadmap. Preserve its branch rather than copying
+or replacing it. Its structural tests do not certify facts or a working lesson.
+First complete one reviewed beginner-to-advanced teach/repair/retry/retention
+journey; full 74-topic expansion remains required afterward. No production changes.
+
 ## 14 October continuation — mock revision consumers
 
 Continues `2d41052`; no completed work or private audits repeated.

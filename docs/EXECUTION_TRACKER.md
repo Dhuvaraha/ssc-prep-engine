@@ -1,16 +1,17 @@
 # SSC recovery execution tracker
 
-Authoritative execution status, updated 14 October 2026 IST. Requirements remain in
+Authoritative execution status, updated 16 October 2026 IST. Requirements remain in
 [master phases 0–9](MASTER_EXECUTION_PHASES_0_TO_9.md) and
 [teaching phases A–G](SSC_TEACHING_REMEDIATION_SPEC_2026-10-09.md).
 Historical evidence documents are checkpoints, not competing task queues.
 No phase is complete, and no launch or exam-equivalence claim is justified.
 
-Latest isolated milestone: PR #54 adds gated application revision capture and
-unpublished independent editorial review. Full backend: 269 passed, 7 skipped;
-Remote PostgreSQL suite: 49 passed, including 14 integration tests. CI and browser
-QA passed at `3ff610b`. Capture remains disabled and production untouched.
-See the [14 October checkpoint](CONTINUATION_EVIDENCE_2026-10-12.md) for exact scope,
+Latest isolated milestone: PR #54 includes revision-based practice/mock consumers,
+gated atomic publication and an editorial browser flow with candidate-specific
+image access. Local validation: 25 integration tests passed, one PostgreSQL skip;
+21 frontend tests and four real browser flows passed. Capture/publication remain
+disabled outside synthetic tests. Production is untouched.
+See the [16 October checkpoint](CONTINUATION_EVIDENCE_2026-10-12.md) for exact scope,
 asset immutability implications, remaining integration and unchanged release gates.
 
 ## Reconciled state
@@ -129,6 +130,23 @@ present remaining operator decisions and production cutover together once ready.
 No production migration is authorized by the draft. Do not loosen authorization.
 
 ## Latest continuation
+
+Phase B scope frozen and remaining engineering implemented from `d332d4a`:
+see [closure matrix and transition procedure](PHASE_B_CLOSURE.md). Local validation:
+**299 backend passed / 8 skipped, 80 PostgreSQL passed, 21 frontend passed,
+4 browser flows passed**, build/static checks passed. Independent review reports
+no scoped code blockers after fixes. Final commit CI is tracked in PR #54.
+Phase A production authorization remains separate. Continue PR #55/PYQ teaching
+after CI; do not reopen Phase B for Phase C–G features.
+
+22 October: continued PR #54 from `34e8464`, preserving six pending files.
+Captured mock timing and diagnostic key/difficulty/topic/curriculum coverage now
+survive later changes; Analytics displays explicit historical uncertainty.
+Focused backend/security **58 passed, 7 skipped**, pyflakes passed; independent
+review found no blockers. Full backend before the last curriculum/UI refinement
+was **285 passed, 7 skipped**. Final frontend/CI evidence is tracked in PR #54.
+This is historical-integrity delivery, not a completed educational journey.
+Production and the existing A–G release gates remain unchanged.
 
 See [12 October continuation](CONTINUATION_EVIDENCE_2026-10-12.md) for implemented
 manifest guards, actual-sized synthetic rehearsal, targeted paper analysis and
