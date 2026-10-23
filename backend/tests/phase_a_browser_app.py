@@ -23,6 +23,9 @@ verify(engine)
 get_settings().phase_b_capture_enabled=True
 get_settings().phase_b_publication_enabled=True
 get_settings().reviewer_emails='editor-a@example.com,editor-b@example.com'
+get_settings().percentage_pilot_enabled=True
+get_settings().percentage_pilot_source_id='browser-original'
+get_settings().percentage_pilot_review_reference='Synthetic browser validation only'
 factory = sessionmaker(engine)
 with factory() as db:
     exam = Exam(slug="ssc-cgl-tier-1", name="Synthetic CGL", duration_minutes=60)

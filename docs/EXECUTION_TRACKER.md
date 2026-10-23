@@ -131,6 +131,17 @@ No production migration is authorized by the draft. Do not loosen authorization.
 
 ## Latest continuation
 
+23 October, after `bc15582`: [shared teaching engine and educational review](TEACHING_REUSE_CHECKPOINT.md).
+Percentage now uses reusable transitions/UI with compatible saved state; an
+original Time & Work development pack exercises the same engine. It is not yet
+learner-delivered or a completed broad topic. Phase B stays closed.
+
+23 October, PR #55: the original Percentage pilot now has an integrated persistent
+teach → diagnose → four-option explanation → repair → fresh retry → spaced revision
+journey. See [pilot checkpoint and exact validation](PERCENTAGE_PILOT_CHECKPOINT.md).
+Phase B remains formally closed; production activation and Phase A authorization
+remain separate. This supersedes the historical engineering status rows above.
+
 Phase B scope frozen and remaining engineering implemented from `d332d4a`:
 see [closure matrix and transition procedure](PHASE_B_CLOSURE.md). Local validation:
 **299 backend passed / 8 skipped, 80 PostgreSQL passed, 21 frontend passed,

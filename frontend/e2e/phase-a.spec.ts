@@ -1,6 +1,38 @@
 import { test, expect } from "@playwright/test";
 
 const api = "http://127.0.0.1:8811/api/v1";
+test("Percentage pilot persists diagnosis, repair, fresh retry and spaced revision", async ({page, request}) => {
+  await page.setViewportSize({width:390,height:844});
+  const login = await request.post(api+"/auth/login", {data:{email:"browser-a@example.com",password:"Synthetic-test-only-123!"}});
+  const token = (await login.json()).access_token;
+  await page.goto('/login');
+  await page.evaluate(value=>localStorage.setItem('ssc_prep_token',value),token);
+  await page.goto('/learn');
+  await page.getByRole('link',{name:'Continue Percentage teaching and spaced revision'}).click();
+  await expect(page.getByRole('heading',{name:'Build the foundations'})).toBeVisible();
+  await page.getByRole('button',{name:'Start diagnosis'}).click();
+  await page.getByRole('radio').nth(0).check();
+  await page.getByRole('button',{name:'Check answer'}).click();
+  await expect(page.getByRole('heading',{name:'Understand all four options'})).toBeVisible();
+  await expect(page.locator('main ol li')).toHaveCount(4);
+  await page.getByRole('button',{name:'Continue',exact:true}).click();
+  await expect(page.getByRole('heading',{name:'Repair the mistake'})).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('heading',{name:'Repair the mistake'})).toBeVisible();
+  await page.getByRole('button',{name:'Try a fresh question'}).click();
+  await expect(page.getByRole('group')).toContainText('15%');
+  for (const option of ['340','408','2.188% loss']) {
+    await page.getByRole('radio',{name:option,exact:true}).check();
+    await page.getByRole('button',{name:'Check answer'}).click();
+    await expect(page.getByText('Fresh, unassisted check recorded.')).toBeVisible();
+    await page.getByRole('button',{name:'Continue',exact:true}).click();
+  }
+  await expect(page.getByRole('heading',{name:'Spaced revision scheduled'})).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('heading',{name:'Spaced revision scheduled'})).toBeVisible();
+  await expect(page.getByRole('button',{name:'Start due revision'})).toBeDisabled();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
 test("reviewed correction uses independent editor UI and publication gate", async ({page, request}) => {
   const tokens = [];
   for (const email of ["editor-a@example.com", "editor-b@example.com"]) {

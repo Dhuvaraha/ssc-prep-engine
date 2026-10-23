@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     phase_b_capture_enabled: bool = False
     phase_b_publication_enabled: bool = False
     phase_b_transition_mode: bool = False
+    percentage_pilot_enabled: bool = False
+    percentage_pilot_source_id: str = ''
+    percentage_pilot_review_reference: str = ''
     release_sha: str = "unreleased"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
