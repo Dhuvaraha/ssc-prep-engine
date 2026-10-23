@@ -4,6 +4,7 @@ Pure journey contract, intentionally not published until application integration
 and independent educational/browser review are complete.
 """
 from datetime import timedelta
+from decimal import Decimal
 
 VERSION = 'changing-base-v1'
 LESSON = {
@@ -111,3 +112,41 @@ def assess(stage, selected, *, assisted, previously_answered, now):
                 if independent else 'repair_then_fresh_check',
         'exam_readiness': None,
     }
+
+
+def raw_item(state):
+    base = next(i for i in ITEMS if i['id'] == state['stage'])
+    n = state['variant']
+    if not n:
+        return base
+    # Fresh quantities, same explicit objective. These are near-transfer checks,
+    # not independent evidence of whole-topic or examination readiness.
+    amount = Decimal(400 + n * 100)
+    a, b = Decimal(20), Decimal(15)
+    correct = amount * (1-a/100) * (1-b/100)
+    values = [amount*(1-(a+b)/100), correct, amount*(1-a/100), amount*(1-b/100)]
+    if state['stage'] == 'transfer':
+        markup = Decimal(40+n)
+        payment = (100+markup)*Decimal('.9')*Decimal('.8')
+        receipt = payment*Decimal('.95')
+        values = [receipt-100,payment-100,(100+markup)*Decimal('.7')*Decimal('.95')-100,payment-105]
+        labels = [f'{abs(v).normalize():f}% '+('profit' if v>=0 else 'loss') for v in values]
+        return dict(id='transfer', stem=f'A seller lists an item {markup}% above cost, discounts it by 10% then 20%, and pays 5% of the customer payment as a fee. What is the result relative to cost?',
+            options=labels,answer=1,explanations=[f'Use cost 100: payment {payment}, receipt {receipt}; compare receipt with cost.',
+            'This omits the fee from customer payment.','This adds the discount rates instead of changing the base.',
+            'This incorrectly subtracts a fee of 5 from a cost base of 100.'],repairs=base['repairs'])
+    return dict(id=state['stage'],stem=f'A price of {amount} receives successive discounts of 20% and 15%. What is paid?',
+        options=[f'{v.normalize():f}' for v in values],answer=2,
+        explanations=[f'{values[0]} adds the rates, using the wrong second base.',
+        f'{correct} = {amount} × 0.80 × 0.85. The second base is {values[2]}.',
+        f'{values[2]} stops after the first discount.',f'{values[3]} omits the first discount.'],
+        repairs=['Name the new base before applying the second reduction.',
+                 'Explain both bases without looking at the worked example.',
+                 'Complete the second reduction after the first.',
+                 'Apply both reductions in their stated order.'])
+
+
+from app.services.teaching_journey import JourneyContent
+
+CONTENT = JourneyContent(VERSION, LESSON, raw_item,
+    "Name the amount each percentage applies to, then multiply the fractions remaining.")

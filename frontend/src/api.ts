@@ -6,13 +6,14 @@ import {
 
 export const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000/api/v1";
 
-export type PercentageJourney = {
+export type TeachingJourneyState = {
   revision: number; phase: string; stage: string; assisted: boolean; due_at: string | null; retention: number;
   evidence_label: string; hint?: string | null;
   lesson: { objective:string; prerequisites:string[]; worked_example:string[]; shortcut:string; limit:string };
   question?: {id:string;stem:string;options:string[]};
   feedback: null | {correct:boolean;independent:boolean;selected:number;correct_option:number;stem:string;options:string[];explanations:string[];repair:string};
 };
+export type PercentageJourney = TeachingJourneyState;
 export async function percentageJourney(action?: {expected_revision:number;action:string;selected?:number}): Promise<PercentageJourney> {
   const response = await sessionFetch(API_BASE+"/learn/percentage-pilot"+(action?"/actions":""), {
     method:action?"POST":"GET",headers:{...authHeaders(),"Content-Type":"application/json"},

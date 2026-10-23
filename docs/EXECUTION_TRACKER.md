@@ -131,6 +131,11 @@ No production migration is authorized by the draft. Do not loosen authorization.
 
 ## Latest continuation
 
+23 October, after `bc15582`: [shared teaching engine and educational review](TEACHING_REUSE_CHECKPOINT.md).
+Percentage now uses reusable transitions/UI with compatible saved state; an
+original Time & Work development pack exercises the same engine. It is not yet
+learner-delivered or a completed broad topic. Phase B stays closed.
+
 23 October, PR #55: the original Percentage pilot now has an integrated persistent
 teach → diagnose → four-option explanation → repair → fresh retry → spaced revision
 journey. See [pilot checkpoint and exact validation](PERCENTAGE_PILOT_CHECKPOINT.md).
