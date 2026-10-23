@@ -1,5 +1,12 @@
 # Phase B engineering closure
 
+**Engineering closed — 23 October 2026.** Commit `336f818` passed final
+[CI](https://github.com/Dhuvaraha/ssc-prep-engine/actions/runs/39828510593) and
+[Browser QA](https://github.com/Dhuvaraha/ssc-prep-engine/actions/runs/39828510604).
+Independent review has no remaining scoped blockers. Engineering is ready for
+the separately authorized release; production authorization is still outstanding.
+Continue PR #55 and the approved teaching roadmap without reopening this scope.
+
 Scope is frozen to P0-C/P0-D and HIST-01–03, PUB-01–03, DB-01 in
 [the approved teaching specification](SSC_TEACHING_REMEDIATION_SPEC_2026-10-09.md).
 This closes historical integrity and its existing integration obligations. It
@@ -10,8 +17,7 @@ PostgreSQL passed; 21 frontend passed; 4 real browser flows passed**. Build,
 pyflakes and compileall passed. Independent review found no remaining scoped
 code blockers after fixes for contributor rebinding, import bypass, export
 uncertainty and cross-course transition rules. The runbook sequencing finding
-was also corrected. Final commit CI is the remaining engineering verification;
-its definitive result is recorded against PR #54, without reopening scope.
+was also corrected. Final commit CI passed with the results above.
 
 ## Acceptance evidence
 
