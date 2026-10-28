@@ -164,6 +164,8 @@ app.include_router(review.router, prefix="/api/v1")
 app.include_router(assets.router, prefix="/api/v1")
 from app.routers import percentage_pilot
 app.include_router(percentage_pilot.router, prefix="/api/v1")
+from app.routers import pilot_objectives
+app.include_router(pilot_objectives.router, prefix="/api/v1")
 
 
 @app.middleware('http')

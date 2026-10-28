@@ -26,6 +26,20 @@ get_settings().reviewer_emails='editor-a@example.com,editor-b@example.com'
 get_settings().percentage_pilot_enabled=True
 get_settings().percentage_pilot_source_id='browser-original'
 get_settings().percentage_pilot_review_reference='Synthetic browser validation only'
+from test_phase_d_objectives import synthetic_unit
+from app.routers import pilot_objectives
+from app.services.pilot_curriculum import OBJECTIVES, load_unit
+import json
+synthetic_units={oid:synthetic_unit(oid) for oid in OBJECTIVES}
+# Render the actual authored grid geometry inside a synthetic test-only lesson.
+# This does not review or release the authored objective.
+synthetic_units['PCT-2'].illustrations=load_unit('PCT-1').illustrations
+synthetic_units['PCT-2'].checks['entry'][0].diagram=load_unit('PCT-1').illustrations[1]
+synthetic_units['PCT-2'].review_digest=synthetic_units['PCT-2'].digest()
+pilot_objectives.load_unit=synthetic_units.get
+get_settings().phase_d_pilot_enabled=True
+get_settings().phase_d_release_manifest=json.dumps({oid:dict(source_ids=['browser-original'],
+    digests=[unit.digest()],access_reference='Synthetic browser only') for oid,unit in synthetic_units.items()})
 factory = sessionmaker(engine)
 with factory() as db:
     exam = Exam(slug="ssc-cgl-tier-1", name="Synthetic CGL", duration_minutes=60)

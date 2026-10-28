@@ -1,3 +1,88 @@
+# Active continuation — 28 October 2026
+
+**Phase D remains IN PROGRESS.** The fixed denominator is the 45 objectives in
+`PHASE_D_ACCEPTANCE.md` and `backend/data/phase_d_scope.json`. Do not stop at an
+individual objective or topic, reopen Phase B, repeat the PDF inventory, or treat
+synthetic browser coverage as educational acceptance. Production is unchanged.
+The historical checkpoint below describes the committed e7621e5 foundation;
+the following work is currently local and must be preserved.
+
+Commit authorization: after two earlier automatic-review timeouts, the user
+explicitly approved committing and normally pushing the reviewed local work to
+PR #55. The staged diff contains only public code, original unpublished drafts,
+tests and continuation evidence; private files and credentials are excluded.
+This checkpoint is not Phase D closure or permission to publish the drafts.
+
+## Current implementation and evidence
+
+- Shared transitions now record supporting-reason answers, explicit guesses,
+  guided versus independent evidence, exact question identities and exposure.
+  Finite pools never recycle answered forms as independent evidence. Completed
+  finite retention stops promising unavailable future checks. Passage and vector
+  context survives feedback. Answer and reason positions vary by stable identity.
+- An additive, default-off objective adapter pins the exact authored unit and its
+  source dependencies per learner/exam/objective. Current release authorization
+  and pinned source access both apply. Compare-and-swap writes and the existing
+  learner lock protect concurrency. There are no legacy record updates or grants.
+- Catalog, objective routes and the shared learner component support explicit
+  reasons, passages, declarative vectors, persistent repair and delayed checks.
+  Learn-page discovery appears only when an objective is available. Keyboard
+  focus follows stage transitions. None of the authored drafts is released.
+- Fifteen objective drafts exist: PCT-1–6, TW-1–6 and SYL-1–3. This is **not**
+  fifteen accepted objectives. Thirty objectives still lack complete authored
+  units, and no phase-wide checklist gate is claimed complete.
+- Review found and corrected repeated numeric delayed templates in TW-1/2/3/5,
+  missing faded steps, misleading distractor explanations, missing signed-flow,
+  unknown-departure and unequal-rate worked models, and damaged mathematical
+  operators/apostrophes. New contextual forms are still drafts pending complete
+  educational acceptance, prerequisite and quality review.
+
+## Validation boundary
+
+- Final backend regression: **360 passed, 13 skipped**, including all fifteen
+  authored drafts and eleven content tests. Skips require PostgreSQL.
+- Final objective/Percentage PostgreSQL suites: **23 passed**, including simultaneous first writes
+  and updates, pinned-source revocation, learner isolation and assessment blocking.
+- Combined PostgreSQL security/revision/Percentage/objective suite before the
+  final answer-lock change (affected journey suites rerun above):
+  **102 passed**, with no skips (the same suite configured in CI).
+- Content suite: **11 tests passed** within the final regression. Independently derived numerical equations,
+  categorical equivalence via the existing model enumerator, symbol integrity and
+  option/reason alignment are checked. These tests do not confer editorial approval.
+- Frontend: **21 tests passed**; build passed after fixing the focus-ref type.
+- Browser: **7 flows passed** in 3.3 minutes. These cover the existing regression
+  paths, eight synthetic objective adapters, discovery, keyboard focus and widths
+  320/360/390/430/768/1024/1440. The real authored Percentage grid was rendered in a
+  synthetic lesson; its mobile screenshot was visually inspected. This does not
+  validate all authored lessons, passages, visual questions or real retention.
+- Pyflakes and compileall passed. No deployment, merge, production migration or live verification.
+- Independent review examined the foundation, numeric keys and Syllogism logic.
+  It identified pre-answer reasoning leaks and three delayed items repeating shown
+  solutions. Objectives now persist and lock answers before revealing reasoning;
+  alteration is rejected, reload preserves the lock and guess/help evidence stays
+  disqualifying. The three items were replaced with contextual compound/absolute-
+  quantity tasks. Follow-up independent review found no remaining blockers in
+  those scoped fixes. This is not full Phase D educational or release approval.
+  No subject/teaching approval digest has been stamped on these drafts.
+
+## Exact remaining work in the SAME phase
+
+Finish all 45 authored objectives and their prerequisites, worked/faded methods,
+distinct independent and contextual delayed checks, stem-specific four-option
+explanations and repair. Complete the bounded legacy pilot dispositions using the
+existing private inventory, not another inventory. Reuse cached PYQ evidence and
+validate visual/reference keys rather than copying them. Complete logical,
+visual, English/passage, official-source Polity and Physics subject reviews.
+Review and correct current drafts before stamping exact digests. SYL-4 requires
+actual counterexample construction; choosing a prepared model alone cannot close
+that objective. Exercise actual
+reviewed content across API/UI, interruption/resume, repair, delayed retention,
+session boundaries, accessibility and visual/passage rendering. Complete local
+migration/restart/rollback evidence, final regressions, independent phase review,
+commit/push and CI. Keep Phase A authorization and production release separate.
+
+---
+
 # Teaching reuse and educational review — 23 October 2026
 
 Continues PR #55 after the development-validated Percentage journey (`bc15582`).

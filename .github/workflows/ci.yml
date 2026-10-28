@@ -91,7 +91,7 @@ jobs:
         working-directory: backend
         env:
           PHASE_A_TEST_DATABASE_URL: postgresql+psycopg://phase_a_test:synthetic-ci-only@127.0.0.1:${{ job.services.postgres.ports[5432] }}/ssc_phase_a_test
-        run: python -m pytest tests/test_phase_a_security.py tests/test_phase_b_integration.py tests/test_percentage_pilot_api.py -q
+        run: python -m pytest tests/test_phase_a_security.py tests/test_phase_b_integration.py tests/test_percentage_pilot_api.py tests/test_phase_d_objectives.py -q
 
   phase-a-browser:
     runs-on: ubuntu-latest

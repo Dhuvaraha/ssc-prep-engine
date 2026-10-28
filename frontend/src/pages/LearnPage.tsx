@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
-import { ContentTree, fetchContentTree, prefetchTopicPackage, percentageJourney } from "../api";
+import { ContentTree, fetchContentTree, prefetchTopicPackage, percentageJourney, pilotCatalog } from "../api";
 
 export default function LearnPage() {
   const [params] = useSearchParams();
@@ -12,9 +12,11 @@ export default function LearnPage() {
   const [priority, setPriority] = useState("all");
   const [error, setError] = useState("");
   const [pilot, setPilot] = useState(false);
+  const [objectivePilot, setObjectivePilot] = useState(false);
   useEffect(() => {
     let active = true;
     percentageJourney().then(() => { if (active) setPilot(true); }).catch(() => {});
+    pilotCatalog().then(items => { if (active) setObjectivePilot(items.some(item => item.available)); }).catch(() => {});
     return () => { active = false; };
   }, []);
 
@@ -55,6 +57,7 @@ export default function LearnPage() {
   return (
     <main className="shell">
       {pilot && <p><Link to="/learn/percentage-pilot">Continue Percentage teaching and spaced revision</Link></p>}
+      {objectivePilot && <p><Link to="/learn/pilot">Explore reviewed teaching objectives and saved revision</Link></p>}
       <section className="learnHero">
         <div>
           <p className="eyebrow">SSC CGL • Core study bank</p>

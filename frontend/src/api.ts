@@ -1,4 +1,5 @@
 import { clearToken, getToken, SESSION_CHANGED, sessionGeneration, broadcastScopeChange } from "./auth";
+import type { TeachingFigureData, TeachingScene } from './components/TeachingFigure';
 import {
   SESSION_EXPIRED_EVENT,
   beginSessionExpiry,
@@ -9,10 +10,25 @@ export const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8
 export type TeachingJourneyState = {
   revision: number; phase: string; stage: string; assisted: boolean; due_at: string | null; retention: number;
   evidence_label: string; hint?: string | null;
-  lesson: { objective:string; prerequisites:string[]; worked_example:string[]; shortcut:string; limit:string };
-  question?: {id:string;stem:string;options:string[]};
-  feedback: null | {correct:boolean;independent:boolean;selected:number;correct_option:number;stem:string;options:string[];explanations:string[];repair:string};
+  pending_answer?: {selected:number;guessed:boolean};
+  lesson: { objective:string; prerequisites:string[]; worked_example:string[]; shortcut:string; limit:string;illustrations?:TeachingScene[] };
+  question?: {id:string;stem:string;options:string[];requires_reason?:boolean;reason_prompt?:string;reason_options?:string[];passage?:string;figure?:TeachingFigureData;diagram?:TeachingScene};
+  feedback: null | {correct:boolean;independent:boolean;selected:number;correct_option:number;stem:string;options:string[];explanations:string[];repair:string;reason_explanation?:string;passage?:string;figure?:TeachingFigureData;diagram?:TeachingScene};
 };
+export type JourneyAction = {expected_revision:number;action:string;selected?:number;reason_selected?:number;guessed?:boolean};
+export type PilotObjective = {objective_id:string;topic:string;title:string;available:boolean};
+export async function pilotCatalog(): Promise<PilotObjective[]> {
+  const response=await sessionFetch(API_BASE+'/learn/pilot',{headers:authHeaders()});
+  if(!response.ok) throw new Error('Reviewed pilot content is not currently available.');
+  return response.json();
+}
+export async function objectiveJourney(id:string,action?:JourneyAction): Promise<TeachingJourneyState> {
+  const response=await sessionFetch(API_BASE+'/learn/pilot/'+encodeURIComponent(id)+(action?'/actions':''),{
+    method:action?'POST':'GET',headers:{...authHeaders(),'Content-Type':'application/json'},body:action?JSON.stringify(action):undefined,
+  });
+  if(!response.ok) throw new Error(response.status===409?'This action is unavailable or needs a fresh reviewed check. Reload saved progress.':'This reviewed objective is not available for your account.');
+  return response.json();
+}
 export type PercentageJourney = TeachingJourneyState;
 export async function percentageJourney(action?: {expected_revision:number;action:string;selected?:number}): Promise<PercentageJourney> {
   const response = await sessionFetch(API_BASE+"/learn/percentage-pilot"+(action?"/actions":""), {

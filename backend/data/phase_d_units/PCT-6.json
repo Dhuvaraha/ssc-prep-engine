@@ -1,0 +1,434 @@
+{
+  "objective_id": "PCT-6",
+  "prerequisites": [
+    "Convert percentages to fractions.",
+    "Identify the reference whole.",
+    "Solve a division equation.",
+    "Combine successive price multipliers before applying the spending constraint (PCT-4)."
+  ],
+  "explanation": "Spending equals unit price times quantity. Their multipliers obey the same product relation. If spending is fixed, quantity multiplier is the reciprocal of price multiplier. If spending changes, divide its multiplier by the price multiplier.",
+  "worked": [
+    {
+      "action": "A household spends600 on rice at30 per kg, buying20 kg. Price rises25% to37.5 per kg.",
+      "justification": "Currency divided by currency/kg gives kg."
+    },
+    {
+      "action": "At the same600 budget it buys600/37.5=16 kg: a4/20 times100 =20% reduction.",
+      "justification": "Quantity multiplier is1/1.25=0.8. Use the original quantity to measure its change."
+    },
+    {
+      "action": "A20% price fall at fixed spending allows quantity multiplier1/0.8=1.25, a25% increase.",
+      "justification": "Using an equal20% increase would not restore the same product."
+    },
+    {
+      "action": "If price rises20% and budget rises8%, quantity multiplier is1.08/1.20=0.9, a10% reduction.",
+      "justification": "Do not impose fixed spending when the question explicitly changes the budget."
+    },
+    {
+      "action": "If a price changes twice, first call its combined multiplier m. At a spending multiplier b, quantity multiplier is b/m.",
+      "justification": "Substitute the actual product of the two price factors for m; a discount on a raised price uses the raised base."
+    }
+  ],
+  "hint": "Price multiplier times quantity multiplier equals spending multiplier.",
+  "shortcut": "Use exact multipliers until the final comparison; substitute to check.",
+  "limitation": "Assume the same product and consistent units, with no extra fixed charges. A change in spending needs its own multiplier.",
+  "checks": {
+    "entry": [
+      {
+        "id": "PCT-6-1",
+        "family": "fixed-product",
+        "context": "Cooking oil",
+        "stem": "Cooking oil: unit price rises by 25%, while total spending stays unchanged. What percentage reduction in quantity results?",
+        "options": [
+          "20",
+          "25",
+          "80",
+          "125/4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Quantity multiplier = (1+(0)/100)/(1+(25)/100) = 4/5; compare with1.",
+          "Subtracting percentage numbers ignores the product constraint.",
+          "This is final quantity as a percentage of original quantity, not the requested change.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it."
+        ],
+        "repairs": [
+          "Quantity multiplier = (1+(0)/100)/(1+(25)/100) = 4/5; compare with1. Write the reference amounts and substitute into the original relation.",
+          "Subtracting percentage numbers ignores the product constraint. Write the reference amounts and substitute into the original relation.",
+          "This is final quantity as a percentage of original quantity, not the requested change. Write the reference amounts and substitute into the original relation.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "Quantity multiplier = (1+(0)/100)/(1+(25)/100) = 4/5; compare with1.",
+          "Quantity percentage change always equals price change minus budget change."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Quantity multiplier = (1+(0)/100)/(1+(25)/100) = 4/5; compare with1."
+      },
+      {
+        "id": "PCT-6-2",
+        "family": "fixed-product",
+        "context": "Rice",
+        "stem": "Rice: unit price rises by 20%, while total spending stays unchanged. What percentage reduction in quantity results?",
+        "options": [
+          "50/3",
+          "20",
+          "250/3",
+          "24"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Quantity multiplier = (1+(0)/100)/(1+(20)/100) = 5/6; compare with1.",
+          "Subtracting percentage numbers ignores the product constraint.",
+          "This is final quantity as a percentage of original quantity, not the requested change.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it."
+        ],
+        "repairs": [
+          "Quantity multiplier = (1+(0)/100)/(1+(20)/100) = 5/6; compare with1. Write the reference amounts and substitute into the original relation.",
+          "Subtracting percentage numbers ignores the product constraint. Write the reference amounts and substitute into the original relation.",
+          "This is final quantity as a percentage of original quantity, not the requested change. Write the reference amounts and substitute into the original relation.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "Quantity multiplier = (1+(0)/100)/(1+(20)/100) = 5/6; compare with1.",
+          "Quantity percentage change always equals price change minus budget change."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Quantity multiplier = (1+(0)/100)/(1+(20)/100) = 5/6; compare with1."
+      }
+    ],
+    "faded": [
+      {
+        "id": "PCT-6-3",
+        "family": "fixed-product",
+        "context": "Bus journeys",
+        "stem": "Bus journeys: unit price rises by 50%, while total spending stays unchanged. What percentage reduction in quantity results? Partly worked: price multiplier=3/2, spending multiplier=1. Complete1 divided by price multiplier, then compare with1.",
+        "options": [
+          "100/3",
+          "50",
+          "200/3",
+          "75"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Quantity multiplier = (1+(0)/100)/(1+(50)/100) = 2/3; compare with1.",
+          "Subtracting percentage numbers ignores the product constraint.",
+          "This is final quantity as a percentage of original quantity, not the requested change.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it."
+        ],
+        "repairs": [
+          "Quantity multiplier = (1+(0)/100)/(1+(50)/100) = 2/3; compare with1. Write the reference amounts and substitute into the original relation.",
+          "Subtracting percentage numbers ignores the product constraint. Write the reference amounts and substitute into the original relation.",
+          "This is final quantity as a percentage of original quantity, not the requested change. Write the reference amounts and substitute into the original relation.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "Quantity multiplier = (1+(0)/100)/(1+(50)/100) = 2/3; compare with1.",
+          "Quantity percentage change always equals price change minus budget change."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Quantity multiplier = (1+(0)/100)/(1+(50)/100) = 2/3; compare with1."
+      },
+      {
+        "id": "PCT-6-4",
+        "family": "fixed-product",
+        "context": "Printer paper",
+        "stem": "Printer paper: unit price rises by 40%, while total spending stays unchanged. What percentage reduction in quantity results? Partly worked: price multiplier=7/5, spending multiplier=1. Complete1 divided by price multiplier, then compare with1.",
+        "options": [
+          "200/7",
+          "40",
+          "500/7",
+          "56"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Quantity multiplier = (1+(0)/100)/(1+(40)/100) = 5/7; compare with1.",
+          "Subtracting percentage numbers ignores the product constraint.",
+          "This is final quantity as a percentage of original quantity, not the requested change.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it."
+        ],
+        "repairs": [
+          "Quantity multiplier = (1+(0)/100)/(1+(40)/100) = 5/7; compare with1. Write the reference amounts and substitute into the original relation.",
+          "Subtracting percentage numbers ignores the product constraint. Write the reference amounts and substitute into the original relation.",
+          "This is final quantity as a percentage of original quantity, not the requested change. Write the reference amounts and substitute into the original relation.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "Quantity multiplier = (1+(0)/100)/(1+(40)/100) = 5/7; compare with1.",
+          "Quantity percentage change always equals price change minus budget change."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Quantity multiplier = (1+(0)/100)/(1+(40)/100) = 5/7; compare with1."
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "PCT-6-5",
+        "family": "fixed-product",
+        "context": "Electricity units",
+        "stem": "Electricity units: unit price rises by 60%, while total spending stays unchanged. What percentage reduction in quantity results?",
+        "options": [
+          "75/2",
+          "60",
+          "125/2",
+          "96"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Quantity multiplier = (1+(0)/100)/(1+(60)/100) = 5/8; compare with1.",
+          "Subtracting percentage numbers ignores the product constraint.",
+          "This is final quantity as a percentage of original quantity, not the requested change.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it."
+        ],
+        "repairs": [
+          "Quantity multiplier = (1+(0)/100)/(1+(60)/100) = 5/8; compare with1. Write the reference amounts and substitute into the original relation.",
+          "Subtracting percentage numbers ignores the product constraint. Write the reference amounts and substitute into the original relation.",
+          "This is final quantity as a percentage of original quantity, not the requested change. Write the reference amounts and substitute into the original relation.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "Quantity multiplier = (1+(0)/100)/(1+(60)/100) = 5/8; compare with1.",
+          "Quantity percentage change always equals price change minus budget change."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Quantity multiplier = (1+(0)/100)/(1+(60)/100) = 5/8; compare with1."
+      },
+      {
+        "id": "PCT-6-6",
+        "family": "changing-budget",
+        "context": "Textile fabric",
+        "stem": "Textile fabric: unit price rises by 25%, while total spending rises by 10%. What percentage reduction in quantity results?",
+        "options": [
+          "12",
+          "15",
+          "88",
+          "75/4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Quantity multiplier = (1+(10)/100)/(1+(25)/100) = 22/25; compare with1.",
+          "Subtracting percentage numbers ignores the product constraint.",
+          "This is final quantity as a percentage of original quantity, not the requested change.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it."
+        ],
+        "repairs": [
+          "Quantity multiplier = (1+(10)/100)/(1+(25)/100) = 22/25; compare with1. Write the reference amounts and substitute into the original relation.",
+          "Subtracting percentage numbers ignores the product constraint. Write the reference amounts and substitute into the original relation.",
+          "This is final quantity as a percentage of original quantity, not the requested change. Write the reference amounts and substitute into the original relation.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "Quantity multiplier = (1+(10)/100)/(1+(25)/100) = 22/25; compare with1.",
+          "Quantity percentage change always equals price change minus budget change."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Quantity multiplier = (1+(10)/100)/(1+(25)/100) = 22/25; compare with1."
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "PCT-6-7",
+        "family": "fixed-product",
+        "context": "Fuel litres",
+        "stem": "Fuel litres: unit price falls by 20%, while total spending stays unchanged. What percentage increase in quantity results?",
+        "options": [
+          "25",
+          "20",
+          "125",
+          "16"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Quantity multiplier = (1+(0)/100)/(1+(-20)/100) = 5/4; compare with1.",
+          "Subtracting percentage numbers ignores the product constraint.",
+          "This is final quantity as a percentage of original quantity, not the requested change.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it."
+        ],
+        "repairs": [
+          "Quantity multiplier = (1+(0)/100)/(1+(-20)/100) = 5/4; compare with1. Write the reference amounts and substitute into the original relation.",
+          "Subtracting percentage numbers ignores the product constraint. Write the reference amounts and substitute into the original relation.",
+          "This is final quantity as a percentage of original quantity, not the requested change. Write the reference amounts and substitute into the original relation.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "Quantity multiplier = (1+(0)/100)/(1+(-20)/100) = 5/4; compare with1.",
+          "Quantity percentage change always equals price change minus budget change."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Quantity multiplier = (1+(0)/100)/(1+(-20)/100) = 5/4; compare with1."
+      },
+      {
+        "id": "PCT-6-8",
+        "family": "fixed-product",
+        "context": "Metal sheets",
+        "stem": "Metal sheets: unit price falls by 25%, while total spending stays unchanged. What percentage increase in quantity results?",
+        "options": [
+          "100/3",
+          "25",
+          "400/3",
+          "75/4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Quantity multiplier = (1+(0)/100)/(1+(-25)/100) = 4/3; compare with1.",
+          "Subtracting percentage numbers ignores the product constraint.",
+          "This is final quantity as a percentage of original quantity, not the requested change.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it."
+        ],
+        "repairs": [
+          "Quantity multiplier = (1+(0)/100)/(1+(-25)/100) = 4/3; compare with1. Write the reference amounts and substitute into the original relation.",
+          "Subtracting percentage numbers ignores the product constraint. Write the reference amounts and substitute into the original relation.",
+          "This is final quantity as a percentage of original quantity, not the requested change. Write the reference amounts and substitute into the original relation.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "Quantity multiplier = (1+(0)/100)/(1+(-25)/100) = 4/3; compare with1.",
+          "Quantity percentage change always equals price change minus budget change."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Quantity multiplier = (1+(0)/100)/(1+(-25)/100) = 4/3; compare with1."
+      }
+    ],
+    "revision": [
+      {
+        "id": "PCT-6-9",
+        "family": "budget-from-absolute-amounts",
+        "context": "budget-from-absolute-amounts",
+        "stem": "A household previously bought12 kg of cereal at50 currency units/kg. It now budgets660 currency units at a price of60/kg. By what percentage does its purchased quantity decrease?",
+        "options": [
+          "25/3",
+          "10",
+          "20",
+          "100/11"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The new quantity is660/60=11 kg. A1 kg fall from12 is100/12=25/3%.",
+          "10% is the budget increase, not the quantity decrease.",
+          "20% is the price increase, not the quantity decrease.",
+          "This divides the1 kg difference by the new11 kg instead of the original12."
+        ],
+        "repairs": [
+          "The new quantity is660/60=11 kg. A1 kg fall from12 is100/12=25/3%. Reconstruct the quantities and their bases before calculating the requested change.",
+          "10% is the budget increase, not the quantity decrease. Reconstruct the quantities and their bases before calculating the requested change.",
+          "20% is the price increase, not the quantity decrease. Reconstruct the quantities and their bases before calculating the requested change.",
+          "This divides the1 kg difference by the new11 kg instead of the original12. Reconstruct the quantities and their bases before calculating the requested change."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "Compare new spending/new price with the original quantity, using the original quantity as the percentage base.",
+          "Compare the quantity difference with the new quantity to measure the decrease."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The new quantity is660/60=11 kg. A1 kg fall from12 is100/12=25/3%. Compare new spending/new price with the original quantity, using the original quantity as the percentage base."
+      },
+      {
+        "id": "PCT-6-10",
+        "family": "changing-budget",
+        "context": "Laboratory reagent",
+        "stem": "Laboratory reagent: unit price rises by 50%, while total spending rises by 20%. What percentage reduction in quantity results?",
+        "options": [
+          "20",
+          "30",
+          "80",
+          "45"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Quantity multiplier = (1+(20)/100)/(1+(50)/100) = 4/5; compare with1.",
+          "Subtracting percentage numbers ignores the product constraint.",
+          "This is final quantity as a percentage of original quantity, not the requested change.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it."
+        ],
+        "repairs": [
+          "Quantity multiplier = (1+(20)/100)/(1+(50)/100) = 4/5; compare with1. Write the reference amounts and substitute into the original relation.",
+          "Subtracting percentage numbers ignores the product constraint. Write the reference amounts and substitute into the original relation.",
+          "This is final quantity as a percentage of original quantity, not the requested change. Write the reference amounts and substitute into the original relation.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "Quantity multiplier = (1+(20)/100)/(1+(50)/100) = 4/5; compare with1.",
+          "Quantity percentage change always equals price change minus budget change."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Quantity multiplier = (1+(20)/100)/(1+(50)/100) = 4/5; compare with1."
+      },
+      {
+        "id": "PCT-6-11",
+        "family": "changing-budget",
+        "context": "Coffee beans",
+        "stem": "Coffee beans: unit price falls by 20%, while total spending falls by 10%. What percentage increase in quantity results?",
+        "options": [
+          "25/2",
+          "10",
+          "225/2",
+          "8"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Quantity multiplier = (1+(-10)/100)/(1+(-20)/100) = 9/8; compare with1.",
+          "Subtracting percentage numbers ignores the product constraint.",
+          "This is final quantity as a percentage of original quantity, not the requested change.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it."
+        ],
+        "repairs": [
+          "Quantity multiplier = (1+(-10)/100)/(1+(-20)/100) = 9/8; compare with1. Write the reference amounts and substitute into the original relation.",
+          "Subtracting percentage numbers ignores the product constraint. Write the reference amounts and substitute into the original relation.",
+          "This is final quantity as a percentage of original quantity, not the requested change. Write the reference amounts and substitute into the original relation.",
+          "This multiplies the percentage-point difference by the price multiplier instead of dividing by it. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "Quantity multiplier = (1+(-10)/100)/(1+(-20)/100) = 9/8; compare with1.",
+          "Quantity percentage change always equals price change minus budget change."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Quantity multiplier = (1+(-10)/100)/(1+(-20)/100) = 9/8; compare with1."
+      },
+      {
+        "id": "PCT-6-12",
+        "family": "compound-unit-price",
+        "context": "compound-unit-price",
+        "stem": "A supplier raises the unit price of ceramic tiles by20%, then gives a5% discount on that raised price. With unchanged spending, what percentage reduction in quantity is required?",
+        "options": [
+          "700/57",
+          "15",
+          "14",
+          "20"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Effective price multiplier is(6/5)(19/20)=57/50; quantity multiplier is50/57. Reduction=(7/57)*100=700/57%.",
+          "Subtracting5 from20 ignores the successive price bases and does not invert the price multiplier.",
+          "14% is the effective price rise, not the quantity reduction.",
+          "This uses the first price rise while ignoring both discount and reciprocal relation."
+        ],
+        "repairs": [
+          "Effective price multiplier is(6/5)(19/20)=57/50; quantity multiplier is50/57. Reduction=(7/57)*100=700/57%. Reconstruct the quantities and their bases before calculating the requested change.",
+          "Subtracting5 from20 ignores the successive price bases and does not invert the price multiplier. Reconstruct the quantities and their bases before calculating the requested change.",
+          "14% is the effective price rise, not the quantity reduction. Reconstruct the quantities and their bases before calculating the requested change.",
+          "This uses the first price rise while ignoring both discount and reciprocal relation. Reconstruct the quantities and their bases before calculating the requested change."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "First multiply the two price factors; divide the spending multiplier by their product.",
+          "Subtract the discount percentage from the increase and use that as the quantity reduction."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Effective price multiplier is(6/5)(19/20)=57/50; quantity multiplier is50/57. Reduction=(7/57)*100=700/57%. First multiply the two price factors; divide the spending multiplier by their product."
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored original examples; not authenticated PYQs or empirical difficulty calibration."
+  ]
+}

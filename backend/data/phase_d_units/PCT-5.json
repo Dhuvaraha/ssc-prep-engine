@@ -1,0 +1,433 @@
+{
+  "objective_id": "PCT-5",
+  "prerequisites": [
+    "Convert percentages to fractions.",
+    "Identify the reference whole.",
+    "Solve a division equation."
+  ],
+  "explanation": "Reversing a comparison changes its denominator. If A is p% more than B, choose B=100 and A=100+p. The reverse percentage difference is100p/(100+p)%. If A is p% less than B, use A=100-p; the reverse excess is100p/(100-p)%. The reference must be positive.",
+  "worked": [
+    {
+      "action": "A is25% more than B. Set B=100 and A=125, a difference of25.",
+      "justification": "The forward statement names B as the base."
+    },
+    {
+      "action": "B is25/125 times100 =20% less than A.",
+      "justification": "The reverse statement uses A as its base."
+    },
+    {
+      "action": "Check using B=40 and A=50: the difference10 divided by50 is20%.",
+      "justification": "Rescaling the quantities does not change their ratio."
+    },
+    {
+      "action": "If A is20% less than B, set B=100 and A=80. B exceeds A by20/80 times100 =25%.",
+      "justification": "The smaller amount becomes the denominator in this reverse comparison."
+    },
+    {
+      "action": "If a speed is3/5 of another, the faster exceeds the slower by(5-3)/3 times100 =200/3%.",
+      "justification": "A ratio and a percentage describe the same comparison; more than identifies the reference."
+    }
+  ],
+  "hint": "Name both quantities on a100-unit scale; divide their difference by the quantity named after than.",
+  "shortcut": "Use exact multipliers until the final comparison; substitute to check.",
+  "limitation": "Percent less and percent of are different. Quantities must have matching units and the reference cannot be zero.",
+  "checks": {
+    "entry": [
+      {
+        "id": "PCT-5-1",
+        "family": "reverse-more",
+        "context": "Salary",
+        "stem": "Salary A is 25% more than the corresponding quantity B. By what percentage is B less than A?",
+        "options": [
+          "20",
+          "25",
+          "80",
+          "100/3"
+        ],
+        "answer": 1,
+        "explanations": [
+          "B=100 and A=125; the reverse difference percentage is25/125 times100 = 20.",
+          "This keeps the original comparison percentage despite a changed base.",
+          "This gives B as a percentage of A, not the relative difference.",
+          "This uses the wrong sign in constructing the new reference quantity."
+        ],
+        "repairs": [
+          "B=100 and A=125; the reverse difference percentage is25/125 times100 = 20. Write the reference amounts and substitute into the original relation.",
+          "This keeps the original comparison percentage despite a changed base. Write the reference amounts and substitute into the original relation.",
+          "This gives B as a percentage of A, not the relative difference. Write the reference amounts and substitute into the original relation.",
+          "This uses the wrong sign in constructing the new reference quantity. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "B=100 and A=125; the reverse difference percentage is25/125 times100 = 20.",
+          "Swapping the quantities preserves the percentage difference."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "B=100 and A=125; the reverse difference percentage is25/125 times100 = 20."
+      },
+      {
+        "id": "PCT-5-2",
+        "family": "reverse-more",
+        "context": "Rope length",
+        "stem": "Rope length A is 50% more than the corresponding quantity B. By what percentage is B less than A?",
+        "options": [
+          "100/3",
+          "50",
+          "200/3",
+          "100"
+        ],
+        "answer": 1,
+        "explanations": [
+          "B=100 and A=150; the reverse difference percentage is50/150 times100 = 100/3.",
+          "This keeps the original comparison percentage despite a changed base.",
+          "This gives B as a percentage of A, not the relative difference.",
+          "This uses the wrong sign in constructing the new reference quantity."
+        ],
+        "repairs": [
+          "B=100 and A=150; the reverse difference percentage is50/150 times100 = 100/3. Write the reference amounts and substitute into the original relation.",
+          "This keeps the original comparison percentage despite a changed base. Write the reference amounts and substitute into the original relation.",
+          "This gives B as a percentage of A, not the relative difference. Write the reference amounts and substitute into the original relation.",
+          "This uses the wrong sign in constructing the new reference quantity. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "B=100 and A=150; the reverse difference percentage is50/150 times100 = 100/3.",
+          "Swapping the quantities preserves the percentage difference."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "B=100 and A=150; the reverse difference percentage is50/150 times100 = 100/3."
+      }
+    ],
+    "faded": [
+      {
+        "id": "PCT-5-3",
+        "family": "reverse-less",
+        "context": "Weekly cost",
+        "stem": "Weekly cost A is 20% less than the corresponding quantity B. By what percentage is B more than A? Partly worked: B=100, A=80, difference=20. Complete difference/A times100.",
+        "options": [
+          "25",
+          "20",
+          "125",
+          "50/3"
+        ],
+        "answer": 1,
+        "explanations": [
+          "B=100 and A=80; the reverse difference percentage is20/80 times100 = 25.",
+          "This keeps the original comparison percentage despite a changed base.",
+          "This gives B as a percentage of A, not the relative difference.",
+          "This uses the wrong sign in constructing the new reference quantity."
+        ],
+        "repairs": [
+          "B=100 and A=80; the reverse difference percentage is20/80 times100 = 25. Write the reference amounts and substitute into the original relation.",
+          "This keeps the original comparison percentage despite a changed base. Write the reference amounts and substitute into the original relation.",
+          "This gives B as a percentage of A, not the relative difference. Write the reference amounts and substitute into the original relation.",
+          "This uses the wrong sign in constructing the new reference quantity. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "B=100 and A=80; the reverse difference percentage is20/80 times100 = 25.",
+          "Swapping the quantities preserves the percentage difference."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "B=100 and A=80; the reverse difference percentage is20/80 times100 = 25."
+      },
+      {
+        "id": "PCT-5-4",
+        "family": "reverse-less",
+        "context": "Travel time",
+        "stem": "Travel time A is 40% less than the corresponding quantity B. By what percentage is B more than A? Partly worked: B=100, A=60, difference=40. Complete difference/A times100.",
+        "options": [
+          "200/3",
+          "40",
+          "500/3",
+          "200/7"
+        ],
+        "answer": 1,
+        "explanations": [
+          "B=100 and A=60; the reverse difference percentage is40/60 times100 = 200/3.",
+          "This keeps the original comparison percentage despite a changed base.",
+          "This gives B as a percentage of A, not the relative difference.",
+          "This uses the wrong sign in constructing the new reference quantity."
+        ],
+        "repairs": [
+          "B=100 and A=60; the reverse difference percentage is40/60 times100 = 200/3. Write the reference amounts and substitute into the original relation.",
+          "This keeps the original comparison percentage despite a changed base. Write the reference amounts and substitute into the original relation.",
+          "This gives B as a percentage of A, not the relative difference. Write the reference amounts and substitute into the original relation.",
+          "This uses the wrong sign in constructing the new reference quantity. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "B=100 and A=60; the reverse difference percentage is40/60 times100 = 200/3.",
+          "Swapping the quantities preserves the percentage difference."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "B=100 and A=60; the reverse difference percentage is40/60 times100 = 200/3."
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "PCT-5-5",
+        "family": "reverse-more",
+        "context": "Alloy mass",
+        "stem": "Alloy mass A is 60% more than the corresponding quantity B. By what percentage is B less than A?",
+        "options": [
+          "75/2",
+          "60",
+          "125/2",
+          "150"
+        ],
+        "answer": 1,
+        "explanations": [
+          "B=100 and A=160; the reverse difference percentage is60/160 times100 = 75/2.",
+          "This keeps the original comparison percentage despite a changed base.",
+          "This gives B as a percentage of A, not the relative difference.",
+          "This uses the wrong sign in constructing the new reference quantity."
+        ],
+        "repairs": [
+          "B=100 and A=160; the reverse difference percentage is60/160 times100 = 75/2. Write the reference amounts and substitute into the original relation.",
+          "This keeps the original comparison percentage despite a changed base. Write the reference amounts and substitute into the original relation.",
+          "This gives B as a percentage of A, not the relative difference. Write the reference amounts and substitute into the original relation.",
+          "This uses the wrong sign in constructing the new reference quantity. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "B=100 and A=160; the reverse difference percentage is60/160 times100 = 75/2.",
+          "Swapping the quantities preserves the percentage difference."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "B=100 and A=160; the reverse difference percentage is60/160 times100 = 75/2."
+      },
+      {
+        "id": "PCT-5-6",
+        "family": "reverse-more",
+        "context": "Water allowance",
+        "stem": "Water allowance A is 75% more than the corresponding quantity B. By what percentage is B less than A?",
+        "options": [
+          "300/7",
+          "75",
+          "400/7",
+          "300"
+        ],
+        "answer": 1,
+        "explanations": [
+          "B=100 and A=175; the reverse difference percentage is75/175 times100 = 300/7.",
+          "This keeps the original comparison percentage despite a changed base.",
+          "This gives B as a percentage of A, not the relative difference.",
+          "This uses the wrong sign in constructing the new reference quantity."
+        ],
+        "repairs": [
+          "B=100 and A=175; the reverse difference percentage is75/175 times100 = 300/7. Write the reference amounts and substitute into the original relation.",
+          "This keeps the original comparison percentage despite a changed base. Write the reference amounts and substitute into the original relation.",
+          "This gives B as a percentage of A, not the relative difference. Write the reference amounts and substitute into the original relation.",
+          "This uses the wrong sign in constructing the new reference quantity. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "B=100 and A=175; the reverse difference percentage is75/175 times100 = 300/7.",
+          "Swapping the quantities preserves the percentage difference."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "B=100 and A=175; the reverse difference percentage is75/175 times100 = 300/7."
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "PCT-5-7",
+        "family": "reverse-less",
+        "context": "Running speed",
+        "stem": "Running speed A is 25% less than the corresponding quantity B. By what percentage is B more than A?",
+        "options": [
+          "100/3",
+          "25",
+          "400/3",
+          "20"
+        ],
+        "answer": 1,
+        "explanations": [
+          "B=100 and A=75; the reverse difference percentage is25/75 times100 = 100/3.",
+          "This keeps the original comparison percentage despite a changed base.",
+          "This gives B as a percentage of A, not the relative difference.",
+          "This uses the wrong sign in constructing the new reference quantity."
+        ],
+        "repairs": [
+          "B=100 and A=75; the reverse difference percentage is25/75 times100 = 100/3. Write the reference amounts and substitute into the original relation.",
+          "This keeps the original comparison percentage despite a changed base. Write the reference amounts and substitute into the original relation.",
+          "This gives B as a percentage of A, not the relative difference. Write the reference amounts and substitute into the original relation.",
+          "This uses the wrong sign in constructing the new reference quantity. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "B=100 and A=75; the reverse difference percentage is25/75 times100 = 100/3.",
+          "Swapping the quantities preserves the percentage difference."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "B=100 and A=75; the reverse difference percentage is25/75 times100 = 100/3."
+      },
+      {
+        "id": "PCT-5-8",
+        "family": "reverse-less",
+        "context": "Storage capacity",
+        "stem": "Storage capacity A is 60% less than the corresponding quantity B. By what percentage is B more than A?",
+        "options": [
+          "150",
+          "60",
+          "250",
+          "75/2"
+        ],
+        "answer": 1,
+        "explanations": [
+          "B=100 and A=40; the reverse difference percentage is60/40 times100 = 150.",
+          "This keeps the original comparison percentage despite a changed base.",
+          "This gives B as a percentage of A, not the relative difference.",
+          "This uses the wrong sign in constructing the new reference quantity."
+        ],
+        "repairs": [
+          "B=100 and A=40; the reverse difference percentage is60/40 times100 = 150. Write the reference amounts and substitute into the original relation.",
+          "This keeps the original comparison percentage despite a changed base. Write the reference amounts and substitute into the original relation.",
+          "This gives B as a percentage of A, not the relative difference. Write the reference amounts and substitute into the original relation.",
+          "This uses the wrong sign in constructing the new reference quantity. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "B=100 and A=40; the reverse difference percentage is60/40 times100 = 150.",
+          "Swapping the quantities preserves the percentage difference."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "B=100 and A=40; the reverse difference percentage is60/40 times100 = 150."
+      }
+    ],
+    "revision": [
+      {
+        "id": "PCT-5-9",
+        "family": "reverse-more",
+        "context": "Ticket price",
+        "stem": "Ticket price A is 20% more than the corresponding quantity B. By what percentage is B less than A?",
+        "options": [
+          "50/3",
+          "20",
+          "250/3",
+          "25"
+        ],
+        "answer": 1,
+        "explanations": [
+          "B=100 and A=120; the reverse difference percentage is20/120 times100 = 50/3.",
+          "This keeps the original comparison percentage despite a changed base.",
+          "This gives B as a percentage of A, not the relative difference.",
+          "This uses the wrong sign in constructing the new reference quantity."
+        ],
+        "repairs": [
+          "B=100 and A=120; the reverse difference percentage is20/120 times100 = 50/3. Write the reference amounts and substitute into the original relation.",
+          "This keeps the original comparison percentage despite a changed base. Write the reference amounts and substitute into the original relation.",
+          "This gives B as a percentage of A, not the relative difference. Write the reference amounts and substitute into the original relation.",
+          "This uses the wrong sign in constructing the new reference quantity. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "B=100 and A=120; the reverse difference percentage is20/120 times100 = 50/3.",
+          "Swapping the quantities preserves the percentage difference."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "B=100 and A=120; the reverse difference percentage is20/120 times100 = 50/3."
+      },
+      {
+        "id": "PCT-5-10",
+        "family": "reverse-less",
+        "context": "Repair bill",
+        "stem": "Repair bill A is 10% less than the corresponding quantity B. By what percentage is B more than A?",
+        "options": [
+          "100/9",
+          "10",
+          "1000/9",
+          "100/11"
+        ],
+        "answer": 1,
+        "explanations": [
+          "B=100 and A=90; the reverse difference percentage is10/90 times100 = 100/9.",
+          "This keeps the original comparison percentage despite a changed base.",
+          "This gives B as a percentage of A, not the relative difference.",
+          "This uses the wrong sign in constructing the new reference quantity."
+        ],
+        "repairs": [
+          "B=100 and A=90; the reverse difference percentage is10/90 times100 = 100/9. Write the reference amounts and substitute into the original relation.",
+          "This keeps the original comparison percentage despite a changed base. Write the reference amounts and substitute into the original relation.",
+          "This gives B as a percentage of A, not the relative difference. Write the reference amounts and substitute into the original relation.",
+          "This uses the wrong sign in constructing the new reference quantity. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "B=100 and A=90; the reverse difference percentage is10/90 times100 = 100/9.",
+          "Swapping the quantities preserves the percentage difference."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "B=100 and A=90; the reverse difference percentage is10/90 times100 = 100/9."
+      },
+      {
+        "id": "PCT-5-11",
+        "family": "reverse-less",
+        "context": "Field area",
+        "stem": "Field area A is 50% less than the corresponding quantity B. By what percentage is B more than A?",
+        "options": [
+          "100",
+          "50",
+          "200",
+          "100/3"
+        ],
+        "answer": 1,
+        "explanations": [
+          "B=100 and A=50; the reverse difference percentage is50/50 times100 = 100.",
+          "This keeps the original comparison percentage despite a changed base.",
+          "This gives B as a percentage of A, not the relative difference.",
+          "This uses the wrong sign in constructing the new reference quantity."
+        ],
+        "repairs": [
+          "B=100 and A=50; the reverse difference percentage is50/50 times100 = 100. Write the reference amounts and substitute into the original relation.",
+          "This keeps the original comparison percentage despite a changed base. Write the reference amounts and substitute into the original relation.",
+          "This gives B as a percentage of A, not the relative difference. Write the reference amounts and substitute into the original relation.",
+          "This uses the wrong sign in constructing the new reference quantity. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "B=100 and A=50; the reverse difference percentage is50/50 times100 = 100.",
+          "Swapping the quantities preserves the percentage difference."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "B=100 and A=50; the reverse difference percentage is50/50 times100 = 100."
+      },
+      {
+        "id": "PCT-5-12",
+        "family": "reverse-more",
+        "context": "Cable length",
+        "stem": "Cable length A is 40% more than the corresponding quantity B. By what percentage is B less than A?",
+        "options": [
+          "200/7",
+          "40",
+          "500/7",
+          "200/3"
+        ],
+        "answer": 1,
+        "explanations": [
+          "B=100 and A=140; the reverse difference percentage is40/140 times100 = 200/7.",
+          "This keeps the original comparison percentage despite a changed base.",
+          "This gives B as a percentage of A, not the relative difference.",
+          "This uses the wrong sign in constructing the new reference quantity."
+        ],
+        "repairs": [
+          "B=100 and A=140; the reverse difference percentage is40/140 times100 = 200/7. Write the reference amounts and substitute into the original relation.",
+          "This keeps the original comparison percentage despite a changed base. Write the reference amounts and substitute into the original relation.",
+          "This gives B as a percentage of A, not the relative difference. Write the reference amounts and substitute into the original relation.",
+          "This uses the wrong sign in constructing the new reference quantity. Write the reference amounts and substitute into the original relation."
+        ],
+        "reason_prompt": "Which relation justifies your result?",
+        "reason_options": [
+          "B=100 and A=140; the reverse difference percentage is40/140 times100 = 200/7.",
+          "Swapping the quantities preserves the percentage difference."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "B=100 and A=140; the reverse difference percentage is40/140 times100 = 200/7."
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored original examples; not authenticated PYQs or empirical difficulty calibration."
+  ]
+}

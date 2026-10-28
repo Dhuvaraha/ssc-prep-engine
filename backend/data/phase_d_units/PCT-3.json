@@ -1,0 +1,503 @@
+{
+  "objective_id": "PCT-3",
+  "prerequisites": [
+    "Interpret percentages and identify the reference base.",
+    "Solve multiplication equations by division."
+  ],
+  "explanation": "Direct percentage multiplies a known whole by its fraction. Inverse percentage starts with the part or final value and solves for the unknown whole.",
+  "worked": [
+    {
+      "action": "15% of 240 is 240 times 15/100 =36.",
+      "justification": "The whole is known, so multiply by its fraction."
+    },
+    {
+      "action": "After a 20% increase, 1.20x=360; divide by 1.20 to find x=300.",
+      "justification": "A percentage change multiplies the original. Its inverse operation is division."
+    },
+    {
+      "action": "Check: 300 plus 20% of 300 equals 360.",
+      "justification": "Substitution verifies the recovered base, not merely the arithmetic."
+    },
+    {
+      "action": "If 42 is 14% of a whole N, write 0.14N=42 and divide: N=300.",
+      "justification": "The known amount is the percentage part. Recover its whole by division and check 14% of 300 is 42."
+    }
+  ],
+  "illustrations": [],
+  "hint": "Write part = fraction times whole, or final = multiplier times original.",
+  "shortcut": "Divide by the multiplier when the original is unknown.",
+  "limitation": "A zero multiplier cannot be inverted; addition/subtraction of a rate to a quantity mixes units.",
+  "checks": {
+    "entry": [
+      {
+        "id": "PCT-3-entry-0",
+        "family": "PCT-3",
+        "context": "direct percent prerequisite",
+        "stem": "What is 10% of 90?",
+        "options": [
+          "9",
+          "10",
+          "81",
+          "900"
+        ],
+        "answer": 1,
+        "explanations": [
+          "90/10 is 9.",
+          "10 is the rate, not the amount.",
+          "81 is what remains after removing 10%.",
+          "900 multiplies by 10 rather than by 0.10."
+        ],
+        "repairs": [
+          "90/10 is 9. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "10 is the rate, not the amount. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "81 is what remains after removing 10%. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "900 multiplies by 10 rather than by 0.10. Reconstruct the stated whole and operation before trying a fresh problem."
+        ],
+        "reason_prompt": "Which equation or base statement supports the result?",
+        "reason_options": [
+          "90 times 10/100",
+          "90 times 10"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Per hundred requires division by 100.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "PCT-3-entry-reserve-1",
+        "family": "PCT-3",
+        "context": "quarter as direct percentage",
+        "stem": "What is 25% of 160?",
+        "options": [
+          "40",
+          "4",
+          "120",
+          "640"
+        ],
+        "answer": 1,
+        "explanations": [
+          "One quarter of 160 is 40.",
+          "4 is a factor-of-ten error.",
+          "120 remains after removing 25%.",
+          "640 divides by a quarter instead of taking a quarter."
+        ],
+        "repairs": [
+          "One quarter of 160 is 40. Taking a part multiplies a known whole by a fraction.",
+          "4 is a factor-of-ten error. Taking a part multiplies a known whole by a fraction.",
+          "120 remains after removing 25%. Taking a part multiplies a known whole by a fraction.",
+          "640 divides by a quarter instead of taking a quarter. Taking a part multiplies a known whole by a fraction."
+        ],
+        "reason_prompt": "Choose the supporting base or equation.",
+        "reason_options": [
+          "160 times 1/4",
+          "160 divided by 1/4"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "160 times 1/4",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "faded": [
+      {
+        "id": "PCT-3-faded-0",
+        "family": "PCT-3",
+        "context": "inverse equation step",
+        "stem": "A sum grows by 20% to 360. Let the original be x. From 1.2x=360, what should you do next?",
+        "options": [
+          "Divide 360 by 1.2",
+          "Subtract 20% of 360",
+          "Multiply 360 by 1.2",
+          "Subtract 20 from 360"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Division undoes multiplication: x=300.",
+          "20% of 360 uses a new base and gives 288, not the original.",
+          "Multiplication grows the final amount again.",
+          "20 is a percent, not a currency amount."
+        ],
+        "repairs": [
+          "Division undoes multiplication: x=300. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "20% of 360 uses a new base and gives 288, not the original. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "Multiplication grows the final amount again. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "20 is a percent, not a currency amount. Reconstruct the stated whole and operation before trying a fresh problem."
+        ],
+        "reason_prompt": "Which equation or base statement supports the result?",
+        "reason_options": [
+          "Original times growth factor = final",
+          "Original = final minus the same percentage of final"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The increase was measured on x, so undo the factor attached to x.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "PCT-3-faded-reserve-1",
+        "family": "PCT-3",
+        "context": "retained fraction equation",
+        "stem": "A 10% reduction leaves 270. The remaining fraction is 0.90. What equation finds the original x?",
+        "options": [
+          "0.90x = 270",
+          "1.10x = 270",
+          "x = 0.90 times 270",
+          "x - 10 = 270"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The final is 90% of the unknown original.",
+          "1.10 models an increase.",
+          "This reduces the final again.",
+          "10 is a rate, not an amount."
+        ],
+        "repairs": [
+          "The final is 90% of the unknown original. Write what happened forward before undoing it.",
+          "1.10 models an increase. Write what happened forward before undoing it.",
+          "This reduces the final again. Write what happened forward before undoing it.",
+          "10 is a rate, not an amount. Write what happened forward before undoing it."
+        ],
+        "reason_prompt": "Choose the supporting base or equation.",
+        "reason_options": [
+          "Final = retained fraction times original",
+          "Original = retained fraction times final"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Final = retained fraction times original",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "PCT-3-independent-direct",
+        "family": "direct-percentage",
+        "context": "allocation of a known budget",
+        "stem": "A club allocates 18% of a known 2500 budget to equipment. What amount is allocated?",
+        "options": [
+          "450",
+          "13900",
+          "2050",
+          "180"
+        ],
+        "answer": 1,
+        "explanations": [
+          "2500 times 18/100 equals 450.",
+          "This exceeds the known whole of 2500, so it cannot be 18% of that whole.",
+          "2050 is the unallocated remainder.",
+          "180 would be 18% of 1000, not of 2500."
+        ],
+        "repairs": [
+          "Identify 2500 as the known whole and multiply it by 0.18.",
+          "18% is less than the whole. Multiply 2500 by 18/100 and check that the result is below 2500.",
+          "Distinguish the allocated part from the remaining budget.",
+          "Scale the percentage to the actual stated whole."
+        ],
+        "reason_prompt": "Which equation fits a known whole?",
+        "reason_options": [
+          "Allocation = 0.18 times 2500",
+          "0.18 times allocation = 2500"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Direct percentage multiplies the known whole by the percentage fraction.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "PCT-3-independent_a-0",
+        "family": "PCT-3",
+        "context": "recover capacity from part",
+        "stem": "A tank contains 84 litres, which is 35% of its capacity. What is its capacity?",
+        "options": [
+          "240 litres",
+          "29.4 litres",
+          "119 litres",
+          "49 litres"
+        ],
+        "answer": 1,
+        "explanations": [
+          "0.35 times capacity =84, so capacity=240.",
+          "29.4 is 35% of 84, a smaller part of the part.",
+          "Adding 35 treats a rate as litres.",
+          "Subtracting 35 also mixes units."
+        ],
+        "repairs": [
+          "0.35 times capacity =84, so capacity=240. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "29.4 is 35% of 84, a smaller part of the part. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "Adding 35 treats a rate as litres. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "Subtracting 35 also mixes units. Reconstruct the stated whole and operation before trying a fresh problem."
+        ],
+        "reason_prompt": "Which equation or base statement supports the result?",
+        "reason_options": [
+          "Capacity = 84/0.35",
+          "Capacity = 84 times 0.35"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "84 is the known part; divide by its fraction of the whole.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "PCT-3-independent_a-reserve-1",
+        "family": "PCT-3",
+        "context": "budget whole from allocation",
+        "stem": "A grant of 72 is 12% of an organisation's budget. What is the budget?",
+        "options": [
+          "600",
+          "8.64",
+          "84",
+          "864"
+        ],
+        "answer": 1,
+        "explanations": [
+          "72/0.12 equals 600.",
+          "8.64 takes a fraction of the part.",
+          "84 adds the percentage number as money.",
+          "864 multiplies by 12 rather than dividing by 0.12."
+        ],
+        "repairs": [
+          "72/0.12 equals 600. Recover the whole by dividing by the known share.",
+          "8.64 takes a fraction of the part. Recover the whole by dividing by the known share.",
+          "84 adds the percentage number as money. Recover the whole by dividing by the known share.",
+          "864 multiplies by 12 rather than dividing by 0.12. Recover the whole by dividing by the known share."
+        ],
+        "reason_prompt": "Choose the supporting base or equation.",
+        "reason_options": [
+          "0.12 times budget = 72",
+          "Budget = 72 times 0.12"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "0.12 times budget = 72",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "PCT-3-independent_b-0",
+        "family": "PCT-3",
+        "context": "reverse retained-price factor",
+        "stem": "An item is sold for 450 after a 25% reduction. What was its original price?",
+        "options": [
+          "600",
+          "562.5",
+          "337.5",
+          "475"
+        ],
+        "answer": 1,
+        "explanations": [
+          "75% remains, so 0.75x=450 and x=600.",
+          "Adding 25% of the sale price uses the wrong base.",
+          "337.5 reduces the already reduced price again.",
+          "Adding 25 treats the rate as money."
+        ],
+        "repairs": [
+          "75% remains, so 0.75x=450 and x=600. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "Adding 25% of the sale price uses the wrong base. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "337.5 reduces the already reduced price again. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "Adding 25 treats the rate as money. Reconstruct the stated whole and operation before trying a fresh problem."
+        ],
+        "reason_prompt": "Which equation or base statement supports the result?",
+        "reason_options": [
+          "Original = 450/0.75",
+          "Original = 450 times 1.25"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A reduction of 25% retains 75% of the original.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "PCT-3-independent_b-reserve-1",
+        "family": "PCT-3",
+        "context": "reverse demographic factor",
+        "stem": "A population after 8% growth is 540. What was it before growth?",
+        "options": [
+          "500",
+          "496.8",
+          "583.2",
+          "532"
+        ],
+        "answer": 1,
+        "explanations": [
+          "540/1.08 equals 500.",
+          "Subtracting 8% of the final uses the wrong base.",
+          "583.2 applies another increase.",
+          "532 treats 8% as eight people."
+        ],
+        "repairs": [
+          "540/1.08 equals 500. Verify by growing the proposed original by 8%.",
+          "Subtracting 8% of the final uses the wrong base. Verify by growing the proposed original by 8%.",
+          "583.2 applies another increase. Verify by growing the proposed original by 8%.",
+          "532 treats 8% as eight people. Verify by growing the proposed original by 8%."
+        ],
+        "reason_prompt": "Choose the supporting base or equation.",
+        "reason_options": [
+          "1.08 times original = 540",
+          "Original = 540 times 0.92"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "1.08 times original = 540",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "revision": [
+      {
+        "id": "PCT-3-revision-0",
+        "family": "PCT-3",
+        "context": "recover population whole",
+        "stem": "A school reports that 18% of its pupils cycle; there are 54 cyclists. How many pupils attend?",
+        "options": [
+          "300",
+          "9.72",
+          "72",
+          "36"
+        ],
+        "answer": 1,
+        "explanations": [
+          "0.18N=54 gives N=300.",
+          "9.72 takes 18% of the part.",
+          "72 adds unlike quantities.",
+          "36 subtracts the rate as though it were a count."
+        ],
+        "repairs": [
+          "0.18N=54 gives N=300. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "9.72 takes 18% of the part. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "72 adds unlike quantities. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "36 subtracts the rate as though it were a count. Reconstruct the stated whole and operation before trying a fresh problem."
+        ],
+        "reason_prompt": "Which equation or base statement supports the result?",
+        "reason_options": [
+          "0.18N = 54",
+          "N = 54 times 0.18"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The cyclist count is a fraction of the unknown total.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "PCT-3-revision-1",
+        "family": "PCT-3",
+        "context": "reverse growth in a measurement",
+        "stem": "A value becomes 184 after an increase of 15%. What was the starting value?",
+        "options": [
+          "160",
+          "156.4",
+          "211.6",
+          "169"
+        ],
+        "answer": 1,
+        "explanations": [
+          "1.15x=184 gives x=160.",
+          "Subtracting 15% of 184 reverses using the wrong base.",
+          "211.6 increases the final value again.",
+          "169 subtracts 15 as an amount."
+        ],
+        "repairs": [
+          "1.15x=184 gives x=160. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "Subtracting 15% of 184 reverses using the wrong base. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "211.6 increases the final value again. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "169 subtracts 15 as an amount. Reconstruct the stated whole and operation before trying a fresh problem."
+        ],
+        "reason_prompt": "Which equation or base statement supports the result?",
+        "reason_options": [
+          "1.15 times original = 184",
+          "Original = 184 minus 0.15 times 184"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The initial value, not the final value, was the percentage base.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "PCT-3-revision-reserve-2",
+        "family": "PCT-3",
+        "context": "recover mass from component share",
+        "stem": "A recipe's sugar is 45 g, representing 15% of the mixture by mass. What is the mixture's mass?",
+        "options": [
+          "300 g",
+          "6.75 g",
+          "60 g",
+          "675 g"
+        ],
+        "answer": 1,
+        "explanations": [
+          "45/0.15 is 300.",
+          "6.75 takes 15% of the sugar.",
+          "60 adds unlike quantities.",
+          "675 multiplies by 15 instead of dividing by 0.15."
+        ],
+        "repairs": [
+          "45/0.15 is 300. Use consistent mass units on both sides of the equation.",
+          "6.75 takes 15% of the sugar. Use consistent mass units on both sides of the equation.",
+          "60 adds unlike quantities. Use consistent mass units on both sides of the equation.",
+          "675 multiplies by 15 instead of dividing by 0.15. Use consistent mass units on both sides of the equation."
+        ],
+        "reason_prompt": "Choose the supporting base or equation.",
+        "reason_options": [
+          "0.15 times total mass = 45 g",
+          "Total mass = 45 g times 0.15"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "0.15 times total mass = 45 g",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "PCT-3-revision-reserve-3",
+        "family": "PCT-3",
+        "context": "reverse loss in mass",
+        "stem": "After losing 40% of its mass, a sample weighs 96 g. What was its original mass?",
+        "options": [
+          "160 g",
+          "134.4 g",
+          "57.6 g",
+          "136 g"
+        ],
+        "answer": 1,
+        "explanations": [
+          "60% remains: 96/0.60 =160.",
+          "Adding 40% of the remainder uses the wrong base.",
+          "57.6 takes another 40% reduction.",
+          "136 adds forty grams instead of reversing a percentage."
+        ],
+        "repairs": [
+          "60% remains: 96/0.60 =160. Convert loss to the retained fraction before dividing.",
+          "Adding 40% of the remainder uses the wrong base. Convert loss to the retained fraction before dividing.",
+          "57.6 takes another 40% reduction. Convert loss to the retained fraction before dividing.",
+          "136 adds forty grams instead of reversing a percentage. Convert loss to the retained fraction before dividing."
+        ],
+        "reason_prompt": "Choose the supporting base or equation.",
+        "reason_options": [
+          "0.60 times original mass = 96 g",
+          "Original mass = 1.40 times 96 g"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "0.60 times original mass = 96 g",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored mathematical instruction; exact arithmetic and educational review required before release."
+  ],
+  "subject_review": "",
+  "teaching_review": "",
+  "review_digest": ""
+}

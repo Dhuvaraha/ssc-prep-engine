@@ -1,0 +1,456 @@
+{
+  "objective_id": "TW-5",
+  "prerequisites": [
+    "Fractions and reciprocals with explicit units.",
+    "Equal-work comparison and constant-rate interpretation."
+  ],
+  "explanation": "For the same work, time and constant rate are inversely proportional. A combined rate must be separated before recovering a solo duration.",
+  "worked": [
+    {
+      "action": "For equal work, time is work divided by rate.",
+      "justification": "A higher constant rate needs less time for the same work."
+    },
+    {
+      "action": "If A:B rates are 3:2 and A takes 10 days, total work can be 30 units.",
+      "justification": "A does 3 units/day for 10 days."
+    },
+    {
+      "action": "B does 2 units/day and takes 30/2 =15 days.",
+      "justification": "The time ratio is 2:3, inverse to the rate ratio 3:2."
+    },
+    {
+      "action": "If rates are A:B=2:3 and together they finish in 6 days, total work is 5 times 6 =30 units; A alone needs 15 days.",
+      "justification": "Combined time must first be converted to work on the chosen rate scale."
+    }
+  ],
+  "illustrations": [],
+  "hint": "Choose work units and label each rate with work/time before calculating.",
+  "shortcut": "Use work = rate times active time; a convenient common work unit can avoid awkward fractions.",
+  "limitation": "The rates must describe the same job, remain constant during each modelled interval, and not interfere.",
+  "checks": {
+    "entry": [
+      {
+        "id": "TW-5-entry-0",
+        "family": "TW-5",
+        "context": "inverse rate-time ratio entry-0",
+        "stem": "A and B perform equal jobs at constant rates in the ratio A:B =3:2. A takes 4 days. How long does B take?",
+        "options": [
+          "6",
+          "8/3",
+          "4",
+          "10"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Total work is 3 times 4; divide by B's rate 2 to get 6.",
+          "This applies the rate ratio in the same direction to time.",
+          "Equal times would require equal rates for equal work.",
+          "This adds A's and B's solo durations; the question asks only for B's duration."
+        ],
+        "repairs": [
+          "Total work is 3 times 4; divide by B's rate 2 to get 6. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This applies the rate ratio in the same direction to time. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Equal times would require equal rates for equal work. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Keep the two solo durations separate. Use equal work: A's rate * A's time = B's rate * B's time."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "3 times 4 =2 times B's time",
+          "B's time =4 times 2/3"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "3 times 4 =2 times B's time",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-5-entry-1",
+        "family": "TW-5",
+        "context": "inverse rate-time ratio entry-1",
+        "stem": "A and B perform equal jobs at constant rates in the ratio A:B =3:2. A takes 6 days. How long does B take?",
+        "options": [
+          "9",
+          "4",
+          "6",
+          "15"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Total work is 3 times 6; divide by B's rate 2 to get 9.",
+          "This applies the rate ratio in the same direction to time.",
+          "Equal times would require equal rates for equal work.",
+          "This adds A's and B's solo durations; the question asks only for B's duration."
+        ],
+        "repairs": [
+          "Total work is 3 times 6; divide by B's rate 2 to get 9. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This applies the rate ratio in the same direction to time. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Equal times would require equal rates for equal work. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Keep the two solo durations separate. Use equal work: A's rate * A's time = B's rate * B's time."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "3 times 6 =2 times B's time",
+          "B's time =6 times 2/3"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "3 times 6 =2 times B's time",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "faded": [
+      {
+        "id": "TW-5-faded-0",
+        "family": "TW-5",
+        "context": "inverse rate-time ratio faded-0",
+        "stem": "A and B perform equal jobs at constant rates in the ratio A:B =3:2. A takes 10 days. How long does B take?\nPartly worked: Choose A's rate as 3 units/day. Total work is 30 units. B's rate is 2 units/day. Complete work divided by B's rate.",
+        "options": [
+          "15",
+          "20/3",
+          "10",
+          "25"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Total work is 3 times 10; divide by B's rate 2 to get 15.",
+          "This applies the rate ratio in the same direction to time.",
+          "Equal times would require equal rates for equal work.",
+          "This adds A's and B's solo durations; the question asks only for B's duration."
+        ],
+        "repairs": [
+          "Total work is 3 times 10; divide by B's rate 2 to get 15. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This applies the rate ratio in the same direction to time. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Equal times would require equal rates for equal work. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Keep the two solo durations separate. Use equal work: A's rate * A's time = B's rate * B's time."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "3 times 10 =2 times B's time",
+          "B's time =10 times 2/3"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "3 times 10 =2 times B's time",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-5-faded-1",
+        "family": "TW-5",
+        "context": "inverse rate-time ratio faded-1",
+        "stem": "A and B perform equal jobs at constant rates in the ratio A:B =3:2. A takes 12 days. How long does B take?\nPartly worked: Choose A's rate as 3 units/day. Total work is 36 units. B's rate is 2 units/day. Complete work divided by B's rate.",
+        "options": [
+          "18",
+          "8",
+          "12",
+          "30"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Total work is 3 times 12; divide by B's rate 2 to get 18.",
+          "This applies the rate ratio in the same direction to time.",
+          "Equal times would require equal rates for equal work.",
+          "This adds A's and B's solo durations; the question asks only for B's duration."
+        ],
+        "repairs": [
+          "Total work is 3 times 12; divide by B's rate 2 to get 18. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This applies the rate ratio in the same direction to time. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Equal times would require equal rates for equal work. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Keep the two solo durations separate. Use equal work: A's rate * A's time = B's rate * B's time."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "3 times 12 =2 times B's time",
+          "B's time =12 times 2/3"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "3 times 12 =2 times B's time",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "TW-5-independent_a-0",
+        "family": "TW-5",
+        "context": "inverse rate-time ratio independent_a-0",
+        "stem": "A and B perform equal jobs at constant rates in the ratio A:B =3:2. A takes 16 days. How long does B take?",
+        "options": [
+          "24",
+          "32/3",
+          "16",
+          "40"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Total work is 3 times 16; divide by B's rate 2 to get 24.",
+          "This applies the rate ratio in the same direction to time.",
+          "Equal times would require equal rates for equal work.",
+          "This adds A's and B's solo durations; the question asks only for B's duration."
+        ],
+        "repairs": [
+          "Total work is 3 times 16; divide by B's rate 2 to get 24. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This applies the rate ratio in the same direction to time. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Equal times would require equal rates for equal work. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Keep the two solo durations separate. Use equal work: A's rate * A's time = B's rate * B's time."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "3 times 16 =2 times B's time",
+          "B's time =16 times 2/3"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "3 times 16 =2 times B's time",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-5-independent_a-1",
+        "family": "TW-5",
+        "context": "inverse rate-time ratio independent_a-1",
+        "stem": "A and B perform equal jobs at constant rates in the ratio A:B =3:2. A takes 18 days. How long does B take?",
+        "options": [
+          "27",
+          "12",
+          "18",
+          "45"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Total work is 3 times 18; divide by B's rate 2 to get 27.",
+          "This applies the rate ratio in the same direction to time.",
+          "Equal times would require equal rates for equal work.",
+          "This adds A's and B's solo durations; the question asks only for B's duration."
+        ],
+        "repairs": [
+          "Total work is 3 times 18; divide by B's rate 2 to get 27. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This applies the rate ratio in the same direction to time. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Equal times would require equal rates for equal work. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Keep the two solo durations separate. Use equal work: A's rate * A's time = B's rate * B's time."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "3 times 18 =2 times B's time",
+          "B's time =18 times 2/3"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "3 times 18 =2 times B's time",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "TW-5-independent_b-0",
+        "family": "TW-5",
+        "context": "combined duration and efficiency independent_b-0",
+        "stem": "A:B rates are 2:3 for one job. Working together, they take 22 days. How long would A alone take?",
+        "options": [
+          "55",
+          "22",
+          "110/3",
+          "44/5"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Work =5 times 22; A takes that work divided by 2 = 55.",
+          "This repeats the joint duration although B no longer helps.",
+          "This is B's solo duration.",
+          "This scales the joint duration down even though removing B must take longer."
+        ],
+        "repairs": [
+          "Work =5 times 22; A takes that work divided by 2 = 55. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This repeats the joint duration although B no longer helps. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This is B's solo duration. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This scales the joint duration down even though removing B must take longer. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "A time =(2+3) times 22/2",
+          "A time =2 times 22/(2+3)"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A time =(2+3) times 22/2",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-5-independent_b-1",
+        "family": "TW-5",
+        "context": "combined duration and efficiency independent_b-1",
+        "stem": "A:B rates are 2:3 for one job. Working together, they take 24 days. How long would A alone take?",
+        "options": [
+          "60",
+          "24",
+          "40",
+          "48/5"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Work =5 times 24; A takes that work divided by 2 = 60.",
+          "This repeats the joint duration although B no longer helps.",
+          "This is B's solo duration.",
+          "This scales the joint duration down even though removing B must take longer."
+        ],
+        "repairs": [
+          "Work =5 times 24; A takes that work divided by 2 = 60. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This repeats the joint duration although B no longer helps. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This is B's solo duration. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This scales the joint duration down even though removing B must take longer. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "A time =(2+3) times 24/2",
+          "A time =2 times 24/(2+3)"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A time =(2+3) times 24/2",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "revision": [
+      {
+        "id": "TW-5-delayed-unequal-jobs",
+        "family": "contextual-unequal-jobs",
+        "context": "unequal-jobs",
+        "stem": "A's rate is twice B's. A is assigned three times as much work as B. What is the ratio of their completion times A:B?",
+        "options": [
+          "3:2",
+          "1:2",
+          "2:3",
+          "6:1"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Time ratio equals work ratio divided by rate ratio:3/2.",
+          "Inverse rates alone apply only to equal work.",
+          "This reverses the time ratio.",
+          "Multiplying work and rate ratios ignores time=work/rate."
+        ],
+        "repairs": [
+          "Time ratio equals work ratio divided by rate ratio:3/2. Rebuild the work/rate/time relation with matching units before calculating.",
+          "Inverse rates alone apply only to equal work. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This reverses the time ratio. Rebuild the work/rate/time relation with matching units before calculating.",
+          "Multiplying work and rate ratios ignores time=work/rate. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "Compare work/rate for each person; these jobs are unequal.",
+          "Time is always inversely proportional to rate even for unequal jobs."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Compare work/rate for each person; these jobs are unequal."
+      },
+      {
+        "id": "TW-5-delayed-percentage-efficiency",
+        "family": "contextual-percentage-efficiency",
+        "context": "percentage-efficiency",
+        "stem": "A is 25% more productive than B on the same task. B needs 20 hours. How long does A need?",
+        "options": [
+          "16",
+          "15",
+          "25",
+          "24"
+        ],
+        "answer": 1,
+        "explanations": [
+          "A's rate multiplier is1.25;20/1.25=16.",
+          "Reducing time by25% assumes matching percentage bases.",
+          "This makes the faster worker slower.",
+          "24 is greater than B's duration."
+        ],
+        "repairs": [
+          "A's rate multiplier is1.25;20/1.25=16. Rebuild the work/rate/time relation with matching units before calculating.",
+          "Reducing time by25% assumes matching percentage bases. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This makes the faster worker slower. Rebuild the work/rate/time relation with matching units before calculating.",
+          "24 is greater than B's duration. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "Equal work gives duration multiplier1/1.25.",
+          "A25% rate rise always produces a25% time fall."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Equal work gives duration multiplier1/1.25."
+      },
+      {
+        "id": "TW-5-delayed-combined-ratio",
+        "family": "contextual-combined-ratio",
+        "context": "combined-ratio",
+        "stem": "Two pumps have rates in ratio3:5. Together they supply 64 litres/minute. How much does the slower pump supply per minute?",
+        "options": [
+          "24",
+          "40",
+          "8",
+          "192"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Eight ratio parts equal64, so three parts equal24.",
+          "40 belongs to the faster pump.",
+          "8 is one ratio part, not the slower pump's three parts.",
+          "Multiplying total by3 omits division by8."
+        ],
+        "repairs": [
+          "Eight ratio parts equal64, so three parts equal24. Rebuild the work/rate/time relation with matching units before calculating.",
+          "40 belongs to the faster pump. Rebuild the work/rate/time relation with matching units before calculating.",
+          "8 is one ratio part, not the slower pump's three parts. Rebuild the work/rate/time relation with matching units before calculating.",
+          "Multiplying total by3 omits division by8. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "Divide the combined rate into3+5 equal ratio parts.",
+          "The slower pump is three times the entire combined output."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Divide the combined rate into3+5 equal ratio parts."
+      },
+      {
+        "id": "TW-5-delayed-time-to-rate",
+        "family": "contextual-time-to-rate",
+        "context": "time-to-rate",
+        "stem": "For identical jobs A needs 18 minutes and B needs 12 minutes. What is the rate ratio A:B?",
+        "options": [
+          "2:3",
+          "3:2",
+          "1:6",
+          "6:1"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Rates are1/18:1/12=2:3.",
+          "3:2 is the duration ratio.",
+          "The6-minute difference is not a rate ratio.",
+          "The time difference cannot replace reciprocal rates."
+        ],
+        "repairs": [
+          "Rates are1/18:1/12=2:3. Rebuild the work/rate/time relation with matching units before calculating.",
+          "3:2 is the duration ratio. Rebuild the work/rate/time relation with matching units before calculating.",
+          "The6-minute difference is not a rate ratio. Rebuild the work/rate/time relation with matching units before calculating.",
+          "The time difference cannot replace reciprocal rates. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "For equal jobs take reciprocals of the durations.",
+          "The longer duration implies the greater output rate."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "For equal jobs take reciprocals of the durations."
+      }
+    ]
+  },
+  "sources": [
+    "Original Phase D authorship; conservation-of-work reasoning. Private cached SSC switching-time reference used only for family analysis."
+  ],
+  "subject_review": "",
+  "teaching_review": "",
+  "review_digest": ""
+}
