@@ -94,7 +94,8 @@ jobs:
         run: python -m pytest tests/test_phase_a_security.py tests/test_phase_b_integration.py tests/test_percentage_pilot_api.py tests/test_phase_d_objectives.py -q
 
   phase-a-browser:
-    runs-on: ubuntu-latest
+    # Playwright 1.56.1 ships browser dependencies for Ubuntu 24.04.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
