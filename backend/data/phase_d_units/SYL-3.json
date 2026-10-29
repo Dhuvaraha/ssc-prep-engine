@@ -1,0 +1,461 @@
+{
+  "objective_id": "SYL-3",
+  "prerequisites": [
+    "Translate the four categorical forms.",
+    "Test whether a complete model satisfies every premise.",
+    "Understand the difference between one possible model and all valid models."
+  ],
+  "explanation": "A necessary conclusion is true in every model satisfying the premises. One valid drawing in which the conclusion is true is not enough. To disprove necessity, build a model that keeps every premise true but makes the conclusion false. If no model satisfies the premises, report inconsistency rather than treating every conclusion as established. Universal statements here do not assert existence.",
+  "worked": [
+    {
+      "action": "All L are M and all M are N force all L are N.",
+      "justification": "Any proposed L outside N would be an M outside N, contradicting the second premise."
+    },
+    {
+      "action": "All L are M does not force all M are L. Use one object in M alone.",
+      "justification": "This model satisfies the premise and falsifies the converse conclusion; one counterexample is sufficient."
+    },
+    {
+      "action": "Some L are M plus some M are N does not force some L are N. Use object1 in L,M and object2 in M,N.",
+      "justification": "Both premises have witnesses but the L/N overlap is empty. A single three-way overlap was merely one possible drawing."
+    },
+    {
+      "action": "Some L are M and no M are N force some L are not N.",
+      "justification": "The required L/M witness cannot be in N. This combines existence with exclusion."
+    },
+    {
+      "action": "All L are M alone does not force some L are M, because L can be empty.",
+      "justification": "Add an explicit existence premise before making an existential conclusion."
+    },
+    {
+      "action": "Some L are M and no L are M have no valid model.",
+      "justification": "The required witness lies in a forbidden region. Distinguish inconsistent premises from a conclusion that is merely not necessary."
+    }
+  ],
+  "hint": "Try to preserve every premise while falsifying the conclusion. If you claim necessity, explain why such a counterexample cannot exist.",
+  "shortcut": "Propagate a required witness through universal inclusions and exclusions; for universal conclusions, trace a hypothetical violating object.",
+  "limitation": "A true conclusion in one diagram establishes possibility only. These authored checks use no existential import unless a witness is explicitly stated.",
+  "checks": {
+    "entry": [
+      {
+        "id": "SYL-3-1",
+        "family": "chain",
+        "context": "chain",
+        "stem": "Premises: All A are B. All B are C. Conclusion: All A are C. Classify the conclusion under the stated no-existential-import convention.",
+        "options": [
+          "The conclusion is true in every valid model.",
+          "The conclusion is true in some valid models and false in others.",
+          "The conclusion is false in every valid model.",
+          "The premises have no valid model."
+        ],
+        "answer": 1,
+        "explanations": [
+          "Every A enters B and every B enters C, so an A outside C is impossible.",
+          "This would require a valid model making the conclusion false. The premise-based argument rules that out. Every A enters B and every B enters C, so an A outside C is impossible.",
+          "The conclusion cannot be false in every model because this valid model makes it true: an empty population.",
+          "The premises are consistent; here is a satisfying model: an empty population."
+        ],
+        "repairs": [
+          "Every A enters B and every B enters C, so an A outside C is impossible. Test every premise before accepting either a supporting model or a countermodel.",
+          "This would require a valid model making the conclusion false. The premise-based argument rules that out. Every A enters B and every B enters C, so an A outside C is impossible. Test every premise before accepting either a supporting model or a countermodel.",
+          "The conclusion cannot be false in every model because this valid model makes it true: an empty population. Test every premise before accepting either a supporting model or a countermodel.",
+          "The premises are consistent; here is a satisfying model: an empty population. Test every premise before accepting either a supporting model or a countermodel."
+        ],
+        "reason_prompt": "Which argument is logically valid here?",
+        "reason_options": [
+          "Every A enters B and every B enters C, so an A outside C is impossible.",
+          "The conclusion is necessary whenever one drawing makes it true.",
+          "The categories must be nonempty simply because they are named.",
+          "Two some statements must always refer to the same witness."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Every A enters B and every B enters C, so an A outside C is impossible."
+      },
+      {
+        "id": "SYL-3-2",
+        "family": "symmetric-exclusion",
+        "context": "symmetric-exclusion",
+        "stem": "Premises: No A are B. Conclusion: No B are A. Classify the conclusion under the stated no-existential-import convention.",
+        "options": [
+          "The conclusion is true in every valid model.",
+          "The conclusion is true in some valid models and false in others.",
+          "The conclusion is false in every valid model.",
+          "The premises have no valid model."
+        ],
+        "answer": 1,
+        "explanations": [
+          "An object in both B and A would also be in both A and B, which the premise forbids.",
+          "This would require a valid model making the conclusion false. The premise-based argument rules that out. An object in both B and A would also be in both A and B, which the premise forbids.",
+          "The conclusion cannot be false in every model because this valid model makes it true: an empty population.",
+          "The premises are consistent; here is a satisfying model: an empty population."
+        ],
+        "repairs": [
+          "An object in both B and A would also be in both A and B, which the premise forbids. Test every premise before accepting either a supporting model or a countermodel.",
+          "This would require a valid model making the conclusion false. The premise-based argument rules that out. An object in both B and A would also be in both A and B, which the premise forbids. Test every premise before accepting either a supporting model or a countermodel.",
+          "The conclusion cannot be false in every model because this valid model makes it true: an empty population. Test every premise before accepting either a supporting model or a countermodel.",
+          "The premises are consistent; here is a satisfying model: an empty population. Test every premise before accepting either a supporting model or a countermodel."
+        ],
+        "reason_prompt": "Which argument is logically valid here?",
+        "reason_options": [
+          "An object in both B and A would also be in both A and B, which the premise forbids.",
+          "The conclusion is necessary whenever one drawing makes it true.",
+          "The categories must be nonempty simply because they are named.",
+          "Two some statements must always refer to the same witness."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "An object in both B and A would also be in both A and B, which the premise forbids."
+      }
+    ],
+    "faded": [
+      {
+        "id": "SYL-3-3",
+        "family": "witness-propagation",
+        "context": "witness-propagation",
+        "stem": "Premises: Some A are B. All B are C. Conclusion: Some A are C. Classify the conclusion under the stated no-existential-import convention. Partly worked: name the A/B witness x. The universal premise puts every B in C. Complete the membership trace for x.",
+        "options": [
+          "The conclusion is true in every valid model.",
+          "The conclusion is true in some valid models and false in others.",
+          "The conclusion is false in every valid model.",
+          "The premises have no valid model."
+        ],
+        "answer": 1,
+        "explanations": [
+          "The A/B witness must also be in C by the universal premise.",
+          "This would require a valid model making the conclusion false. The premise-based argument rules that out. The A/B witness must also be in C by the universal premise.",
+          "The conclusion cannot be false in every model because this valid model makes it true: object1 in A,B,C.",
+          "The premises are consistent; here is a satisfying model: object1 in A,B,C."
+        ],
+        "repairs": [
+          "The A/B witness must also be in C by the universal premise. Test every premise before accepting either a supporting model or a countermodel.",
+          "This would require a valid model making the conclusion false. The premise-based argument rules that out. The A/B witness must also be in C by the universal premise. Test every premise before accepting either a supporting model or a countermodel.",
+          "The conclusion cannot be false in every model because this valid model makes it true: object1 in A,B,C. Test every premise before accepting either a supporting model or a countermodel.",
+          "The premises are consistent; here is a satisfying model: object1 in A,B,C. Test every premise before accepting either a supporting model or a countermodel."
+        ],
+        "reason_prompt": "Which argument is logically valid here?",
+        "reason_options": [
+          "The A/B witness must also be in C by the universal premise.",
+          "The conclusion is necessary whenever one drawing makes it true.",
+          "The categories must be nonempty simply because they are named.",
+          "Two some statements must always refer to the same witness."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The A/B witness must also be in C by the universal premise."
+      },
+      {
+        "id": "SYL-3-4",
+        "family": "nonconversion",
+        "context": "nonconversion",
+        "stem": "Premises: All A are B. Conclusion: All B are A. Classify the conclusion under the stated no-existential-import convention. Partly worked: propose one object in B alone and no A objects. Check the premise, then test whether this object violates the conclusion.",
+        "options": [
+          "The conclusion is true in every valid model.",
+          "The conclusion is true in some valid models and false in others.",
+          "The conclusion is false in every valid model.",
+          "The premises have no valid model."
+        ],
+        "answer": 2,
+        "explanations": [
+          "A valid countermodel refutes necessity. Containment allows additional B objects outside A. Reversing the direction adds an unstated restriction. A countermodel is: object1 belongs exactly to B.",
+          "Containment allows additional B objects outside A. Reversing the direction adds an unstated restriction. A countermodel is: object1 belongs exactly to B. A supporting model is: an empty population.",
+          "The conclusion is possible: an empty population. A counterexample to necessity does not make a conclusion impossible.",
+          "The premises have valid models; for example: an empty population. Their consistency is separate from whether the conclusion is forced."
+        ],
+        "repairs": [
+          "A valid countermodel refutes necessity. Containment allows additional B objects outside A. Reversing the direction adds an unstated restriction. A countermodel is: object1 belongs exactly to B. Test every premise before accepting either a supporting model or a countermodel.",
+          "Containment allows additional B objects outside A. Reversing the direction adds an unstated restriction. A countermodel is: object1 belongs exactly to B. A supporting model is: an empty population. Test every premise before accepting either a supporting model or a countermodel.",
+          "The conclusion is possible: an empty population. A counterexample to necessity does not make a conclusion impossible. Test every premise before accepting either a supporting model or a countermodel.",
+          "The premises have valid models; for example: an empty population. Their consistency is separate from whether the conclusion is forced. Test every premise before accepting either a supporting model or a countermodel."
+        ],
+        "reason_prompt": "Which argument is logically valid here?",
+        "reason_options": [
+          "Containment allows additional B objects outside A. Reversing the direction adds an unstated restriction. A countermodel is: object1 belongs exactly to B.",
+          "The conclusion is necessary whenever one drawing makes it true.",
+          "The categories must be nonempty simply because they are named.",
+          "Two some statements must always refer to the same witness."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Containment allows additional B objects outside A. Reversing the direction adds an unstated restriction. A countermodel is: object1 belongs exactly to B."
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "SYL-3-5",
+        "family": "separate-witnesses",
+        "context": "separate-witnesses",
+        "stem": "Premises: Some A are B. Some B are C. Conclusion: Some A are C. Classify the conclusion under the stated no-existential-import convention.",
+        "options": [
+          "The conclusion is true in every valid model.",
+          "The conclusion is true in some valid models and false in others.",
+          "The conclusion is false in every valid model.",
+          "The premises have no valid model."
+        ],
+        "answer": 2,
+        "explanations": [
+          "A valid countermodel refutes necessity. The two existential premises may be satisfied by separate objects, one in A/B and another in B/C. A countermodel is: object1 belongs exactly to B, C; object2 belongs exactly to A, B.",
+          "The two existential premises may be satisfied by separate objects, one in A/B and another in B/C. A countermodel is: object1 belongs exactly to B, C; object2 belongs exactly to A, B. A supporting model is: object1 in B,C; object2 in A,C; object3 in A,B.",
+          "The conclusion is possible: object1 in B,C; object2 in A,C; object3 in A,B. A counterexample to necessity does not make a conclusion impossible.",
+          "The premises have valid models; for example: object1 in B,C; object2 in A,C; object3 in A,B. Their consistency is separate from whether the conclusion is forced."
+        ],
+        "repairs": [
+          "A valid countermodel refutes necessity. The two existential premises may be satisfied by separate objects, one in A/B and another in B/C. A countermodel is: object1 belongs exactly to B, C; object2 belongs exactly to A, B. Test every premise before accepting either a supporting model or a countermodel.",
+          "The two existential premises may be satisfied by separate objects, one in A/B and another in B/C. A countermodel is: object1 belongs exactly to B, C; object2 belongs exactly to A, B. A supporting model is: object1 in B,C; object2 in A,C; object3 in A,B. Test every premise before accepting either a supporting model or a countermodel.",
+          "The conclusion is possible: object1 in B,C; object2 in A,C; object3 in A,B. A counterexample to necessity does not make a conclusion impossible. Test every premise before accepting either a supporting model or a countermodel.",
+          "The premises have valid models; for example: object1 in B,C; object2 in A,C; object3 in A,B. Their consistency is separate from whether the conclusion is forced. Test every premise before accepting either a supporting model or a countermodel."
+        ],
+        "reason_prompt": "Which argument is logically valid here?",
+        "reason_options": [
+          "The two existential premises may be satisfied by separate objects, one in A/B and another in B/C. A countermodel is: object1 belongs exactly to B, C; object2 belongs exactly to A, B.",
+          "The conclusion is necessary whenever one drawing makes it true.",
+          "The categories must be nonempty simply because they are named.",
+          "Two some statements must always refer to the same witness."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The two existential premises may be satisfied by separate objects, one in A/B and another in B/C. A countermodel is: object1 belongs exactly to B, C; object2 belongs exactly to A, B."
+      },
+      {
+        "id": "SYL-3-6",
+        "family": "excluded-chain",
+        "context": "excluded-chain",
+        "stem": "Premises: All A are B. No B are C. Conclusion: No A are C. Classify the conclusion under the stated no-existential-import convention.",
+        "options": [
+          "The conclusion is true in every valid model.",
+          "The conclusion is true in some valid models and false in others.",
+          "The conclusion is false in every valid model.",
+          "The premises have no valid model."
+        ],
+        "answer": 1,
+        "explanations": [
+          "An A is a B, and no B can be C; hence an A/C witness is forbidden.",
+          "This would require a valid model making the conclusion false. The premise-based argument rules that out. An A is a B, and no B can be C; hence an A/C witness is forbidden.",
+          "The conclusion cannot be false in every model because this valid model makes it true: an empty population.",
+          "The premises are consistent; here is a satisfying model: an empty population."
+        ],
+        "repairs": [
+          "An A is a B, and no B can be C; hence an A/C witness is forbidden. Test every premise before accepting either a supporting model or a countermodel.",
+          "This would require a valid model making the conclusion false. The premise-based argument rules that out. An A is a B, and no B can be C; hence an A/C witness is forbidden. Test every premise before accepting either a supporting model or a countermodel.",
+          "The conclusion cannot be false in every model because this valid model makes it true: an empty population. Test every premise before accepting either a supporting model or a countermodel.",
+          "The premises are consistent; here is a satisfying model: an empty population. Test every premise before accepting either a supporting model or a countermodel."
+        ],
+        "reason_prompt": "Which argument is logically valid here?",
+        "reason_options": [
+          "An A is a B, and no B can be C; hence an A/C witness is forbidden.",
+          "The conclusion is necessary whenever one drawing makes it true.",
+          "The categories must be nonempty simply because they are named.",
+          "Two some statements must always refer to the same witness."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "An A is a B, and no B can be C; hence an A/C witness is forbidden."
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "SYL-3-7",
+        "family": "negative-not-propagated",
+        "context": "negative-not-propagated",
+        "stem": "Premises: Some A are not B. All B are C. Conclusion: Some A are not C. Classify the conclusion under the stated no-existential-import convention.",
+        "options": [
+          "The conclusion is true in every valid model.",
+          "The conclusion is true in some valid models and false in others.",
+          "The conclusion is false in every valid model.",
+          "The premises have no valid model."
+        ],
+        "answer": 2,
+        "explanations": [
+          "A valid countermodel refutes necessity. Being outside B does not mean being outside C; C may contain objects that are not B. A countermodel is: object1 belongs exactly to A, C.",
+          "Being outside B does not mean being outside C; C may contain objects that are not B. A countermodel is: object1 belongs exactly to A, C. A supporting model is: object1 in A.",
+          "The conclusion is possible: object1 in A. A counterexample to necessity does not make a conclusion impossible.",
+          "The premises have valid models; for example: object1 in A. Their consistency is separate from whether the conclusion is forced."
+        ],
+        "repairs": [
+          "A valid countermodel refutes necessity. Being outside B does not mean being outside C; C may contain objects that are not B. A countermodel is: object1 belongs exactly to A, C. Test every premise before accepting either a supporting model or a countermodel.",
+          "Being outside B does not mean being outside C; C may contain objects that are not B. A countermodel is: object1 belongs exactly to A, C. A supporting model is: object1 in A. Test every premise before accepting either a supporting model or a countermodel.",
+          "The conclusion is possible: object1 in A. A counterexample to necessity does not make a conclusion impossible. Test every premise before accepting either a supporting model or a countermodel.",
+          "The premises have valid models; for example: object1 in A. Their consistency is separate from whether the conclusion is forced. Test every premise before accepting either a supporting model or a countermodel."
+        ],
+        "reason_prompt": "Which argument is logically valid here?",
+        "reason_options": [
+          "Being outside B does not mean being outside C; C may contain objects that are not B. A countermodel is: object1 belongs exactly to A, C.",
+          "The conclusion is necessary whenever one drawing makes it true.",
+          "The categories must be nonempty simply because they are named.",
+          "Two some statements must always refer to the same witness."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Being outside B does not mean being outside C; C may contain objects that are not B. A countermodel is: object1 belongs exactly to A, C."
+      },
+      {
+        "id": "SYL-3-8",
+        "family": "witness-exclusion",
+        "context": "witness-exclusion",
+        "stem": "Premises: Some A are B. No B are C. Conclusion: Some A are not C. Classify the conclusion under the stated no-existential-import convention.",
+        "options": [
+          "The conclusion is true in every valid model.",
+          "The conclusion is true in some valid models and false in others.",
+          "The conclusion is false in every valid model.",
+          "The premises have no valid model."
+        ],
+        "answer": 1,
+        "explanations": [
+          "The A/B witness is outside C because the B/C overlap is forbidden.",
+          "This would require a valid model making the conclusion false. The premise-based argument rules that out. The A/B witness is outside C because the B/C overlap is forbidden.",
+          "The conclusion cannot be false in every model because this valid model makes it true: object1 in A,B.",
+          "The premises are consistent; here is a satisfying model: object1 in A,B."
+        ],
+        "repairs": [
+          "The A/B witness is outside C because the B/C overlap is forbidden. Test every premise before accepting either a supporting model or a countermodel.",
+          "This would require a valid model making the conclusion false. The premise-based argument rules that out. The A/B witness is outside C because the B/C overlap is forbidden. Test every premise before accepting either a supporting model or a countermodel.",
+          "The conclusion cannot be false in every model because this valid model makes it true: object1 in A,B. Test every premise before accepting either a supporting model or a countermodel.",
+          "The premises are consistent; here is a satisfying model: object1 in A,B. Test every premise before accepting either a supporting model or a countermodel."
+        ],
+        "reason_prompt": "Which argument is logically valid here?",
+        "reason_options": [
+          "The A/B witness is outside C because the B/C overlap is forbidden.",
+          "The conclusion is necessary whenever one drawing makes it true.",
+          "The categories must be nonempty simply because they are named.",
+          "Two some statements must always refer to the same witness."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The A/B witness is outside C because the B/C overlap is forbidden."
+      }
+    ],
+    "revision": [
+      {
+        "id": "SYL-3-9",
+        "family": "reoriented-witness",
+        "context": "reoriented-witness",
+        "stem": "Premises: No A are B. Some A are C. Conclusion: Some C are not B. Classify the conclusion under the stated no-existential-import convention.",
+        "options": [
+          "The conclusion is true in every valid model.",
+          "The conclusion is true in some valid models and false in others.",
+          "The conclusion is false in every valid model.",
+          "The premises have no valid model."
+        ],
+        "answer": 1,
+        "explanations": [
+          "The A/C witness is a C object outside B.",
+          "This would require a valid model making the conclusion false. The premise-based argument rules that out. The A/C witness is a C object outside B.",
+          "The conclusion cannot be false in every model because this valid model makes it true: object1 in A,C.",
+          "The premises are consistent; here is a satisfying model: object1 in A,C."
+        ],
+        "repairs": [
+          "The A/C witness is a C object outside B. Test every premise before accepting either a supporting model or a countermodel.",
+          "This would require a valid model making the conclusion false. The premise-based argument rules that out. The A/C witness is a C object outside B. Test every premise before accepting either a supporting model or a countermodel.",
+          "The conclusion cannot be false in every model because this valid model makes it true: object1 in A,C. Test every premise before accepting either a supporting model or a countermodel.",
+          "The premises are consistent; here is a satisfying model: object1 in A,C. Test every premise before accepting either a supporting model or a countermodel."
+        ],
+        "reason_prompt": "Which argument is logically valid here?",
+        "reason_options": [
+          "The A/C witness is a C object outside B.",
+          "The conclusion is necessary whenever one drawing makes it true.",
+          "The categories must be nonempty simply because they are named.",
+          "Two some statements must always refer to the same witness."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The A/C witness is a C object outside B."
+      },
+      {
+        "id": "SYL-3-10",
+        "family": "common-container",
+        "context": "common-container",
+        "stem": "Premises: All A are B. All C are B. Conclusion: Some A are C. Classify the conclusion under the stated no-existential-import convention.",
+        "options": [
+          "The conclusion is true in every valid model.",
+          "The conclusion is true in some valid models and false in others.",
+          "The conclusion is false in every valid model.",
+          "The premises have no valid model."
+        ],
+        "answer": 2,
+        "explanations": [
+          "A valid countermodel refutes necessity. Two categories inside a common container need not overlap; they need not even be nonempty. A countermodel is: No objects exist.",
+          "Two categories inside a common container need not overlap; they need not even be nonempty. A countermodel is: No objects exist. A supporting model is: object1 in A,B,C.",
+          "The conclusion is possible: object1 in A,B,C. A counterexample to necessity does not make a conclusion impossible.",
+          "The premises have valid models; for example: object1 in A,B,C. Their consistency is separate from whether the conclusion is forced."
+        ],
+        "repairs": [
+          "A valid countermodel refutes necessity. Two categories inside a common container need not overlap; they need not even be nonempty. A countermodel is: No objects exist. Test every premise before accepting either a supporting model or a countermodel.",
+          "Two categories inside a common container need not overlap; they need not even be nonempty. A countermodel is: No objects exist. A supporting model is: object1 in A,B,C. Test every premise before accepting either a supporting model or a countermodel.",
+          "The conclusion is possible: object1 in A,B,C. A counterexample to necessity does not make a conclusion impossible. Test every premise before accepting either a supporting model or a countermodel.",
+          "The premises have valid models; for example: object1 in A,B,C. Their consistency is separate from whether the conclusion is forced. Test every premise before accepting either a supporting model or a countermodel."
+        ],
+        "reason_prompt": "Which argument is logically valid here?",
+        "reason_options": [
+          "Two categories inside a common container need not overlap; they need not even be nonempty. A countermodel is: No objects exist.",
+          "The conclusion is necessary whenever one drawing makes it true.",
+          "The categories must be nonempty simply because they are named.",
+          "Two some statements must always refer to the same witness."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Two categories inside a common container need not overlap; they need not even be nonempty. A countermodel is: No objects exist."
+      },
+      {
+        "id": "SYL-3-11",
+        "family": "negative-nonconversion",
+        "context": "negative-nonconversion",
+        "stem": "Premises: Some A are not B. Conclusion: Some B are not A. Classify the conclusion under the stated no-existential-import convention.",
+        "options": [
+          "The conclusion is true in every valid model.",
+          "The conclusion is true in some valid models and false in others.",
+          "The conclusion is false in every valid model.",
+          "The premises have no valid model."
+        ],
+        "answer": 2,
+        "explanations": [
+          "A valid countermodel refutes necessity. An A outside B proves nothing about whether B has any member outside A. A countermodel is: object1 belongs exactly to A.",
+          "An A outside B proves nothing about whether B has any member outside A. A countermodel is: object1 belongs exactly to A. A supporting model is: object1 in B; object2 in A.",
+          "The conclusion is possible: object1 in B; object2 in A. A counterexample to necessity does not make a conclusion impossible.",
+          "The premises have valid models; for example: object1 in B; object2 in A. Their consistency is separate from whether the conclusion is forced."
+        ],
+        "repairs": [
+          "A valid countermodel refutes necessity. An A outside B proves nothing about whether B has any member outside A. A countermodel is: object1 belongs exactly to A. Test every premise before accepting either a supporting model or a countermodel.",
+          "An A outside B proves nothing about whether B has any member outside A. A countermodel is: object1 belongs exactly to A. A supporting model is: object1 in B; object2 in A. Test every premise before accepting either a supporting model or a countermodel.",
+          "The conclusion is possible: object1 in B; object2 in A. A counterexample to necessity does not make a conclusion impossible. Test every premise before accepting either a supporting model or a countermodel.",
+          "The premises have valid models; for example: object1 in B; object2 in A. Their consistency is separate from whether the conclusion is forced. Test every premise before accepting either a supporting model or a countermodel."
+        ],
+        "reason_prompt": "Which argument is logically valid here?",
+        "reason_options": [
+          "An A outside B proves nothing about whether B has any member outside A. A countermodel is: object1 belongs exactly to A.",
+          "The conclusion is necessary whenever one drawing makes it true.",
+          "The categories must be nonempty simply because they are named.",
+          "Two some statements must always refer to the same witness."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "An A outside B proves nothing about whether B has any member outside A. A countermodel is: object1 belongs exactly to A."
+      },
+      {
+        "id": "SYL-3-12",
+        "family": "existence-chain",
+        "context": "existence-chain",
+        "stem": "Premises: All A are B. All B are C. Some A are A. Conclusion: Some C are B. Classify the conclusion under the stated no-existential-import convention.",
+        "options": [
+          "The conclusion is true in every valid model.",
+          "The conclusion is true in some valid models and false in others.",
+          "The conclusion is false in every valid model.",
+          "The premises have no valid model."
+        ],
+        "answer": 1,
+        "explanations": [
+          "The explicit A witness belongs to B and C, so a C/B witness exists.",
+          "This would require a valid model making the conclusion false. The premise-based argument rules that out. The explicit A witness belongs to B and C, so a C/B witness exists.",
+          "The conclusion cannot be false in every model because this valid model makes it true: object1 in A,B,C.",
+          "The premises are consistent; here is a satisfying model: object1 in A,B,C."
+        ],
+        "repairs": [
+          "The explicit A witness belongs to B and C, so a C/B witness exists. Test every premise before accepting either a supporting model or a countermodel.",
+          "This would require a valid model making the conclusion false. The premise-based argument rules that out. The explicit A witness belongs to B and C, so a C/B witness exists. Test every premise before accepting either a supporting model or a countermodel.",
+          "The conclusion cannot be false in every model because this valid model makes it true: object1 in A,B,C. Test every premise before accepting either a supporting model or a countermodel.",
+          "The premises are consistent; here is a satisfying model: object1 in A,B,C. Test every premise before accepting either a supporting model or a countermodel."
+        ],
+        "reason_prompt": "Which argument is logically valid here?",
+        "reason_options": [
+          "The explicit A witness belongs to B and C, so a C/B witness exists.",
+          "The conclusion is necessary whenever one drawing makes it true.",
+          "The categories must be nonempty simply because they are named.",
+          "Two some statements must always refer to the same witness."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The explicit A witness belongs to B and C, so a C/B witness exists."
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored categorical inference tasks; keys enumerated by the existing finite-model validator. Not authenticated PYQs."
+  ]
+}

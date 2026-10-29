@@ -1,0 +1,232 @@
+[
+  {
+    "question_id": "SYL-3-1",
+    "premises": [
+      [
+        "all",
+        "A",
+        "B"
+      ],
+      [
+        "all",
+        "B",
+        "C"
+      ]
+    ],
+    "conclusion": [
+      "all",
+      "A",
+      "C"
+    ]
+  },
+  {
+    "question_id": "SYL-3-2",
+    "premises": [
+      [
+        "no",
+        "A",
+        "B"
+      ]
+    ],
+    "conclusion": [
+      "no",
+      "B",
+      "A"
+    ]
+  },
+  {
+    "question_id": "SYL-3-3",
+    "premises": [
+      [
+        "some",
+        "A",
+        "B"
+      ],
+      [
+        "all",
+        "B",
+        "C"
+      ]
+    ],
+    "conclusion": [
+      "some",
+      "A",
+      "C"
+    ]
+  },
+  {
+    "question_id": "SYL-3-4",
+    "premises": [
+      [
+        "all",
+        "A",
+        "B"
+      ]
+    ],
+    "conclusion": [
+      "all",
+      "B",
+      "A"
+    ]
+  },
+  {
+    "question_id": "SYL-3-5",
+    "premises": [
+      [
+        "some",
+        "A",
+        "B"
+      ],
+      [
+        "some",
+        "B",
+        "C"
+      ]
+    ],
+    "conclusion": [
+      "some",
+      "A",
+      "C"
+    ]
+  },
+  {
+    "question_id": "SYL-3-6",
+    "premises": [
+      [
+        "all",
+        "A",
+        "B"
+      ],
+      [
+        "no",
+        "B",
+        "C"
+      ]
+    ],
+    "conclusion": [
+      "no",
+      "A",
+      "C"
+    ]
+  },
+  {
+    "question_id": "SYL-3-7",
+    "premises": [
+      [
+        "some_not",
+        "A",
+        "B"
+      ],
+      [
+        "all",
+        "B",
+        "C"
+      ]
+    ],
+    "conclusion": [
+      "some_not",
+      "A",
+      "C"
+    ]
+  },
+  {
+    "question_id": "SYL-3-8",
+    "premises": [
+      [
+        "some",
+        "A",
+        "B"
+      ],
+      [
+        "no",
+        "B",
+        "C"
+      ]
+    ],
+    "conclusion": [
+      "some_not",
+      "A",
+      "C"
+    ]
+  },
+  {
+    "question_id": "SYL-3-9",
+    "premises": [
+      [
+        "no",
+        "A",
+        "B"
+      ],
+      [
+        "some",
+        "A",
+        "C"
+      ]
+    ],
+    "conclusion": [
+      "some_not",
+      "C",
+      "B"
+    ]
+  },
+  {
+    "question_id": "SYL-3-10",
+    "premises": [
+      [
+        "all",
+        "A",
+        "B"
+      ],
+      [
+        "all",
+        "C",
+        "B"
+      ]
+    ],
+    "conclusion": [
+      "some",
+      "A",
+      "C"
+    ]
+  },
+  {
+    "question_id": "SYL-3-11",
+    "premises": [
+      [
+        "some_not",
+        "A",
+        "B"
+      ]
+    ],
+    "conclusion": [
+      "some_not",
+      "B",
+      "A"
+    ]
+  },
+  {
+    "question_id": "SYL-3-12",
+    "premises": [
+      [
+        "all",
+        "A",
+        "B"
+      ],
+      [
+        "all",
+        "B",
+        "C"
+      ],
+      [
+        "some",
+        "A",
+        "A"
+      ]
+    ],
+    "conclusion": [
+      "some",
+      "C",
+      "B"
+    ]
+  }
+]

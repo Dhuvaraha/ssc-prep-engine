@@ -1,0 +1,461 @@
+{
+  "objective_id": "SYL-5",
+  "prerequisites": [
+    "Translate all/no/some/some-not as set constraints.",
+    "Distinguish a valid model from a picture that violates a premise.",
+    "An explicit some-statement requires a witness; universal statements alone do not."
+  ],
+  "explanation": "Possible means true in at least one valid model. Certain means true in every valid model. Every certain claim is also possible when the premises are consistent. The answer category possible but not certain is narrower: it requires one supporting model and one falsifying model. Impossible means false in every valid model. Check consistency first; no valid model means the premises are inconsistent, not a license to call any claim possible.",
+  "worked": [
+    {
+      "action": "Suppose all L are M. Can some M be L?",
+      "justification": "Yes: put one object in both L and M. This establishes possibility only."
+    },
+    {
+      "action": "Keep all L are M but put one object only in M and leave L empty.",
+      "justification": "Now some M are L is false. The claim is possible but not certain because both models satisfy the premise."
+    },
+    {
+      "action": "Suppose some L are M. The claim some M are L is certain.",
+      "justification": "The required overlap witness satisfies both expressions in every valid model. Certainty includes possibility."
+    },
+    {
+      "action": "Suppose no L are M. The claim some L are M is impossible.",
+      "justification": "Any supporting witness would violate the premise; empty categories do not create an overlap."
+    },
+    {
+      "action": "Suppose some L are M and no L are M simultaneously.",
+      "justification": "The first premise requires a witness in the region the second forbids. There is no valid model; check this before classifying a claim."
+    },
+    {
+      "action": "All badges are tokens, and some tokens are red. Some badges being red is possible but not certain.",
+      "justification": "A red badge/token supports it. A red token with no badges falsifies it. Treat category names only as the stated sets, not as extra real-world facts."
+    }
+  ],
+  "hint": "First check that the premises can hold together. Then seek a model making the claim true and one making it false.",
+  "shortcut": "A supporting model proves possibility; a falsifying model disproves certainty. Keep these two jobs separate.",
+  "limitation": "This unit declares no existential import. Read any different convention explicitly in the source task. A drawing that violates even one premise is no evidence.",
+  "checks": {
+    "entry": [
+      {
+        "id": "SYL-5-1",
+        "family": "overlap-open",
+        "context": "overlap-open",
+        "stem": "Premises: All A are B. Claim: Some B are A. Classify the claim. Use no existential import: a category may be empty unless existence is stated.",
+        "options": [
+          "Certain: true in every valid model.",
+          "Possible but not certain: true in at least one valid model and false in another.",
+          "Impossible: false in every valid model.",
+          "Inconsistent premises: no valid model exists."
+        ],
+        "answer": 2,
+        "explanations": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. An A/B object supports the claim; an empty A with one B-only object falsifies it. Both satisfy all A are B.",
+          "This classification is correct. Possible but not certain requires both a supporting model and a falsifying model. An A/B object supports the claim; an empty A with one B-only object falsifies it. Both satisfy all A are B.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. An A/B object supports the claim; an empty A with one B-only object falsifies it. Both satisfy all A are B.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. An A/B object supports the claim; an empty A with one B-only object falsifies it. Both satisfy all A are B."
+        ],
+        "repairs": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. An A/B object supports the claim; an empty A with one B-only object falsifies it. Both satisfy all A are B. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is correct. Possible but not certain requires both a supporting model and a falsifying model. An A/B object supports the claim; an empty A with one B-only object falsifies it. Both satisfy all A are B. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. An A/B object supports the claim; an empty A with one B-only object falsifies it. Both satisfy all A are B. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. An A/B object supports the claim; an empty A with one B-only object falsifies it. Both satisfy all A are B. Try a supporting model and then a falsifying model, checking every premise in each."
+        ],
+        "reason_prompt": "Which model argument supports the classification?",
+        "reason_options": [
+          "An A/B object supports the claim; an empty A with one B-only object falsifies it. Both satisfy all A are B.",
+          "A single drawing that makes the claim true also proves it certain, even if other valid drawings differ.",
+          "If the claim is not forced by the premises, it must be impossible in every valid drawing.",
+          "Every named category must contain an object, even without an existence statement."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "An A/B object supports the claim; an empty A with one B-only object falsifies it. Both satisfy all A are B."
+      },
+      {
+        "id": "SYL-5-2",
+        "family": "excluded-overlap",
+        "context": "excluded-overlap",
+        "stem": "Premises: No A are B. Claim: Some A are B. Classify the claim. Use no existential import: a category may be empty unless existence is stated.",
+        "options": [
+          "Certain: true in every valid model.",
+          "Possible but not certain: true in at least one valid model and false in another.",
+          "Impossible: false in every valid model.",
+          "Inconsistent premises: no valid model exists."
+        ],
+        "answer": 3,
+        "explanations": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. The required A/B object would occupy exactly the region the premise forbids.",
+          "This classification is not justified here. Possible but not certain requires both a supporting model and a falsifying model. The required A/B object would occupy exactly the region the premise forbids.",
+          "This classification is correct. Impossibility requires the claim to fail in every valid model, not just in one drawing. The required A/B object would occupy exactly the region the premise forbids.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. The required A/B object would occupy exactly the region the premise forbids."
+        ],
+        "repairs": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. The required A/B object would occupy exactly the region the premise forbids. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Possible but not certain requires both a supporting model and a falsifying model. The required A/B object would occupy exactly the region the premise forbids. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is correct. Impossibility requires the claim to fail in every valid model, not just in one drawing. The required A/B object would occupy exactly the region the premise forbids. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. The required A/B object would occupy exactly the region the premise forbids. Try a supporting model and then a falsifying model, checking every premise in each."
+        ],
+        "reason_prompt": "Which model argument supports the classification?",
+        "reason_options": [
+          "The required A/B object would occupy exactly the region the premise forbids.",
+          "A single drawing that makes the claim true also proves it certain, even if other valid drawings differ.",
+          "If the claim is not forced by the premises, it must be impossible in every valid drawing.",
+          "Every named category must contain an object, even without an existence statement."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The required A/B object would occupy exactly the region the premise forbids."
+      }
+    ],
+    "faded": [
+      {
+        "id": "SYL-5-3",
+        "family": "required-overlap",
+        "context": "required-overlap",
+        "stem": "Premises: Some A are B. Claim: Some B are A. Classify the claim. Use no existential import: a category may be empty unless existence is stated. Partly worked: mark the required A/B witness first. Decide whether changing the order of its category names changes membership.",
+        "options": [
+          "Certain: true in every valid model.",
+          "Possible but not certain: true in at least one valid model and false in another.",
+          "Impossible: false in every valid model.",
+          "Inconsistent premises: no valid model exists."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This classification is correct. Certainty requires truth in every valid model, not just a supporting model. The required shared object belongs to both B and A. Reversing the wording does not remove that witness.",
+          "This classification is not justified here. Possible but not certain requires both a supporting model and a falsifying model. The required shared object belongs to both B and A. Reversing the wording does not remove that witness.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. The required shared object belongs to both B and A. Reversing the wording does not remove that witness.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. The required shared object belongs to both B and A. Reversing the wording does not remove that witness."
+        ],
+        "repairs": [
+          "This classification is correct. Certainty requires truth in every valid model, not just a supporting model. The required shared object belongs to both B and A. Reversing the wording does not remove that witness. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Possible but not certain requires both a supporting model and a falsifying model. The required shared object belongs to both B and A. Reversing the wording does not remove that witness. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. The required shared object belongs to both B and A. Reversing the wording does not remove that witness. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. The required shared object belongs to both B and A. Reversing the wording does not remove that witness. Try a supporting model and then a falsifying model, checking every premise in each."
+        ],
+        "reason_prompt": "Which model argument supports the classification?",
+        "reason_options": [
+          "The required shared object belongs to both B and A. Reversing the wording does not remove that witness.",
+          "A single drawing that makes the claim true also proves it certain, even if other valid drawings differ.",
+          "If the claim is not forced by the premises, it must be impossible in every valid drawing.",
+          "Every named category must contain an object, even without an existence statement."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The required shared object belongs to both B and A. Reversing the wording does not remove that witness."
+      },
+      {
+        "id": "SYL-5-4",
+        "family": "separate-witnesses",
+        "context": "separate-witnesses",
+        "stem": "Premises: Some A are B. Some B are C. Claim: Some A are C. Classify the claim. Use no existential import: a category may be empty unless existence is stated. Partly worked: two some-premises may use different objects. Start with object 1 in A/B and object 2 in B/C; test whether adding or removing A/C overlap can preserve both premises.",
+        "options": [
+          "Certain: true in every valid model.",
+          "Possible but not certain: true in at least one valid model and false in another.",
+          "Impossible: false in every valid model.",
+          "Inconsistent premises: no valid model exists."
+        ],
+        "answer": 2,
+        "explanations": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. One A/B/C object supports the claim. Separate A/B-only and B/C-only objects falsify it while preserving both premises.",
+          "This classification is correct. Possible but not certain requires both a supporting model and a falsifying model. One A/B/C object supports the claim. Separate A/B-only and B/C-only objects falsify it while preserving both premises.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. One A/B/C object supports the claim. Separate A/B-only and B/C-only objects falsify it while preserving both premises.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. One A/B/C object supports the claim. Separate A/B-only and B/C-only objects falsify it while preserving both premises."
+        ],
+        "repairs": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. One A/B/C object supports the claim. Separate A/B-only and B/C-only objects falsify it while preserving both premises. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is correct. Possible but not certain requires both a supporting model and a falsifying model. One A/B/C object supports the claim. Separate A/B-only and B/C-only objects falsify it while preserving both premises. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. One A/B/C object supports the claim. Separate A/B-only and B/C-only objects falsify it while preserving both premises. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. One A/B/C object supports the claim. Separate A/B-only and B/C-only objects falsify it while preserving both premises. Try a supporting model and then a falsifying model, checking every premise in each."
+        ],
+        "reason_prompt": "Which model argument supports the classification?",
+        "reason_options": [
+          "One A/B/C object supports the claim. Separate A/B-only and B/C-only objects falsify it while preserving both premises.",
+          "A single drawing that makes the claim true also proves it certain, even if other valid drawings differ.",
+          "If the claim is not forced by the premises, it must be impossible in every valid drawing.",
+          "Every named category must contain an object, even without an existence statement."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "One A/B/C object supports the claim. Separate A/B-only and B/C-only objects falsify it while preserving both premises."
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "SYL-5-5",
+        "family": "existence-missing",
+        "context": "existence-missing",
+        "stem": "Premises: All A are B. All B are C. Claim: Some A are C. Classify the claim. Use no existential import: a category may be empty unless existence is stated.",
+        "options": [
+          "Certain: true in every valid model.",
+          "Possible but not certain: true in at least one valid model and false in another.",
+          "Impossible: false in every valid model.",
+          "Inconsistent premises: no valid model exists."
+        ],
+        "answer": 2,
+        "explanations": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. One A/B/C object makes the claim true; an empty population makes it false. The inclusions allow both models.",
+          "This classification is correct. Possible but not certain requires both a supporting model and a falsifying model. One A/B/C object makes the claim true; an empty population makes it false. The inclusions allow both models.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. One A/B/C object makes the claim true; an empty population makes it false. The inclusions allow both models.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. One A/B/C object makes the claim true; an empty population makes it false. The inclusions allow both models."
+        ],
+        "repairs": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. One A/B/C object makes the claim true; an empty population makes it false. The inclusions allow both models. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is correct. Possible but not certain requires both a supporting model and a falsifying model. One A/B/C object makes the claim true; an empty population makes it false. The inclusions allow both models. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. One A/B/C object makes the claim true; an empty population makes it false. The inclusions allow both models. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. One A/B/C object makes the claim true; an empty population makes it false. The inclusions allow both models. Try a supporting model and then a falsifying model, checking every premise in each."
+        ],
+        "reason_prompt": "Which model argument supports the classification?",
+        "reason_options": [
+          "One A/B/C object makes the claim true; an empty population makes it false. The inclusions allow both models.",
+          "A single drawing that makes the claim true also proves it certain, even if other valid drawings differ.",
+          "If the claim is not forced by the premises, it must be impossible in every valid drawing.",
+          "Every named category must contain an object, even without an existence statement."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "One A/B/C object makes the claim true; an empty population makes it false. The inclusions allow both models."
+      },
+      {
+        "id": "SYL-5-6",
+        "family": "excluded-witness",
+        "context": "excluded-witness",
+        "stem": "Premises: Some A are B. No B are C. Claim: Some A are C. Classify the claim. Use no existential import: a category may be empty unless existence is stated.",
+        "options": [
+          "Certain: true in every valid model.",
+          "Possible but not certain: true in at least one valid model and false in another.",
+          "Impossible: false in every valid model.",
+          "Inconsistent premises: no valid model exists."
+        ],
+        "answer": 2,
+        "explanations": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. Keep an A/B object outside C. Adding a separate A/C object makes the claim true; omitting it makes the claim false.",
+          "This classification is correct. Possible but not certain requires both a supporting model and a falsifying model. Keep an A/B object outside C. Adding a separate A/C object makes the claim true; omitting it makes the claim false.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. Keep an A/B object outside C. Adding a separate A/C object makes the claim true; omitting it makes the claim false.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. Keep an A/B object outside C. Adding a separate A/C object makes the claim true; omitting it makes the claim false."
+        ],
+        "repairs": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. Keep an A/B object outside C. Adding a separate A/C object makes the claim true; omitting it makes the claim false. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is correct. Possible but not certain requires both a supporting model and a falsifying model. Keep an A/B object outside C. Adding a separate A/C object makes the claim true; omitting it makes the claim false. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. Keep an A/B object outside C. Adding a separate A/C object makes the claim true; omitting it makes the claim false. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. Keep an A/B object outside C. Adding a separate A/C object makes the claim true; omitting it makes the claim false. Try a supporting model and then a falsifying model, checking every premise in each."
+        ],
+        "reason_prompt": "Which model argument supports the classification?",
+        "reason_options": [
+          "Keep an A/B object outside C. Adding a separate A/C object makes the claim true; omitting it makes the claim false.",
+          "A single drawing that makes the claim true also proves it certain, even if other valid drawings differ.",
+          "If the claim is not forced by the premises, it must be impossible in every valid drawing.",
+          "Every named category must contain an object, even without an existence statement."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Keep an A/B object outside C. Adding a separate A/C object makes the claim true; omitting it makes the claim false."
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "SYL-5-7",
+        "family": "converse-inclusion",
+        "context": "converse-inclusion",
+        "stem": "Premises: All A are B. Some A are A. Claim: All B are A. Classify the claim. Use no existential import: a category may be empty unless existence is stated.",
+        "options": [
+          "Certain: true in every valid model.",
+          "Possible but not certain: true in at least one valid model and false in another.",
+          "Impossible: false in every valid model.",
+          "Inconsistent premises: no valid model exists."
+        ],
+        "answer": 2,
+        "explanations": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. One A/B object and no B-only object makes the claim true. Adding a B-only object makes it false while keeping the A witness and inclusion.",
+          "This classification is correct. Possible but not certain requires both a supporting model and a falsifying model. One A/B object and no B-only object makes the claim true. Adding a B-only object makes it false while keeping the A witness and inclusion.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. One A/B object and no B-only object makes the claim true. Adding a B-only object makes it false while keeping the A witness and inclusion.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. One A/B object and no B-only object makes the claim true. Adding a B-only object makes it false while keeping the A witness and inclusion."
+        ],
+        "repairs": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. One A/B object and no B-only object makes the claim true. Adding a B-only object makes it false while keeping the A witness and inclusion. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is correct. Possible but not certain requires both a supporting model and a falsifying model. One A/B object and no B-only object makes the claim true. Adding a B-only object makes it false while keeping the A witness and inclusion. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. One A/B object and no B-only object makes the claim true. Adding a B-only object makes it false while keeping the A witness and inclusion. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. One A/B object and no B-only object makes the claim true. Adding a B-only object makes it false while keeping the A witness and inclusion. Try a supporting model and then a falsifying model, checking every premise in each."
+        ],
+        "reason_prompt": "Which model argument supports the classification?",
+        "reason_options": [
+          "One A/B object and no B-only object makes the claim true. Adding a B-only object makes it false while keeping the A witness and inclusion.",
+          "A single drawing that makes the claim true also proves it certain, even if other valid drawings differ.",
+          "If the claim is not forced by the premises, it must be impossible in every valid drawing.",
+          "Every named category must contain an object, even without an existence statement."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "One A/B object and no B-only object makes the claim true. Adding a B-only object makes it false while keeping the A witness and inclusion."
+      },
+      {
+        "id": "SYL-5-8",
+        "family": "inconsistent",
+        "context": "inconsistent",
+        "stem": "Premises: Some A are B. No A are B. Claim: All A are C. Classify the claim. Use no existential import: a category may be empty unless existence is stated.",
+        "options": [
+          "Certain: true in every valid model.",
+          "Possible but not certain: true in at least one valid model and false in another.",
+          "Impossible: false in every valid model.",
+          "Inconsistent premises: no valid model exists."
+        ],
+        "answer": 4,
+        "explanations": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. The required A/B witness is forbidden by the other premise, so no model satisfies both. Do not infer a possibility from inconsistent premises.",
+          "This classification is not justified here. Possible but not certain requires both a supporting model and a falsifying model. The required A/B witness is forbidden by the other premise, so no model satisfies both. Do not infer a possibility from inconsistent premises.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. The required A/B witness is forbidden by the other premise, so no model satisfies both. Do not infer a possibility from inconsistent premises.",
+          "This classification is correct. Inconsistency requires the premises themselves to have no satisfying model. The required A/B witness is forbidden by the other premise, so no model satisfies both. Do not infer a possibility from inconsistent premises."
+        ],
+        "repairs": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. The required A/B witness is forbidden by the other premise, so no model satisfies both. Do not infer a possibility from inconsistent premises. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Possible but not certain requires both a supporting model and a falsifying model. The required A/B witness is forbidden by the other premise, so no model satisfies both. Do not infer a possibility from inconsistent premises. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. The required A/B witness is forbidden by the other premise, so no model satisfies both. Do not infer a possibility from inconsistent premises. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is correct. Inconsistency requires the premises themselves to have no satisfying model. The required A/B witness is forbidden by the other premise, so no model satisfies both. Do not infer a possibility from inconsistent premises. Try a supporting model and then a falsifying model, checking every premise in each."
+        ],
+        "reason_prompt": "Which model argument supports the classification?",
+        "reason_options": [
+          "The required A/B witness is forbidden by the other premise, so no model satisfies both. Do not infer a possibility from inconsistent premises.",
+          "A single drawing that makes the claim true also proves it certain, even if other valid drawings differ.",
+          "If the claim is not forced by the premises, it must be impossible in every valid drawing.",
+          "Every named category must contain an object, even without an existence statement."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The required A/B witness is forbidden by the other premise, so no model satisfies both. Do not infer a possibility from inconsistent premises."
+      }
+    ],
+    "revision": [
+      {
+        "id": "SYL-5-9",
+        "family": "archive",
+        "context": "archive",
+        "stem": "In an archive, every card is a record, no card is fragile, and at least one record is fragile. Claim: all records are fragile. Classify the claim using only these constraints; categories may be empty unless existence is stated.",
+        "options": [
+          "Certain: true in every valid model.",
+          "Possible but not certain: true in at least one valid model and false in another.",
+          "Impossible: false in every valid model.",
+          "Inconsistent premises: no valid model exists."
+        ],
+        "answer": 2,
+        "explanations": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. One fragile record with no cards makes the claim true. Add a non-fragile card/record and the claim becomes false; the fragile record still supplies the required witness and no card is fragile.",
+          "This classification is correct. Possible but not certain requires both a supporting model and a falsifying model. One fragile record with no cards makes the claim true. Add a non-fragile card/record and the claim becomes false; the fragile record still supplies the required witness and no card is fragile.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. One fragile record with no cards makes the claim true. Add a non-fragile card/record and the claim becomes false; the fragile record still supplies the required witness and no card is fragile.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. One fragile record with no cards makes the claim true. Add a non-fragile card/record and the claim becomes false; the fragile record still supplies the required witness and no card is fragile."
+        ],
+        "repairs": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. One fragile record with no cards makes the claim true. Add a non-fragile card/record and the claim becomes false; the fragile record still supplies the required witness and no card is fragile. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is correct. Possible but not certain requires both a supporting model and a falsifying model. One fragile record with no cards makes the claim true. Add a non-fragile card/record and the claim becomes false; the fragile record still supplies the required witness and no card is fragile. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. One fragile record with no cards makes the claim true. Add a non-fragile card/record and the claim becomes false; the fragile record still supplies the required witness and no card is fragile. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. One fragile record with no cards makes the claim true. Add a non-fragile card/record and the claim becomes false; the fragile record still supplies the required witness and no card is fragile. Try a supporting model and then a falsifying model, checking every premise in each."
+        ],
+        "reason_prompt": "Which model argument supports the classification?",
+        "reason_options": [
+          "One fragile record with no cards makes the claim true. Add a non-fragile card/record and the claim becomes false; the fragile record still supplies the required witness and no card is fragile.",
+          "A single drawing that makes the claim true also proves it certain, even if other valid drawings differ.",
+          "If the claim is not forced by the premises, it must be impossible in every valid drawing.",
+          "Every named category must contain an object, even without an existence statement."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "One fragile record with no cards makes the claim true. Add a non-fragile card/record and the claim becomes false; the fragile record still supplies the required witness and no card is fragile."
+      },
+      {
+        "id": "SYL-5-10",
+        "family": "workshop",
+        "context": "workshop",
+        "stem": "Premises: All Trainees are Visitors. No Visitors are Operators. Some Trainees are Trainees. Claim: Some Trainees are Operators. Classify the claim. Use no existential import: a category may be empty unless existence is stated.",
+        "options": [
+          "Certain: true in every valid model.",
+          "Possible but not certain: true in at least one valid model and false in another.",
+          "Impossible: false in every valid model.",
+          "Inconsistent premises: no valid model exists."
+        ],
+        "answer": 3,
+        "explanations": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. Every trainee is a visitor and therefore excluded from Operators. The explicit trainee witness does not undo that exclusion.",
+          "This classification is not justified here. Possible but not certain requires both a supporting model and a falsifying model. Every trainee is a visitor and therefore excluded from Operators. The explicit trainee witness does not undo that exclusion.",
+          "This classification is correct. Impossibility requires the claim to fail in every valid model, not just in one drawing. Every trainee is a visitor and therefore excluded from Operators. The explicit trainee witness does not undo that exclusion.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. Every trainee is a visitor and therefore excluded from Operators. The explicit trainee witness does not undo that exclusion."
+        ],
+        "repairs": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. Every trainee is a visitor and therefore excluded from Operators. The explicit trainee witness does not undo that exclusion. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Possible but not certain requires both a supporting model and a falsifying model. Every trainee is a visitor and therefore excluded from Operators. The explicit trainee witness does not undo that exclusion. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is correct. Impossibility requires the claim to fail in every valid model, not just in one drawing. Every trainee is a visitor and therefore excluded from Operators. The explicit trainee witness does not undo that exclusion. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. Every trainee is a visitor and therefore excluded from Operators. The explicit trainee witness does not undo that exclusion. Try a supporting model and then a falsifying model, checking every premise in each."
+        ],
+        "reason_prompt": "Which model argument supports the classification?",
+        "reason_options": [
+          "Every trainee is a visitor and therefore excluded from Operators. The explicit trainee witness does not undo that exclusion.",
+          "A single drawing that makes the claim true also proves it certain, even if other valid drawings differ.",
+          "If the claim is not forced by the premises, it must be impossible in every valid drawing.",
+          "Every named category must contain an object, even without an existence statement."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Every trainee is a visitor and therefore excluded from Operators. The explicit trainee witness does not undo that exclusion."
+      },
+      {
+        "id": "SYL-5-11",
+        "family": "garden",
+        "context": "garden",
+        "stem": "Premises: Some Roses are Plants. All Plants are Tagged. Claim: Some Tagged are Roses. Classify the claim. Use no existential import: a category may be empty unless existence is stated.",
+        "options": [
+          "Certain: true in every valid model.",
+          "Possible but not certain: true in at least one valid model and false in another.",
+          "Impossible: false in every valid model.",
+          "Inconsistent premises: no valid model exists."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This classification is correct. Certainty requires truth in every valid model, not just a supporting model. The required rose/plant witness must be tagged, giving a tagged rose in every valid model.",
+          "This classification is not justified here. Possible but not certain requires both a supporting model and a falsifying model. The required rose/plant witness must be tagged, giving a tagged rose in every valid model.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. The required rose/plant witness must be tagged, giving a tagged rose in every valid model.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. The required rose/plant witness must be tagged, giving a tagged rose in every valid model."
+        ],
+        "repairs": [
+          "This classification is correct. Certainty requires truth in every valid model, not just a supporting model. The required rose/plant witness must be tagged, giving a tagged rose in every valid model. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Possible but not certain requires both a supporting model and a falsifying model. The required rose/plant witness must be tagged, giving a tagged rose in every valid model. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Impossibility requires the claim to fail in every valid model, not just in one drawing. The required rose/plant witness must be tagged, giving a tagged rose in every valid model. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. The required rose/plant witness must be tagged, giving a tagged rose in every valid model. Try a supporting model and then a falsifying model, checking every premise in each."
+        ],
+        "reason_prompt": "Which model argument supports the classification?",
+        "reason_options": [
+          "The required rose/plant witness must be tagged, giving a tagged rose in every valid model.",
+          "A single drawing that makes the claim true also proves it certain, even if other valid drawings differ.",
+          "If the claim is not forced by the premises, it must be impossible in every valid drawing.",
+          "Every named category must contain an object, even without an existence statement."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The required rose/plant witness must be tagged, giving a tagged rose in every valid model."
+      },
+      {
+        "id": "SYL-5-12",
+        "family": "library",
+        "context": "library",
+        "stem": "Premises: All Maps are Documents. Some Documents are not Maps. Claim: All Documents are Maps. Classify the claim. Use no existential import: a category may be empty unless existence is stated.",
+        "options": [
+          "Certain: true in every valid model.",
+          "Possible but not certain: true in at least one valid model and false in another.",
+          "Impossible: false in every valid model.",
+          "Inconsistent premises: no valid model exists."
+        ],
+        "answer": 3,
+        "explanations": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. The explicit document outside Maps is a counterexample to all documents being maps in every valid model.",
+          "This classification is not justified here. Possible but not certain requires both a supporting model and a falsifying model. The explicit document outside Maps is a counterexample to all documents being maps in every valid model.",
+          "This classification is correct. Impossibility requires the claim to fail in every valid model, not just in one drawing. The explicit document outside Maps is a counterexample to all documents being maps in every valid model.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. The explicit document outside Maps is a counterexample to all documents being maps in every valid model."
+        ],
+        "repairs": [
+          "This classification is not justified here. Certainty requires truth in every valid model, not just a supporting model. The explicit document outside Maps is a counterexample to all documents being maps in every valid model. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Possible but not certain requires both a supporting model and a falsifying model. The explicit document outside Maps is a counterexample to all documents being maps in every valid model. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is correct. Impossibility requires the claim to fail in every valid model, not just in one drawing. The explicit document outside Maps is a counterexample to all documents being maps in every valid model. Try a supporting model and then a falsifying model, checking every premise in each.",
+          "This classification is not justified here. Inconsistency requires the premises themselves to have no satisfying model. The explicit document outside Maps is a counterexample to all documents being maps in every valid model. Try a supporting model and then a falsifying model, checking every premise in each."
+        ],
+        "reason_prompt": "Which model argument supports the classification?",
+        "reason_options": [
+          "The explicit document outside Maps is a counterexample to all documents being maps in every valid model.",
+          "A single drawing that makes the claim true also proves it certain, even if other valid drawings differ.",
+          "If the claim is not forced by the premises, it must be impossible in every valid drawing.",
+          "Every named category must contain an object, even without an existence statement."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The explicit document outside Maps is a counterexample to all documents being maps in every valid model."
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored modal categorical tasks, not authenticated PYQs. Finite occupied-region enumeration checks the keys; teaching review is separate."
+  ]
+}

@@ -1,0 +1,476 @@
+{
+  "objective_id": "PCT-2",
+  "prerequisites": [
+    "Interpret part/whole and percentages.",
+    "Distinguish a count from a ratio."
+  ],
+  "explanation": "A percentage is meaningful only after naming its reference whole. Read of, more than, increase from, and among to identify that whole before dividing.",
+  "worked": [
+    {
+      "action": "A group contains 15 adults and 10 children; children are 10/25 of the group.",
+      "justification": "The whole group contains both adults and children."
+    },
+    {
+      "action": "Children as a percentage of adults is instead 10/15 times 100%.",
+      "justification": "The comparison word adults changes the denominator, even though the counts stay the same."
+    },
+    {
+      "action": "For 10 children in a group of 25, compute 10/25 times 100 =40%.",
+      "justification": "This finishes the part-to-whole calculation using the whole group."
+    },
+    {
+      "action": "Children as a percentage of 15 adults is 10/15 times 100 =66 2/3%.",
+      "justification": "The selected comparison base is adults, not everyone."
+    },
+    {
+      "action": "If membership grows from 30 to 36, the increase is 6; 6/30 times 100 =20%.",
+      "justification": "Increase is a difference relative to the original quantity, not the final quantity."
+    },
+    {
+      "action": "If A has 45 tokens and B has 30, A has 15 more; 15/30 times 100 =50% more than B.",
+      "justification": "More than B names B as the reference. A itself is 150% of B; the excess is only 50%."
+    }
+  ],
+  "illustrations": [],
+  "hint": "Underline the words naming the comparison group.",
+  "shortcut": "Write the denominator in words before putting in numbers.",
+  "limitation": "Different questions about the same data can have different bases.",
+  "checks": {
+    "entry": [
+      {
+        "id": "PCT-2-entry-0",
+        "family": "PCT-2",
+        "context": "identify a collection whole",
+        "stem": "A basket holds 8 apples and 12 pears. For the fraction of all fruit that is apples, what is the denominator?",
+        "options": [
+          "20",
+          "8",
+          "12",
+          "4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "All fruit totals 8+12=20.",
+          "8 counts the selected apples, not all fruit.",
+          "12 counts only pears.",
+          "4 is the count difference, not the whole."
+        ],
+        "repairs": [
+          "All fruit totals 8+12=20. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "8 counts the selected apples, not all fruit. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "12 counts only pears. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "4 is the count difference, not the whole. Reconstruct the stated whole and operation before trying a fresh problem."
+        ],
+        "reason_prompt": "Which equation or base statement supports the result?",
+        "reason_options": [
+          "The whole is apples plus pears",
+          "The whole is only the selected apples"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Part/all uses all 20 fruit.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "PCT-2-entry-reserve-1",
+        "family": "PCT-2",
+        "context": "classification of a complete collection",
+        "stem": "A box contains 5 damaged and 45 sound lamps. For damaged lamps as a percentage of all lamps, which base is needed?",
+        "options": [
+          "50 lamps",
+          "45 lamps",
+          "5 lamps",
+          "40 lamps"
+        ],
+        "answer": 1,
+        "explanations": [
+          "All lamps total 50.",
+          "45 excludes the damaged lamps from the whole.",
+          "5 is the selected part.",
+          "40 is the difference."
+        ],
+        "repairs": [
+          "All lamps total 50. Name the whole before calculating.",
+          "45 excludes the damaged lamps from the whole. Name the whole before calculating.",
+          "5 is the selected part. Name the whole before calculating.",
+          "40 is the difference. Name the whole before calculating."
+        ],
+        "reason_prompt": "Choose the supporting base or equation.",
+        "reason_options": [
+          "Base = damaged + sound",
+          "Base = sound only"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Base = damaged + sound",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "faded": [
+      {
+        "id": "PCT-2-faded-0",
+        "family": "PCT-2",
+        "context": "discount denominator",
+        "stem": "A shirt originally costs 500 and is reduced by 100. The reduction percentage is 100 divided by which amount, multiplied by 100?",
+        "options": [
+          "500",
+          "400",
+          "100",
+          "600"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The original price 500 is the base for its reduction.",
+          "400 is the final price; using it changes the comparison.",
+          "100 is the reduction itself.",
+          "600 was never the original or final price."
+        ],
+        "repairs": [
+          "The original price 500 is the base for its reduction. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "400 is the final price; using it changes the comparison. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "100 is the reduction itself. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "600 was never the original or final price. Reconstruct the stated whole and operation before trying a fresh problem."
+        ],
+        "reason_prompt": "Which equation or base statement supports the result?",
+        "reason_options": [
+          "Change / original value",
+          "Change / changed value"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The question compares the fall with the original price.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "PCT-2-faded-reserve-1",
+        "family": "PCT-2",
+        "context": "change versus retained fraction",
+        "stem": "A price falls from 80 to 60. The fall is 20. Which expression gives the percentage fall?",
+        "options": [
+          "20/80 times 100%",
+          "20/60 times 100%",
+          "60/80 times 100%",
+          "80/20 times 100%"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The fall is compared with the initial 80.",
+          "This compares the fall with the final price.",
+          "This is the retained-price percentage.",
+          "This reverses the required fraction."
+        ],
+        "repairs": [
+          "The fall is compared with the initial 80. Separate the amount changed from the amount remaining.",
+          "This compares the fall with the final price. Separate the amount changed from the amount remaining.",
+          "This is the retained-price percentage. Separate the amount changed from the amount remaining.",
+          "This reverses the required fraction. Separate the amount changed from the amount remaining."
+        ],
+        "reason_prompt": "Choose the supporting base or equation.",
+        "reason_options": [
+          "Change / original",
+          "Change / final"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Change / original",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "PCT-2-independent_a-0",
+        "family": "PCT-2",
+        "context": "membership growth",
+        "stem": "A club grows from 40 to 50 members. What is its percentage increase?",
+        "options": [
+          "25%",
+          "20%",
+          "10%",
+          "125%"
+        ],
+        "answer": 1,
+        "explanations": [
+          "10/40 times 100 equals 25%.",
+          "10/50 uses the final membership as base.",
+          "10 is a count, not the percentage.",
+          "125% is final membership as a percentage of the original, not the increase."
+        ],
+        "repairs": [
+          "10/40 times 100 equals 25%. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "10/50 uses the final membership as base. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "10 is a count, not the percentage. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "125% is final membership as a percentage of the original, not the increase. Reconstruct the stated whole and operation before trying a fresh problem."
+        ],
+        "reason_prompt": "Which equation or base statement supports the result?",
+        "reason_options": [
+          "(50-40)/40 times 100%",
+          "(50-40)/50 times 100%"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The initial 40 members form the comparison base.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "PCT-2-independent_a-reserve-1",
+        "family": "PCT-2",
+        "context": "used stock base",
+        "stem": "A workshop uses 24 kg from a 60 kg supply. What percentage of the original supply was used?",
+        "options": [
+          "40%",
+          "66 2/3%",
+          "60%",
+          "24%"
+        ],
+        "answer": 1,
+        "explanations": [
+          "24/60 times 100 is 40%.",
+          "24/36 uses remaining stock as the base.",
+          "60% remains.",
+          "24 is a mass, not its percentage."
+        ],
+        "repairs": [
+          "24/60 times 100 is 40%. The original supply remains the denominator even after some is consumed.",
+          "24/36 uses remaining stock as the base. The original supply remains the denominator even after some is consumed.",
+          "60% remains. The original supply remains the denominator even after some is consumed.",
+          "24 is a mass, not its percentage. The original supply remains the denominator even after some is consumed."
+        ],
+        "reason_prompt": "Choose the supporting base or equation.",
+        "reason_options": [
+          "Used / original = 24/60",
+          "Used / remaining = 24/36"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Used / original = 24/60",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "PCT-2-independent_b-0",
+        "family": "PCT-2",
+        "context": "complement of a plan",
+        "stem": "A journey covers 30 km out of a planned 120 km. What percentage of the planned journey remains?",
+        "options": [
+          "75%",
+          "25%",
+          "300%",
+          "90%"
+        ],
+        "answer": 1,
+        "explanations": [
+          "90/120 times 100 is 75%.",
+          "25% is completed, not remaining.",
+          "90/30 uses completed distance as base.",
+          "90 is the remaining number of kilometres, not its percent."
+        ],
+        "repairs": [
+          "90/120 times 100 is 75%. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "25% is completed, not remaining. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "90/30 uses completed distance as base. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "90 is the remaining number of kilometres, not its percent. Reconstruct the stated whole and operation before trying a fresh problem."
+        ],
+        "reason_prompt": "Which equation or base statement supports the result?",
+        "reason_options": [
+          "(120-30)/120 times 100%",
+          "(120-30)/30 times 100%"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The whole is the planned 120 km; the requested part is 90 km.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "PCT-2-independent_b-reserve-1",
+        "family": "PCT-2",
+        "context": "reference person comparison",
+        "stem": "A is paid 90 and B is paid 60 for a task. A is paid what percentage more than B?",
+        "options": [
+          "50%",
+          "33 1/3%",
+          "20%",
+          "150%"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The excess 30 is half of B's 60.",
+          "30/90 answers a different comparison.",
+          "30/150 uses the combined pay.",
+          "150% is A's total relative to B, not its excess."
+        ],
+        "repairs": [
+          "The excess 30 is half of B's 60. More than B makes B the base.",
+          "30/90 answers a different comparison. More than B makes B the base.",
+          "30/150 uses the combined pay. More than B makes B the base.",
+          "150% is A's total relative to B, not its excess. More than B makes B the base."
+        ],
+        "reason_prompt": "Choose the supporting base or equation.",
+        "reason_options": [
+          "(90-60)/60",
+          "(90-60)/90"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "(90-60)/60",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "revision": [
+      {
+        "id": "PCT-2-revision-0",
+        "family": "PCT-2",
+        "context": "relative comparison base",
+        "stem": "A sample has 60 red beads and 40 blue beads. Red beads are what percentage more numerous than blue beads?",
+        "options": [
+          "50%",
+          "20%",
+          "33 1/3%",
+          "150%"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The excess is 20 and the blue comparison base is 40: 50%.",
+          "20/100 compares the difference with all beads.",
+          "20/60 uses the red count as base.",
+          "150% is red as a percentage of blue; the excess is 50%."
+        ],
+        "repairs": [
+          "The excess is 20 and the blue comparison base is 40: 50%. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "20/100 compares the difference with all beads. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "20/60 uses the red count as base. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "150% is red as a percentage of blue; the excess is 50%. Reconstruct the stated whole and operation before trying a fresh problem."
+        ],
+        "reason_prompt": "Which equation or base statement supports the result?",
+        "reason_options": [
+          "(60-40)/40 times 100%",
+          "(60-40)/100 times 100%"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "More than blue explicitly selects blue as denominator.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "PCT-2-revision-1",
+        "family": "PCT-2",
+        "context": "conditional whole",
+        "stem": "A test has 80 questions. A learner answers 60, of which 45 are correct. What percentage of the answered questions are correct?",
+        "options": [
+          "75%",
+          "56.25%",
+          "25%",
+          "45%"
+        ],
+        "answer": 1,
+        "explanations": [
+          "45/60 times 100 is 75%.",
+          "45/80 uses the whole test rather than answered questions.",
+          "25% is the incorrect fraction of answered questions.",
+          "45 is the correct count, not the percentage."
+        ],
+        "repairs": [
+          "45/60 times 100 is 75%. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "45/80 uses the whole test rather than answered questions. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "25% is the incorrect fraction of answered questions. Reconstruct the stated whole and operation before trying a fresh problem.",
+          "45 is the correct count, not the percentage. Reconstruct the stated whole and operation before trying a fresh problem."
+        ],
+        "reason_prompt": "Which equation or base statement supports the result?",
+        "reason_options": [
+          "45/60 times 100%",
+          "45/80 times 100%"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The phrase answered questions restricts the whole to 60.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "PCT-2-revision-reserve-2",
+        "family": "PCT-2",
+        "context": "subset within sold inventory",
+        "stem": "A store sells 70 of its 100 notebooks. Of the sold notebooks, 14 are hardbound. What percent of sold notebooks are hardbound?",
+        "options": [
+          "20%",
+          "14%",
+          "70%",
+          "80%"
+        ],
+        "answer": 1,
+        "explanations": [
+          "14/70 equals 20%.",
+          "14/100 uses all stock instead of sold stock.",
+          "70% describes the share sold.",
+          "80% is the sold share not hardbound."
+        ],
+        "repairs": [
+          "14/70 equals 20%. Read the restricted comparison group literally.",
+          "14/100 uses all stock instead of sold stock. Read the restricted comparison group literally.",
+          "70% describes the share sold. Read the restricted comparison group literally.",
+          "80% is the sold share not hardbound. Read the restricted comparison group literally."
+        ],
+        "reason_prompt": "Choose the supporting base or equation.",
+        "reason_options": [
+          "14/70 times 100%",
+          "14/100 times 100%"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "14/70 times 100%",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "PCT-2-revision-reserve-3",
+        "family": "PCT-2",
+        "context": "temporal comparison reference",
+        "stem": "A plant used 50 litres yesterday and 40 today. Today's use is what percentage less than yesterday's?",
+        "options": [
+          "20%",
+          "25%",
+          "80%",
+          "10%"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The fall 10 divided by yesterday's 50 is 20%.",
+          "10/40 uses today's value as the base.",
+          "80% is today's retained proportion.",
+          "10 is a volume difference."
+        ],
+        "repairs": [
+          "The fall 10 divided by yesterday's 50 is 20%. Yesterday is the named reference quantity.",
+          "10/40 uses today's value as the base. Yesterday is the named reference quantity.",
+          "80% is today's retained proportion. Yesterday is the named reference quantity.",
+          "10 is a volume difference. Yesterday is the named reference quantity."
+        ],
+        "reason_prompt": "Choose the supporting base or equation.",
+        "reason_options": [
+          "(50-40)/50 times 100%",
+          "(50-40)/40 times 100%"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "(50-40)/50 times 100%",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored mathematical instruction; exact arithmetic and educational review required before release."
+  ],
+  "subject_review": "",
+  "teaching_review": "",
+  "review_digest": ""
+}

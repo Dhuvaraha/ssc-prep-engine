@@ -1,0 +1,456 @@
+{
+  "objective_id": "ENG-4",
+  "prerequisites": [
+    "Distinguish a written letter from a spoken sound.",
+    "Recognize a singular count-noun phrase and its modifying words."
+  ],
+  "explanation": "For an indefinite singular count-noun phrase, choose a before a consonant sound and an before a vowel sound. Listen to the first word immediately after the article, including an adjective or adverb. Silent letters and letter names can make spelling misleading. When an abbreviation has different pronunciations, the spoken form controls the choice; these tasks state the intended pronunciation.",
+  "worked": [
+    {
+      "action": "Say an apple: apple starts with a vowel sound. Say a pear: pear starts with a consonant sound.",
+      "justification": "The rule uses sound, not whether a word looks long or important."
+    },
+    {
+      "action": "Say an heir when heir has a silent h; say a yellow envelope.",
+      "justification": "The first example starts with a vowel sound; in the second, yellow supplies the first consonant sound, not envelope."
+    },
+    {
+      "action": "Say a user: user begins with the consonant sound y as in you.",
+      "justification": "A written u does not always begin with a vowel sound."
+    },
+    {
+      "action": "Say an MP when M is pronounced em, but a URL when U is pronounced you.",
+      "justification": "Letter names have their own initial sounds. Do not apply one rule to all abbreviations."
+    },
+    {
+      "action": "Compare an unusual gift with a remarkably unusual gift.",
+      "justification": "The first phrase starts with the vowel sound in unusual; the second starts with r in remarkably. The later noun gift does not control either choice."
+    }
+  ],
+  "hint": "Read aloud from the word immediately after the blank. Is its first spoken sound a vowel or a consonant?",
+  "shortcut": "Check pronunciation before spelling, especially silent h, y/w beginnings and letter-name abbreviations.",
+  "limitation": "This rule selects a versus an only when an indefinite article is appropriate. Definite reference, plural nouns and mass-noun usage require additional context. Do not guess the pronunciation of an unfamiliar abbreviation.",
+  "checks": {
+    "entry": [
+      {
+        "id": "ENG-4-1",
+        "family": "hour",
+        "context": "hour",
+        "stem": "A writer introduces one previously unspecified item and needs the indefinite article. Complete: ___ hour. The h is silent; hour begins with a vowel sound.",
+        "options": [
+          "a",
+          "an",
+          "Either a or an is equally correct with the stated pronunciation.",
+          "No indefinite article is needed in this singular count-noun phrase."
+        ],
+        "answer": 2,
+        "explanations": [
+          "A is not the form for this initial vowel sound. hour begins with a vowel sound, not a spoken h.",
+          "An is correct. hour begins with a vowel sound, not a spoken h.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. hour begins with a vowel sound, not a spoken h.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it."
+        ],
+        "repairs": [
+          "A is not the form for this initial vowel sound. hour begins with a vowel sound, not a spoken h. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "An is correct. hour begins with a vowel sound, not a spoken h. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. hour begins with a vowel sound, not a spoken h. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying."
+        ],
+        "reason_prompt": "Which sound-based explanation supports your article?",
+        "reason_options": [
+          "hour begins with a vowel sound, not a spoken h.",
+          "The first written vowel letter always requires an, regardless of its sound.",
+          "Only the final noun matters, even when an adjective or adverb comes before it.",
+          "Every abbreviation takes the same article regardless of how it is pronounced."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "hour begins with a vowel sound, not a spoken h."
+      },
+      {
+        "id": "ENG-4-2",
+        "family": "university",
+        "context": "university",
+        "stem": "A writer introduces one previously unspecified item and needs the indefinite article. Complete: ___ university. University starts with the consonant sound y as in you.",
+        "options": [
+          "a",
+          "an",
+          "Either a or an is equally correct with the stated pronunciation.",
+          "No indefinite article is needed in this singular count-noun phrase."
+        ],
+        "answer": 1,
+        "explanations": [
+          "A is correct. The first spoken sound is consonantal even though the first written letter is u.",
+          "An is not the form for this initial consonant sound. The first spoken sound is consonantal even though the first written letter is u.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. The first spoken sound is consonantal even though the first written letter is u.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it."
+        ],
+        "repairs": [
+          "A is correct. The first spoken sound is consonantal even though the first written letter is u. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "An is not the form for this initial consonant sound. The first spoken sound is consonantal even though the first written letter is u. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. The first spoken sound is consonantal even though the first written letter is u. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying."
+        ],
+        "reason_prompt": "Which sound-based explanation supports your article?",
+        "reason_options": [
+          "The first spoken sound is consonantal even though the first written letter is u.",
+          "The first written vowel letter always requires an, regardless of its sound.",
+          "Only the final noun matters, even when an adjective or adverb comes before it.",
+          "Every abbreviation takes the same article regardless of how it is pronounced."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The first spoken sound is consonantal even though the first written letter is u."
+      }
+    ],
+    "faded": [
+      {
+        "id": "ENG-4-3",
+        "family": "honest",
+        "context": "honest witness",
+        "stem": "A writer introduces one previously unspecified item and needs the indefinite article. Complete: ___ honest witness. Honest begins with a vowel sound; its h is silent. Partly worked: ignore the silent written h; identify the first sound you actually hear.",
+        "options": [
+          "a",
+          "an",
+          "Either a or an is equally correct with the stated pronunciation.",
+          "No indefinite article is needed in this singular count-noun phrase."
+        ],
+        "answer": 2,
+        "explanations": [
+          "A is not the form for this initial vowel sound. The article precedes honest, so its silent h and initial vowel sound determine the choice.",
+          "An is correct. The article precedes honest, so its silent h and initial vowel sound determine the choice.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. The article precedes honest, so its silent h and initial vowel sound determine the choice.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it."
+        ],
+        "repairs": [
+          "A is not the form for this initial vowel sound. The article precedes honest, so its silent h and initial vowel sound determine the choice. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "An is correct. The article precedes honest, so its silent h and initial vowel sound determine the choice. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. The article precedes honest, so its silent h and initial vowel sound determine the choice. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying."
+        ],
+        "reason_prompt": "Which sound-based explanation supports your article?",
+        "reason_options": [
+          "The article precedes honest, so its silent h and initial vowel sound determine the choice.",
+          "The first written vowel letter always requires an, regardless of its sound.",
+          "Only the final noun matters, even when an adjective or adverb comes before it.",
+          "Every abbreviation takes the same article regardless of how it is pronounced."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The article precedes honest, so its silent h and initial vowel sound determine the choice."
+      },
+      {
+        "id": "ENG-4-4",
+        "family": "useful",
+        "context": "useful map",
+        "stem": "A writer introduces one previously unspecified item and needs the indefinite article. Complete: ___ useful map. Useful starts with the consonant sound y as in you. Partly worked: identify the first word after the blank, useful; now classify its starting sound.",
+        "options": [
+          "a",
+          "an",
+          "Either a or an is equally correct with the stated pronunciation.",
+          "No indefinite article is needed in this singular count-noun phrase."
+        ],
+        "answer": 1,
+        "explanations": [
+          "A is correct. The article agrees with the first sound of useful, not with the later noun map.",
+          "An is not the form for this initial consonant sound. The article agrees with the first sound of useful, not with the later noun map.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. The article agrees with the first sound of useful, not with the later noun map.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it."
+        ],
+        "repairs": [
+          "A is correct. The article agrees with the first sound of useful, not with the later noun map. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "An is not the form for this initial consonant sound. The article agrees with the first sound of useful, not with the later noun map. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. The article agrees with the first sound of useful, not with the later noun map. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying."
+        ],
+        "reason_prompt": "Which sound-based explanation supports your article?",
+        "reason_options": [
+          "The article agrees with the first sound of useful, not with the later noun map.",
+          "The first written vowel letter always requires an, regardless of its sound.",
+          "Only the final noun matters, even when an adjective or adverb comes before it.",
+          "Every abbreviation takes the same article regardless of how it is pronounced."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The article agrees with the first sound of useful, not with the later noun map."
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "ENG-4-5",
+        "family": "mri",
+        "context": "MRI scan",
+        "stem": "A writer introduces one previously unspecified item and needs the indefinite article. Complete: ___ MRI scan. Read MRI as the letter names em-ar-eye.",
+        "options": [
+          "a",
+          "an",
+          "Either a or an is equally correct with the stated pronunciation.",
+          "No indefinite article is needed in this singular count-noun phrase."
+        ],
+        "answer": 2,
+        "explanations": [
+          "A is not the form for this initial vowel sound. The spoken letter name em starts with a vowel sound.",
+          "An is correct. The spoken letter name em starts with a vowel sound.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. The spoken letter name em starts with a vowel sound.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it."
+        ],
+        "repairs": [
+          "A is not the form for this initial vowel sound. The spoken letter name em starts with a vowel sound. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "An is correct. The spoken letter name em starts with a vowel sound. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. The spoken letter name em starts with a vowel sound. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying."
+        ],
+        "reason_prompt": "Which sound-based explanation supports your article?",
+        "reason_options": [
+          "The spoken letter name em starts with a vowel sound.",
+          "The first written vowel letter always requires an, regardless of its sound.",
+          "Only the final noun matters, even when an adjective or adverb comes before it.",
+          "Every abbreviation takes the same article regardless of how it is pronounced."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The spoken letter name em starts with a vowel sound."
+      },
+      {
+        "id": "ENG-4-6",
+        "family": "ufo",
+        "context": "UFO sighting",
+        "stem": "A writer introduces one previously unspecified item and needs the indefinite article. Complete: ___ UFO sighting. Read UFO as the letter names you-eff-oh.",
+        "options": [
+          "a",
+          "an",
+          "Either a or an is equally correct with the stated pronunciation.",
+          "No indefinite article is needed in this singular count-noun phrase."
+        ],
+        "answer": 1,
+        "explanations": [
+          "A is correct. The letter name you starts with a consonant sound.",
+          "An is not the form for this initial consonant sound. The letter name you starts with a consonant sound.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. The letter name you starts with a consonant sound.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it."
+        ],
+        "repairs": [
+          "A is correct. The letter name you starts with a consonant sound. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "An is not the form for this initial consonant sound. The letter name you starts with a consonant sound. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. The letter name you starts with a consonant sound. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying."
+        ],
+        "reason_prompt": "Which sound-based explanation supports your article?",
+        "reason_options": [
+          "The letter name you starts with a consonant sound.",
+          "The first written vowel letter always requires an, regardless of its sound.",
+          "Only the final noun matters, even when an adjective or adverb comes before it.",
+          "Every abbreviation takes the same article regardless of how it is pronounced."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The letter name you starts with a consonant sound."
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "ENG-4-7",
+        "family": "european",
+        "context": "European city",
+        "stem": "A writer introduces one previously unspecified item and needs the indefinite article. Complete: ___ European city. European begins with the consonant sound y as in you.",
+        "options": [
+          "a",
+          "an",
+          "Either a or an is equally correct with the stated pronunciation.",
+          "No indefinite article is needed in this singular count-noun phrase."
+        ],
+        "answer": 1,
+        "explanations": [
+          "A is correct. The first written letter e does not remove the initial consonant sound.",
+          "An is not the form for this initial consonant sound. The first written letter e does not remove the initial consonant sound.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. The first written letter e does not remove the initial consonant sound.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it."
+        ],
+        "repairs": [
+          "A is correct. The first written letter e does not remove the initial consonant sound. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "An is not the form for this initial consonant sound. The first written letter e does not remove the initial consonant sound. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. The first written letter e does not remove the initial consonant sound. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying."
+        ],
+        "reason_prompt": "Which sound-based explanation supports your article?",
+        "reason_options": [
+          "The first written letter e does not remove the initial consonant sound.",
+          "The first written vowel letter always requires an, regardless of its sound.",
+          "Only the final noun matters, even when an adjective or adverb comes before it.",
+          "Every abbreviation takes the same article regardless of how it is pronounced."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The first written letter e does not remove the initial consonant sound."
+      },
+      {
+        "id": "ENG-4-8",
+        "family": "one-way",
+        "context": "one-way street",
+        "stem": "A writer introduces one previously unspecified item and needs the indefinite article. Complete: ___ one-way street. One begins with the consonant sound w.",
+        "options": [
+          "a",
+          "an",
+          "Either a or an is equally correct with the stated pronunciation.",
+          "No indefinite article is needed in this singular count-noun phrase."
+        ],
+        "answer": 1,
+        "explanations": [
+          "A is correct. The word one starts with a w sound despite its initial written o.",
+          "An is not the form for this initial consonant sound. The word one starts with a w sound despite its initial written o.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. The word one starts with a w sound despite its initial written o.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it."
+        ],
+        "repairs": [
+          "A is correct. The word one starts with a w sound despite its initial written o. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "An is not the form for this initial consonant sound. The word one starts with a w sound despite its initial written o. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The pronunciation is explicitly specified, so these are not freely interchangeable here. The word one starts with a w sound despite its initial written o. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying.",
+          "The prompt requests an indefinite singular count-noun phrase; omitting the article does not satisfy it. Say the whole phrase starting immediately after the blank; classify its first spoken sound before retrying."
+        ],
+        "reason_prompt": "Which sound-based explanation supports your article?",
+        "reason_options": [
+          "The word one starts with a w sound despite its initial written o.",
+          "The first written vowel letter always requires an, regardless of its sound.",
+          "Only the final noun matters, even when an adjective or adverb comes before it.",
+          "Every abbreviation takes the same article regardless of how it is pronounced."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The word one starts with a w sound despite its initial written o."
+      }
+    ],
+    "revision": [
+      {
+        "id": "ENG-4-9",
+        "family": "adverb-vowel",
+        "context": "unusually quiet room",
+        "stem": "Complete both indefinite article slots in this sentence: The archivist wrote ___ unusually detailed account on ___ uniform form. Read X as eks and MRI as em-ar-eye where they occur.",
+        "options": [
+          "a / a",
+          "a / an",
+          "an / a",
+          "an / an"
+        ],
+        "answer": 3,
+        "explanations": [
+          "The article before unusually should be an, not a. Unusually starts with a vowel sound; uniform starts with the consonant y sound.",
+          "The article before unusually should be an, not a. The article before uniform should be a, not an. Unusually starts with a vowel sound; uniform starts with the consonant y sound.",
+          "Both articles match the required initial sounds. Unusually starts with a vowel sound; uniform starts with the consonant y sound.",
+          "The article before uniform should be a, not an. Unusually starts with a vowel sound; uniform starts with the consonant y sound."
+        ],
+        "repairs": [
+          "The article before unusually should be an, not a. Unusually starts with a vowel sound; uniform starts with the consonant y sound. Check the first spoken word after each blank separately.",
+          "The article before unusually should be an, not a. The article before uniform should be a, not an. Unusually starts with a vowel sound; uniform starts with the consonant y sound. Check the first spoken word after each blank separately.",
+          "Both articles match the required initial sounds. Unusually starts with a vowel sound; uniform starts with the consonant y sound. Check the first spoken word after each blank separately.",
+          "The article before uniform should be a, not an. Unusually starts with a vowel sound; uniform starts with the consonant y sound. Check the first spoken word after each blank separately."
+        ],
+        "reason_prompt": "Which sound-based explanation supports your article?",
+        "reason_options": [
+          "Unusually starts with a vowel sound; uniform starts with the consonant y sound.",
+          "The first written vowel letter always requires an, regardless of its sound.",
+          "Only the final noun matters, even when an adjective or adverb comes before it.",
+          "Every abbreviation takes the same article regardless of how it is pronounced."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Unusually starts with a vowel sound; uniform starts with the consonant y sound."
+      },
+      {
+        "id": "ENG-4-10",
+        "family": "adverb-consonant",
+        "context": "highly unusual plan",
+        "stem": "Complete both indefinite article slots in this sentence: They approved ___ highly unusual plan after ___ hour of discussion. Read X as eks and MRI as em-ar-eye where they occur.",
+        "options": [
+          "a / a",
+          "a / an",
+          "an / a",
+          "an / an"
+        ],
+        "answer": 2,
+        "explanations": [
+          "The article before hour should be an, not a. Highly starts with a pronounced h; hour starts with a vowel sound because its h is silent.",
+          "Both articles match the required initial sounds. Highly starts with a pronounced h; hour starts with a vowel sound because its h is silent.",
+          "The article before highly should be a, not an. The article before hour should be an, not a. Highly starts with a pronounced h; hour starts with a vowel sound because its h is silent.",
+          "The article before highly should be a, not an. Highly starts with a pronounced h; hour starts with a vowel sound because its h is silent."
+        ],
+        "repairs": [
+          "The article before hour should be an, not a. Highly starts with a pronounced h; hour starts with a vowel sound because its h is silent. Check the first spoken word after each blank separately.",
+          "Both articles match the required initial sounds. Highly starts with a pronounced h; hour starts with a vowel sound because its h is silent. Check the first spoken word after each blank separately.",
+          "The article before highly should be a, not an. The article before hour should be an, not a. Highly starts with a pronounced h; hour starts with a vowel sound because its h is silent. Check the first spoken word after each blank separately.",
+          "The article before highly should be a, not an. Highly starts with a pronounced h; hour starts with a vowel sound because its h is silent. Check the first spoken word after each blank separately."
+        ],
+        "reason_prompt": "Which sound-based explanation supports your article?",
+        "reason_options": [
+          "Highly starts with a pronounced h; hour starts with a vowel sound because its h is silent.",
+          "The first written vowel letter always requires an, regardless of its sound.",
+          "Only the final noun matters, even when an adjective or adverb comes before it.",
+          "Every abbreviation takes the same article regardless of how it is pronounced."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Highly starts with a pronounced h; hour starts with a vowel sound because its h is silent."
+      },
+      {
+        "id": "ENG-4-11",
+        "family": "xray",
+        "context": "X-ray image",
+        "stem": "Complete both indefinite article slots in this sentence: The clinician requested ___ X-ray image and wrote ___ useful note. Read X as eks and MRI as em-ar-eye where they occur.",
+        "options": [
+          "a / a",
+          "a / an",
+          "an / a",
+          "an / an"
+        ],
+        "answer": 3,
+        "explanations": [
+          "The article before X-ray should be an, not a. The letter name eks starts with a vowel sound; useful starts with the consonant y sound.",
+          "The article before X-ray should be an, not a. The article before useful should be a, not an. The letter name eks starts with a vowel sound; useful starts with the consonant y sound.",
+          "Both articles match the required initial sounds. The letter name eks starts with a vowel sound; useful starts with the consonant y sound.",
+          "The article before useful should be a, not an. The letter name eks starts with a vowel sound; useful starts with the consonant y sound."
+        ],
+        "repairs": [
+          "The article before X-ray should be an, not a. The letter name eks starts with a vowel sound; useful starts with the consonant y sound. Check the first spoken word after each blank separately.",
+          "The article before X-ray should be an, not a. The article before useful should be a, not an. The letter name eks starts with a vowel sound; useful starts with the consonant y sound. Check the first spoken word after each blank separately.",
+          "Both articles match the required initial sounds. The letter name eks starts with a vowel sound; useful starts with the consonant y sound. Check the first spoken word after each blank separately.",
+          "The article before useful should be a, not an. The letter name eks starts with a vowel sound; useful starts with the consonant y sound. Check the first spoken word after each blank separately."
+        ],
+        "reason_prompt": "Which sound-based explanation supports your article?",
+        "reason_options": [
+          "The letter name eks starts with a vowel sound; useful starts with the consonant y sound.",
+          "The first written vowel letter always requires an, regardless of its sound.",
+          "Only the final noun matters, even when an adjective or adverb comes before it.",
+          "Every abbreviation takes the same article regardless of how it is pronounced."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The letter name eks starts with a vowel sound; useful starts with the consonant y sound."
+      },
+      {
+        "id": "ENG-4-12",
+        "family": "uniform",
+        "context": "uniform label",
+        "stem": "Complete both indefinite article slots in this sentence: The inspector wore ___ uniform and carried ___ MRI report. Read X as eks and MRI as em-ar-eye where they occur.",
+        "options": [
+          "a / a",
+          "a / an",
+          "an / a",
+          "an / an"
+        ],
+        "answer": 2,
+        "explanations": [
+          "The article before MRI should be an, not a. Uniform starts with the consonant y sound; MRI read as em-ar-eye starts with a vowel sound.",
+          "Both articles match the required initial sounds. Uniform starts with the consonant y sound; MRI read as em-ar-eye starts with a vowel sound.",
+          "The article before uniform should be a, not an. The article before MRI should be an, not a. Uniform starts with the consonant y sound; MRI read as em-ar-eye starts with a vowel sound.",
+          "The article before uniform should be a, not an. Uniform starts with the consonant y sound; MRI read as em-ar-eye starts with a vowel sound."
+        ],
+        "repairs": [
+          "The article before MRI should be an, not a. Uniform starts with the consonant y sound; MRI read as em-ar-eye starts with a vowel sound. Check the first spoken word after each blank separately.",
+          "Both articles match the required initial sounds. Uniform starts with the consonant y sound; MRI read as em-ar-eye starts with a vowel sound. Check the first spoken word after each blank separately.",
+          "The article before uniform should be a, not an. The article before MRI should be an, not a. Uniform starts with the consonant y sound; MRI read as em-ar-eye starts with a vowel sound. Check the first spoken word after each blank separately.",
+          "The article before uniform should be a, not an. Uniform starts with the consonant y sound; MRI read as em-ar-eye starts with a vowel sound. Check the first spoken word after each blank separately."
+        ],
+        "reason_prompt": "Which sound-based explanation supports your article?",
+        "reason_options": [
+          "Uniform starts with the consonant y sound; MRI read as em-ar-eye starts with a vowel sound.",
+          "The first written vowel letter always requires an, regardless of its sound.",
+          "Only the final noun matters, even when an adjective or adverb comes before it.",
+          "Every abbreviation takes the same article regardless of how it is pronounced."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Uniform starts with the consonant y sound; MRI read as em-ar-eye starts with a vowel sound."
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored sound-based article exercises; intended pronunciation stated explicitly. Not authenticated PYQs. Subject and teaching acceptance remain separate."
+  ]
+}

@@ -1,0 +1,1500 @@
+{
+  "objective_id": "MIR-2",
+  "prerequisites": [
+    "Distinguish left/right and above/below relative to a depicted line.",
+    "Recognise equal perpendicular distances.",
+    "Read the coordinate description if using the text alternative: x is right-positive, y is upward-positive."
+  ],
+  "explanation": "A reflection preserves the perpendicular distance to its depicted axis. Read which coordinate changes: across x=c, x becomes2c-x while y is unchanged; across y=c, y becomes2c-y while x is unchanged. These formulas express equal distances, not a requirement to memorise coordinates.",
+  "worked": [
+    {
+      "action": "Use worked diagram1: the original is left of the vertical mirror and its image right. Follow the black marked corner along the horizontal connector; the matching ticks mark equal distances.",
+      "justification": "The diagram models the operation before using optional coordinates. Height is unchanged."
+    },
+    {
+      "action": "Use a vertical mirror through x=0. A corner at(-40,20) is40 units left and20 units above the centre.",
+      "justification": "Perpendicular distance to this vertical line is horizontal distance."
+    },
+    {
+      "action": "Its image is(40,20):40 units right at the same height.",
+      "justification": "Only the left/right displacement changes sign."
+    },
+    {
+      "action": "A second corner(-20,10) maps to(20,10), and a dot(-30,15) maps to(30,15).",
+      "justification": "Apply the same rule to every feature; the shape and its marked point must both transform."
+    },
+    {
+      "action": "For a horizontal water line through y=0,(-40,20) maps to(-40,-20). A half-turn instead maps it to(40,-20).",
+      "justification": "The water reflection preserves x, while the half-turn reverses both coordinates."
+    },
+    {
+      "action": "For a shifted vertical mirror x=10, a point at x=-20 is30 units left, so its image is x=40,30 units right.",
+      "justification": "Negating x alone works only when the mirror is x=0."
+    },
+    {
+      "action": "For two separate shapes, move their centres across the mirror and reflect each shape and mark as well.",
+      "justification": "One global reflection changes both the arrangement and the orientation of every component."
+    },
+    {
+      "action": "Compare worked diagram2 (water reflection), diagram3 (two-piece arrangement) and diagram4 (shifted mirror). Trace the marked points and then the remaining corners.",
+      "justification": "Use the depicted mirror and preserve perpendicular distance; every component and internal mark must transform."
+    }
+  ],
+  "hint": "Choose one distinctive corner or dot. Check its perpendicular distance and its position parallel to the mirror before testing the other features.",
+  "shortcut": "Reject an incorrect candidate using one violated feature, but verify all features in the final candidate.",
+  "limitation": "Use the depicted axis, not an assumed page edge. Reflection differs from rotation; symmetric figures alone may hide that difference.",
+  "checks": {
+    "entry": [
+      {
+        "id": "MIR-2-1",
+        "family": "vertical-central-axis",
+        "context": "vertical asymmetric layout 1",
+        "stem": "The specified corner is(-65,10) and the depicted vertical mirror is x=0. What is the perpendicular distance, in grid units, of that corner's image from the mirror?",
+        "options": [
+          "65",
+          "70",
+          "60",
+          "130"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The image is the same perpendicular distance from the mirror: |-65-(0)|=65.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement.",
+          "This reduces the required distance by5 units; reflection preserves it.",
+          "130 is the separation between the point and its image, not the distance of either one from the mirror."
+        ],
+        "repairs": [
+          "The image is the same perpendicular distance from the mirror: |-65-(0)|=65. Check the original and image of one distinctive corner, then every marked point.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement. Check the original and image of one distinctive corner, then every marked point.",
+          "This reduces the required distance by5 units; reflection preserves it. Check the original and image of one distinctive corner, then every marked point.",
+          "130 is the separation between the point and its image, not the distance of either one from the mirror. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The image retains the original point's perpendicular distance to the depicted mirror.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The image is the same perpendicular distance from the mirror: |-65-(0)|=65.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 10), (-41, 16), (-48, 37), (-61, 29)]]. Dots: [(-61, 14)]. Lines: [[(0, -95), (0, 95)]].",
+          "polygons": [
+            [
+              {
+                "x": -65,
+                "y": 10
+              },
+              {
+                "x": -41,
+                "y": 16
+              },
+              {
+                "x": -48,
+                "y": 37
+              },
+              {
+                "x": -61,
+                "y": 29
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -61,
+              "y": 14
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "MIR-2-2",
+        "family": "horizontal-central-axis",
+        "context": "horizontal asymmetric layout 2",
+        "stem": "The specified corner is(-58,17) and the depicted horizontal mirror is y=0. What is the perpendicular distance, in grid units, of that corner's image from the mirror?",
+        "options": [
+          "17",
+          "22",
+          "12",
+          "34"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The image is the same perpendicular distance from the mirror: |17-(0)|=17.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement.",
+          "This reduces the required distance by5 units; reflection preserves it.",
+          "34 is the separation between the point and its image, not the distance of either one from the mirror."
+        ],
+        "repairs": [
+          "The image is the same perpendicular distance from the mirror: |17-(0)|=17. Check the original and image of one distinctive corner, then every marked point.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement. Check the original and image of one distinctive corner, then every marked point.",
+          "This reduces the required distance by5 units; reflection preserves it. Check the original and image of one distinctive corner, then every marked point.",
+          "34 is the separation between the point and its image, not the distance of either one from the mirror. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The image retains the original point's perpendicular distance to the depicted mirror.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The image is the same perpendicular distance from the mirror: |17-(0)|=17.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 17), (-34, 17), (-34, 26), (-42, 26), (-42, 37), (-51, 37), (-51, 45), (-58, 45)]]. Dots: [(-54, 21)]. Lines: [[(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -58,
+                "y": 17
+              },
+              {
+                "x": -34,
+                "y": 17
+              },
+              {
+                "x": -34,
+                "y": 26
+              },
+              {
+                "x": -42,
+                "y": 26
+              },
+              {
+                "x": -42,
+                "y": 37
+              },
+              {
+                "x": -51,
+                "y": 37
+              },
+              {
+                "x": -51,
+                "y": 45
+              },
+              {
+                "x": -58,
+                "y": 45
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -54,
+              "y": 21
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      }
+    ],
+    "faded": [
+      {
+        "id": "MIR-2-3",
+        "family": "vertical-central-axis",
+        "context": "vertical asymmetric layout 3",
+        "stem": "The specified corner is(-51,24) and the depicted vertical mirror is x=0. What is the perpendicular distance, in grid units, of that corner's image from the mirror? Partly worked: the original perpendicular distance is |-51-(0)|. Reflection preserves that distance. Complete the magnitude.",
+        "options": [
+          "51",
+          "56",
+          "46",
+          "102"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The image is the same perpendicular distance from the mirror: |-51-(0)|=51.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement.",
+          "This reduces the required distance by5 units; reflection preserves it.",
+          "102 is the separation between the point and its image, not the distance of either one from the mirror."
+        ],
+        "repairs": [
+          "The image is the same perpendicular distance from the mirror: |-51-(0)|=51. Check the original and image of one distinctive corner, then every marked point.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement. Check the original and image of one distinctive corner, then every marked point.",
+          "This reduces the required distance by5 units; reflection preserves it. Check the original and image of one distinctive corner, then every marked point.",
+          "102 is the separation between the point and its image, not the distance of either one from the mirror. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The image retains the original point's perpendicular distance to the depicted mirror.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The image is the same perpendicular distance from the mirror: |-51-(0)|=51.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 24), (-29, 24), (-29, 31), (-43, 31), (-43, 49), (-51, 49)]]. Dots: [(-47, 28)]. Lines: [[(0, -95), (0, 95)]].",
+          "polygons": [
+            [
+              {
+                "x": -51,
+                "y": 24
+              },
+              {
+                "x": -29,
+                "y": 24
+              },
+              {
+                "x": -29,
+                "y": 31
+              },
+              {
+                "x": -43,
+                "y": 31
+              },
+              {
+                "x": -43,
+                "y": 49
+              },
+              {
+                "x": -51,
+                "y": 49
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -47,
+              "y": 28
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "MIR-2-4",
+        "family": "horizontal-central-axis",
+        "context": "horizontal asymmetric layout 4",
+        "stem": "The specified corner is(-65,39) and the depicted horizontal mirror is y=0. What is the perpendicular distance, in grid units, of that corner's image from the mirror? Partly worked: the original perpendicular distance is |39-(0)|. Reflection preserves that distance. Complete the magnitude.",
+        "options": [
+          "39",
+          "44",
+          "34",
+          "78"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The image is the same perpendicular distance from the mirror: |39-(0)|=39.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement.",
+          "This reduces the required distance by5 units; reflection preserves it.",
+          "78 is the separation between the point and its image, not the distance of either one from the mirror."
+        ],
+        "repairs": [
+          "The image is the same perpendicular distance from the mirror: |39-(0)|=39. Check the original and image of one distinctive corner, then every marked point.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement. Check the original and image of one distinctive corner, then every marked point.",
+          "This reduces the required distance by5 units; reflection preserves it. Check the original and image of one distinctive corner, then every marked point.",
+          "78 is the separation between the point and its image, not the distance of either one from the mirror. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The image retains the original point's perpendicular distance to the depicted mirror.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The image is the same perpendicular distance from the mirror: |39-(0)|=39.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 39), (-51, 39), (-51, 31), (-37, 45), (-51, 59), (-51, 51), (-65, 51)]]. Dots: [(-61, 35)]. Lines: [[(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -65,
+                "y": 39
+              },
+              {
+                "x": -51,
+                "y": 39
+              },
+              {
+                "x": -51,
+                "y": 31
+              },
+              {
+                "x": -37,
+                "y": 45
+              },
+              {
+                "x": -51,
+                "y": 59
+              },
+              {
+                "x": -51,
+                "y": 51
+              },
+              {
+                "x": -65,
+                "y": 51
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -61,
+              "y": 35
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "MIR-2-5",
+        "family": "vertical-central-axis",
+        "context": "vertical asymmetric layout 5",
+        "stem": "The specified corner is(-58,10) and the depicted vertical mirror is x=0. What is the perpendicular distance, in grid units, of that corner's image from the mirror?",
+        "options": [
+          "58",
+          "63",
+          "53",
+          "116"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The image is the same perpendicular distance from the mirror: |-58-(0)|=58.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement.",
+          "This reduces the required distance by5 units; reflection preserves it.",
+          "116 is the separation between the point and its image, not the distance of either one from the mirror."
+        ],
+        "repairs": [
+          "The image is the same perpendicular distance from the mirror: |-58-(0)|=58. Check the original and image of one distinctive corner, then every marked point.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement. Check the original and image of one distinctive corner, then every marked point.",
+          "This reduces the required distance by5 units; reflection preserves it. Check the original and image of one distinctive corner, then every marked point.",
+          "116 is the separation between the point and its image, not the distance of either one from the mirror. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The image retains the original point's perpendicular distance to the depicted mirror.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The image is the same perpendicular distance from the mirror: |-58-(0)|=58.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 10), (-34, 16), (-41, 37), (-54, 29)]]. Dots: [(-54, 14)]. Lines: [[(0, -95), (0, 95)]].",
+          "polygons": [
+            [
+              {
+                "x": -58,
+                "y": 10
+              },
+              {
+                "x": -34,
+                "y": 16
+              },
+              {
+                "x": -41,
+                "y": 37
+              },
+              {
+                "x": -54,
+                "y": 29
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -54,
+              "y": 14
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "MIR-2-6",
+        "family": "horizontal-central-axis",
+        "context": "horizontal asymmetric layout 6",
+        "stem": "The specified corner is(-51,17) and the depicted horizontal mirror is y=0. What is the perpendicular distance, in grid units, of that corner's image from the mirror?",
+        "options": [
+          "17",
+          "22",
+          "12",
+          "34"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The image is the same perpendicular distance from the mirror: |17-(0)|=17.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement.",
+          "This reduces the required distance by5 units; reflection preserves it.",
+          "34 is the separation between the point and its image, not the distance of either one from the mirror."
+        ],
+        "repairs": [
+          "The image is the same perpendicular distance from the mirror: |17-(0)|=17. Check the original and image of one distinctive corner, then every marked point.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement. Check the original and image of one distinctive corner, then every marked point.",
+          "This reduces the required distance by5 units; reflection preserves it. Check the original and image of one distinctive corner, then every marked point.",
+          "34 is the separation between the point and its image, not the distance of either one from the mirror. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The image retains the original point's perpendicular distance to the depicted mirror.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The image is the same perpendicular distance from the mirror: |17-(0)|=17.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 17), (-27, 17), (-27, 26), (-35, 26), (-35, 37), (-44, 37), (-44, 45), (-51, 45)]]. Dots: [(-47, 21)]. Lines: [[(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -51,
+                "y": 17
+              },
+              {
+                "x": -27,
+                "y": 17
+              },
+              {
+                "x": -27,
+                "y": 26
+              },
+              {
+                "x": -35,
+                "y": 26
+              },
+              {
+                "x": -35,
+                "y": 37
+              },
+              {
+                "x": -44,
+                "y": 37
+              },
+              {
+                "x": -44,
+                "y": 45
+              },
+              {
+                "x": -51,
+                "y": 45
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -47,
+              "y": 21
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "MIR-2-7",
+        "family": "vertical-central-axis",
+        "context": "vertical asymmetric layout 7",
+        "stem": "The specified corner is(-65,24) and the depicted vertical mirror is x=0. What is the perpendicular distance, in grid units, of that corner's image from the mirror?",
+        "options": [
+          "65",
+          "70",
+          "60",
+          "130"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The image is the same perpendicular distance from the mirror: |-65-(0)|=65.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement.",
+          "This reduces the required distance by5 units; reflection preserves it.",
+          "130 is the separation between the point and its image, not the distance of either one from the mirror."
+        ],
+        "repairs": [
+          "The image is the same perpendicular distance from the mirror: |-65-(0)|=65. Check the original and image of one distinctive corner, then every marked point.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement. Check the original and image of one distinctive corner, then every marked point.",
+          "This reduces the required distance by5 units; reflection preserves it. Check the original and image of one distinctive corner, then every marked point.",
+          "130 is the separation between the point and its image, not the distance of either one from the mirror. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The image retains the original point's perpendicular distance to the depicted mirror.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The image is the same perpendicular distance from the mirror: |-65-(0)|=65.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 24), (-43, 24), (-43, 31), (-57, 31), (-57, 49), (-65, 49)]]. Dots: [(-61, 28)]. Lines: [[(0, -95), (0, 95)]].",
+          "polygons": [
+            [
+              {
+                "x": -65,
+                "y": 24
+              },
+              {
+                "x": -43,
+                "y": 24
+              },
+              {
+                "x": -43,
+                "y": 31
+              },
+              {
+                "x": -57,
+                "y": 31
+              },
+              {
+                "x": -57,
+                "y": 49
+              },
+              {
+                "x": -65,
+                "y": 49
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -61,
+              "y": 28
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "MIR-2-8",
+        "family": "horizontal-central-axis",
+        "context": "horizontal asymmetric layout 8",
+        "stem": "The specified corner is(-58,39) and the depicted horizontal mirror is y=0. What is the perpendicular distance, in grid units, of that corner's image from the mirror?",
+        "options": [
+          "39",
+          "44",
+          "34",
+          "78"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The image is the same perpendicular distance from the mirror: |39-(0)|=39.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement.",
+          "This reduces the required distance by5 units; reflection preserves it.",
+          "78 is the separation between the point and its image, not the distance of either one from the mirror."
+        ],
+        "repairs": [
+          "The image is the same perpendicular distance from the mirror: |39-(0)|=39. Check the original and image of one distinctive corner, then every marked point.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement. Check the original and image of one distinctive corner, then every marked point.",
+          "This reduces the required distance by5 units; reflection preserves it. Check the original and image of one distinctive corner, then every marked point.",
+          "78 is the separation between the point and its image, not the distance of either one from the mirror. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The image retains the original point's perpendicular distance to the depicted mirror.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The image is the same perpendicular distance from the mirror: |39-(0)|=39.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 39), (-44, 39), (-44, 31), (-30, 45), (-44, 59), (-44, 51), (-58, 51)]]. Dots: [(-54, 35)]. Lines: [[(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -58,
+                "y": 39
+              },
+              {
+                "x": -44,
+                "y": 39
+              },
+              {
+                "x": -44,
+                "y": 31
+              },
+              {
+                "x": -30,
+                "y": 45
+              },
+              {
+                "x": -44,
+                "y": 59
+              },
+              {
+                "x": -44,
+                "y": 51
+              },
+              {
+                "x": -58,
+                "y": 51
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -54,
+              "y": 35
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      }
+    ],
+    "revision": [
+      {
+        "id": "MIR-2-9",
+        "family": "vertical-shifted-axis",
+        "context": "vertical asymmetric layout 9",
+        "stem": "The specified corner is(-51,10) and the depicted vertical mirror is x=10. What is the perpendicular distance, in grid units, of that corner's image from the mirror?",
+        "options": [
+          "61",
+          "66",
+          "56",
+          "122"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The image is the same perpendicular distance from the mirror: |-51-(10)|=61.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement.",
+          "This reduces the required distance by5 units; reflection preserves it.",
+          "122 is the separation between the point and its image, not the distance of either one from the mirror."
+        ],
+        "repairs": [
+          "The image is the same perpendicular distance from the mirror: |-51-(10)|=61. Check the original and image of one distinctive corner, then every marked point.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement. Check the original and image of one distinctive corner, then every marked point.",
+          "This reduces the required distance by5 units; reflection preserves it. Check the original and image of one distinctive corner, then every marked point.",
+          "122 is the separation between the point and its image, not the distance of either one from the mirror. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The image retains the original point's perpendicular distance to the depicted mirror.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The image is the same perpendicular distance from the mirror: |-51-(10)|=61.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 10), (-27, 16), (-34, 37), (-47, 29)]]. Dots: [(-47, 14)]. Lines: [[(10, -95), (10, 95)]].",
+          "polygons": [
+            [
+              {
+                "x": -51,
+                "y": 10
+              },
+              {
+                "x": -27,
+                "y": 16
+              },
+              {
+                "x": -34,
+                "y": 37
+              },
+              {
+                "x": -47,
+                "y": 29
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -47,
+              "y": 14
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 10,
+                "y": -95
+              },
+              {
+                "x": 10,
+                "y": 95
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "MIR-2-10",
+        "family": "horizontal-shifted-axis",
+        "context": "horizontal asymmetric layout 10",
+        "stem": "The specified corner is(-65,17) and the depicted horizontal mirror is y=-10. What is the perpendicular distance, in grid units, of that corner's image from the mirror?",
+        "options": [
+          "27",
+          "32",
+          "22",
+          "54"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The image is the same perpendicular distance from the mirror: |17-(-10)|=27.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement.",
+          "This reduces the required distance by5 units; reflection preserves it.",
+          "54 is the separation between the point and its image, not the distance of either one from the mirror."
+        ],
+        "repairs": [
+          "The image is the same perpendicular distance from the mirror: |17-(-10)|=27. Check the original and image of one distinctive corner, then every marked point.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement. Check the original and image of one distinctive corner, then every marked point.",
+          "This reduces the required distance by5 units; reflection preserves it. Check the original and image of one distinctive corner, then every marked point.",
+          "54 is the separation between the point and its image, not the distance of either one from the mirror. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The image retains the original point's perpendicular distance to the depicted mirror.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The image is the same perpendicular distance from the mirror: |17-(-10)|=27.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 17), (-41, 17), (-41, 26), (-49, 26), (-49, 37), (-58, 37), (-58, 45), (-65, 45)]]. Dots: [(-61, 21)]. Lines: [[(-95, -10), (95, -10)]].",
+          "polygons": [
+            [
+              {
+                "x": -65,
+                "y": 17
+              },
+              {
+                "x": -41,
+                "y": 17
+              },
+              {
+                "x": -41,
+                "y": 26
+              },
+              {
+                "x": -49,
+                "y": 26
+              },
+              {
+                "x": -49,
+                "y": 37
+              },
+              {
+                "x": -58,
+                "y": 37
+              },
+              {
+                "x": -58,
+                "y": 45
+              },
+              {
+                "x": -65,
+                "y": 45
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -61,
+              "y": 21
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": -95,
+                "y": -10
+              },
+              {
+                "x": 95,
+                "y": -10
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "MIR-2-11",
+        "family": "vertical-shifted-axis",
+        "context": "vertical asymmetric layout 11",
+        "stem": "The specified corner is(-58,24) and the depicted vertical mirror is x=10. What is the perpendicular distance, in grid units, of that corner's image from the mirror?",
+        "options": [
+          "68",
+          "73",
+          "63",
+          "136"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The image is the same perpendicular distance from the mirror: |-58-(10)|=68.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement.",
+          "This reduces the required distance by5 units; reflection preserves it.",
+          "136 is the separation between the point and its image, not the distance of either one from the mirror."
+        ],
+        "repairs": [
+          "The image is the same perpendicular distance from the mirror: |-58-(10)|=68. Check the original and image of one distinctive corner, then every marked point.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement. Check the original and image of one distinctive corner, then every marked point.",
+          "This reduces the required distance by5 units; reflection preserves it. Check the original and image of one distinctive corner, then every marked point.",
+          "136 is the separation between the point and its image, not the distance of either one from the mirror. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The image retains the original point's perpendicular distance to the depicted mirror.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The image is the same perpendicular distance from the mirror: |-58-(10)|=68.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 24), (-36, 24), (-36, 31), (-50, 31), (-50, 49), (-58, 49)]]. Dots: [(-54, 28)]. Lines: [[(10, -95), (10, 95)]].",
+          "polygons": [
+            [
+              {
+                "x": -58,
+                "y": 24
+              },
+              {
+                "x": -36,
+                "y": 24
+              },
+              {
+                "x": -36,
+                "y": 31
+              },
+              {
+                "x": -50,
+                "y": 31
+              },
+              {
+                "x": -50,
+                "y": 49
+              },
+              {
+                "x": -58,
+                "y": 49
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -54,
+              "y": 28
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 10,
+                "y": -95
+              },
+              {
+                "x": 10,
+                "y": 95
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "MIR-2-12",
+        "family": "horizontal-shifted-axis",
+        "context": "horizontal asymmetric layout 12",
+        "stem": "The specified corner is(-51,39) and the depicted horizontal mirror is y=-10. What is the perpendicular distance, in grid units, of that corner's image from the mirror?",
+        "options": [
+          "49",
+          "54",
+          "44",
+          "98"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The image is the same perpendicular distance from the mirror: |39-(-10)|=49.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement.",
+          "This reduces the required distance by5 units; reflection preserves it.",
+          "98 is the separation between the point and its image, not the distance of either one from the mirror."
+        ],
+        "repairs": [
+          "The image is the same perpendicular distance from the mirror: |39-(-10)|=49. Check the original and image of one distinctive corner, then every marked point.",
+          "This adds5 units to the required distance; reflection does not stretch the displacement. Check the original and image of one distinctive corner, then every marked point.",
+          "This reduces the required distance by5 units; reflection preserves it. Check the original and image of one distinctive corner, then every marked point.",
+          "98 is the separation between the point and its image, not the distance of either one from the mirror. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The image retains the original point's perpendicular distance to the depicted mirror.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The image is the same perpendicular distance from the mirror: |39-(-10)|=49.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 39), (-37, 39), (-37, 31), (-23, 45), (-37, 59), (-37, 51), (-51, 51)]]. Dots: [(-47, 35)]. Lines: [[(-95, -10), (95, -10)]].",
+          "polygons": [
+            [
+              {
+                "x": -51,
+                "y": 39
+              },
+              {
+                "x": -37,
+                "y": 39
+              },
+              {
+                "x": -37,
+                "y": 31
+              },
+              {
+                "x": -23,
+                "y": 45
+              },
+              {
+                "x": -37,
+                "y": 59
+              },
+              {
+                "x": -37,
+                "y": 51
+              },
+              {
+                "x": -51,
+                "y": 51
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -47,
+              "y": 35
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": -95,
+                "y": -10
+              },
+              {
+                "x": 95,
+                "y": -10
+              }
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored asymmetric vector constructions; no third-party diagram reproduced. Not authenticated PYQs or measured exam difficulty."
+  ],
+  "illustrations": [
+    {
+      "description": "Worked vertical reflection: the original L-shaped piece is left of the upright mirror; its image is right. The marked top corner is40 units from the mirror on each side, at the same height. Two equal horizontal segments and matching ticks show equal distance.",
+      "polygons": [
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 0
+          },
+          {
+            "x": -40,
+            "y": 0
+          }
+        ],
+        [
+          {
+            "x": 40,
+            "y": 20
+          },
+          {
+            "x": 20,
+            "y": 20
+          },
+          {
+            "x": 20,
+            "y": 10
+          },
+          {
+            "x": 35,
+            "y": 10
+          },
+          {
+            "x": 35,
+            "y": 0
+          },
+          {
+            "x": 40,
+            "y": 0
+          }
+        ]
+      ],
+      "dots": [
+        {
+          "x": -40,
+          "y": 20
+        },
+        {
+          "x": 40,
+          "y": 20
+        }
+      ],
+      "lines": [
+        [
+          {
+            "x": 0,
+            "y": -80
+          },
+          {
+            "x": 0,
+            "y": 80
+          }
+        ],
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": 0,
+            "y": 20
+          }
+        ],
+        [
+          {
+            "x": 0,
+            "y": 20
+          },
+          {
+            "x": 40,
+            "y": 20
+          }
+        ],
+        [
+          {
+            "x": -20,
+            "y": 17
+          },
+          {
+            "x": -20,
+            "y": 23
+          }
+        ],
+        [
+          {
+            "x": 20,
+            "y": 17
+          },
+          {
+            "x": 20,
+            "y": 23
+          }
+        ]
+      ]
+    },
+    {
+      "description": "Worked water reflection: the original lies above the horizontal water line and the image below it. The marked corner stays at the same left/right position,20 units above versus20 below. Equal vertical segments and matching ticks show equal distances.",
+      "polygons": [
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 0
+          },
+          {
+            "x": -40,
+            "y": 0
+          }
+        ],
+        [
+          {
+            "x": -40,
+            "y": -20
+          },
+          {
+            "x": -20,
+            "y": -20
+          },
+          {
+            "x": -20,
+            "y": -10
+          },
+          {
+            "x": -35,
+            "y": -10
+          },
+          {
+            "x": -35,
+            "y": 0
+          },
+          {
+            "x": -40,
+            "y": 0
+          }
+        ]
+      ],
+      "dots": [
+        {
+          "x": -40,
+          "y": 20
+        },
+        {
+          "x": -40,
+          "y": -20
+        }
+      ],
+      "lines": [
+        [
+          {
+            "x": -80,
+            "y": 0
+          },
+          {
+            "x": 80,
+            "y": 0
+          }
+        ],
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": -40,
+            "y": 0
+          }
+        ],
+        [
+          {
+            "x": -40,
+            "y": 0
+          },
+          {
+            "x": -40,
+            "y": -20
+          }
+        ],
+        [
+          {
+            "x": -43,
+            "y": 10
+          },
+          {
+            "x": -37,
+            "y": 10
+          }
+        ],
+        [
+          {
+            "x": -43,
+            "y": -10
+          },
+          {
+            "x": -37,
+            "y": -10
+          }
+        ]
+      ]
+    },
+    {
+      "description": "Worked arrangement: an L piece and a triangle lie left of the vertical mirror. Their reflected images lie right. The triangle remains nearer the mirror, while both internal orientations and their marked points reverse. Moving the pieces alone would leave their orientations wrong.",
+      "polygons": [
+        [
+          {
+            "x": -65,
+            "y": -10
+          },
+          {
+            "x": -45,
+            "y": -10
+          },
+          {
+            "x": -45,
+            "y": 0
+          },
+          {
+            "x": -55,
+            "y": 0
+          },
+          {
+            "x": -55,
+            "y": 15
+          },
+          {
+            "x": -65,
+            "y": 15
+          }
+        ],
+        [
+          {
+            "x": -30,
+            "y": -10
+          },
+          {
+            "x": -10,
+            "y": -10
+          },
+          {
+            "x": -25,
+            "y": 15
+          }
+        ],
+        [
+          {
+            "x": 65,
+            "y": -10
+          },
+          {
+            "x": 45,
+            "y": -10
+          },
+          {
+            "x": 45,
+            "y": 0
+          },
+          {
+            "x": 55,
+            "y": 0
+          },
+          {
+            "x": 55,
+            "y": 15
+          },
+          {
+            "x": 65,
+            "y": 15
+          }
+        ],
+        [
+          {
+            "x": 30,
+            "y": -10
+          },
+          {
+            "x": 10,
+            "y": -10
+          },
+          {
+            "x": 25,
+            "y": 15
+          }
+        ]
+      ],
+      "dots": [
+        {
+          "x": -60,
+          "y": -5
+        },
+        {
+          "x": -24,
+          "y": -5
+        },
+        {
+          "x": 60,
+          "y": -5
+        },
+        {
+          "x": 24,
+          "y": -5
+        }
+      ],
+      "lines": [
+        [
+          {
+            "x": 0,
+            "y": -80
+          },
+          {
+            "x": 0,
+            "y": 80
+          }
+        ],
+        [
+          {
+            "x": -60,
+            "y": -5
+          },
+          {
+            "x": 60,
+            "y": -5
+          }
+        ]
+      ]
+    },
+    {
+      "description": "Worked shifted mirror: the vertical mirror is10 units right of the origin. The original marked point is at x=-20,30 units left of the mirror; its image is at x=40,30 units right. Both points have y=30. Matching ticks show equal segments about the actual mirror, not the page centre.",
+      "polygons": [],
+      "dots": [
+        {
+          "x": -20,
+          "y": 30
+        },
+        {
+          "x": 40,
+          "y": 30
+        }
+      ],
+      "lines": [
+        [
+          {
+            "x": 10,
+            "y": -80
+          },
+          {
+            "x": 10,
+            "y": 80
+          }
+        ],
+        [
+          {
+            "x": -20,
+            "y": 30
+          },
+          {
+            "x": 10,
+            "y": 30
+          }
+        ],
+        [
+          {
+            "x": 10,
+            "y": 30
+          },
+          {
+            "x": 40,
+            "y": 30
+          }
+        ],
+        [
+          {
+            "x": -5,
+            "y": 27
+          },
+          {
+            "x": -5,
+            "y": 33
+          }
+        ],
+        [
+          {
+            "x": 25,
+            "y": 27
+          },
+          {
+            "x": 25,
+            "y": 33
+          }
+        ]
+      ]
+    }
+  ]
+}

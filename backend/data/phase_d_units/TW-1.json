@@ -1,0 +1,452 @@
+{
+  "objective_id": "TW-1",
+  "prerequisites": [
+    "Fractions and reciprocals with explicit units.",
+    "Equal-work comparison and constant-rate interpretation."
+  ],
+  "explanation": "Choose one whole job or a convenient number of equal work units. Keep that same whole for completed and remaining work.",
+  "worked": [
+    {
+      "action": "Treat painting one complete room as one job.",
+      "justification": "A job is a chosen whole, not a time unit."
+    },
+    {
+      "action": "Equivalently call that job 60 work units; painting 15 units completes 15/60 =1/4 job.",
+      "justification": "Changing the scale does not change the fraction completed."
+    },
+    {
+      "action": "The remaining work is 1-1/4 =3/4 job, or 45 work units.",
+      "justification": "Completed and remaining work must sum to the same chosen whole."
+    }
+  ],
+  "illustrations": [],
+  "hint": "Choose work units and label each rate with work/time before calculating.",
+  "shortcut": "Use work = rate times active time; a convenient common work unit can avoid awkward fractions.",
+  "limitation": "The rates must describe the same job, remain constant during each modelled interval, and not interfere.",
+  "checks": {
+    "entry": [
+      {
+        "id": "TW-1-entry-0",
+        "family": "TW-1",
+        "context": "normalised completed fraction entry-0",
+        "stem": "A complete wall-painting job is defined as 24 equal work units. 6 units are complete. What fraction of the job is complete?",
+        "options": [
+          "1/4",
+          "3/4",
+          "6",
+          "24"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Completed / whole =1/4.",
+          "3/4 is remaining work.",
+          "A unit count alone is not a fraction of the whole.",
+          "The total counts all work, not completed fraction."
+        ],
+        "repairs": [
+          "Completed / whole =1/4. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "3/4 is remaining work. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "A unit count alone is not a fraction of the whole. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "The total counts all work, not completed fraction. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "6/24 =1/4",
+          "24/6 =4"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "6/24 =1/4",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-1-entry-1",
+        "family": "TW-1",
+        "context": "normalised completed fraction entry-1",
+        "stem": "A complete wall-painting job is defined as 36 equal work units. 9 units are complete. What fraction of the job is complete?",
+        "options": [
+          "1/4",
+          "3/4",
+          "9",
+          "36"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Completed / whole =1/4.",
+          "3/4 is remaining work.",
+          "A unit count alone is not a fraction of the whole.",
+          "The total counts all work, not completed fraction."
+        ],
+        "repairs": [
+          "Completed / whole =1/4. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "3/4 is remaining work. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "A unit count alone is not a fraction of the whole. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "The total counts all work, not completed fraction. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "9/36 =1/4",
+          "36/9 =4"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "9/36 =1/4",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "faded": [
+      {
+        "id": "TW-1-faded-0",
+        "family": "TW-1",
+        "context": "normalised completed fraction faded-0",
+        "stem": "A complete wall-painting job is defined as 60 equal work units. 15 units are complete. What fraction of the job is complete?\nPartly worked: The whole job contains 60 equal units. Completed fraction = 15/60. Reduce this fraction to finish the calculation.",
+        "options": [
+          "1/4",
+          "3/4",
+          "15",
+          "60"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Completed / whole =1/4.",
+          "3/4 is remaining work.",
+          "A unit count alone is not a fraction of the whole.",
+          "The total counts all work, not completed fraction."
+        ],
+        "repairs": [
+          "Completed / whole =1/4. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "3/4 is remaining work. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "A unit count alone is not a fraction of the whole. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "The total counts all work, not completed fraction. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "15/60 =1/4",
+          "60/15 =4"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "15/60 =1/4",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-1-faded-1",
+        "family": "TW-1",
+        "context": "normalised completed fraction faded-1",
+        "stem": "A complete wall-painting job is defined as 72 equal work units. 18 units are complete. What fraction of the job is complete?\nPartly worked: The whole job contains 72 equal units. Completed fraction = 18/72. Reduce this fraction to finish the calculation.",
+        "options": [
+          "1/4",
+          "3/4",
+          "18",
+          "72"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Completed / whole =1/4.",
+          "3/4 is remaining work.",
+          "A unit count alone is not a fraction of the whole.",
+          "The total counts all work, not completed fraction."
+        ],
+        "repairs": [
+          "Completed / whole =1/4. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "3/4 is remaining work. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "A unit count alone is not a fraction of the whole. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "The total counts all work, not completed fraction. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "18/72 =1/4",
+          "72/18 =4"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "18/72 =1/4",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "TW-1-independent_a-0",
+        "family": "TW-1",
+        "context": "normalised completed fraction independent_a-0",
+        "stem": "A complete wall-painting job is defined as 96 equal work units. 24 units are complete. What fraction of the job is complete?",
+        "options": [
+          "1/4",
+          "3/4",
+          "24",
+          "96"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Completed / whole =1/4.",
+          "3/4 is remaining work.",
+          "A unit count alone is not a fraction of the whole.",
+          "The total counts all work, not completed fraction."
+        ],
+        "repairs": [
+          "Completed / whole =1/4. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "3/4 is remaining work. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "A unit count alone is not a fraction of the whole. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "The total counts all work, not completed fraction. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "24/96 =1/4",
+          "96/24 =4"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "24/96 =1/4",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-1-independent_a-1",
+        "family": "TW-1",
+        "context": "normalised completed fraction independent_a-1",
+        "stem": "A complete wall-painting job is defined as 108 equal work units. 27 units are complete. What fraction of the job is complete?",
+        "options": [
+          "1/4",
+          "3/4",
+          "27",
+          "108"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Completed / whole =1/4.",
+          "3/4 is remaining work.",
+          "A unit count alone is not a fraction of the whole.",
+          "The total counts all work, not completed fraction."
+        ],
+        "repairs": [
+          "Completed / whole =1/4. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "3/4 is remaining work. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "A unit count alone is not a fraction of the whole. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "The total counts all work, not completed fraction. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "27/108 =1/4",
+          "108/27 =4"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "27/108 =1/4",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "TW-1-independent_b-0",
+        "family": "TW-1",
+        "context": "recover physical remaining amount independent_b-0",
+        "stem": "A printing order has 132 pages. One quarter has been printed. How many pages remain?",
+        "options": [
+          "99",
+          "33",
+          "132",
+          "165"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Three quarters of 132 is 99.",
+          "33 pages are completed, not remaining.",
+          "The whole includes work already completed.",
+          "Adding completed work to the whole double-counts it."
+        ],
+        "repairs": [
+          "Three quarters of 132 is 99. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "33 pages are completed, not remaining. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "The whole includes work already completed. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Adding completed work to the whole double-counts it. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "Remaining = 132 times (1-1/4)",
+          "Remaining = 132 times 1/4"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Remaining = 132 times (1-1/4)",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-1-independent_b-1",
+        "family": "TW-1",
+        "context": "recover physical remaining amount independent_b-1",
+        "stem": "A printing order has 144 pages. One quarter has been printed. How many pages remain?",
+        "options": [
+          "108",
+          "36",
+          "144",
+          "180"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Three quarters of 144 is 108.",
+          "36 pages are completed, not remaining.",
+          "The whole includes work already completed.",
+          "Adding completed work to the whole double-counts it."
+        ],
+        "repairs": [
+          "Three quarters of 144 is 108. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "36 pages are completed, not remaining. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "The whole includes work already completed. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Adding completed work to the whole double-counts it. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "Remaining = 144 times (1-1/4)",
+          "Remaining = 144 times 1/4"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Remaining = 144 times (1-1/4)",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "revision": [
+      {
+        "id": "TW-1-delayed-road-sections",
+        "family": "contextual-road-sections",
+        "context": "road-sections",
+        "stem": "A road has 5 equal-length sections. Two sections are resurfaced, and half of a third is resurfaced. What fraction of the whole road is complete?",
+        "options": [
+          "1/2",
+          "2/5",
+          "3/5",
+          "5/2"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Two and a half of five equal sections is one half.",
+          "This omits the half-section.",
+          "This counts the partly finished section as complete.",
+          "This reverses completed work and total work."
+        ],
+        "repairs": [
+          "Two and a half of five equal sections is one half. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This omits the half-section. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This counts the partly finished section as complete. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This reverses completed work and total work. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "(2+1/2)/5 =1/2",
+          "Partial sections must be rounded up."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "(2+1/2)/5 =1/2"
+      },
+      {
+        "id": "TW-1-delayed-weighted-batch",
+        "family": "contextual-weighted-batch",
+        "context": "weighted-batch",
+        "stem": "A batch contains 30 small plates and 10 large plates. Each large plate needs twice the polishing work of a small plate. All small plates are polished. What fraction of total polishing work is complete?",
+        "options": [
+          "3/5",
+          "3/4",
+          "1/2",
+          "2/5"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Use small-plate work units: 30/(30+20)=3/5.",
+          "Counting objects equally ignores unequal work per plate.",
+          "Large plates require20, not30, small-plate units.",
+          "2/5 is the unfinished fraction."
+        ],
+        "repairs": [
+          "Use small-plate work units: 30/(30+20)=3/5. Rebuild the work/rate/time relation with matching units before calculating.",
+          "Counting objects equally ignores unequal work per plate. Rebuild the work/rate/time relation with matching units before calculating.",
+          "Large plates require20, not30, small-plate units. Rebuild the work/rate/time relation with matching units before calculating.",
+          "2/5 is the unfinished fraction. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "Choose one small plate's polishing as one unit; a large plate is two units.",
+          "Every physical object must count as one identical work unit."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Choose one small plate's polishing as one unit; a large plate is two units."
+      },
+      {
+        "id": "TW-1-delayed-remaining-fraction",
+        "family": "contextual-remaining-fraction",
+        "context": "remaining-fraction",
+        "stem": "A digitisation project has 240 equal-length pages. After 3/8 of the pages are processed, how many remain?",
+        "options": [
+          "150",
+          "90",
+          "210",
+          "180"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The remaining5/8 of240 is150.",
+          "90 is the processed number.",
+          "This subtracts1/8 rather than3/8.",
+          "180 would be3/4 of the total."
+        ],
+        "repairs": [
+          "The remaining5/8 of240 is150. Rebuild the work/rate/time relation with matching units before calculating.",
+          "90 is the processed number. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This subtracts1/8 rather than3/8. Rebuild the work/rate/time relation with matching units before calculating.",
+          "180 would be3/4 of the total. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "Remaining work is (1-3/8) * 240.",
+          "The processed fraction is also the remaining fraction."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Remaining work is (1-3/8) * 240."
+      },
+      {
+        "id": "TW-1-delayed-unit-rescaling",
+        "family": "contextual-unit-rescaling",
+        "context": "unit-rescaling",
+        "stem": "A complete mural can be represented as 1 job or 80 equal work units. If 30 units are finished, what fraction of the job is unfinished?",
+        "options": [
+          "5/8",
+          "3/8",
+          "50/30",
+          "30/50"
+        ],
+        "answer": 1,
+        "explanations": [
+          "50 of80 remain, or5/8.",
+          "3/8 is completed.",
+          "Remaining work must be compared with the whole80, not completed30.",
+          "This compares completed with remaining, not remaining with total."
+        ],
+        "repairs": [
+          "50 of80 remain, or5/8. Rebuild the work/rate/time relation with matching units before calculating.",
+          "3/8 is completed. Rebuild the work/rate/time relation with matching units before calculating.",
+          "Remaining work must be compared with the whole80, not completed30. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This compares completed with remaining, not remaining with total. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "Changing the work scale leaves the completed and remaining proportions unchanged.",
+          "Choosing a larger unit changes the fraction complete."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Changing the work scale leaves the completed and remaining proportions unchanged."
+      }
+    ]
+  },
+  "sources": [
+    "Original Phase D authorship; conservation-of-work reasoning. Private cached SSC switching-time reference used only for family analysis."
+  ],
+  "subject_review": "",
+  "teaching_review": "",
+  "review_digest": ""
+}

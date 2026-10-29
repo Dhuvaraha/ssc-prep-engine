@@ -1,6 +1,161 @@
 import { test, expect } from "@playwright/test";
 
 const api = "http://127.0.0.1:8811/api/v1";
+test('Phase D original passage survives answer locking, reload and four-option feedback',async ({page,request})=>{
+  const login=await request.post(api+'/auth/login',{data:{email:'browser-a@example.com',password:'Synthetic-test-only-123!'}});
+  await page.goto('/login');
+  await page.evaluate(token=>localStorage.setItem('ssc_prep_token',token),(await login.json()).access_token);
+  await page.setViewportSize({width:320,height:844});
+  await page.goto('/learn/pilot/RC-1');
+  await page.getByRole('button',{name:'Start diagnosis'}).click();
+  const passage=page.getByRole('article',{name:'Reading passage'});
+  await expect(passage).toContainText('Borrowers were asked to return seeds from their harvest if they could.');
+  const original=await passage.innerText();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+  await page.getByRole('radio',{name:'Every borrower must return exactly the same number of seeds.',exact:true}).check();
+  await page.getByRole('button',{name:'Save answer'}).click();
+  await page.reload();
+  await expect(passage).toHaveText(original);
+  await expect(page.getByRole('radio',{name:'Every borrower must return exactly the same number of seeds.',exact:true})).toBeDisabled();
+  await page.getByRole('radio',{name:'The first sentence introduces seed lending; the last explains the exchange it enables.',exact:true}).check();
+  await page.getByRole('button',{name:'Check reasoning'}).click();
+  await expect(page.getByText('This response is learning evidence, not an independent pass.')).toBeVisible();
+  await expect(passage).toHaveText(original);
+  await expect(page.getByRole('heading',{name:'Understand all four options'})).toBeVisible();
+  await page.getByRole('button',{name:'Continue',exact:true}).click();
+  await expect(page.getByRole('heading',{name:'Repair the mistake',exact:true})).toBeVisible();
+  await page.reload();
+  await expect(passage).toHaveText(original);
+  await page.screenshot({path:'test-results/phase-d-original-passage-repair.png',fullPage:true});
+});
+test('Phase D original reflection diagrams and shuffled figure captions render coherently',async ({page,request})=>{
+  const login=await request.post(api+'/auth/login',{data:{email:'browser-a@example.com',password:'Synthetic-test-only-123!'}});
+  await page.goto('/login');
+  await page.evaluate(token=>localStorage.setItem('ssc_prep_token',token),(await login.json()).access_token);
+  await page.setViewportSize({width:390,height:844});
+  await page.goto('/learn/pilot/MIR-4');
+  await expect(page.getByRole('img')).toHaveCount(4);
+  await page.screenshot({path:'test-results/phase-d-reflection-lesson.png',fullPage:true});
+  await page.getByRole('button',{name:'Start diagnosis'}).click();
+  await expect(page.getByRole('img')).toHaveCount(5);
+  for(const label of ['Figure 1','Figure 2','Figure 3','Figure 4']) {
+    await expect(page.locator('figcaption').filter({hasText:label})).toHaveCount(1);
+    await expect(page.getByRole('radio',{name:label,exact:true})).toHaveCount(1);
+  }
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+  await page.screenshot({path:'test-results/phase-d-reflection-question.png',fullPage:true});
+  // Independently projection-checked authored MIR-4-1: reflected arrangement is Figure 3.
+  await page.getByRole('radio',{name:'Figure 3',exact:true}).check();
+  await page.getByRole('button',{name:'Save answer'}).click();
+  await page.getByRole('radio',{name:/^The x coordinate changes/}).check();
+  await page.getByRole('button',{name:'Check reasoning'}).click();
+  await expect(page.getByRole('heading',{name:'Correct',exact:true})).toBeVisible();
+  await expect(page.getByRole('img')).toHaveCount(5);
+});
+test('Phase D learner constructs a countermodel after locking the answer',async ({page,request})=>{
+  const login=await request.post(api+'/auth/login',{data:{email:'browser-a@example.com',password:'Synthetic-test-only-123!'}});
+  await page.goto('/login');
+  await page.evaluate(token=>localStorage.setItem('ssc_prep_token',token),(await login.json()).access_token);
+  await page.goto('/learn/pilot/SYL-4');
+  await page.getByRole('button',{name:'Start diagnosis'}).click();
+  await page.getByRole('radio',{name:'2',exact:true}).check();
+  await page.getByRole('button',{name:'Save answer'}).click();
+  await page.reload();
+  await expect(page.getByRole('radio',{name:'2',exact:true})).toBeDisabled();
+  await page.getByRole('radio',{name:'1+1=2',exact:true}).check();
+  await page.getByRole('button',{name:'Add object',exact:true}).click();
+  await page.getByRole('checkbox',{name:'B',exact:true}).check();
+  await page.getByRole('button',{name:'Check reasoning'}).click();
+  await expect(page.getByText('Every premise is true in your model and the conclusion is false. This is a valid counterexample.')).toBeVisible();
+  await page.reload();
+  await expect(page.getByText('Every premise is true in your model and the conclusion is false. This is a valid counterexample.')).toBeVisible();
+});
+test('Phase D reviewed discovery, grid layout and keyboard stage focus',async ({page,request})=>{
+  test.setTimeout(90000);
+  const login=await request.post(api+'/auth/login',{data:{email:'browser-a@example.com',password:'Synthetic-test-only-123!'}});
+  await page.goto('/login');
+  await page.evaluate(token=>localStorage.setItem('ssc_prep_token',token),(await login.json()).access_token);
+  await page.goto('/learn');
+  await page.getByRole('link',{name:'Explore reviewed teaching objectives and saved revision'}).click();
+  await page.getByRole('link',{name:/^PCT-2:/}).click();
+  for(const width of [320,360,390,430,768,1024,1440]) {
+    await page.setViewportSize({width,height:900});
+    await expect(page.getByRole('heading',{name:'Build the foundations'})).toBeVisible();
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+  }
+  await page.setViewportSize({width:390,height:844});
+  await page.screenshot({path:'test-results/phase-d-grid-mobile.png',fullPage:true});
+  const start=page.getByRole('button',{name:'Start diagnosis'});
+  await start.focus();await page.keyboard.press('Enter');
+  await expect(page.getByRole('status')).toBeFocused();
+  await expect(page.getByRole('img')).toHaveCount(1);
+  await page.getByRole('radio',{name:'2',exact:true}).focus();
+  await page.keyboard.press('Space');
+  await expect(page.getByRole('radio',{name:'1+1=2',exact:true})).toHaveCount(0);
+  await page.getByRole('button',{name:'Save answer',exact:true}).click();
+  await page.getByRole('radio',{name:'1+1=2',exact:true}).focus();
+  await page.keyboard.press('Space');
+  await page.getByRole('button',{name:'Check reasoning'}).focus();await page.keyboard.press('Enter');
+  await expect(page.getByRole('heading',{name:'Understand all four options'})).toBeVisible();
+  await expect(page.getByRole('status')).toBeFocused();
+  await expect(page.getByRole('img')).toHaveCount(1);
+});
+for(const oid of ['PCT-1','TW-1','SYL-1','MIR-1','ENG-1','RC-2','POL-1','PHY-1']) {
+ test(`Phase D shared UI ${oid} persists independent evidence and resume`,async ({page,request})=>{
+  test.setTimeout(60000);
+  const login=await request.post(api+'/auth/login',{data:{email:'browser-a@example.com',password:'Synthetic-test-only-123!'}});
+  await page.goto('/login');
+  await page.evaluate(token=>localStorage.setItem('ssc_prep_token',token),(await login.json()).access_token);
+    await page.goto('/learn/pilot');
+    await page.getByRole('link',{name:new RegExp('^'+oid+':')}).click();
+    await page.getByRole('button',{name:'Start diagnosis'}).click();
+    for(let stage=0;stage<4;stage++) {
+      await page.getByRole('radio',{name:'2',exact:true}).check();
+      await expect(page.getByRole('radio',{name:'1+1=2',exact:true})).toHaveCount(0);
+      await page.getByRole('button',{name:'Save answer'}).click();
+      await expect(page.getByRole('button',{name:'Check reasoning'})).toBeDisabled();
+      await page.getByRole('radio',{name:'1+1=2',exact:true}).check();
+      await page.getByRole('button',{name:'Check reasoning'}).click();
+      await expect(page.getByRole('heading',{name:'Understand all four options'})).toBeVisible();
+      await page.getByRole('button',{name:'Continue',exact:true}).click();
+    }
+    await expect(page.getByRole('heading',{name:'Spaced revision scheduled'})).toBeVisible();
+    await page.reload();
+    await expect(page.getByRole('heading',{name:'Spaced revision scheduled'})).toBeVisible();
+ });
+}
+test("Percentage pilot persists diagnosis, repair, fresh retry and spaced revision", async ({page, request}) => {
+  await page.setViewportSize({width:390,height:844});
+  const login = await request.post(api+"/auth/login", {data:{email:"browser-a@example.com",password:"Synthetic-test-only-123!"}});
+  const token = (await login.json()).access_token;
+  await page.goto('/login');
+  await page.evaluate(value=>localStorage.setItem('ssc_prep_token',value),token);
+  await page.goto('/learn');
+  await page.getByRole('link',{name:'Continue Percentage teaching and spaced revision'}).click();
+  await expect(page.getByRole('heading',{name:'Build the foundations'})).toBeVisible();
+  await page.getByRole('button',{name:'Start diagnosis'}).click();
+  await page.getByRole('radio').nth(0).check();
+  await page.getByRole('button',{name:'Check answer'}).click();
+  await expect(page.getByRole('heading',{name:'Understand all four options'})).toBeVisible();
+  await expect(page.locator('main ol li')).toHaveCount(4);
+  await page.getByRole('button',{name:'Continue',exact:true}).click();
+  await expect(page.getByRole('heading',{name:'Repair the mistake'})).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('heading',{name:'Repair the mistake'})).toBeVisible();
+  await page.getByRole('button',{name:'Try a fresh question'}).click();
+  await expect(page.getByRole('group')).toContainText('15%');
+  for (const option of ['340','408','2.188% loss']) {
+    await page.getByRole('radio',{name:option,exact:true}).check();
+    await page.getByRole('button',{name:'Check answer'}).click();
+    await expect(page.getByText('Fresh, unassisted check recorded.')).toBeVisible();
+    await page.getByRole('button',{name:'Continue',exact:true}).click();
+  }
+  await expect(page.getByRole('heading',{name:'Spaced revision scheduled'})).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('heading',{name:'Spaced revision scheduled'})).toBeVisible();
+  await expect(page.getByRole('button',{name:'Start due revision'})).toBeDisabled();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
 test("reviewed correction uses independent editor UI and publication gate", async ({page, request}) => {
   const tokens = [];
   for (const email of ["editor-a@example.com", "editor-b@example.com"]) {

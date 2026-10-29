@@ -1,0 +1,452 @@
+{
+  "objective_id": "TW-2",
+  "prerequisites": [
+    "Fractions and reciprocals with explicit units.",
+    "Equal-work comparison and constant-rate interpretation."
+  ],
+  "explanation": "A rate measures work per time; a duration measures time needed for the specified work. Convert units before comparing rates.",
+  "worked": [
+    {
+      "action": "A worker completes one job in 8 days at a constant rate.",
+      "justification": "Equal work is done each day under the stated assumption."
+    },
+    {
+      "action": "Rate =1 job /8 days =1/8 job per day.",
+      "justification": "Rate divides work by time; duration divides time by work."
+    },
+    {
+      "action": "If a machine instead completes 1/5 job per hour, one job needs 1 divided by 1/5 =5 hours.",
+      "justification": "The reciprocal converts rate back to time only when the whole job and units are consistent."
+    }
+  ],
+  "illustrations": [],
+  "hint": "Choose work units and label each rate with work/time before calculating.",
+  "shortcut": "Use work = rate times active time; a convenient common work unit can avoid awkward fractions.",
+  "limitation": "The rates must describe the same job, remain constant during each modelled interval, and not interfere.",
+  "checks": {
+    "entry": [
+      {
+        "id": "TW-2-entry-0",
+        "family": "TW-2",
+        "context": "duration to rate with units entry-0",
+        "stem": "At a constant rate, a worker completes one job in 6 days. How much of this job is completed per day?",
+        "options": [
+          "1/6 job/day",
+          "6 jobs/day",
+          "1/6 day/job",
+          "6 days/job"
+        ],
+        "answer": 1,
+        "explanations": [
+          "One job divided by its duration gives work per day.",
+          "This reverses the rate magnitude.",
+          "The numerical fraction has been attached to the inverse unit.",
+          "This is the solo duration, not work per day."
+        ],
+        "repairs": [
+          "One job divided by its duration gives work per day. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This reverses the rate magnitude. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "The numerical fraction has been attached to the inverse unit. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This is the solo duration, not work per day. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "Rate =1 job /6 days",
+          "Rate =6 days /1 job"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Rate =1 job /6 days",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-2-entry-1",
+        "family": "TW-2",
+        "context": "duration to rate with units entry-1",
+        "stem": "At a constant rate, a worker completes one job in 9 days. How much of this job is completed per day?",
+        "options": [
+          "1/9 job/day",
+          "9 jobs/day",
+          "1/9 day/job",
+          "9 days/job"
+        ],
+        "answer": 1,
+        "explanations": [
+          "One job divided by its duration gives work per day.",
+          "This reverses the rate magnitude.",
+          "The numerical fraction has been attached to the inverse unit.",
+          "This is the solo duration, not work per day."
+        ],
+        "repairs": [
+          "One job divided by its duration gives work per day. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This reverses the rate magnitude. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "The numerical fraction has been attached to the inverse unit. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This is the solo duration, not work per day. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "Rate =1 job /9 days",
+          "Rate =9 days /1 job"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Rate =1 job /9 days",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "faded": [
+      {
+        "id": "TW-2-faded-0",
+        "family": "TW-2",
+        "context": "duration to rate with units faded-0",
+        "stem": "At a constant rate, a worker completes one job in 15 days. How much of this job is completed per day?\nPartly worked: One whole job is completed in 15 days. Rate = one job divided by 15 days. Complete the reciprocal and attach its unit.",
+        "options": [
+          "1/15 job/day",
+          "15 jobs/day",
+          "1/15 day/job",
+          "15 days/job"
+        ],
+        "answer": 1,
+        "explanations": [
+          "One job divided by its duration gives work per day.",
+          "This reverses the rate magnitude.",
+          "The numerical fraction has been attached to the inverse unit.",
+          "This is the solo duration, not work per day."
+        ],
+        "repairs": [
+          "One job divided by its duration gives work per day. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This reverses the rate magnitude. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "The numerical fraction has been attached to the inverse unit. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This is the solo duration, not work per day. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "Rate =1 job /15 days",
+          "Rate =15 days /1 job"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Rate =1 job /15 days",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-2-faded-1",
+        "family": "TW-2",
+        "context": "duration to rate with units faded-1",
+        "stem": "At a constant rate, a worker completes one job in 18 days. How much of this job is completed per day?\nPartly worked: One whole job is completed in 18 days. Rate = one job divided by 18 days. Complete the reciprocal and attach its unit.",
+        "options": [
+          "1/18 job/day",
+          "18 jobs/day",
+          "1/18 day/job",
+          "18 days/job"
+        ],
+        "answer": 1,
+        "explanations": [
+          "One job divided by its duration gives work per day.",
+          "This reverses the rate magnitude.",
+          "The numerical fraction has been attached to the inverse unit.",
+          "This is the solo duration, not work per day."
+        ],
+        "repairs": [
+          "One job divided by its duration gives work per day. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This reverses the rate magnitude. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "The numerical fraction has been attached to the inverse unit. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This is the solo duration, not work per day. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "Rate =1 job /18 days",
+          "Rate =18 days /1 job"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Rate =1 job /18 days",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "TW-2-independent_a-0",
+        "family": "TW-2",
+        "context": "duration to rate with units independent_a-0",
+        "stem": "At a constant rate, a worker completes one job in 24 days. How much of this job is completed per day?",
+        "options": [
+          "1/24 job/day",
+          "24 jobs/day",
+          "1/24 day/job",
+          "24 days/job"
+        ],
+        "answer": 1,
+        "explanations": [
+          "One job divided by its duration gives work per day.",
+          "This reverses the rate magnitude.",
+          "The numerical fraction has been attached to the inverse unit.",
+          "This is the solo duration, not work per day."
+        ],
+        "repairs": [
+          "One job divided by its duration gives work per day. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This reverses the rate magnitude. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "The numerical fraction has been attached to the inverse unit. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This is the solo duration, not work per day. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "Rate =1 job /24 days",
+          "Rate =24 days /1 job"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Rate =1 job /24 days",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-2-independent_a-1",
+        "family": "TW-2",
+        "context": "duration to rate with units independent_a-1",
+        "stem": "At a constant rate, a worker completes one job in 27 days. How much of this job is completed per day?",
+        "options": [
+          "1/27 job/day",
+          "27 jobs/day",
+          "1/27 day/job",
+          "27 days/job"
+        ],
+        "answer": 1,
+        "explanations": [
+          "One job divided by its duration gives work per day.",
+          "This reverses the rate magnitude.",
+          "The numerical fraction has been attached to the inverse unit.",
+          "This is the solo duration, not work per day."
+        ],
+        "repairs": [
+          "One job divided by its duration gives work per day. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This reverses the rate magnitude. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "The numerical fraction has been attached to the inverse unit. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This is the solo duration, not work per day. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "Rate =1 job /27 days",
+          "Rate =27 days /1 job"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Rate =1 job /27 days",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "TW-2-independent_b-0",
+        "family": "TW-2",
+        "context": "rate to time with conversion independent_b-0",
+        "stem": "A machine completes 1/11 of an order per hour. How many minutes are needed for the full order at that rate?",
+        "options": [
+          "660",
+          "11",
+          "60/11",
+          "1/660"
+        ],
+        "answer": 1,
+        "explanations": [
+          "One order takes 11 hours, or 660 minutes.",
+          "This leaves the answer in hours rather than requested minutes.",
+          "Multiplying the rate by 60 is not the completion duration.",
+          "This reverses the duration again."
+        ],
+        "repairs": [
+          "One order takes 11 hours, or 660 minutes. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This leaves the answer in hours rather than requested minutes. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Multiplying the rate by 60 is not the completion duration. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This reverses the duration again. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "Time =1/(1/11) hours; multiply hours by 60",
+          "Time =60 times (1/11) minutes"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Time =1/(1/11) hours; multiply hours by 60",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-2-independent_b-1",
+        "family": "TW-2",
+        "context": "rate to time with conversion independent_b-1",
+        "stem": "A machine completes 1/12 of an order per hour. How many minutes are needed for the full order at that rate?",
+        "options": [
+          "720",
+          "12",
+          "5",
+          "1/720"
+        ],
+        "answer": 1,
+        "explanations": [
+          "One order takes 12 hours, or 720 minutes.",
+          "This leaves the answer in hours rather than requested minutes.",
+          "Multiplying the rate by 60 is not the completion duration.",
+          "This reverses the duration again."
+        ],
+        "repairs": [
+          "One order takes 12 hours, or 720 minutes. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This leaves the answer in hours rather than requested minutes. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Multiplying the rate by 60 is not the completion duration. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This reverses the duration again. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "Time =1/(1/12) hours; multiply hours by 60",
+          "Time =60 times (1/12) minutes"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Time =1/(1/12) hours; multiply hours by 60",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "revision": [
+      {
+        "id": "TW-2-delayed-timed-sort",
+        "family": "contextual-timed-sort",
+        "context": "timed-sort",
+        "stem": "A sorting machine completes a standard batch in 2.5 hours at a constant rate. What fraction of a batch does it finish in 30 minutes?",
+        "options": [
+          "1/5",
+          "1/2",
+          "5",
+          "1/30"
+        ],
+        "answer": 1,
+        "explanations": [
+          "30 minutes is0.5 hours;0.5/2.5=1/5.",
+          "This is elapsed hours, not the completed batch fraction.",
+          "This reverses total and elapsed time.",
+          "One thirtieth does not use the full-batch duration."
+        ],
+        "repairs": [
+          "30 minutes is0.5 hours;0.5/2.5=1/5. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This is elapsed hours, not the completed batch fraction. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This reverses total and elapsed time. Rebuild the work/rate/time relation with matching units before calculating.",
+          "One thirtieth does not use the full-batch duration. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "Convert both durations to the same unit before taking their ratio.",
+          "Use30 and2.5 directly despite their different units."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Convert both durations to the same unit before taking their ratio."
+      },
+      {
+        "id": "TW-2-delayed-rate-reversal",
+        "family": "contextual-rate-reversal",
+        "context": "rate-reversal",
+        "stem": "An operator finishes 3/10 of a standard inspection each hour. At that constant rate, how many hours are needed for one inspection?",
+        "options": [
+          "10/3",
+          "3/10",
+          "3",
+          "10"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Time is one inspection divided by3/10 inspection/hour.",
+          "This repeats the rate number as a time.",
+          "3 hours completes only9/10.",
+          "10 hours completes3 inspections."
+        ],
+        "repairs": [
+          "Time is one inspection divided by3/10 inspection/hour. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This repeats the rate number as a time. Rebuild the work/rate/time relation with matching units before calculating.",
+          "3 hours completes only9/10. Rebuild the work/rate/time relation with matching units before calculating.",
+          "10 hours completes3 inspections. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "(3/10 inspection/hour) * (10/3 hour)=1 inspection.",
+          "Rate and total time have the same numerical value."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "(3/10 inspection/hour) * (10/3 hour)=1 inspection."
+      },
+      {
+        "id": "TW-2-delayed-partial-window",
+        "family": "contextual-partial-window",
+        "context": "partial-window",
+        "stem": "A device completes a run in 48 minutes. It operates at a constant rate for 18 minutes. What fraction of the run remains?",
+        "options": [
+          "5/8",
+          "3/8",
+          "8/3",
+          "1/48"
+        ],
+        "answer": 1,
+        "explanations": [
+          "18/48=3/8 is done;5/8 remains.",
+          "This is the completed fraction.",
+          "This reverses full and elapsed durations.",
+          "1/48 is output per minute, not remaining work."
+        ],
+        "repairs": [
+          "18/48=3/8 is done;5/8 remains. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This is the completed fraction. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This reverses full and elapsed durations. Rebuild the work/rate/time relation with matching units before calculating.",
+          "1/48 is output per minute, not remaining work. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "Remaining fraction is1-18/48.",
+          "The fraction completed is the fraction remaining."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Remaining fraction is1-18/48."
+      },
+      {
+        "id": "TW-2-delayed-hour-conversion",
+        "family": "contextual-hour-conversion",
+        "context": "hour-conversion",
+        "stem": "A cutter needs 12 minutes for one identical panel. How many panels can it complete in one hour without breaks?",
+        "options": [
+          "5",
+          "12",
+          "1/12",
+          "720"
+        ],
+        "answer": 1,
+        "explanations": [
+          "60/12=5 panels.",
+          "12 is minutes per panel.",
+          "1/12 is panels per minute, not panels per hour.",
+          "Multiplication produces minutes squared per panel rather than output."
+        ],
+        "repairs": [
+          "60/12=5 panels. Rebuild the work/rate/time relation with matching units before calculating.",
+          "12 is minutes per panel. Rebuild the work/rate/time relation with matching units before calculating.",
+          "1/12 is panels per minute, not panels per hour. Rebuild the work/rate/time relation with matching units before calculating.",
+          "Multiplication produces minutes squared per panel rather than output. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "Convert one hour to60 minutes, then divide by minutes per panel.",
+          "Minutes per panel should be multiplied by minutes available."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Convert one hour to60 minutes, then divide by minutes per panel."
+      }
+    ]
+  },
+  "sources": [
+    "Original Phase D authorship; conservation-of-work reasoning. Private cached SSC switching-time reference used only for family analysis."
+  ],
+  "subject_review": "",
+  "teaching_review": "",
+  "review_digest": ""
+}

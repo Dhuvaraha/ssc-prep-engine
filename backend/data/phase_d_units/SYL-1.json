@@ -1,0 +1,460 @@
+{
+  "objective_id": "SYL-1",
+  "prerequisites": [
+    "A category is a set of objects with a stated property.",
+    "Understand every, none, at least one and not."
+  ],
+  "explanation": "Translate the statement before drawing a diagram. All A are B forbids an A outside B. No A are B forbids overlap. Some A are B requires at least one shared witness. Some A are not B requires at least one A outside B. In this unit, universal statements do not assert that a category exists. Some means at least one, not some but not all. Use only the stated categories, not real-world beliefs.",
+  "worked": [
+    {
+      "action": "All badges are blue: any object that is a badge must belong to blue things. The blue set may also contain objects that are not badges.",
+      "justification": "Containment is directional. This does not say all blue things are badges or that badges exist."
+    },
+    {
+      "action": "No badges are round: the badge/round overlap is forbidden.",
+      "justification": "An empty overlap can be described in either direction, but neither category is required to contain a witness."
+    },
+    {
+      "action": "Some badges are blue: put one witness in both sets.",
+      "justification": "At least one witness is guaranteed. Additional witnesses and full containment are neither required nor excluded."
+    },
+    {
+      "action": "Some badges are not round: put a badge witness outside the round set.",
+      "justification": "This is a positive existence claim with a negative membership condition. It does not say no badges are round."
+    },
+    {
+      "action": "Only trained staff may supervise means all supervisors are trained staff.",
+      "justification": "Only introduces a necessary condition: being a supervisor requires training. It does not make every trained person a supervisor."
+    },
+    {
+      "action": "Not every report is signed means some report is not signed.",
+      "justification": "Negating a universal supplies a counterexample. With no reports at all, every report is signed would be vacuously true, so its negation cannot hold."
+    }
+  ],
+  "hint": "Identify the subject category, the condition, and whether a witness is asserted or a region forbidden.",
+  "shortcut": "Mark all/no as forbidden-region constraints and some/some-not as required-witness constraints.",
+  "limitation": "This explicit no-existential-import convention applies to these authored checks. Follow any different existence assumptions stated in an exam question.",
+  "checks": {
+    "entry": [
+      {
+        "id": "SYL-1-1",
+        "family": "translate-all",
+        "context": "Every red token is a square token.",
+        "stem": "Treat the categories only as stated. Translate exactly: \"Every red token is a square token.\"",
+        "options": [
+          "Every member of red tokens is a member of square tokens.",
+          "No member of red tokens is a member of square tokens.",
+          "At least one member of red tokens is a member of square tokens.",
+          "At least one member of red tokens is not a member of square tokens."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This is the exact translation. Forbid red tokens outside square tokens; no witness is asserted.",
+          "This changes the stated constraint. Forbid the overlap of red tokens and square tokens; no witness is asserted. The source instead requires: Forbid red tokens outside square tokens; no witness is asserted.",
+          "This changes the stated constraint. Require a witness in both red tokens and square tokens. The source instead requires: Forbid red tokens outside square tokens; no witness is asserted.",
+          "This changes the stated constraint. Require a witness in red tokens outside square tokens. The source instead requires: Forbid red tokens outside square tokens; no witness is asserted."
+        ],
+        "repairs": [
+          "This is the exact translation. Forbid red tokens outside square tokens; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Forbid the overlap of red tokens and square tokens; no witness is asserted. The source instead requires: Forbid red tokens outside square tokens; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in both red tokens and square tokens. The source instead requires: Forbid red tokens outside square tokens; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in red tokens outside square tokens. The source instead requires: Forbid red tokens outside square tokens; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence."
+        ],
+        "reason_prompt": "Which set constraint preserves the statement?",
+        "reason_options": [
+          "Forbid red tokens outside square tokens; no witness is asserted.",
+          "Forbid the overlap of red tokens and square tokens; no witness is asserted.",
+          "Require a witness in both red tokens and square tokens.",
+          "Require a witness in red tokens outside square tokens."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Forbid red tokens outside square tokens; no witness is asserted."
+      },
+      {
+        "id": "SYL-1-2",
+        "family": "translate-some",
+        "context": "At least one sealed packet is a labelled packet.",
+        "stem": "Treat the categories only as stated. Translate exactly: \"At least one sealed packet is a labelled packet.\"",
+        "options": [
+          "Every member of sealed packets is a member of labelled packets.",
+          "No member of sealed packets is a member of labelled packets.",
+          "At least one member of sealed packets is a member of labelled packets.",
+          "At least one member of sealed packets is not a member of labelled packets."
+        ],
+        "answer": 3,
+        "explanations": [
+          "This changes the stated constraint. Forbid sealed packets outside labelled packets; no witness is asserted. The source instead requires: Require a witness in both sealed packets and labelled packets.",
+          "This changes the stated constraint. Forbid the overlap of sealed packets and labelled packets; no witness is asserted. The source instead requires: Require a witness in both sealed packets and labelled packets.",
+          "This is the exact translation. Require a witness in both sealed packets and labelled packets.",
+          "This changes the stated constraint. Require a witness in sealed packets outside labelled packets. The source instead requires: Require a witness in both sealed packets and labelled packets."
+        ],
+        "repairs": [
+          "This changes the stated constraint. Forbid sealed packets outside labelled packets; no witness is asserted. The source instead requires: Require a witness in both sealed packets and labelled packets. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Forbid the overlap of sealed packets and labelled packets; no witness is asserted. The source instead requires: Require a witness in both sealed packets and labelled packets. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This is the exact translation. Require a witness in both sealed packets and labelled packets. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in sealed packets outside labelled packets. The source instead requires: Require a witness in both sealed packets and labelled packets. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence."
+        ],
+        "reason_prompt": "Which set constraint preserves the statement?",
+        "reason_options": [
+          "Forbid sealed packets outside labelled packets; no witness is asserted.",
+          "Forbid the overlap of sealed packets and labelled packets; no witness is asserted.",
+          "Require a witness in both sealed packets and labelled packets.",
+          "Require a witness in sealed packets outside labelled packets."
+        ],
+        "reason_answer": 3,
+        "reason_explanation": "Require a witness in both sealed packets and labelled packets."
+      }
+    ],
+    "faded": [
+      {
+        "id": "SYL-1-3",
+        "family": "translate-no",
+        "context": "No wooden piece is a magnetic piece.",
+        "stem": "Treat the categories only as stated. Translate exactly: \"No wooden piece is a magnetic piece.\" Partly worked: identify whether the sentence forbids an overlap or requires a witness outside a set. Complete the matching quantified statement.",
+        "options": [
+          "Every member of wooden pieces is a member of magnetic pieces.",
+          "No member of wooden pieces is a member of magnetic pieces.",
+          "At least one member of wooden pieces is a member of magnetic pieces.",
+          "At least one member of wooden pieces is not a member of magnetic pieces."
+        ],
+        "answer": 2,
+        "explanations": [
+          "This changes the stated constraint. Forbid wooden pieces outside magnetic pieces; no witness is asserted. The source instead requires: Forbid the overlap of wooden pieces and magnetic pieces; no witness is asserted.",
+          "This is the exact translation. Forbid the overlap of wooden pieces and magnetic pieces; no witness is asserted.",
+          "This changes the stated constraint. Require a witness in both wooden pieces and magnetic pieces. The source instead requires: Forbid the overlap of wooden pieces and magnetic pieces; no witness is asserted.",
+          "This changes the stated constraint. Require a witness in wooden pieces outside magnetic pieces. The source instead requires: Forbid the overlap of wooden pieces and magnetic pieces; no witness is asserted."
+        ],
+        "repairs": [
+          "This changes the stated constraint. Forbid wooden pieces outside magnetic pieces; no witness is asserted. The source instead requires: Forbid the overlap of wooden pieces and magnetic pieces; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This is the exact translation. Forbid the overlap of wooden pieces and magnetic pieces; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in both wooden pieces and magnetic pieces. The source instead requires: Forbid the overlap of wooden pieces and magnetic pieces; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in wooden pieces outside magnetic pieces. The source instead requires: Forbid the overlap of wooden pieces and magnetic pieces; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence."
+        ],
+        "reason_prompt": "Which set constraint preserves the statement?",
+        "reason_options": [
+          "Forbid wooden pieces outside magnetic pieces; no witness is asserted.",
+          "Forbid the overlap of wooden pieces and magnetic pieces; no witness is asserted.",
+          "Require a witness in both wooden pieces and magnetic pieces.",
+          "Require a witness in wooden pieces outside magnetic pieces."
+        ],
+        "reason_answer": 2,
+        "reason_explanation": "Forbid the overlap of wooden pieces and magnetic pieces; no witness is asserted."
+      },
+      {
+        "id": "SYL-1-4",
+        "family": "translate-some_not",
+        "context": "Some archived files are not signed files.",
+        "stem": "Treat the categories only as stated. Translate exactly: \"Some archived files are not signed files.\" Partly worked: identify whether the sentence forbids an overlap or requires a witness outside a set. Complete the matching quantified statement.",
+        "options": [
+          "Every member of archived files is a member of signed files.",
+          "No member of archived files is a member of signed files.",
+          "At least one member of archived files is a member of signed files.",
+          "At least one member of archived files is not a member of signed files."
+        ],
+        "answer": 4,
+        "explanations": [
+          "This changes the stated constraint. Forbid archived files outside signed files; no witness is asserted. The source instead requires: Require a witness in archived files outside signed files.",
+          "This changes the stated constraint. Forbid the overlap of archived files and signed files; no witness is asserted. The source instead requires: Require a witness in archived files outside signed files.",
+          "This changes the stated constraint. Require a witness in both archived files and signed files. The source instead requires: Require a witness in archived files outside signed files.",
+          "This is the exact translation. Require a witness in archived files outside signed files."
+        ],
+        "repairs": [
+          "This changes the stated constraint. Forbid archived files outside signed files; no witness is asserted. The source instead requires: Require a witness in archived files outside signed files. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Forbid the overlap of archived files and signed files; no witness is asserted. The source instead requires: Require a witness in archived files outside signed files. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in both archived files and signed files. The source instead requires: Require a witness in archived files outside signed files. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This is the exact translation. Require a witness in archived files outside signed files. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence."
+        ],
+        "reason_prompt": "Which set constraint preserves the statement?",
+        "reason_options": [
+          "Forbid archived files outside signed files; no witness is asserted.",
+          "Forbid the overlap of archived files and signed files; no witness is asserted.",
+          "Require a witness in both archived files and signed files.",
+          "Require a witness in archived files outside signed files."
+        ],
+        "reason_answer": 4,
+        "reason_explanation": "Require a witness in archived files outside signed files."
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "SYL-1-5",
+        "family": "translate-all",
+        "context": "Only certified staff can be inspectors.",
+        "stem": "Treat the categories only as stated. Translate exactly: \"Only certified staff can be inspectors.\"",
+        "options": [
+          "Every member of inspectors is a member of certified staff.",
+          "No member of inspectors is a member of certified staff.",
+          "At least one member of inspectors is a member of certified staff.",
+          "At least one member of inspectors is not a member of certified staff."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This is the exact translation. Forbid inspectors outside certified staff; no witness is asserted.",
+          "This changes the stated constraint. Forbid the overlap of inspectors and certified staff; no witness is asserted. The source instead requires: Forbid inspectors outside certified staff; no witness is asserted.",
+          "This changes the stated constraint. Require a witness in both inspectors and certified staff. The source instead requires: Forbid inspectors outside certified staff; no witness is asserted.",
+          "This changes the stated constraint. Require a witness in inspectors outside certified staff. The source instead requires: Forbid inspectors outside certified staff; no witness is asserted."
+        ],
+        "repairs": [
+          "This is the exact translation. Forbid inspectors outside certified staff; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Forbid the overlap of inspectors and certified staff; no witness is asserted. The source instead requires: Forbid inspectors outside certified staff; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in both inspectors and certified staff. The source instead requires: Forbid inspectors outside certified staff; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in inspectors outside certified staff. The source instead requires: Forbid inspectors outside certified staff; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence."
+        ],
+        "reason_prompt": "Which set constraint preserves the statement?",
+        "reason_options": [
+          "Forbid inspectors outside certified staff; no witness is asserted.",
+          "Forbid the overlap of inspectors and certified staff; no witness is asserted.",
+          "Require a witness in both inspectors and certified staff.",
+          "Require a witness in inspectors outside certified staff."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Forbid inspectors outside certified staff; no witness is asserted."
+      },
+      {
+        "id": "SYL-1-6",
+        "family": "translate-no",
+        "context": "Not a single night service is an express service.",
+        "stem": "Treat the categories only as stated. Translate exactly: \"Not a single night service is an express service.\"",
+        "options": [
+          "Every member of night services is a member of express services.",
+          "No member of night services is a member of express services.",
+          "At least one member of night services is a member of express services.",
+          "At least one member of night services is not a member of express services."
+        ],
+        "answer": 2,
+        "explanations": [
+          "This changes the stated constraint. Forbid night services outside express services; no witness is asserted. The source instead requires: Forbid the overlap of night services and express services; no witness is asserted.",
+          "This is the exact translation. Forbid the overlap of night services and express services; no witness is asserted.",
+          "This changes the stated constraint. Require a witness in both night services and express services. The source instead requires: Forbid the overlap of night services and express services; no witness is asserted.",
+          "This changes the stated constraint. Require a witness in night services outside express services. The source instead requires: Forbid the overlap of night services and express services; no witness is asserted."
+        ],
+        "repairs": [
+          "This changes the stated constraint. Forbid night services outside express services; no witness is asserted. The source instead requires: Forbid the overlap of night services and express services; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This is the exact translation. Forbid the overlap of night services and express services; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in both night services and express services. The source instead requires: Forbid the overlap of night services and express services; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in night services outside express services. The source instead requires: Forbid the overlap of night services and express services; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence."
+        ],
+        "reason_prompt": "Which set constraint preserves the statement?",
+        "reason_options": [
+          "Forbid night services outside express services; no witness is asserted.",
+          "Forbid the overlap of night services and express services; no witness is asserted.",
+          "Require a witness in both night services and express services.",
+          "Require a witness in night services outside express services."
+        ],
+        "reason_answer": 2,
+        "reason_explanation": "Forbid the overlap of night services and express services; no witness is asserted."
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "SYL-1-7",
+        "family": "translate-some_not",
+        "context": "It is not true that every library copy is illustrated.",
+        "stem": "Treat the categories only as stated. Translate exactly: \"It is not true that every library copy is illustrated.\"",
+        "options": [
+          "Every member of library copies is a member of illustrated copies.",
+          "No member of library copies is a member of illustrated copies.",
+          "At least one member of library copies is a member of illustrated copies.",
+          "At least one member of library copies is not a member of illustrated copies."
+        ],
+        "answer": 4,
+        "explanations": [
+          "This changes the stated constraint. Forbid library copies outside illustrated copies; no witness is asserted. The source instead requires: Require a witness in library copies outside illustrated copies.",
+          "This changes the stated constraint. Forbid the overlap of library copies and illustrated copies; no witness is asserted. The source instead requires: Require a witness in library copies outside illustrated copies.",
+          "This changes the stated constraint. Require a witness in both library copies and illustrated copies. The source instead requires: Require a witness in library copies outside illustrated copies.",
+          "This is the exact translation. Require a witness in library copies outside illustrated copies."
+        ],
+        "repairs": [
+          "This changes the stated constraint. Forbid library copies outside illustrated copies; no witness is asserted. The source instead requires: Require a witness in library copies outside illustrated copies. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Forbid the overlap of library copies and illustrated copies; no witness is asserted. The source instead requires: Require a witness in library copies outside illustrated copies. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in both library copies and illustrated copies. The source instead requires: Require a witness in library copies outside illustrated copies. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This is the exact translation. Require a witness in library copies outside illustrated copies. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence."
+        ],
+        "reason_prompt": "Which set constraint preserves the statement?",
+        "reason_options": [
+          "Forbid library copies outside illustrated copies; no witness is asserted.",
+          "Forbid the overlap of library copies and illustrated copies; no witness is asserted.",
+          "Require a witness in both library copies and illustrated copies.",
+          "Require a witness in library copies outside illustrated copies."
+        ],
+        "reason_answer": 4,
+        "reason_explanation": "Require a witness in library copies outside illustrated copies."
+      },
+      {
+        "id": "SYL-1-8",
+        "family": "translate-some",
+        "context": "The survey contains at least one response that is anonymous.",
+        "stem": "Treat the categories only as stated. Translate exactly: \"The survey contains at least one response that is anonymous.\"",
+        "options": [
+          "Every member of survey responses is a member of anonymous responses.",
+          "No member of survey responses is a member of anonymous responses.",
+          "At least one member of survey responses is a member of anonymous responses.",
+          "At least one member of survey responses is not a member of anonymous responses."
+        ],
+        "answer": 3,
+        "explanations": [
+          "This changes the stated constraint. Forbid survey responses outside anonymous responses; no witness is asserted. The source instead requires: Require a witness in both survey responses and anonymous responses.",
+          "This changes the stated constraint. Forbid the overlap of survey responses and anonymous responses; no witness is asserted. The source instead requires: Require a witness in both survey responses and anonymous responses.",
+          "This is the exact translation. Require a witness in both survey responses and anonymous responses.",
+          "This changes the stated constraint. Require a witness in survey responses outside anonymous responses. The source instead requires: Require a witness in both survey responses and anonymous responses."
+        ],
+        "repairs": [
+          "This changes the stated constraint. Forbid survey responses outside anonymous responses; no witness is asserted. The source instead requires: Require a witness in both survey responses and anonymous responses. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Forbid the overlap of survey responses and anonymous responses; no witness is asserted. The source instead requires: Require a witness in both survey responses and anonymous responses. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This is the exact translation. Require a witness in both survey responses and anonymous responses. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in survey responses outside anonymous responses. The source instead requires: Require a witness in both survey responses and anonymous responses. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence."
+        ],
+        "reason_prompt": "Which set constraint preserves the statement?",
+        "reason_options": [
+          "Forbid survey responses outside anonymous responses; no witness is asserted.",
+          "Forbid the overlap of survey responses and anonymous responses; no witness is asserted.",
+          "Require a witness in both survey responses and anonymous responses.",
+          "Require a witness in survey responses outside anonymous responses."
+        ],
+        "reason_answer": 3,
+        "reason_explanation": "Require a witness in both survey responses and anonymous responses."
+      }
+    ],
+    "revision": [
+      {
+        "id": "SYL-1-9",
+        "family": "translate-all",
+        "context": "A sample may be accepted only if it has been tested.",
+        "stem": "Treat the categories only as stated. Translate exactly: \"A sample may be accepted only if it has been tested.\"",
+        "options": [
+          "Every member of accepted samples is a member of tested samples.",
+          "No member of accepted samples is a member of tested samples.",
+          "At least one member of accepted samples is a member of tested samples.",
+          "At least one member of accepted samples is not a member of tested samples."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This is the exact translation. Forbid accepted samples outside tested samples; no witness is asserted.",
+          "This changes the stated constraint. Forbid the overlap of accepted samples and tested samples; no witness is asserted. The source instead requires: Forbid accepted samples outside tested samples; no witness is asserted.",
+          "This changes the stated constraint. Require a witness in both accepted samples and tested samples. The source instead requires: Forbid accepted samples outside tested samples; no witness is asserted.",
+          "This changes the stated constraint. Require a witness in accepted samples outside tested samples. The source instead requires: Forbid accepted samples outside tested samples; no witness is asserted."
+        ],
+        "repairs": [
+          "This is the exact translation. Forbid accepted samples outside tested samples; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Forbid the overlap of accepted samples and tested samples; no witness is asserted. The source instead requires: Forbid accepted samples outside tested samples; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in both accepted samples and tested samples. The source instead requires: Forbid accepted samples outside tested samples; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in accepted samples outside tested samples. The source instead requires: Forbid accepted samples outside tested samples; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence."
+        ],
+        "reason_prompt": "Which set constraint preserves the statement?",
+        "reason_options": [
+          "Forbid accepted samples outside tested samples; no witness is asserted.",
+          "Forbid the overlap of accepted samples and tested samples; no witness is asserted.",
+          "Require a witness in both accepted samples and tested samples.",
+          "Require a witness in accepted samples outside tested samples."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Forbid accepted samples outside tested samples; no witness is asserted."
+      },
+      {
+        "id": "SYL-1-10",
+        "family": "translate-some_not",
+        "context": "At least one delivered crate is not intact.",
+        "stem": "Treat the categories only as stated. Translate exactly: \"At least one delivered crate is not intact.\"",
+        "options": [
+          "Every member of delivered crates is a member of intact crates.",
+          "No member of delivered crates is a member of intact crates.",
+          "At least one member of delivered crates is a member of intact crates.",
+          "At least one member of delivered crates is not a member of intact crates."
+        ],
+        "answer": 4,
+        "explanations": [
+          "This changes the stated constraint. Forbid delivered crates outside intact crates; no witness is asserted. The source instead requires: Require a witness in delivered crates outside intact crates.",
+          "This changes the stated constraint. Forbid the overlap of delivered crates and intact crates; no witness is asserted. The source instead requires: Require a witness in delivered crates outside intact crates.",
+          "This changes the stated constraint. Require a witness in both delivered crates and intact crates. The source instead requires: Require a witness in delivered crates outside intact crates.",
+          "This is the exact translation. Require a witness in delivered crates outside intact crates."
+        ],
+        "repairs": [
+          "This changes the stated constraint. Forbid delivered crates outside intact crates; no witness is asserted. The source instead requires: Require a witness in delivered crates outside intact crates. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Forbid the overlap of delivered crates and intact crates; no witness is asserted. The source instead requires: Require a witness in delivered crates outside intact crates. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in both delivered crates and intact crates. The source instead requires: Require a witness in delivered crates outside intact crates. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This is the exact translation. Require a witness in delivered crates outside intact crates. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence."
+        ],
+        "reason_prompt": "Which set constraint preserves the statement?",
+        "reason_options": [
+          "Forbid delivered crates outside intact crates; no witness is asserted.",
+          "Forbid the overlap of delivered crates and intact crates; no witness is asserted.",
+          "Require a witness in both delivered crates and intact crates.",
+          "Require a witness in delivered crates outside intact crates."
+        ],
+        "reason_answer": 4,
+        "reason_explanation": "Require a witness in delivered crates outside intact crates."
+      },
+      {
+        "id": "SYL-1-11",
+        "family": "translate-no",
+        "context": "Restricted records and public records have no member in common.",
+        "stem": "Treat the categories only as stated. Translate exactly: \"Restricted records and public records have no member in common.\"",
+        "options": [
+          "Every member of restricted records is a member of public records.",
+          "No member of restricted records is a member of public records.",
+          "At least one member of restricted records is a member of public records.",
+          "At least one member of restricted records is not a member of public records."
+        ],
+        "answer": 2,
+        "explanations": [
+          "This changes the stated constraint. Forbid restricted records outside public records; no witness is asserted. The source instead requires: Forbid the overlap of restricted records and public records; no witness is asserted.",
+          "This is the exact translation. Forbid the overlap of restricted records and public records; no witness is asserted.",
+          "This changes the stated constraint. Require a witness in both restricted records and public records. The source instead requires: Forbid the overlap of restricted records and public records; no witness is asserted.",
+          "This changes the stated constraint. Require a witness in restricted records outside public records. The source instead requires: Forbid the overlap of restricted records and public records; no witness is asserted."
+        ],
+        "repairs": [
+          "This changes the stated constraint. Forbid restricted records outside public records; no witness is asserted. The source instead requires: Forbid the overlap of restricted records and public records; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This is the exact translation. Forbid the overlap of restricted records and public records; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in both restricted records and public records. The source instead requires: Forbid the overlap of restricted records and public records; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in restricted records outside public records. The source instead requires: Forbid the overlap of restricted records and public records; no witness is asserted. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence."
+        ],
+        "reason_prompt": "Which set constraint preserves the statement?",
+        "reason_options": [
+          "Forbid restricted records outside public records; no witness is asserted.",
+          "Forbid the overlap of restricted records and public records; no witness is asserted.",
+          "Require a witness in both restricted records and public records.",
+          "Require a witness in restricted records outside public records."
+        ],
+        "reason_answer": 2,
+        "reason_explanation": "Forbid the overlap of restricted records and public records; no witness is asserted."
+      },
+      {
+        "id": "SYL-1-12",
+        "family": "translate-some",
+        "context": "There exists a team that is both registered and mixed.",
+        "stem": "Treat the categories only as stated. Translate exactly: \"There exists a team that is both registered and mixed.\"",
+        "options": [
+          "Every member of registered teams is a member of mixed teams.",
+          "No member of registered teams is a member of mixed teams.",
+          "At least one member of registered teams is a member of mixed teams.",
+          "At least one member of registered teams is not a member of mixed teams."
+        ],
+        "answer": 3,
+        "explanations": [
+          "This changes the stated constraint. Forbid registered teams outside mixed teams; no witness is asserted. The source instead requires: Require a witness in both registered teams and mixed teams.",
+          "This changes the stated constraint. Forbid the overlap of registered teams and mixed teams; no witness is asserted. The source instead requires: Require a witness in both registered teams and mixed teams.",
+          "This is the exact translation. Require a witness in both registered teams and mixed teams.",
+          "This changes the stated constraint. Require a witness in registered teams outside mixed teams. The source instead requires: Require a witness in both registered teams and mixed teams."
+        ],
+        "repairs": [
+          "This changes the stated constraint. Forbid registered teams outside mixed teams; no witness is asserted. The source instead requires: Require a witness in both registered teams and mixed teams. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Forbid the overlap of registered teams and mixed teams; no witness is asserted. The source instead requires: Require a witness in both registered teams and mixed teams. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This is the exact translation. Require a witness in both registered teams and mixed teams. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence.",
+          "This changes the stated constraint. Require a witness in registered teams outside mixed teams. The source instead requires: Require a witness in both registered teams and mixed teams. Rewrite the sentence using every, none, at least one, or at least one not; check both direction and existence."
+        ],
+        "reason_prompt": "Which set constraint preserves the statement?",
+        "reason_options": [
+          "Forbid registered teams outside mixed teams; no witness is asserted.",
+          "Forbid the overlap of registered teams and mixed teams; no witness is asserted.",
+          "Require a witness in both registered teams and mixed teams.",
+          "Require a witness in registered teams outside mixed teams."
+        ],
+        "reason_answer": 3,
+        "reason_explanation": "Require a witness in both registered teams and mixed teams."
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored categorical translations; formal semantics checked using app/content/syllogism.py. Not authenticated PYQs."
+  ]
+}

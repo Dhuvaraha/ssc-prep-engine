@@ -18,6 +18,8 @@ import DashboardPage from "./pages/DashboardPage";
 import ExamChooserPage from "./pages/ExamChooserPage";
 import LearnPage from "./pages/LearnPage";
 import LessonPage from "./pages/LessonPage";
+import PercentageJourneyPage from "./pages/PercentageJourneyPage";
+import PilotPage, { ObjectivePage } from "./pages/PilotPage";
 import MockPage from "./pages/MockPage";
 import PracticePage from "./pages/PracticePage";
 import PlannerPage from "./pages/PlannerPage";
@@ -39,6 +41,9 @@ export default function App() {
         <Route path="/login" element={<AuthPage />} />
         <Route path="/analytics" element={<RequireAuth><AnalyticsPage /></RequireAuth>} />
         <Route path="/learn" element={<LearnPage />} />
+        <Route path="/learn/percentage-pilot" element={<RequireAuth><PercentageJourneyPage /></RequireAuth>} />
+        <Route path="/learn/pilot" element={<RequireAuth><PilotPage /></RequireAuth>} />
+        <Route path="/learn/pilot/:objectiveId" element={<RequireAuth><ObjectivePage /></RequireAuth>} />
         <Route path="/learn/topic/:topicId" element={<RequireAuth><LessonPage /></RequireAuth>} />
         <Route path="/practice" element={<RequireAuth><PracticePage /></RequireAuth>} />
         <Route path="/planner" element={<RequireAuth><PlannerPage /></RequireAuth>} />

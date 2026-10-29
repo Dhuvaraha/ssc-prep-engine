@@ -1,0 +1,441 @@
+{
+  "objective_id": "TW-6",
+  "prerequisites": [
+    "Identify units of work and time.",
+    "Use work = constant rate * active time.",
+    "Subtract outflow from inflow."
+  ],
+  "explanation": "A rate model is a conditional statement, not an automatic formula. First name the same target job, check rate units, split rate changes into intervals, subtract destructive flows and account for downtime or shared equipment. A solo completion time describes only its own job and conditions. Missing conversion or capacity information can make a numerical answer unjustified.",
+  "worked": [
+    {
+      "action": "Suppose two pumps supply 8 and 5 litres/minute but share a pipe capped at 10 litres/minute.",
+      "justification": "The unconstrained sum is 13; the common pipe is a binding limit."
+    },
+    {
+      "action": "For 60 litres, the best possible filling time is 60/10 =6 minutes.",
+      "justification": "This assumes an initially empty tank, no leakage, constant rates and continuous availability."
+    },
+    {
+      "action": "If the pipe is unavailable for 2 minutes before pumping begins, elapsed time is 2+6 =8 minutes.",
+      "justification": "Downtime increases elapsed time without adding water."
+    },
+    {
+      "action": "If the target were 60 buckets of unknown size, stop and obtain litres per bucket.",
+      "justification": "The work unit must match the rate unit; a number without the conversion would be invented."
+    },
+    {
+      "action": "For a batch of60 items, an operator does the first30 at12 items/hour and the next30 at6 items/hour.",
+      "justification": "Equal work portions do not imply equal active times when rates differ."
+    },
+    {
+      "action": "First time =30/12=2.5 hours; second time =30/6=5 hours. Total =7.5 hours.",
+      "justification": "Use work/rate separately in each interval, then add times. The average of12 and6 would incorrectly assume equal time at both rates."
+    },
+    {
+      "action": "Check average output:60/7.5=8 items/hour, between the two rates and closer to the slower rate.",
+      "justification": "More time is spent at the slower rate; this is a reasonableness check, not a substitute for the calculation."
+    }
+  ],
+  "hint": "Write: target unit; active intervals; rate changes; shared limits; inflows minus outflows.",
+  "shortcut": "Use the slowest mandatory shared capacity as a ceiling, then calculate only over active intervals.",
+  "limitation": "A ceiling is not a guaranteed achieved rate unless losses and other restrictions are excluded. Do not infer a fixed rate from an incompatible measurement.",
+  "checks": {
+    "entry": [
+      {
+        "id": "TW-6-same-job",
+        "family": "same-job",
+        "context": "same-job",
+        "stem": "A paints a small gate in 2 hours. B paints a large gate in 3 hours. Can their solo times alone determine how long they take together on the large gate?",
+        "options": [
+          "No; the two times refer to different jobs.",
+          "Yes; 6/5 hours.",
+          "Yes; 5 hours.",
+          "Yes; 1 hour."
+        ],
+        "answer": 1,
+        "explanations": [
+          "The work amount used to define a rate must be common.",
+          "The reciprocal sum assumes both solo times describe the target job.",
+          "Adding solo durations does not establish a joint rate.",
+          "Subtracting durations gives no rate for the large gate."
+        ],
+        "repairs": [
+          "The work amount used to define a rate must be common. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "The reciprocal sum assumes both solo times describe the target job. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "Adding solo durations does not establish a joint rate. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "Subtracting durations gives no rate for the large gate. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation."
+        ],
+        "reason_prompt": "Which modelling statement justifies your choice?",
+        "reason_options": [
+          "We need A's rate on the large gate, or a relation between the job sizes.",
+          "Any two durations can be combined by adding reciprocals."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "We need A's rate on the large gate, or a relation between the job sizes."
+      },
+      {
+        "id": "TW-6-rate-units",
+        "family": "rate-units",
+        "context": "rate-units",
+        "stem": "One worker processes 12 identical files per hour. Another processes 18 identical files per hour, independently. Which quantity can be added directly?",
+        "options": [
+          "12 files/hour and 18 files/hour",
+          "1/12 hour/file and 1/18 hour/file",
+          "12 files/hour and 18 hours/file",
+          "The two workers' total working lifetimes"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Both rates measure the same work per the same time unit.",
+          "These are times per file; their sum is not joint output per hour.",
+          "The units differ and cannot be added as rates.",
+          "Working lifetime is not an output rate."
+        ],
+        "repairs": [
+          "Both rates measure the same work per the same time unit. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "These are times per file; their sum is not joint output per hour. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "The units differ and cannot be added as rates. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "Working lifetime is not an output rate. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation."
+        ],
+        "reason_prompt": "Which modelling statement justifies your choice?",
+        "reason_options": [
+          "Independent output rates in matching units add.",
+          "All quantities involving time can be added."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Independent output rates in matching units add."
+      }
+    ],
+    "faded": [
+      {
+        "id": "TW-6-interference",
+        "family": "interference",
+        "context": "interference",
+        "stem": "A and B individually pack 8 and 12 boxes per hour. They share a machine that can seal at most 15 boxes per hour. Complete the model: finished sealed output per hour is bounded by ___.",
+        "options": [
+          "15 boxes",
+          "20 boxes",
+          "96 boxes",
+          "4 boxes"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The shared sealing bottleneck caps completed output at 15.",
+          "20 is the unconstrained packing sum; sealing is slower.",
+          "Multiplying packing rates has units boxes squared/hour squared.",
+          "The difference between packing rates is not the sealing capacity."
+        ],
+        "repairs": [
+          "The shared sealing bottleneck caps completed output at 15. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "20 is the unconstrained packing sum; sealing is slower. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "Multiplying packing rates has units boxes squared/hour squared. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "The difference between packing rates is not the sealing capacity. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation."
+        ],
+        "reason_prompt": "Which modelling statement justifies your choice?",
+        "reason_options": [
+          "Finished output cannot exceed the slowest mandatory shared stage.",
+          "Independent solo rates always add even with a shared bottleneck."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Finished output cannot exceed the slowest mandatory shared stage."
+      },
+      {
+        "id": "TW-6-piecewise",
+        "family": "piecewise",
+        "context": "piecewise",
+        "stem": "A pump supplies 6 litres/minute for the first 4 minutes and then 3 litres/minute for 4 minutes. Complete V =6 * 4 +3 * 4. What assumption would be wrong?",
+        "options": [
+          "Treating 6 litres/minute as constant for all 8 minutes",
+          "Adding the two interval volumes",
+          "Using minutes for both intervals",
+          "Expecting a total of 36 litres"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The rate is explicitly reduced after minute 4.",
+          "Volumes from disjoint intervals can be added.",
+          "The time units match the stated rates.",
+          "24+12 is exactly 36 litres."
+        ],
+        "repairs": [
+          "The rate is explicitly reduced after minute 4. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "Volumes from disjoint intervals can be added. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "The time units match the stated rates. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "24+12 is exactly 36 litres. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation."
+        ],
+        "reason_prompt": "Which modelling statement justifies your choice?",
+        "reason_options": [
+          "Each constant rate applies only during its stated interval.",
+          "The initial rate must remain valid throughout."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Each constant rate applies only during its stated interval."
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "TW-6-fatigue",
+        "family": "fatigue",
+        "context": "fatigue",
+        "stem": "A technician completes the first half of a repair batch at 10 repairs/hour and the other half at 5 repairs/hour. Which forecast is justified for 40 repairs?",
+        "options": [
+          "6 hours",
+          "16/3 hours",
+          "4 hours",
+          "8 hours"
+        ],
+        "answer": 1,
+        "explanations": [
+          "20/10+20/5=2+4=6 hours.",
+          "Using the arithmetic mean of rates assumes equal time, not equal work.",
+          "4 hours assumes the faster rate never changes.",
+          "8 hours assumes the slower rate throughout."
+        ],
+        "repairs": [
+          "20/10+20/5=2+4=6 hours. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "Using the arithmetic mean of rates assumes equal time, not equal work. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "4 hours assumes the faster rate never changes. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "8 hours assumes the slower rate throughout. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation."
+        ],
+        "reason_prompt": "Which modelling statement justifies your choice?",
+        "reason_options": [
+          "Equal quantities of work take unequal times at unequal rates.",
+          "Equal work portions imply equal time portions."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Equal quantities of work take unequal times at unequal rates."
+      },
+      {
+        "id": "TW-6-shared-resource",
+        "family": "shared-resource",
+        "context": "shared-resource",
+        "stem": "Two printers each make 30 pages/minute alone. Together they must share a feeder limited to 45 pages/minute. With no other losses, what is the minimum time for 900 pages?",
+        "options": [
+          "20 minutes",
+          "15 minutes",
+          "30 minutes",
+          "10 minutes"
+        ],
+        "answer": 1,
+        "explanations": [
+          "900/45=20; the feeder binds.",
+          "900/60 ignores the shared feeder.",
+          "30 minutes uses only one printer's solo output.",
+          "90 pages/minute exceeds both available capacities."
+        ],
+        "repairs": [
+          "900/45=20; the feeder binds. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "900/60 ignores the shared feeder. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "30 minutes uses only one printer's solo output. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "90 pages/minute exceeds both available capacities. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation."
+        ],
+        "reason_prompt": "Which modelling statement justifies your choice?",
+        "reason_options": [
+          "The usable combined rate is min(30+30,45).",
+          "The feeder limit is added to the two printer rates."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The usable combined rate is min(30+30,45)."
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "TW-6-leak-sign",
+        "family": "leak-sign",
+        "context": "leak-sign",
+        "stem": "An inlet fills 20 litres/minute while an outlet removes 5 litres/minute. The tank initially contains 30 litres. Until capacity is reached, how long until it contains 150 litres?",
+        "options": [
+          "8 minutes",
+          "6 minutes",
+          "10 minutes",
+          "24 minutes"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The missing 120 litres accumulate at 15 litres/minute.",
+          "120/20 ignores the outlet.",
+          "150/15 ignores the initial 30 litres.",
+          "120/5 uses the outlet rate as net inflow."
+        ],
+        "repairs": [
+          "The missing 120 litres accumulate at 15 litres/minute. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "120/20 ignores the outlet. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "150/15 ignores the initial 30 litres. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "120/5 uses the outlet rate as net inflow. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation."
+        ],
+        "reason_prompt": "Which modelling statement justifies your choice?",
+        "reason_options": [
+          "Net inflow is 20-5 and the required increase is 150-30.",
+          "Both flows increase the amount of water."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Net inflow is 20-5 and the required increase is 150-30."
+      },
+      {
+        "id": "TW-6-nonlinear-evidence",
+        "family": "nonlinear-evidence",
+        "context": "nonlinear-evidence",
+        "stem": "A team of 4 produced 80 units yesterday. A team of 8 must share the same single oven today. Which claim is supported without knowing the oven capacity?",
+        "options": [
+          "Doubling staff does not establish doubled output.",
+          "Output must be 160 units.",
+          "Output must remain exactly 80 units.",
+          "Output must fall to 40 units."
+        ],
+        "answer": 1,
+        "explanations": [
+          "A shared constraint may prevent proportional scaling; capacity data are missing.",
+          "This assumes staff alone limits output.",
+          "A bottleneck could bind, but the evidence does not fix its capacity.",
+          "No stated condition implies halving output."
+        ],
+        "repairs": [
+          "A shared constraint may prevent proportional scaling; capacity data are missing. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "This assumes staff alone limits output. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "A bottleneck could bind, but the evidence does not fix its capacity. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "No stated condition implies halving output. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation."
+        ],
+        "reason_prompt": "Which modelling statement justifies your choice?",
+        "reason_options": [
+          "Proportional scaling needs unchanged per-worker productivity and no binding shared constraint.",
+          "Headcount determines output regardless of equipment."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Proportional scaling needs unchanged per-worker productivity and no binding shared constraint."
+      }
+    ],
+    "revision": [
+      {
+        "id": "TW-6-downtime",
+        "family": "downtime",
+        "context": "downtime",
+        "stem": "A scanner handles 24 pages/minute while running. During a 15-minute booking it spends 5 minutes warming up and produces nothing. How many pages can it scan at most?",
+        "options": [
+          "240",
+          "360",
+          "120",
+          "480"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Only 10 minutes are productive: 24 * 10.",
+          "This counts warm-up time as productive.",
+          "This uses only the warm-up duration.",
+          "This adds warm-up to the booking instead of subtracting it."
+        ],
+        "repairs": [
+          "Only 10 minutes are productive: 24 * 10. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "This counts warm-up time as productive. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "This uses only the warm-up duration. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "This adds warm-up to the booking instead of subtracting it. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation."
+        ],
+        "reason_prompt": "Which modelling statement justifies your choice?",
+        "reason_options": [
+          "Active processing time is booking time minus warm-up.",
+          "The advertised processing rate applies during warm-up too."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Active processing time is booking time minus warm-up."
+      },
+      {
+        "id": "TW-6-changing-unit",
+        "family": "changing-unit",
+        "context": "changing-unit",
+        "stem": "Machine A makes 20 small tiles/hour. Machine B makes 12 large tiles/hour. A contract asks for 240 large tiles. What is missing for a combined completion calculation?",
+        "options": [
+          "A's large-tile production rate",
+          "The sum 20+12",
+          "The difference 20-12",
+          "The product 20 * 12"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The target work unit is a large tile; A's given rate measures another product.",
+          "Different tile types cannot be treated as interchangeable target units.",
+          "Subtracting output counts does not convert tile type.",
+          "Multiplying rates does not give A's large-tile productivity."
+        ],
+        "repairs": [
+          "The target work unit is a large tile; A's given rate measures another product. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "Different tile types cannot be treated as interchangeable target units. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "Subtracting output counts does not convert tile type. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "Multiplying rates does not give A's large-tile productivity. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation."
+        ],
+        "reason_prompt": "Which modelling statement justifies your choice?",
+        "reason_options": [
+          "A common target work unit must be established before adding rates.",
+          "A tile of any size is necessarily the same amount of work."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A common target work unit must be established before adding rates."
+      },
+      {
+        "id": "TW-6-rate-observation",
+        "family": "rate-observation",
+        "context": "rate-observation",
+        "stem": "A pond's water depth rises 2 cm/hour during one observation. Its banks slope outward, so area increases with depth. Can this alone establish a constant volume inflow for the next 5 hours?",
+        "options": [
+          "No; depth change does not determine a fixed volume rate without geometry.",
+          "Yes; volume increases by exactly 10 litres.",
+          "Yes; volume increases by exactly 10 cubic metres.",
+          "Yes; depth and volume have identical units."
+        ],
+        "answer": 1,
+        "explanations": [
+          "Changing surface area changes volume per centimetre of depth.",
+          "Centimetres cannot be converted to litres without area.",
+          "No area measurement supports cubic metres.",
+          "Depth is length; volume is length cubed."
+        ],
+        "repairs": [
+          "Changing surface area changes volume per centimetre of depth. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "Centimetres cannot be converted to litres without area. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "No area measurement supports cubic metres. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "Depth is length; volume is length cubed. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation."
+        ],
+        "reason_prompt": "Which modelling statement justifies your choice?",
+        "reason_options": [
+          "Volume rate depends on area as well as depth rate.",
+          "A constant depth rate always means a constant volume rate."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Volume rate depends on area as well as depth rate."
+      },
+      {
+        "id": "TW-6-availability",
+        "family": "availability",
+        "context": "availability",
+        "stem": "A laboratory processes 15 samples/hour when staffed. During a 6-hour session, staff are available for 2 hours, absent for 1 hour, then available for 3 hours. How many samples are processed if work stops during absence?",
+        "options": [
+          "75",
+          "90",
+          "45",
+          "30"
+        ],
+        "answer": 1,
+        "explanations": [
+          "There are 5 active hours: 15 * 5.",
+          "6 * 15 counts the unstaffed hour.",
+          "This counts only the final staffed period.",
+          "This counts only the initial staffed period."
+        ],
+        "repairs": [
+          "There are 5 active hours: 15 * 5. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "6 * 15 counts the unstaffed hour. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "This counts only the final staffed period. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation.",
+          "This counts only the initial staffed period. Mark the target work unit, active intervals and any shared constraint before choosing a rate equation."
+        ],
+        "reason_prompt": "Which modelling statement justifies your choice?",
+        "reason_options": [
+          "Add active intervals; no output accumulates while work is stopped.",
+          "Elapsed session time and productive time are always equal."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Add active intervals; no output accumulates while work is stopped."
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored modelling examples; not authenticated PYQs."
+  ]
+}

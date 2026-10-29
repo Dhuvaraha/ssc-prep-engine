@@ -1,0 +1,429 @@
+{
+  "objective_id": "PCT-4",
+  "prerequisites": [
+    "Find a percentage of a specified base.",
+    "Convert percentage rises and falls to multipliers.",
+    "Solve a division equation."
+  ],
+  "explanation": "Successive changes act on changing bases. A rise of p% multiplies by1+p/100; a fall multiplies by1-p/100. Multiply successive multipliers. Reverse the entire process by dividing by their product, not by reversing their signs.",
+  "worked": [
+    {
+      "action": "A stock of200 rises20% to240, then falls25% of240 to180.",
+      "justification": "The second percentage uses240, not200."
+    },
+    {
+      "action": "Overall multiplier=(6/5)(3/4)=9/10, a10% fall.",
+      "justification": "Final divided by original is180/200. Adding20-25 would wrongly predict a5% fall."
+    },
+    {
+      "action": "If the final stock is180 after those changes, original=180/(9/10)=200.",
+      "justification": "Division reverses the combined multiplication."
+    },
+    {
+      "action": "To rise25% first but finish10% above the start, second multiplier=(11/10)/(5/4)=22/25.",
+      "justification": "Final multiplier equals first times second. The second change is1-22/25=3/25, a12% fall."
+    }
+  ],
+  "hint": "Write original, after first change, and final, labelling each percentage base.",
+  "shortcut": "Multiply exact factors, then compare the product with1.",
+  "limitation": "Fixed additions and changes in percentage points are not sequential percentage multipliers.",
+  "checks": {
+    "entry": [
+      {
+        "id": "PCT-4-1",
+        "family": "forward",
+        "context": "Seed reserve",
+        "stem": "Seed reserve starts at 300 units. It increases by 20%, then decreases by 10% of the new amount. What is the final amount in units?",
+        "options": [
+          "324",
+          "330",
+          "270",
+          "360"
+        ],
+        "answer": 1,
+        "explanations": [
+          "300 * (1+20/100) * (1-10/100) = 324.",
+          "This adds signed percentages using a fixed original base.",
+          "This applies only the decrease to the original quantity.",
+          "This stops after the increase."
+        ],
+        "repairs": [
+          "300 * (1+20/100) * (1-10/100) = 324. Write each base and its multiplier, then substitute the proposed result.",
+          "This adds signed percentages using a fixed original base. Write each base and its multiplier, then substitute the proposed result.",
+          "This applies only the decrease to the original quantity. Write each base and its multiplier, then substitute the proposed result.",
+          "This stops after the increase. Write each base and its multiplier, then substitute the proposed result."
+        ],
+        "reason_prompt": "Which multiplier equation justifies the answer?",
+        "reason_options": [
+          "300 * (1+20/100) * (1-10/100) = 324.",
+          "Add the signed percentage numbers regardless of their bases."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "300 * (1+20/100) * (1-10/100) = 324."
+      },
+      {
+        "id": "PCT-4-2",
+        "family": "forward",
+        "context": "Library stock",
+        "stem": "Library stock starts at 400 units. It increases by 25%, then decreases by 20% of the new amount. What is the final amount in units?",
+        "options": [
+          "400",
+          "420",
+          "320",
+          "500"
+        ],
+        "answer": 1,
+        "explanations": [
+          "400 * (1+25/100) * (1-20/100) = 400.",
+          "This adds signed percentages using a fixed original base.",
+          "This applies only the decrease to the original quantity.",
+          "This stops after the increase."
+        ],
+        "repairs": [
+          "400 * (1+25/100) * (1-20/100) = 400. Write each base and its multiplier, then substitute the proposed result.",
+          "This adds signed percentages using a fixed original base. Write each base and its multiplier, then substitute the proposed result.",
+          "This applies only the decrease to the original quantity. Write each base and its multiplier, then substitute the proposed result.",
+          "This stops after the increase. Write each base and its multiplier, then substitute the proposed result."
+        ],
+        "reason_prompt": "Which multiplier equation justifies the answer?",
+        "reason_options": [
+          "400 * (1+25/100) * (1-20/100) = 400.",
+          "Add the signed percentage numbers regardless of their bases."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "400 * (1+25/100) * (1-20/100) = 400."
+      }
+    ],
+    "faded": [
+      {
+        "id": "PCT-4-3",
+        "family": "forward",
+        "context": "Factory output",
+        "stem": "Factory output starts at 500 units. It increases by 10%, then decreases by 20% of the new amount. What is the final amount in units? Partly worked: after the rise the amount is 550. Multiply this by(1-20/100) to finish.",
+        "options": [
+          "440",
+          "450",
+          "400",
+          "550"
+        ],
+        "answer": 1,
+        "explanations": [
+          "500 * (1+10/100) * (1-20/100) = 440.",
+          "This adds signed percentages using a fixed original base.",
+          "This applies only the decrease to the original quantity.",
+          "This stops after the increase."
+        ],
+        "repairs": [
+          "500 * (1+10/100) * (1-20/100) = 440. Write each base and its multiplier, then substitute the proposed result.",
+          "This adds signed percentages using a fixed original base. Write each base and its multiplier, then substitute the proposed result.",
+          "This applies only the decrease to the original quantity. Write each base and its multiplier, then substitute the proposed result.",
+          "This stops after the increase. Write each base and its multiplier, then substitute the proposed result."
+        ],
+        "reason_prompt": "Which multiplier equation justifies the answer?",
+        "reason_options": [
+          "500 * (1+10/100) * (1-20/100) = 440.",
+          "Add the signed percentage numbers regardless of their bases."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "500 * (1+10/100) * (1-20/100) = 440."
+      },
+      {
+        "id": "PCT-4-4",
+        "family": "forward",
+        "context": "Water allocation",
+        "stem": "Water allocation starts at 800 units. It increases by 50%, then decreases by 10% of the new amount. What is the final amount in units? Partly worked: after the rise the amount is 1200. Multiply this by(1-10/100) to finish.",
+        "options": [
+          "1080",
+          "1120",
+          "720",
+          "1200"
+        ],
+        "answer": 1,
+        "explanations": [
+          "800 * (1+50/100) * (1-10/100) = 1080.",
+          "This adds signed percentages using a fixed original base.",
+          "This applies only the decrease to the original quantity.",
+          "This stops after the increase."
+        ],
+        "repairs": [
+          "800 * (1+50/100) * (1-10/100) = 1080. Write each base and its multiplier, then substitute the proposed result.",
+          "This adds signed percentages using a fixed original base. Write each base and its multiplier, then substitute the proposed result.",
+          "This applies only the decrease to the original quantity. Write each base and its multiplier, then substitute the proposed result.",
+          "This stops after the increase. Write each base and its multiplier, then substitute the proposed result."
+        ],
+        "reason_prompt": "Which multiplier equation justifies the answer?",
+        "reason_options": [
+          "800 * (1+50/100) * (1-10/100) = 1080.",
+          "Add the signed percentage numbers regardless of their bases."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "800 * (1+50/100) * (1-10/100) = 1080."
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "PCT-4-5",
+        "family": "forward",
+        "context": "Festival attendance",
+        "stem": "Festival attendance starts at 1200 units. It increases by 25%, then decreases by 12% of the new amount. What is the final amount in units?",
+        "options": [
+          "1320",
+          "1356",
+          "1056",
+          "1500"
+        ],
+        "answer": 1,
+        "explanations": [
+          "1200 * (1+25/100) * (1-12/100) = 1320.",
+          "This adds signed percentages using a fixed original base.",
+          "This applies only the decrease to the original quantity.",
+          "This stops after the increase."
+        ],
+        "repairs": [
+          "1200 * (1+25/100) * (1-12/100) = 1320. Write each base and its multiplier, then substitute the proposed result.",
+          "This adds signed percentages using a fixed original base. Write each base and its multiplier, then substitute the proposed result.",
+          "This applies only the decrease to the original quantity. Write each base and its multiplier, then substitute the proposed result.",
+          "This stops after the increase. Write each base and its multiplier, then substitute the proposed result."
+        ],
+        "reason_prompt": "Which multiplier equation justifies the answer?",
+        "reason_options": [
+          "1200 * (1+25/100) * (1-12/100) = 1320.",
+          "Add the signed percentage numbers regardless of their bases."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "1200 * (1+25/100) * (1-12/100) = 1320."
+      },
+      {
+        "id": "PCT-4-6",
+        "family": "forward",
+        "context": "Battery capacity",
+        "stem": "Battery capacity starts at 640 units. It increases by 20%, then decreases by 25% of the new amount. What is the final amount in units?",
+        "options": [
+          "576",
+          "608",
+          "480",
+          "768"
+        ],
+        "answer": 1,
+        "explanations": [
+          "640 * (1+20/100) * (1-25/100) = 576.",
+          "This adds signed percentages using a fixed original base.",
+          "This applies only the decrease to the original quantity.",
+          "This stops after the increase."
+        ],
+        "repairs": [
+          "640 * (1+20/100) * (1-25/100) = 576. Write each base and its multiplier, then substitute the proposed result.",
+          "This adds signed percentages using a fixed original base. Write each base and its multiplier, then substitute the proposed result.",
+          "This applies only the decrease to the original quantity. Write each base and its multiplier, then substitute the proposed result.",
+          "This stops after the increase. Write each base and its multiplier, then substitute the proposed result."
+        ],
+        "reason_prompt": "Which multiplier equation justifies the answer?",
+        "reason_options": [
+          "640 * (1+20/100) * (1-25/100) = 576.",
+          "Add the signed percentage numbers regardless of their bases."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "640 * (1+20/100) * (1-25/100) = 576."
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "PCT-4-7",
+        "family": "reverse",
+        "context": "Warehouse inventory",
+        "stem": "Warehouse inventory rises by 25%, then falls by 20% of the changed amount, ending at 600 units. What was the original amount?",
+        "options": [
+          "600",
+          "540",
+          "480",
+          "750"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Original * (1+25/100) * (1-20/100) = 600; divide by the product.",
+          "Changing the signs does not invert the multipliers.",
+          "This divides by only the first multiplier.",
+          "This divides by only the second multiplier."
+        ],
+        "repairs": [
+          "Original * (1+25/100) * (1-20/100) = 600; divide by the product. Write each base and its multiplier, then substitute the proposed result.",
+          "Changing the signs does not invert the multipliers. Write each base and its multiplier, then substitute the proposed result.",
+          "This divides by only the first multiplier. Write each base and its multiplier, then substitute the proposed result.",
+          "This divides by only the second multiplier. Write each base and its multiplier, then substitute the proposed result."
+        ],
+        "reason_prompt": "Which multiplier equation justifies the answer?",
+        "reason_options": [
+          "Original * (1+25/100) * (1-20/100) = 600; divide by the product.",
+          "Undo each percentage by changing its sign."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Original * (1+25/100) * (1-20/100) = 600; divide by the product."
+      },
+      {
+        "id": "PCT-4-8",
+        "family": "reverse",
+        "context": "Tree nursery",
+        "stem": "Tree nursery rises by 20%, then falls by 25% of the changed amount, ending at 720 units. What was the original amount?",
+        "options": [
+          "800",
+          "720",
+          "600",
+          "960"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Original * (1+20/100) * (1-25/100) = 720; divide by the product.",
+          "Changing the signs does not invert the multipliers.",
+          "This divides by only the first multiplier.",
+          "This divides by only the second multiplier."
+        ],
+        "repairs": [
+          "Original * (1+20/100) * (1-25/100) = 720; divide by the product. Write each base and its multiplier, then substitute the proposed result.",
+          "Changing the signs does not invert the multipliers. Write each base and its multiplier, then substitute the proposed result.",
+          "This divides by only the first multiplier. Write each base and its multiplier, then substitute the proposed result.",
+          "This divides by only the second multiplier. Write each base and its multiplier, then substitute the proposed result."
+        ],
+        "reason_prompt": "Which multiplier equation justifies the answer?",
+        "reason_options": [
+          "Original * (1+20/100) * (1-25/100) = 720; divide by the product.",
+          "Undo each percentage by changing its sign."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Original * (1+20/100) * (1-25/100) = 720; divide by the product."
+      }
+    ],
+    "revision": [
+      {
+        "id": "PCT-4-9",
+        "family": "reverse",
+        "context": "Online readership",
+        "stem": "Online readership rises by 50%, then falls by 20% of the changed amount, ending at 1200 units. What was the original amount?",
+        "options": [
+          "1000",
+          "720",
+          "800",
+          "1500"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Original * (1+50/100) * (1-20/100) = 1200; divide by the product.",
+          "Changing the signs does not invert the multipliers.",
+          "This divides by only the first multiplier.",
+          "This divides by only the second multiplier."
+        ],
+        "repairs": [
+          "Original * (1+50/100) * (1-20/100) = 1200; divide by the product. Write each base and its multiplier, then substitute the proposed result.",
+          "Changing the signs does not invert the multipliers. Write each base and its multiplier, then substitute the proposed result.",
+          "This divides by only the first multiplier. Write each base and its multiplier, then substitute the proposed result.",
+          "This divides by only the second multiplier. Write each base and its multiplier, then substitute the proposed result."
+        ],
+        "reason_prompt": "Which multiplier equation justifies the answer?",
+        "reason_options": [
+          "Original * (1+50/100) * (1-20/100) = 1200; divide by the product.",
+          "Undo each percentage by changing its sign."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Original * (1+50/100) * (1-20/100) = 1200; divide by the product."
+      },
+      {
+        "id": "PCT-4-10",
+        "family": "restoring-after-two-losses",
+        "context": "restoring-after-two-losses",
+        "stem": "A water store loses20% to evaporation, then25% of what remains to a leak. By what percentage must the remaining water increase to restore the original amount?",
+        "options": [
+          "200/3",
+          "45",
+          "40",
+          "125/3"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The remaining multiplier is(4/5)(3/4)=3/5. Restoring the original requires multiplier5/3, an increase of200/3%.",
+          "Adding the two loss percentages ignores the second base and still would not give the restoring increase.",
+          "40% is the loss as a percentage of original water, not the increase relative to remaining water.",
+          "This does not restore the product to one: (3/5)(1+5/12)=17/20."
+        ],
+        "repairs": [
+          "The remaining multiplier is(4/5)(3/4)=3/5. Restoring the original requires multiplier5/3, an increase of200/3%. Reconstruct the quantities and their bases before calculating the requested change.",
+          "Adding the two loss percentages ignores the second base and still would not give the restoring increase. Reconstruct the quantities and their bases before calculating the requested change.",
+          "40% is the loss as a percentage of original water, not the increase relative to remaining water. Reconstruct the quantities and their bases before calculating the requested change.",
+          "This does not restore the product to one: (3/5)(1+5/12)=17/20. Reconstruct the quantities and their bases before calculating the requested change."
+        ],
+        "reason_prompt": "Which multiplier equation justifies the answer?",
+        "reason_options": [
+          "The restoring multiplier is the reciprocal of the product of the two loss multipliers.",
+          "The restoring increase always equals the sum of the loss percentages."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The remaining multiplier is(4/5)(3/4)=3/5. Restoring the original requires multiplier5/3, an increase of200/3%. The restoring multiplier is the reciprocal of the product of the two loss multipliers."
+      },
+      {
+        "id": "PCT-4-11",
+        "family": "missing",
+        "context": "Transport budget",
+        "stem": "Transport budget first rises by 50%. It must finish 15% above its original amount after a subsequent reduction. What percentage reduction of the increased amount is needed?",
+        "options": [
+          "70/3",
+          "35",
+          "15",
+          "140/9"
+        ],
+        "answer": 1,
+        "explanations": [
+          "(1+50/100) * (1-r/100) = (1+15/100); r=70/3.",
+          "Subtracting percentage numbers ignores the changed base.",
+          "The target increase is not the subsequent reduction.",
+          "This divides the already computed reduction by the first multiplier a second time."
+        ],
+        "repairs": [
+          "(1+50/100) * (1-r/100) = (1+15/100); r=70/3. Write each base and its multiplier, then substitute the proposed result.",
+          "Subtracting percentage numbers ignores the changed base. Write each base and its multiplier, then substitute the proposed result.",
+          "The target increase is not the subsequent reduction. Write each base and its multiplier, then substitute the proposed result.",
+          "This divides the already computed reduction by the first multiplier a second time. Write each base and its multiplier, then substitute the proposed result."
+        ],
+        "reason_prompt": "Which multiplier equation justifies the answer?",
+        "reason_options": [
+          "(1+50/100) * (1-r/100) = (1+15/100); r=70/3.",
+          "The reduction equals the difference of the stated percentage numbers."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "(1+50/100) * (1-r/100) = (1+15/100); r=70/3."
+      },
+      {
+        "id": "PCT-4-12",
+        "family": "missing",
+        "context": "Charity collection",
+        "stem": "Charity collection first rises by 20%. It must finish 8% above its original amount after a subsequent reduction. What percentage reduction of the increased amount is needed?",
+        "options": [
+          "10",
+          "12",
+          "8",
+          "25/3"
+        ],
+        "answer": 1,
+        "explanations": [
+          "(1+20/100) * (1-r/100) = (1+8/100); r=10.",
+          "Subtracting percentage numbers ignores the changed base.",
+          "The target increase is not the subsequent reduction.",
+          "This divides the already computed reduction by the first multiplier a second time."
+        ],
+        "repairs": [
+          "(1+20/100) * (1-r/100) = (1+8/100); r=10. Write each base and its multiplier, then substitute the proposed result.",
+          "Subtracting percentage numbers ignores the changed base. Write each base and its multiplier, then substitute the proposed result.",
+          "The target increase is not the subsequent reduction. Write each base and its multiplier, then substitute the proposed result.",
+          "This divides the already computed reduction by the first multiplier a second time. Write each base and its multiplier, then substitute the proposed result."
+        ],
+        "reason_prompt": "Which multiplier equation justifies the answer?",
+        "reason_options": [
+          "(1+20/100) * (1-r/100) = (1+8/100); r=10.",
+          "The reduction equals the difference of the stated percentage numbers."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "(1+20/100) * (1-r/100) = (1+8/100); r=10."
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored original examples; not authenticated PYQs or empirical difficulty calibration."
+  ]
+}

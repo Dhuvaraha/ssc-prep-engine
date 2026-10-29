@@ -1,0 +1,469 @@
+{
+  "objective_id": "RC-1",
+  "prerequisites": [
+    "Distinguish a topic from a statement about that topic.",
+    "Recognize words marking contrast or limitation, such as but, some and before.",
+    "Use only what the passage states or supports, not outside assumptions."
+  ],
+  "explanation": "The main idea is the central point made about a topic across the passage. A true detail may be too narrow; an impressive general claim may be unsupported. Identify the situation, what changes or is argued, and why the ending matters. Test your proposed summary against every sentence. Preserve limits such as some, a trial or an undecided outcome.",
+  "worked": [
+    {
+      "action": "Read this original example: A school opened its courtyard at lunch. Pupils used shaded benches for reading, but the noisy corner remained reserved for games. Staff kept both spaces because pupils wanted different kinds of breaks.",
+      "justification": "The topic is use of the courtyard, not benches alone."
+    },
+    {
+      "action": "List the roles: opening gives the situation; reading and games give contrasting uses; the final sentence explains keeping both.",
+      "justification": "A main idea must connect these roles rather than repeat one detail."
+    },
+    {
+      "action": "Choose: The school kept different courtyard spaces to support different lunchtime activities.",
+      "justification": "This covers reading, games and the decision, with no claim that everyone prefers one activity."
+    },
+    {
+      "action": "Reject: All pupils prefer quiet reading.",
+      "justification": "This contradicts the reported variety. Rejecting an overstatement is different from rejecting a true but narrow detail such as pupils used benches."
+    },
+    {
+      "action": "For a trial with mixed early evidence, summarize the trial and cautious decision, not a guaranteed future result.",
+      "justification": "Words such as some, before deciding and not yet preserve the author's degree of certainty."
+    }
+  ],
+  "hint": "Say what the passage is mainly doing in one sentence. Check the opening, contrast and ending against that sentence.",
+  "shortcut": "Use topic plus central point as a draft, then test it against the whole passage.",
+  "limitation": "The last sentence is useful evidence, not an automatic answer. A title-like topic label alone and a true minor detail can both miss the main idea.",
+  "checks": {
+    "entry": [
+      {
+        "id": "RC-1-1",
+        "family": "seed-library",
+        "context": "seed-library",
+        "passage": "The community library began lending seeds as well as books. Borrowers were asked to return seeds from their harvest if they could. The programme gave neighbours a way to exchange both plants and growing advice.",
+        "stem": "Passage 1: Which statement best expresses the main idea of the whole passage?",
+        "options": [
+          "A library programme connects neighbours through shared seeds and advice.",
+          "Every borrower must return exactly the same number of seeds.",
+          "Libraries should replace their books with plants.",
+          "The programme proves that all neighbours grow vegetables."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This includes the programme and its social purpose across all three sentences.",
+          "The passage says if they could; it gives no exact number.",
+          "Books are still lent; replacement is not proposed.",
+          "No universal claim about neighbours or vegetables appears."
+        ],
+        "repairs": [
+          "This includes the programme and its social purpose across all three sentences. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "The passage says if they could; it gives no exact number. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "Books are still lent; replacement is not proposed. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "No universal claim about neighbours or vegetables appears. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim."
+        ],
+        "reason_prompt": "Which passage-level evidence supports the summary?",
+        "reason_options": [
+          "The first sentence introduces seed lending; the last explains the exchange it enables.",
+          "A memorable single detail is sufficient even when the rest of the passage has a different focus.",
+          "A summary should strengthen a limited observation into a rule applying to every case.",
+          "A likely consequence may replace what the author actually describes."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The first sentence introduces seed lending; the last explains the exchange it enables."
+      },
+      {
+        "id": "RC-1-2",
+        "family": "shade",
+        "context": "shade",
+        "passage": "Workers placed a shade cloth over half the seedlings. Those under the cloth needed water less often during a hot week. The gardener recorded the difference but planned to repeat the observation in cooler weather before changing the routine.",
+        "stem": "Passage 2: Which statement best expresses the main idea of the whole passage?",
+        "options": [
+          "Shade always removes the need to water plants.",
+          "A gardener is cautiously investigating how shade affects watering needs.",
+          "Cool weather damages every seedling.",
+          "The shade cloth covered the entire garden."
+        ],
+        "answer": 2,
+        "explanations": [
+          "Less often is not never, and one hot week is not every condition.",
+          "This combines the observation with the decision to check it under another condition.",
+          "The passage reports no damage in cool weather.",
+          "Only half the seedlings were covered."
+        ],
+        "repairs": [
+          "Less often is not never, and one hot week is not every condition. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "This combines the observation with the decision to check it under another condition. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "The passage reports no damage in cool weather. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "Only half the seedlings were covered. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim."
+        ],
+        "reason_prompt": "Which passage-level evidence supports the summary?",
+        "reason_options": [
+          "The observed difference is followed by a plan to test another condition rather than a universal conclusion.",
+          "A memorable single detail is sufficient even when the rest of the passage has a different focus.",
+          "A summary should strengthen a limited observation into a rule applying to every case.",
+          "A likely consequence may replace what the author actually describes."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The observed difference is followed by a plan to test another condition rather than a universal conclusion."
+      }
+    ],
+    "faded": [
+      {
+        "id": "RC-1-3",
+        "family": "repair-cafe",
+        "context": "repair-cafe",
+        "passage": "At a weekend repair table, volunteers fixed torn bags and loose handles. Visitors watched the repairs and practised simple stitches. The organisers wanted people to leave with useful objects and skills, rather than only a repaired item.",
+        "stem": "Passage 3: Which statement best expresses the main idea of the whole passage? Partly worked: the repairs are the topic, while the final sentence supplies the purpose. Select a summary that keeps both.",
+        "options": [
+          "The volunteers repaired loose handles.",
+          "Weekend events are more popular than weekday events.",
+          "The repair table combines fixing objects with teaching practical skills.",
+          "Professional repairs are never necessary."
+        ],
+        "answer": 3,
+        "explanations": [
+          "This is a true supporting detail but leaves out teaching and the stated purpose.",
+          "No weekday comparison is given.",
+          "The activities and final purpose both support this summary.",
+          "The passage does not reject professional repairs."
+        ],
+        "repairs": [
+          "This is a true supporting detail but leaves out teaching and the stated purpose. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "No weekday comparison is given. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "The activities and final purpose both support this summary. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "The passage does not reject professional repairs. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim."
+        ],
+        "reason_prompt": "Which passage-level evidence supports the summary?",
+        "reason_options": [
+          "The final sentence joins useful objects with skills, explaining why visitors watched and practised.",
+          "A memorable single detail is sufficient even when the rest of the passage has a different focus.",
+          "A summary should strengthen a limited observation into a rule applying to every case.",
+          "A likely consequence may replace what the author actually describes."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The final sentence joins useful objects with skills, explaining why visitors watched and practised."
+      },
+      {
+        "id": "RC-1-4",
+        "family": "notice-board",
+        "context": "notice-board",
+        "passage": "A station notice board displayed several old timetables beside the new one. Travellers often stopped to compare the sheets. Staff removed the expired versions and added a clear date to the current sheet so that passengers could identify the relevant information.",
+        "stem": "Passage 4: Which statement best expresses the main idea of the whole passage? Partly worked: identify the information problem first. Complete the summary by matching the staff action to that problem.",
+        "options": [
+          "Every timetable on the board was incorrect.",
+          "Passengers dislike all printed information.",
+          "The station introduced a new train service.",
+          "Removing outdated notices made current travel information easier to identify."
+        ],
+        "answer": 4,
+        "explanations": [
+          "The current sheet was retained; not every sheet is described as wrong.",
+          "The problem concerns conflicting old and new notices, not all print.",
+          "A new timetable is not evidence of a new service.",
+          "This states the problem and the reason for the specific changes."
+        ],
+        "repairs": [
+          "The current sheet was retained; not every sheet is described as wrong. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "The problem concerns conflicting old and new notices, not all print. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "A new timetable is not evidence of a new service. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "This states the problem and the reason for the specific changes. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim."
+        ],
+        "reason_prompt": "Which passage-level evidence supports the summary?",
+        "reason_options": [
+          "Old and new sheets caused comparison; removing expired sheets and dating the current one addressed that problem.",
+          "A memorable single detail is sufficient even when the rest of the passage has a different focus.",
+          "A summary should strengthen a limited observation into a rule applying to every case.",
+          "A likely consequence may replace what the author actually describes."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Old and new sheets caused comparison; removing expired sheets and dating the current one addressed that problem."
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "RC-1-5",
+        "family": "quiet-hour",
+        "context": "quiet-hour",
+        "passage": "A museum offered a quiet hour with softer sounds and fewer flashing displays. It did not remove the exhibits. Some visitors who usually found the galleries overwhelming said the altered environment helped them stay longer. The museum retained ordinary sessions as well.",
+        "stem": "Passage 5: Which statement best expresses the main idea of the whole passage?",
+        "options": [
+          "A museum adjusted some sessions to improve access while keeping its exhibits and ordinary sessions.",
+          "The museum kept its exhibits during quiet sessions.",
+          "All visitors prefer quiet sessions to ordinary sessions.",
+          "Longer visits are the only measure of museum quality."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This covers the adjustment, its reported benefit and the continued ordinary provision.",
+          "This is true but too narrow: it omits the access adjustment and the reported benefit to some visitors.",
+          "Only some visitors are reported; no preference from all visitors is given.",
+          "The passage offers no such exclusive quality measure."
+        ],
+        "repairs": [
+          "This covers the adjustment, its reported benefit and the continued ordinary provision. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "This is true but too narrow: it omits the access adjustment and the reported benefit to some visitors. State the central point and check that it accounts for the rest of the passage.",
+          "Only some visitors are reported; no preference from all visitors is given. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "The passage offers no such exclusive quality measure. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim."
+        ],
+        "reason_prompt": "Which passage-level evidence supports the summary?",
+        "reason_options": [
+          "The account describes an access adjustment and reports a limited response without claiming universal preference.",
+          "A memorable single detail is sufficient even when the rest of the passage has a different focus.",
+          "A summary should strengthen a limited observation into a rule applying to every case.",
+          "A likely consequence may replace what the author actually describes."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The account describes an access adjustment and reports a limited response without claiming universal preference."
+      },
+      {
+        "id": "RC-1-6",
+        "family": "market-crates",
+        "context": "market-crates",
+        "passage": "The market replaced disposable delivery boxes with reusable crates. Traders liked having fewer boxes to discard, but empty crates had to be sorted and collected. A shared collection rota reduced missed pickups. The change therefore depended on coordination as well as new containers.",
+        "stem": "Passage 6: Which statement best expresses the main idea of the whole passage?",
+        "options": [
+          "Empty market crates had to be sorted and collected.",
+          "A packaging change brought a benefit but also required coordinated returns.",
+          "Traders opposed all reusable containers.",
+          "Sorting empty crates was the entire purpose of the market."
+        ],
+        "answer": 2,
+        "explanations": [
+          "This true detail names the return task but omits the packaging benefit and the need for coordination.",
+          "This includes reduced discarded boxes and the return system needed to sustain it.",
+          "Traders liked one benefit; universal opposition is unsupported.",
+          "Sorting is a supporting requirement, not the market purpose."
+        ],
+        "repairs": [
+          "This true detail names the return task but omits the packaging benefit and the need for coordination. State the central point and check that it accounts for the rest of the passage.",
+          "This includes reduced discarded boxes and the return system needed to sustain it. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "Traders liked one benefit; universal opposition is unsupported. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "Sorting is a supporting requirement, not the market purpose. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim."
+        ],
+        "reason_prompt": "Which passage-level evidence supports the summary?",
+        "reason_options": [
+          "The final sentence explicitly joins the new containers with the coordination illustrated by the rota.",
+          "A memorable single detail is sufficient even when the rest of the passage has a different focus.",
+          "A summary should strengthen a limited observation into a rule applying to every case.",
+          "A likely consequence may replace what the author actually describes."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The final sentence explicitly joins the new containers with the coordination illustrated by the rota."
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "RC-1-7",
+        "family": "path",
+        "context": "path",
+        "passage": "A park shortcut became muddy after rain. Paving the entire area would have covered tree roots, so staff tested a raised walkway along the busiest section. They checked both access and root conditions before deciding whether to extend it.",
+        "stem": "Passage 7: Which statement best expresses the main idea of the whole passage?",
+        "options": [
+          "Staff checked tree-root conditions near a walkway.",
+          "Tree roots make every walkway unsafe.",
+          "Staff are testing a limited access solution while monitoring its effect on trees.",
+          "Rainfall is the only reason people visit parks."
+        ],
+        "answer": 3,
+        "explanations": [
+          "This is a true monitoring detail but omits the access problem and limited trial.",
+          "The passage gives no universal safety conclusion.",
+          "This accounts for the problem, limited trial and two things monitored.",
+          "Visitor motives are not discussed."
+        ],
+        "repairs": [
+          "This is a true monitoring detail but omits the access problem and limited trial. State the central point and check that it accounts for the rest of the passage.",
+          "The passage gives no universal safety conclusion. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "This accounts for the problem, limited trial and two things monitored. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "Visitor motives are not discussed. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim."
+        ],
+        "reason_prompt": "Which passage-level evidence supports the summary?",
+        "reason_options": [
+          "The limited walkway is a trial evaluated for both access and root conditions, not an unconditional expansion.",
+          "A memorable single detail is sufficient even when the rest of the passage has a different focus.",
+          "A summary should strengthen a limited observation into a rule applying to every case.",
+          "A likely consequence may replace what the author actually describes."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The limited walkway is a trial evaluated for both access and root conditions, not an unconditional expansion."
+      },
+      {
+        "id": "RC-1-8",
+        "family": "oral-history",
+        "context": "oral-history",
+        "passage": "Students recorded residents describing an old riverside market. Some accounts disagreed about when a bridge opened. Rather than choosing the most vivid story, the students compared dated photographs and municipal records. They kept the recordings but marked the unresolved date clearly.",
+        "stem": "Passage 8: Which statement best expresses the main idea of the whole passage?",
+        "options": [
+          "Some residents disagreed about the date a bridge opened.",
+          "The students proved that every resident was mistaken.",
+          "Official records eliminate the value of personal accounts.",
+          "The students preserved personal accounts while checking and flagging an uncertain historical detail."
+        ],
+        "answer": 4,
+        "explanations": [
+          "This true detail gives the problem but misses how the students checked and preserved the accounts.",
+          "Disagreement about one date does not show every account is false.",
+          "They kept the recordings; the accounts were not discarded as valueless.",
+          "This combines preservation, checking and the marked uncertainty."
+        ],
+        "repairs": [
+          "This true detail gives the problem but misses how the students checked and preserved the accounts. State the central point and check that it accounts for the rest of the passage.",
+          "Disagreement about one date does not show every account is false. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "They kept the recordings; the accounts were not discarded as valueless. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "This combines preservation, checking and the marked uncertainty. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim."
+        ],
+        "reason_prompt": "Which passage-level evidence supports the summary?",
+        "reason_options": [
+          "They retained the recordings while using other evidence and marking the date unresolved.",
+          "A memorable single detail is sufficient even when the rest of the passage has a different focus.",
+          "A summary should strengthen a limited observation into a rule applying to every case.",
+          "A likely consequence may replace what the author actually describes."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "They retained the recordings while using other evidence and marking the date unresolved."
+      }
+    ],
+    "revision": [
+      {
+        "id": "RC-1-9",
+        "family": "water-meter",
+        "context": "water-meter",
+        "passage": "An apartment association compared monthly water-meter totals after fitting new taps. Consumption fell, but several flats had also been empty that month. The committee recorded both changes and postponed its claim about savings until occupied-flat figures were available. It still kept the new taps in use.",
+        "stem": "Passage 9: Which statement best expresses the main idea of the whole passage?",
+        "options": [
+          "The committee refused to attribute lower water use solely to new taps while occupancy also changed.",
+          "The new taps certainly caused all of the fall in water use.",
+          "Empty flats prove that water-saving equipment never works.",
+          "Several flats were empty during the month of the water comparison."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This captures the competing explanation and the committee's cautious decision.",
+          "The committee postponed precisely this causal attribution.",
+          "A competing explanation does not establish that equipment never works.",
+          "This is true but is only the competing explanation; it omits the committee's cautious decision about the taps."
+        ],
+        "repairs": [
+          "This captures the competing explanation and the committee's cautious decision. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "The committee postponed precisely this causal attribution. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "A competing explanation does not establish that equipment never works. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "This is true but is only the competing explanation; it omits the committee's cautious decision about the taps. State the central point and check that it accounts for the rest of the passage."
+        ],
+        "reason_prompt": "Which passage-level evidence supports the summary?",
+        "reason_options": [
+          "The passage contrasts lower totals with changed occupancy and delays an exclusive explanation.",
+          "A memorable single detail is sufficient even when the rest of the passage has a different focus.",
+          "A summary should strengthen a limited observation into a rule applying to every case.",
+          "A likely consequence may replace what the author actually describes."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The passage contrasts lower totals with changed occupancy and delays an exclusive explanation."
+      },
+      {
+        "id": "RC-1-10",
+        "family": "argument-public-space",
+        "context": "argument-public-space",
+        "passage": "A public square is sometimes praised simply because its paving is new. That is an incomplete test of its value. A beautiful surface offers little comfort if there is nowhere to rest in the heat, and an open entrance offers little access if a step excludes some users. Maintenance, shade and usable routes deserve attention alongside appearance. The question is not whether a square looks renewed, but whether people can use it comfortably over time.",
+        "stem": "Passage 10: Which statement best expresses the main idea of the whole passage?",
+        "options": [
+          "New paving can improve the appearance of a public square.",
+          "Public squares should be judged by sustained usability as well as appearance.",
+          "Some entrances have steps that restrict access.",
+          "Appearance has no value in any public place."
+        ],
+        "answer": 2,
+        "explanations": [
+          "The opening refers to praise for new paving, but appearance alone is the limited test the author challenges.",
+          "This states the argument joining comfort, access and maintenance to appearance.",
+          "This is a supported example but misses the wider argument about how to judge a square.",
+          "The author asks for attention alongside appearance, not its total rejection."
+        ],
+        "repairs": [
+          "The opening refers to praise for new paving, but appearance alone is the limited test the author challenges. Identify how the whole passage develops its central point, not only which statement is true.",
+          "This states the argument joining comfort, access and maintenance to appearance. Identify how the whole passage develops its central point, not only which statement is true.",
+          "This is a supported example but misses the wider argument about how to judge a square. Identify how the whole passage develops its central point, not only which statement is true.",
+          "The author asks for attention alongside appearance, not its total rejection. Identify how the whole passage develops its central point, not only which statement is true."
+        ],
+        "reason_prompt": "Which passage-level evidence supports the summary?",
+        "reason_options": [
+          "The opening challenges an appearance-only test; the examples and ending develop a broader usability standard.",
+          "A memorable single detail is sufficient even when the rest of the passage has a different focus.",
+          "A summary should strengthen a limited observation into a rule applying to every case.",
+          "A likely consequence may replace what the author actually describes."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The opening challenges an appearance-only test; the examples and ending develop a broader usability standard."
+      },
+      {
+        "id": "RC-1-11",
+        "family": "narrative-unfinished-garden",
+        "context": "narrative-unfinished-garden",
+        "passage": "Mira reached the old house intending to take only a desk. In its drawer she found an envelope containing her father's unfinished sketch of the garden. She began to fold it away, then noticed a small pencilled bench that had never been built. Outside, the garden was almost bare. She carried the envelope to the doorway and stood comparing the drawing with the ground before asking the caretaker to wait a little longer.",
+        "stem": "Passage 11: Which statement best expresses the main idea of the whole passage?",
+        "options": [
+          "Mira found an unfinished garden sketch inside a desk.",
+          "Mira decided to build every feature in the drawing immediately.",
+          "An unexpected sketch interrupts Mira's practical visit and draws her attention to an unrealised garden.",
+          "The caretaker had designed the garden bench."
+        ],
+        "answer": 3,
+        "explanations": [
+          "This is true but reports only the discovery; it omits the shift in Mira's attention and the delay at the ending.",
+          "She looks and asks for more time; the passage does not state a construction decision.",
+          "This follows the change from collecting a desk to studying the sketch against the garden without inventing a final decision.",
+          "The sketch is her father's, and no design work by the caretaker is mentioned."
+        ],
+        "repairs": [
+          "This is true but reports only the discovery; it omits the shift in Mira's attention and the delay at the ending. Identify how the whole passage develops its central point, not only which statement is true.",
+          "She looks and asks for more time; the passage does not state a construction decision. Identify how the whole passage develops its central point, not only which statement is true.",
+          "This follows the change from collecting a desk to studying the sketch against the garden without inventing a final decision. Identify how the whole passage develops its central point, not only which statement is true.",
+          "The sketch is her father's, and no design work by the caretaker is mentioned. Identify how the whole passage develops its central point, not only which statement is true."
+        ],
+        "reason_prompt": "Which passage-level evidence supports the summary?",
+        "reason_options": [
+          "The opening gives a practical intention; the sketch changes what Mira attends to, and the final request leaves her decision open.",
+          "A memorable single detail is sufficient even when the rest of the passage has a different focus.",
+          "A summary should strengthen a limited observation into a rule applying to every case.",
+          "A likely consequence may replace what the author actually describes."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The opening gives a practical intention; the sketch changes what Mira attends to, and the final request leaves her decision open."
+      },
+      {
+        "id": "RC-1-12",
+        "family": "compost",
+        "context": "compost",
+        "passage": "A school compost bin filled quickly with food scraps but developed a strong smell. The caretaker added dry leaves and turned the mixture, explaining that collecting waste was only the first step. Pupils began recording what they added and when they mixed it. Their project shifted from merely filling a bin to managing a process.",
+        "stem": "Passage 12: Which statement best expresses the main idea of the whole passage?",
+        "options": [
+          "Pupils recorded what they added to the compost bin.",
+          "Dry leaves should replace every kind of food scrap.",
+          "The school abandoned its compost project.",
+          "The project taught pupils that composting requires ongoing management as well as waste collection."
+        ],
+        "answer": 4,
+        "explanations": [
+          "This is true but is one supporting activity, not the broader shift from collection to process management.",
+          "Leaves were added; total replacement is not stated.",
+          "The pupils continued with records and mixing.",
+          "The final sentence states this shift, supported by the caretaker's actions."
+        ],
+        "repairs": [
+          "This is true but is one supporting activity, not the broader shift from collection to process management. State the central point and check that it accounts for the rest of the passage.",
+          "Leaves were added; total replacement is not stated. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "The pupils continued with records and mixing. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim.",
+          "The final sentence states this shift, supported by the caretaker's actions. Reread the beginning and ending, then check whether your summary covers the middle without adding a stronger claim."
+        ],
+        "reason_prompt": "Which passage-level evidence supports the summary?",
+        "reason_options": [
+          "The problem, changed handling and records all illustrate the shift described in the final sentence.",
+          "A memorable single detail is sufficient even when the rest of the passage has a different focus.",
+          "A summary should strengthen a limited observation into a rule applying to every case.",
+          "A likely consequence may replace what the author actually describes."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The problem, changed handling and records all illustrate the shift described in the final sentence."
+      }
+    ]
+  },
+  "sources": [
+    "Twelve independently authored passages and explanations. Not third-party extracts or authenticated PYQs. Passage/teaching review pending."
+  ]
+}

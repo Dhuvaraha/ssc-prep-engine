@@ -1,0 +1,242 @@
+{
+  "version": "approved-2026-10-09",
+  "source": "docs/SSC_TEACHING_REMEDIATION_SPEC_2026-10-09.md",
+  "topics": [
+    {
+      "pilot": "A",
+      "topic": "Percentage",
+      "scope": "bases, multipliers and reverse reasoning",
+      "objectives": [
+        {
+          "id": "PCT-1",
+          "description": "interpret a percentage"
+        },
+        {
+          "id": "PCT-2",
+          "description": "identify and justify the base"
+        },
+        {
+          "id": "PCT-3",
+          "description": "solve direct/inverse percentage"
+        },
+        {
+          "id": "PCT-4",
+          "description": "model successive change"
+        },
+        {
+          "id": "PCT-5",
+          "description": "reverse a comparison"
+        },
+        {
+          "id": "PCT-6",
+          "description": "use a product constraint for price/consumption"
+        }
+      ]
+    },
+    {
+      "pilot": "B",
+      "topic": "Time & Work",
+      "scope": "conservation of work and rate composition",
+      "objectives": [
+        {
+          "id": "TW-1",
+          "description": "define a unit of work"
+        },
+        {
+          "id": "TW-2",
+          "description": "convert solo time to rate"
+        },
+        {
+          "id": "TW-3",
+          "description": "combine simultaneous rates"
+        },
+        {
+          "id": "TW-4",
+          "description": "model staged/alternating work"
+        },
+        {
+          "id": "TW-5",
+          "description": "connect efficiency ratios to time"
+        },
+        {
+          "id": "TW-6",
+          "description": "explain assumptions"
+        }
+      ]
+    },
+    {
+      "pilot": "C",
+      "topic": "Syllogism",
+      "scope": "necessity, counterexamples and explicit existence",
+      "objectives": [
+        {
+          "id": "SYL-1",
+          "description": "translate categorical statements"
+        },
+        {
+          "id": "SYL-2",
+          "description": "retain only stated constraints"
+        },
+        {
+          "id": "SYL-3",
+          "description": "test necessity across valid models"
+        },
+        {
+          "id": "SYL-4",
+          "description": "construct a counterexample"
+        },
+        {
+          "id": "SYL-5",
+          "description": "distinguish possibility from certainty"
+        }
+      ]
+    },
+    {
+      "pilot": "D",
+      "topic": "Mirror & Water Images",
+      "scope": "spatial transformations with genuine visuals",
+      "objectives": [
+        {
+          "id": "MIR-1",
+          "description": "identify the depicted reflection axis"
+        },
+        {
+          "id": "MIR-2",
+          "description": "preserve distance from it"
+        },
+        {
+          "id": "MIR-3",
+          "description": "distinguish reflection from rotation"
+        },
+        {
+          "id": "MIR-4",
+          "description": "transform arrangements and individual shapes"
+        },
+        {
+          "id": "MIR-5",
+          "description": "reject distractors using invariant features"
+        }
+      ]
+    },
+    {
+      "pilot": "E",
+      "topic": "Error Spotting",
+      "scope": "grammatical structure and justified correction",
+      "objectives": [
+        {
+          "id": "ENG-1",
+          "description": "find the head of the subject"
+        },
+        {
+          "id": "ENG-2",
+          "description": "apply agreement despite intervening phrases"
+        },
+        {
+          "id": "ENG-3",
+          "description": "interpret explicit time reference"
+        },
+        {
+          "id": "ENG-4",
+          "description": "select a/an by sound"
+        },
+        {
+          "id": "ENG-5",
+          "description": "distinguish countable and uncountable usage"
+        },
+        {
+          "id": "ENG-6",
+          "description": "justify a minimal correction or a no-error decision"
+        }
+      ]
+    },
+    {
+      "pilot": "F",
+      "topic": "Reading Comprehension",
+      "scope": "claims supported by passage evidence",
+      "objectives": [
+        {
+          "id": "RC-1",
+          "description": "identify main idea"
+        },
+        {
+          "id": "RC-2",
+          "description": "locate an explicit fact"
+        },
+        {
+          "id": "RC-3",
+          "description": "resolve reference"
+        },
+        {
+          "id": "RC-4",
+          "description": "draw a bounded inference"
+        },
+        {
+          "id": "RC-5",
+          "description": "interpret vocabulary/tone in context"
+        },
+        {
+          "id": "RC-6",
+          "description": "reject unsupported causal or universal claims"
+        }
+      ]
+    },
+    {
+      "pilot": "G",
+      "topic": "Indian Polity",
+      "scope": "constitutional categories and evidence-based distinctions",
+      "objectives": [
+        {
+          "id": "POL-1",
+          "description": "classify a constitutional provision"
+        },
+        {
+          "id": "POL-2",
+          "description": "distinguish obligation, policy direction and right"
+        },
+        {
+          "id": "POL-3",
+          "description": "attach article/part references to meaning"
+        },
+        {
+          "id": "POL-4",
+          "description": "compare the scope of introductory remedy provisions"
+        },
+        {
+          "id": "POL-5",
+          "description": "explain why an attractive distractor belongs to a different category"
+        }
+      ]
+    },
+    {
+      "pilot": "H",
+      "topic": "Physics",
+      "scope": "measurement and motion before formula substitution",
+      "objectives": [
+        {
+          "id": "PHY-1",
+          "description": "identify quantity and unit"
+        },
+        {
+          "id": "PHY-2",
+          "description": "distinguish path length from displacement"
+        },
+        {
+          "id": "PHY-3",
+          "description": "calculate average speed and average velocity"
+        },
+        {
+          "id": "PHY-4",
+          "description": "interpret constant acceleration"
+        },
+        {
+          "id": "PHY-5",
+          "description": "connect a graph to motion"
+        },
+        {
+          "id": "PHY-6",
+          "description": "state when a formula applies"
+        }
+      ]
+    }
+  ]
+}

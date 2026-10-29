@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "status": "editorial_draft_not_published",
+  "authorship": "Independently authored original learning item. Not an authenticated SSC PYQ.",
+  "exam": "ssc-cgl-tier-1",
+  "subject": "general-awareness",
+  "topic": "Indian Polity",
+  "subtopic": "Fundamental Rights and constitutional remedies",
+  "prerequisites": [
+    "Difference between a substantive right and a judicial enforcement remedy",
+    "Fundamental Rights under Part III"
+  ],
+  "teaching_sequence": [
+    "understand",
+    "compare_options",
+    "explain_confusion",
+    "independent_recall",
+    "spaced_review"
+  ],
+  "question": "Which Article of the Constitution of India guarantees the right to approach the Supreme Court for enforcement of Fundamental Rights?",
+  "options": [
+    {
+      "position": 1,
+      "label": "Article 14",
+      "role": "incorrect",
+      "actual_meaning": "Equality before the law and equal protection of the laws.",
+      "why_not_this_question": "Article 14 states a substantive equality right, not the specific guaranteed Supreme Court remedy asked in the stem.",
+      "confusion": "Distinguishing a protected right from the constitutional route to enforce that right.",
+      "source": "https://static.pib.gov.in/WriteReadData/ebooklat/Flip-Book/constfiles/files/basic-html/page71.html"
+    },
+    {
+      "position": 2,
+      "label": "Article 19",
+      "role": "incorrect",
+      "actual_meaning": "Protects enumerated freedoms, including speech and expression and movement, subject to constitutional restrictions.",
+      "why_not_this_question": "Article 19 specifies freedoms rather than the right to approach the Supreme Court for enforcement.",
+      "confusion": "Mixing the freedom protected with the enforcement remedy.",
+      "source": "https://static.pib.gov.in/WriteReadData/ebooklat/Flip-Book/constfiles/files/basic-html/page72.html"
+    },
+    {
+      "position": 3,
+      "label": "Article 21",
+      "role": "incorrect",
+      "actual_meaning": "Protects life and personal liberty; deprivation must follow procedure established by law.",
+      "why_not_this_question": "Article 21 is the substantive protection; the stem asks for the Supreme Court enforcement guarantee.",
+      "confusion": "An important right involving liberty is not automatically the provision creating the remedy.",
+      "source": "https://static.pib.gov.in/WriteReadData/ebooklat/Flip-Book/constfiles/files/basic-html/page18.html"
+    },
+    {
+      "position": 4,
+      "label": "Article 32",
+      "role": "correct",
+      "actual_meaning": "Guarantees the right to move the Supreme Court by appropriate proceedings for enforcement of Fundamental Rights, including writ remedies.",
+      "why_this_question": "The stem explicitly asks for the Supreme Court enforcement remedy provided by Article 32.",
+      "confusion": "Distinguish Article 32 (Supreme Court) from Article 226 (High Courts).",
+      "source": "https://www.sci.gov.in/jurisdiction/"
+    }
+  ],
+  "correct_position": 4,
+  "related_concept": {
+    "name": "Article 226",
+    "explanation": "High Courts may issue writs for enforcement of Fundamental Rights and for other purposes, subject to the constitutional limits of their jurisdiction.",
+    "source": "https://cdnbbsr.s3waas.gov.in/s3ec030655f117444fc1911ab9c6f6b013/uploads/2024/11/2024112085.pdf"
+  },
+  "quick_rule": "14 equality; 19 freedoms; 21 life and personal liberty; 32 Supreme Court remedy; 226 High Court writ power.",
+  "mistake_repair": {
+    "if_selected": [
+      1,
+      2,
+      3
+    ],
+    "action": "Explain the selected substantive right, contrast it with the enforcement route in the question, then give a fresh independent check."
+  },
+  "independent_check": {
+    "question": "Which Article empowers High Courts to issue writs for enforcement of Fundamental Rights and, within its scope, other purposes?",
+    "options": [
+      "Article 19",
+      "Article 21",
+      "Article 32",
+      "Article 226"
+    ],
+    "correct_position": 4,
+    "reason": "Article 226 concerns High Court writ powers; Article 32 concerns Supreme Court enforcement of Fundamental Rights.",
+    "source": "https://cdnbbsr.s3waas.gov.in/s3ec030655f117444fc1911ab9c6f6b013/uploads/2024/11/2024112085.pdf"
+  },
+  "editorial_gates": [
+    "Independent legal subject-matter check against current official text",
+    "Verify each option's source and the Article 226 comparison",
+    "Approved content revision, dated references, review record and access permissions before publishing",
+    "Do not count reading or seeing answers as independent mastery"
+  ],
+  "ai_required": false
+}

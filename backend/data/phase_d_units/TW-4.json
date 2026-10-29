@@ -1,0 +1,480 @@
+{
+  "objective_id": "TW-4",
+  "prerequisites": [
+    "Fractions and reciprocals with explicit units.",
+    "Equal-work comparison and constant-rate interpretation."
+  ],
+  "explanation": "Changing participation requires a timeline. Sum completed work over active intervals and stop at the actual completion time.",
+  "worked": [
+    {
+      "action": "A takes 12 days and B 18; choose 36 units. A works alone for 3 days.",
+      "justification": "A completes 3 times 3 =9 units before B joins."
+    },
+    {
+      "action": "27 units remain; the combined rate is 5 units/day, so 27/5 =5.4 more days are needed.",
+      "justification": "Total elapsed time is 3+5.4 =8.4 days, not just the final stage."
+    },
+    {
+      "action": "For alternate days, A taking 8 days and B 12 gives rates 3 and 2 in a 24-unit job.",
+      "justification": "They do 5 units per two-day cycle, not per day."
+    },
+    {
+      "action": "After four cycles, 20 units are done in eight days; A does 3 on day nine, then B needs half a day for the final unit.",
+      "justification": "Total is 9.5 days. Count the active worker in the final partial interval."
+    },
+    {
+      "action": "A finishes a job alone in 12 days; B in 18 days and C in 36 days. A works throughout, B and C work together initially, then leave. The whole job takes 8 days.",
+      "justification": "Let x be the time B and C are present. A's contribution is fixed by the total elapsed time."
+    },
+    {
+      "action": "Write 8/12 + x(1/18+1/36)=1. Thus 2/3+x/12=1, so x=4 days.",
+      "justification": "Conserve the whole job and isolate the unknown active interval; do not confuse departure time with total duration."
+    },
+    {
+      "action": "Check: A supplies 2/3; B supplies 2/9 and C supplies 1/9. Their sum is one.",
+      "justification": "Substitution verifies the equation and the feasible bound 0 <= x <= 8."
+    }
+  ],
+  "illustrations": [],
+  "hint": "Choose work units and label each rate with work/time before calculating.",
+  "shortcut": "Use work = rate times active time; a convenient common work unit can avoid awkward fractions.",
+  "limitation": "The rates must describe the same job, remain constant during each modelled interval, and not interfere.",
+  "checks": {
+    "entry": [
+      {
+        "id": "TW-4-entry-0",
+        "family": "retry",
+        "context": "retry entry-0",
+        "stem": "A needs 16 days and B 24 days for one job. A works alone for 4 days, then B joins. What is the total elapsed time to finish?",
+        "options": [
+          "36/5 days",
+          "56/5 days",
+          "48/5 days",
+          "40 days"
+        ],
+        "answer": 2,
+        "explanations": [
+          "36/5 is the remaining joint stage only; add the first 4 days.",
+          "A completes 1/4 job. Remaining work is 3/4; joint rate is 5/48. The joint stage is 36/5, total 56/5 days.",
+          "48/5 assumes both work from the start, contrary to the schedule.",
+          "40 adds solo times and ignores both completed work and the joint stage."
+        ],
+        "repairs": [
+          "Separate elapsed and remaining time.",
+          "Verify both stages add to exactly one job.",
+          "Draw the joining point on a timeline.",
+          "Use remaining work divided by combined rate."
+        ],
+        "reason_prompt": "Which schedule model fits the question?",
+        "reason_options": [
+          "Subtract A's initial work, then add the remaining joint time to elapsed time",
+          "Treat every worker as working simultaneously for the entire elapsed time"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Completed work is the sum of rate times active duration for each worker, using the stated schedule.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-4-entry-1",
+        "family": "retry",
+        "context": "retry entry-1",
+        "stem": "A needs 20 days and B 30 days for one job. A works alone for 5 days, then B joins. What is the total elapsed time to finish?",
+        "options": [
+          "9 days",
+          "14 days",
+          "12 days",
+          "50 days"
+        ],
+        "answer": 2,
+        "explanations": [
+          "9 is the remaining joint stage only; add the first 5 days.",
+          "A completes 1/4 job. Remaining work is 3/4; joint rate is 5/60. The joint stage is 9, total 14 days.",
+          "12 assumes both work from the start, contrary to the schedule.",
+          "50 adds solo times and ignores both completed work and the joint stage."
+        ],
+        "repairs": [
+          "Separate elapsed and remaining time.",
+          "Verify both stages add to exactly one job.",
+          "Draw the joining point on a timeline.",
+          "Use remaining work divided by combined rate."
+        ],
+        "reason_prompt": "Which schedule model fits the question?",
+        "reason_options": [
+          "Subtract A's initial work, then add the remaining joint time to elapsed time",
+          "Treat every worker as working simultaneously for the entire elapsed time"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Completed work is the sum of rate times active duration for each worker, using the stated schedule.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "faded": [
+      {
+        "id": "TW-4-faded-0",
+        "family": "retry",
+        "context": "retry faded-0",
+        "stem": "A needs 28 days and B 42 days for one job. A works alone for 7 days, then B joins. What is the total elapsed time to finish?\nPartly worked: After the solo interval, 1/4 of the job is complete and 3/4 remains. The joint rate is 5/84 job/day. Find the remaining time, then include the solo interval.",
+        "options": [
+          "63/5 days",
+          "98/5 days",
+          "84/5 days",
+          "70 days"
+        ],
+        "answer": 2,
+        "explanations": [
+          "63/5 is the remaining joint stage only; add the first 7 days.",
+          "A completes 1/4 job. Remaining work is 3/4; joint rate is 5/84. The joint stage is 63/5, total 98/5 days.",
+          "84/5 assumes both work from the start, contrary to the schedule.",
+          "70 adds solo times and ignores both completed work and the joint stage."
+        ],
+        "repairs": [
+          "Separate elapsed and remaining time.",
+          "Verify both stages add to exactly one job.",
+          "Draw the joining point on a timeline.",
+          "Use remaining work divided by combined rate."
+        ],
+        "reason_prompt": "Which schedule model fits the question?",
+        "reason_options": [
+          "Subtract A's initial work, then add the remaining joint time to elapsed time",
+          "Treat every worker as working simultaneously for the entire elapsed time"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Completed work is the sum of rate times active duration for each worker, using the stated schedule.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-4-faded-1",
+        "family": "retry",
+        "context": "retry faded-1",
+        "stem": "A needs 32 days and B 48 days for one job. A works alone for 8 days, then B joins. What is the total elapsed time to finish?\nPartly worked: After the solo interval, 1/4 of the job is complete and 3/4 remains. The joint rate is 5/96 job/day. Find the remaining time, then include the solo interval.",
+        "options": [
+          "72/5 days",
+          "112/5 days",
+          "96/5 days",
+          "80 days"
+        ],
+        "answer": 2,
+        "explanations": [
+          "72/5 is the remaining joint stage only; add the first 8 days.",
+          "A completes 1/4 job. Remaining work is 3/4; joint rate is 5/96. The joint stage is 72/5, total 112/5 days.",
+          "96/5 assumes both work from the start, contrary to the schedule.",
+          "80 adds solo times and ignores both completed work and the joint stage."
+        ],
+        "repairs": [
+          "Separate elapsed and remaining time.",
+          "Verify both stages add to exactly one job.",
+          "Draw the joining point on a timeline.",
+          "Use remaining work divided by combined rate."
+        ],
+        "reason_prompt": "Which schedule model fits the question?",
+        "reason_options": [
+          "Subtract A's initial work, then add the remaining joint time to elapsed time",
+          "Treat every worker as working simultaneously for the entire elapsed time"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Completed work is the sum of rate times active duration for each worker, using the stated schedule.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "TW-4-independent_a-0",
+        "family": "retry",
+        "context": "retry independent_a-0",
+        "stem": "A needs 40 days and B 60 days for one job. A works alone for 10 days, then B joins. What is the total elapsed time to finish?",
+        "options": [
+          "18 days",
+          "28 days",
+          "24 days",
+          "100 days"
+        ],
+        "answer": 2,
+        "explanations": [
+          "18 is the remaining joint stage only; add the first 10 days.",
+          "A completes 1/4 job. Remaining work is 3/4; joint rate is 5/120. The joint stage is 18, total 28 days.",
+          "24 assumes both work from the start, contrary to the schedule.",
+          "100 adds solo times and ignores both completed work and the joint stage."
+        ],
+        "repairs": [
+          "Separate elapsed and remaining time.",
+          "Verify both stages add to exactly one job.",
+          "Draw the joining point on a timeline.",
+          "Use remaining work divided by combined rate."
+        ],
+        "reason_prompt": "Which schedule model fits the question?",
+        "reason_options": [
+          "Subtract A's initial work, then add the remaining joint time to elapsed time",
+          "Treat every worker as working simultaneously for the entire elapsed time"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Completed work is the sum of rate times active duration for each worker, using the stated schedule.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-4-independent_a-1",
+        "family": "retry",
+        "context": "retry independent_a-1",
+        "stem": "A needs 44 days and B 66 days for one job. A works alone for 11 days, then B joins. What is the total elapsed time to finish?",
+        "options": [
+          "99/5 days",
+          "154/5 days",
+          "132/5 days",
+          "110 days"
+        ],
+        "answer": 2,
+        "explanations": [
+          "99/5 is the remaining joint stage only; add the first 11 days.",
+          "A completes 1/4 job. Remaining work is 3/4; joint rate is 5/132. The joint stage is 99/5, total 154/5 days.",
+          "132/5 assumes both work from the start, contrary to the schedule.",
+          "110 adds solo times and ignores both completed work and the joint stage."
+        ],
+        "repairs": [
+          "Separate elapsed and remaining time.",
+          "Verify both stages add to exactly one job.",
+          "Draw the joining point on a timeline.",
+          "Use remaining work divided by combined rate."
+        ],
+        "reason_prompt": "Which schedule model fits the question?",
+        "reason_options": [
+          "Subtract A's initial work, then add the remaining joint time to elapsed time",
+          "Treat every worker as working simultaneously for the entire elapsed time"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Completed work is the sum of rate times active duration for each worker, using the stated schedule.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "TW-4-independent_b-0",
+        "family": "revision",
+        "context": "revision independent_b-0",
+        "stem": "A needs 228 days and B 342 days for a job. They work on alternate days, A first, at constant rates. They stop immediately when finished. What is the total time?",
+        "options": [
+          "684/5 days",
+          "274 days",
+          "547/2 days",
+          "272 days"
+        ],
+        "answer": 3,
+        "explanations": [
+          "684/5 assumes simultaneous work; only one worker is active each day.",
+          "274 rounds to a full final day; B needs only half that day.",
+          "Use 684 units: A does 3/day and B 2/day. After 136 two-day cycles, 4 units remain. A does 3 in one day and B does the last unit in half a day: 547/2 days.",
+          "272 stops after complete cycles, with 4 work units unfinished."
+        ],
+        "repairs": [
+          "Write the alternating schedule before using rates.",
+          "Divide the final work by the active worker rate.",
+          "Check the last partial day against the schedule.",
+          "Count the unfinished work after full cycles."
+        ],
+        "reason_prompt": "Which schedule model fits the question?",
+        "reason_options": [
+          "Count two-day cycles, then the active worker's partial final day",
+          "Treat every worker as working simultaneously for the entire elapsed time"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Completed work is the sum of rate times active duration for each worker, using the stated schedule.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-4-independent_b-1",
+        "family": "retry",
+        "context": "retry independent_b-1",
+        "stem": "A needs 56 days and B 84 days for one job. A works alone for 14 days, then B joins. What is the total elapsed time to finish?",
+        "options": [
+          "126/5 days",
+          "196/5 days",
+          "168/5 days",
+          "140 days"
+        ],
+        "answer": 2,
+        "explanations": [
+          "126/5 is the remaining joint stage only; add the first 14 days.",
+          "A completes 1/4 job. Remaining work is 3/4; joint rate is 5/168. The joint stage is 126/5, total 196/5 days.",
+          "168/5 assumes both work from the start, contrary to the schedule.",
+          "140 adds solo times and ignores both completed work and the joint stage."
+        ],
+        "repairs": [
+          "Separate elapsed and remaining time.",
+          "Verify both stages add to exactly one job.",
+          "Draw the joining point on a timeline.",
+          "Use remaining work divided by combined rate."
+        ],
+        "reason_prompt": "Which schedule model fits the question?",
+        "reason_options": [
+          "Subtract A's initial work, then add the remaining joint time to elapsed time",
+          "Treat every worker as working simultaneously for the entire elapsed time"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Completed work is the sum of rate times active duration for each worker, using the stated schedule.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "revision": [
+      {
+        "id": "TW-4-revision-0",
+        "family": "revision",
+        "context": "revision revision-0",
+        "stem": "A needs 288 days and B 432 days for a job. They work on alternate days, A first, at constant rates. They stop immediately when finished. What is the total time?",
+        "options": [
+          "864/5 days",
+          "346 days",
+          "691/2 days",
+          "344 days"
+        ],
+        "answer": 3,
+        "explanations": [
+          "864/5 assumes simultaneous work; only one worker is active each day.",
+          "346 rounds to a full final day; B needs only half that day.",
+          "Use 864 units: A does 3/day and B 2/day. After 172 two-day cycles, 4 units remain. A does 3 in one day and B does the last unit in half a day: 691/2 days.",
+          "344 stops after complete cycles, with 4 work units unfinished."
+        ],
+        "repairs": [
+          "Write the alternating schedule before using rates.",
+          "Divide the final work by the active worker rate.",
+          "Check the last partial day against the schedule.",
+          "Count the unfinished work after full cycles."
+        ],
+        "reason_prompt": "Which schedule model fits the question?",
+        "reason_options": [
+          "Count two-day cycles, then the active worker's partial final day",
+          "Treat every worker as working simultaneously for the entire elapsed time"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Completed work is the sum of rate times active duration for each worker, using the stated schedule.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-4-revision-1",
+        "family": "transfer",
+        "context": "transfer revision-1",
+        "stem": "A, B and C take 68, 102 and 204 days respectively for one job. All start together; B and C then leave, and A finishes. If the total time is 51 days, after how many days did B and C leave? Assume constant independent rates.",
+        "options": [
+          "17 days",
+          "34 days",
+          "51 days",
+          "68 days"
+        ],
+        "answer": 1,
+        "explanations": [
+          "A works all 51 days and completes 3/4 job. B and C must supply 1/4 at rate 1/102 + 1/204 = 1/68, taking 17 days.",
+          "34 is the completion time if all three work throughout; it is not the switching time.",
+          "51 is the total deadline. Keeping all three that long would exceed one job.",
+          "68 is A alone and exceeds the given deadline; it cannot be the leaving time."
+        ],
+        "repairs": [
+          "Count A over the whole timeline; count B and C only before the switch.",
+          "Distinguish all-together time from the unknown switching interval.",
+          "Substitute the proposed switch into the total-work equation.",
+          "Require the switch to occur between the start and the deadline."
+        ],
+        "reason_prompt": "Which schedule model fits the question?",
+        "reason_options": [
+          "Count A over the deadline and B/C only until they leave",
+          "Treat every worker as working simultaneously for the entire elapsed time"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Completed work is the sum of rate times active duration for each worker, using the stated schedule.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-4-revision-2",
+        "family": "revision",
+        "context": "revision revision-2",
+        "stem": "A needs 328 days and B 492 days for a job. They work on alternate days, A first, at constant rates. They stop immediately when finished. What is the total time?",
+        "options": [
+          "984/5 days",
+          "394 days",
+          "787/2 days",
+          "392 days"
+        ],
+        "answer": 3,
+        "explanations": [
+          "984/5 assumes simultaneous work; only one worker is active each day.",
+          "394 rounds to a full final day; B needs only half that day.",
+          "Use 984 units: A does 3/day and B 2/day. After 196 two-day cycles, 4 units remain. A does 3 in one day and B does the last unit in half a day: 787/2 days.",
+          "392 stops after complete cycles, with 4 work units unfinished."
+        ],
+        "repairs": [
+          "Write the alternating schedule before using rates.",
+          "Divide the final work by the active worker rate.",
+          "Check the last partial day against the schedule.",
+          "Count the unfinished work after full cycles."
+        ],
+        "reason_prompt": "Which schedule model fits the question?",
+        "reason_options": [
+          "Count two-day cycles, then the active worker's partial final day",
+          "Treat every worker as working simultaneously for the entire elapsed time"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Completed work is the sum of rate times active duration for each worker, using the stated schedule.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-4-revision-3",
+        "family": "transfer",
+        "context": "transfer revision-3",
+        "stem": "A, B and C take 76, 114 and 228 days respectively for one job. All start together; B and C then leave, and A finishes. If the total time is 57 days, after how many days did B and C leave? Assume constant independent rates.",
+        "options": [
+          "19 days",
+          "38 days",
+          "57 days",
+          "76 days"
+        ],
+        "answer": 1,
+        "explanations": [
+          "A works all 57 days and completes 3/4 job. B and C must supply 1/4 at rate 1/114 + 1/228 = 1/76, taking 19 days.",
+          "38 is the completion time if all three work throughout; it is not the switching time.",
+          "57 is the total deadline. Keeping all three that long would exceed one job.",
+          "76 is A alone and exceeds the given deadline; it cannot be the leaving time."
+        ],
+        "repairs": [
+          "Count A over the whole timeline; count B and C only before the switch.",
+          "Distinguish all-together time from the unknown switching interval.",
+          "Substitute the proposed switch into the total-work equation.",
+          "Require the switch to occur between the start and the deadline."
+        ],
+        "reason_prompt": "Which schedule model fits the question?",
+        "reason_options": [
+          "Count A over the deadline and B/C only until they leave",
+          "Treat every worker as working simultaneously for the entire elapsed time"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Completed work is the sum of rate times active duration for each worker, using the stated schedule.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ]
+  },
+  "sources": [
+    "Original Phase D authorship; conservation-of-work reasoning. Private cached SSC switching-time reference used only for family analysis."
+  ],
+  "subject_review": "",
+  "teaching_review": "",
+  "review_digest": ""
+}

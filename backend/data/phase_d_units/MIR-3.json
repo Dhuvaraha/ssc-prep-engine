@@ -1,0 +1,2194 @@
+{
+  "objective_id": "MIR-3",
+  "prerequisites": [
+    "Distinguish left/right and above/below relative to a depicted line.",
+    "Recognise equal perpendicular distances.",
+    "Read the coordinate description if using the text alternative: x is right-positive, y is upward-positive."
+  ],
+  "explanation": "Reflection reverses orientation across one axis. A half-turn reverses both horizontal and vertical directions about its centre. An unchanged copy reverses neither. Use an asymmetric corner and a marked point to distinguish the operations.",
+  "worked": [
+    {
+      "action": "Use worked diagram1: the original is left of the vertical mirror and its image right. Follow the black marked corner along the horizontal connector; the matching ticks mark equal distances.",
+      "justification": "The diagram models the operation before using optional coordinates. Height is unchanged."
+    },
+    {
+      "action": "Use a vertical mirror through x=0. A corner at(-40,20) is40 units left and20 units above the centre.",
+      "justification": "Perpendicular distance to this vertical line is horizontal distance."
+    },
+    {
+      "action": "Its image is(40,20):40 units right at the same height.",
+      "justification": "Only the left/right displacement changes sign."
+    },
+    {
+      "action": "A second corner(-20,10) maps to(20,10), and a dot(-30,15) maps to(30,15).",
+      "justification": "Apply the same rule to every feature; the shape and its marked point must both transform."
+    },
+    {
+      "action": "For a horizontal water line through y=0,(-40,20) maps to(-40,-20). A half-turn instead maps it to(40,-20).",
+      "justification": "The water reflection preserves x, while the half-turn reverses both coordinates."
+    },
+    {
+      "action": "For a shifted vertical mirror x=10, a point at x=-20 is30 units left, so its image is x=40,30 units right.",
+      "justification": "Negating x alone works only when the mirror is x=0."
+    },
+    {
+      "action": "For two separate shapes, move their centres across the mirror and reflect each shape and mark as well.",
+      "justification": "One global reflection changes both the arrangement and the orientation of every component."
+    },
+    {
+      "action": "Compare worked diagram2 (water reflection), diagram3 (two-piece arrangement) and diagram4 (shifted mirror). Trace the marked points and then the remaining corners.",
+      "justification": "Use the depicted mirror and preserve perpendicular distance; every component and internal mark must transform."
+    },
+    {
+      "action": "In worked diagram5, a half-turn sends(-40,20) to(40,-20) and(-20,20) to(20,-20). Both x and y change sign.",
+      "justification": "Unlike a vertical reflection, height reverses. Unlike a horizontal reflection, left/right position reverses too."
+    },
+    {
+      "action": "In worked diagram6, translation sends(-40,20) to(50,0) and(-20,20) to(70,0). Both points move90 right and20 down.",
+      "justification": "Every point has the same displacement, so orientation remains unchanged. Test a second landmark rather than identifying an operation from one point alone."
+    }
+  ],
+  "hint": "Choose one distinctive corner or dot. Check its perpendicular distance and its position parallel to the mirror before testing the other features.",
+  "shortcut": "Reject an incorrect candidate using one violated feature, but verify all features in the final candidate.",
+  "limitation": "Use the depicted axis, not an assumed page edge. Reflection differs from rotation; symmetric figures alone may hide that difference.",
+  "checks": {
+    "entry": [
+      {
+        "id": "MIR-3-1",
+        "family": "vertical-central-axis",
+        "context": "vertical asymmetric layout 1",
+        "stem": "Two copies of the same asymmetric piece are shown, including their dots. Which operation maps one complete piece to the other? For translation, use the piece on the left as the original. The crossing reference lines mark the vertical and horizontal lines through the origin. Case 1.",
+        "options": [
+          "Reflection in the vertical line through the origin",
+          "Reflection in the horizontal line through the origin",
+          "Half-turn about the origin",
+          "Translation90 units right and20 units down"
+        ],
+        "answer": 1,
+        "explanations": [
+          "This matches every vertex and dot. Only x changes sign; y stays fixed.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed.",
+          "This rule fails the shown correspondence. Both x and y change sign.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "repairs": [
+          "This matches every vertex and dot. Only x changes sign; y stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Both x and y change sign. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "Only x changes sign; y stays fixed.",
+          "Only y changes sign; x stays fixed.",
+          "Both x and y change sign.",
+          "Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Only x changes sign; y stays fixed.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 10), (-41, 10), (-41, 19), (-49, 19), (-49, 30), (-58, 30), (-58, 38), (-65, 38)], [(65, 10), (41, 10), (41, 19), (49, 19), (49, 30), (58, 30), (58, 38), (65, 38)]]. Dots: [(-61, 14), (61, 14)]. Lines: [[(0, -95), (0, 95)], [(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -65,
+                "y": 10
+              },
+              {
+                "x": -41,
+                "y": 10
+              },
+              {
+                "x": -41,
+                "y": 19
+              },
+              {
+                "x": -49,
+                "y": 19
+              },
+              {
+                "x": -49,
+                "y": 30
+              },
+              {
+                "x": -58,
+                "y": 30
+              },
+              {
+                "x": -58,
+                "y": 38
+              },
+              {
+                "x": -65,
+                "y": 38
+              }
+            ],
+            [
+              {
+                "x": 65,
+                "y": 10
+              },
+              {
+                "x": 41,
+                "y": 10
+              },
+              {
+                "x": 41,
+                "y": 19
+              },
+              {
+                "x": 49,
+                "y": 19
+              },
+              {
+                "x": 49,
+                "y": 30
+              },
+              {
+                "x": 58,
+                "y": 30
+              },
+              {
+                "x": 58,
+                "y": 38
+              },
+              {
+                "x": 65,
+                "y": 38
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -61,
+              "y": 14
+            },
+            {
+              "x": 61,
+              "y": 14
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ],
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "MIR-3-2",
+        "family": "horizontal-central-axis",
+        "context": "horizontal asymmetric layout 2",
+        "stem": "Two copies of the same asymmetric piece are shown, including their dots. Which operation maps one complete piece to the other? For translation, use the piece on the left as the original. The crossing reference lines mark the vertical and horizontal lines through the origin. Case 2.",
+        "options": [
+          "Reflection in the vertical line through the origin",
+          "Reflection in the horizontal line through the origin",
+          "Half-turn about the origin",
+          "Translation90 units right and20 units down"
+        ],
+        "answer": 2,
+        "explanations": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed.",
+          "This matches every vertex and dot. Only y changes sign; x stays fixed.",
+          "This rule fails the shown correspondence. Both x and y change sign.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "repairs": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This matches every vertex and dot. Only y changes sign; x stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Both x and y change sign. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "Only x changes sign; y stays fixed.",
+          "Only y changes sign; x stays fixed.",
+          "Both x and y change sign.",
+          "Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "reason_answer": 2,
+        "reason_explanation": "Only y changes sign; x stays fixed.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 17), (-36, 17), (-36, 24), (-50, 24), (-50, 42), (-58, 42)], [(-58, -17), (-36, -17), (-36, -24), (-50, -24), (-50, -42), (-58, -42)]]. Dots: [(-54, 21), (-54, -21)]. Lines: [[(0, -95), (0, 95)], [(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -58,
+                "y": 17
+              },
+              {
+                "x": -36,
+                "y": 17
+              },
+              {
+                "x": -36,
+                "y": 24
+              },
+              {
+                "x": -50,
+                "y": 24
+              },
+              {
+                "x": -50,
+                "y": 42
+              },
+              {
+                "x": -58,
+                "y": 42
+              }
+            ],
+            [
+              {
+                "x": -58,
+                "y": -17
+              },
+              {
+                "x": -36,
+                "y": -17
+              },
+              {
+                "x": -36,
+                "y": -24
+              },
+              {
+                "x": -50,
+                "y": -24
+              },
+              {
+                "x": -50,
+                "y": -42
+              },
+              {
+                "x": -58,
+                "y": -42
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -54,
+              "y": 21
+            },
+            {
+              "x": -54,
+              "y": -21
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ],
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      }
+    ],
+    "faded": [
+      {
+        "id": "MIR-3-3",
+        "family": "vertical-central-axis",
+        "context": "vertical asymmetric layout 3",
+        "stem": "Two copies of the same asymmetric piece are shown, including their dots. Which operation maps one complete piece to the other? For translation, use the piece on the left as the original. The crossing reference lines mark the vertical and horizontal lines through the origin. Case 3. Partly worked: the first corner moves from(-51,32) to(51,-32). Its horizontal displacement is102 and its vertical displacement is-64. Check a second vertex and the dot before deciding whether the same displacement applies to all points or coordinates change sign.",
+        "options": [
+          "Reflection in the vertical line through the origin",
+          "Reflection in the horizontal line through the origin",
+          "Half-turn about the origin",
+          "Translation90 units right and20 units down"
+        ],
+        "answer": 3,
+        "explanations": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed.",
+          "This matches every vertex and dot. Both x and y change sign.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "repairs": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This matches every vertex and dot. Both x and y change sign. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "Only x changes sign; y stays fixed.",
+          "Only y changes sign; x stays fixed.",
+          "Both x and y change sign.",
+          "Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "reason_answer": 3,
+        "reason_explanation": "Both x and y change sign.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 32), (-37, 32), (-37, 24), (-23, 38), (-37, 52), (-37, 44), (-51, 44)], [(51, -32), (37, -32), (37, -24), (23, -38), (37, -52), (37, -44), (51, -44)]]. Dots: [(-47, 28), (47, -28)]. Lines: [[(0, -95), (0, 95)], [(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -51,
+                "y": 32
+              },
+              {
+                "x": -37,
+                "y": 32
+              },
+              {
+                "x": -37,
+                "y": 24
+              },
+              {
+                "x": -23,
+                "y": 38
+              },
+              {
+                "x": -37,
+                "y": 52
+              },
+              {
+                "x": -37,
+                "y": 44
+              },
+              {
+                "x": -51,
+                "y": 44
+              }
+            ],
+            [
+              {
+                "x": 51,
+                "y": -32
+              },
+              {
+                "x": 37,
+                "y": -32
+              },
+              {
+                "x": 37,
+                "y": -24
+              },
+              {
+                "x": 23,
+                "y": -38
+              },
+              {
+                "x": 37,
+                "y": -52
+              },
+              {
+                "x": 37,
+                "y": -44
+              },
+              {
+                "x": 51,
+                "y": -44
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -47,
+              "y": 28
+            },
+            {
+              "x": 47,
+              "y": -28
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ],
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "MIR-3-4",
+        "family": "horizontal-central-axis",
+        "context": "horizontal asymmetric layout 4",
+        "stem": "Two copies of the same asymmetric piece are shown, including their dots. Which operation maps one complete piece to the other? For translation, use the piece on the left as the original. The crossing reference lines mark the vertical and horizontal lines through the origin. Case 4. Partly worked: the first corner moves from(-65,31) to(25,11). Its horizontal displacement is90 and its vertical displacement is-20. Check a second vertex and the dot before deciding whether the same displacement applies to all points or coordinates change sign.",
+        "options": [
+          "Reflection in the vertical line through the origin",
+          "Reflection in the horizontal line through the origin",
+          "Half-turn about the origin",
+          "Translation90 units right and20 units down"
+        ],
+        "answer": 4,
+        "explanations": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed.",
+          "This rule fails the shown correspondence. Both x and y change sign.",
+          "This matches every vertex and dot. Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "repairs": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Both x and y change sign. Check the original and image of one distinctive corner, then every marked point.",
+          "This matches every vertex and dot. Every point moves90 units right and20 units down; orientation remains unchanged. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "Only x changes sign; y stays fixed.",
+          "Only y changes sign; x stays fixed.",
+          "Both x and y change sign.",
+          "Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "reason_answer": 4,
+        "reason_explanation": "Every point moves90 units right and20 units down; orientation remains unchanged.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 31), (-41, 37), (-48, 58), (-61, 50)], [(25, 11), (49, 17), (42, 38), (29, 30)]]. Dots: [(-61, 35), (29, 15)]. Lines: [[(0, -95), (0, 95)], [(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -65,
+                "y": 31
+              },
+              {
+                "x": -41,
+                "y": 37
+              },
+              {
+                "x": -48,
+                "y": 58
+              },
+              {
+                "x": -61,
+                "y": 50
+              }
+            ],
+            [
+              {
+                "x": 25,
+                "y": 11
+              },
+              {
+                "x": 49,
+                "y": 17
+              },
+              {
+                "x": 42,
+                "y": 38
+              },
+              {
+                "x": 29,
+                "y": 30
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -61,
+              "y": 35
+            },
+            {
+              "x": 29,
+              "y": 15
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ],
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "MIR-3-5",
+        "family": "vertical-central-axis",
+        "context": "vertical asymmetric layout 5",
+        "stem": "Two copies of the same asymmetric piece are shown, including their dots. Which operation maps one complete piece to the other? For translation, use the piece on the left as the original. The crossing reference lines mark the vertical and horizontal lines through the origin. Case 5.",
+        "options": [
+          "Reflection in the vertical line through the origin",
+          "Reflection in the horizontal line through the origin",
+          "Half-turn about the origin",
+          "Translation90 units right and20 units down"
+        ],
+        "answer": 1,
+        "explanations": [
+          "This matches every vertex and dot. Only x changes sign; y stays fixed.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed.",
+          "This rule fails the shown correspondence. Both x and y change sign.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "repairs": [
+          "This matches every vertex and dot. Only x changes sign; y stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Both x and y change sign. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "Only x changes sign; y stays fixed.",
+          "Only y changes sign; x stays fixed.",
+          "Both x and y change sign.",
+          "Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Only x changes sign; y stays fixed.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 10), (-34, 10), (-34, 19), (-42, 19), (-42, 30), (-51, 30), (-51, 38), (-58, 38)], [(58, 10), (34, 10), (34, 19), (42, 19), (42, 30), (51, 30), (51, 38), (58, 38)]]. Dots: [(-54, 14), (54, 14)]. Lines: [[(0, -95), (0, 95)], [(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -58,
+                "y": 10
+              },
+              {
+                "x": -34,
+                "y": 10
+              },
+              {
+                "x": -34,
+                "y": 19
+              },
+              {
+                "x": -42,
+                "y": 19
+              },
+              {
+                "x": -42,
+                "y": 30
+              },
+              {
+                "x": -51,
+                "y": 30
+              },
+              {
+                "x": -51,
+                "y": 38
+              },
+              {
+                "x": -58,
+                "y": 38
+              }
+            ],
+            [
+              {
+                "x": 58,
+                "y": 10
+              },
+              {
+                "x": 34,
+                "y": 10
+              },
+              {
+                "x": 34,
+                "y": 19
+              },
+              {
+                "x": 42,
+                "y": 19
+              },
+              {
+                "x": 42,
+                "y": 30
+              },
+              {
+                "x": 51,
+                "y": 30
+              },
+              {
+                "x": 51,
+                "y": 38
+              },
+              {
+                "x": 58,
+                "y": 38
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -54,
+              "y": 14
+            },
+            {
+              "x": 54,
+              "y": 14
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ],
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "MIR-3-6",
+        "family": "horizontal-central-axis",
+        "context": "horizontal asymmetric layout 6",
+        "stem": "Two copies of the same asymmetric piece are shown, including their dots. Which operation maps one complete piece to the other? For translation, use the piece on the left as the original. The crossing reference lines mark the vertical and horizontal lines through the origin. Case 6.",
+        "options": [
+          "Reflection in the vertical line through the origin",
+          "Reflection in the horizontal line through the origin",
+          "Half-turn about the origin",
+          "Translation90 units right and20 units down"
+        ],
+        "answer": 2,
+        "explanations": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed.",
+          "This matches every vertex and dot. Only y changes sign; x stays fixed.",
+          "This rule fails the shown correspondence. Both x and y change sign.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "repairs": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This matches every vertex and dot. Only y changes sign; x stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Both x and y change sign. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "Only x changes sign; y stays fixed.",
+          "Only y changes sign; x stays fixed.",
+          "Both x and y change sign.",
+          "Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "reason_answer": 2,
+        "reason_explanation": "Only y changes sign; x stays fixed.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 17), (-29, 17), (-29, 24), (-43, 24), (-43, 42), (-51, 42)], [(-51, -17), (-29, -17), (-29, -24), (-43, -24), (-43, -42), (-51, -42)]]. Dots: [(-47, 21), (-47, -21)]. Lines: [[(0, -95), (0, 95)], [(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -51,
+                "y": 17
+              },
+              {
+                "x": -29,
+                "y": 17
+              },
+              {
+                "x": -29,
+                "y": 24
+              },
+              {
+                "x": -43,
+                "y": 24
+              },
+              {
+                "x": -43,
+                "y": 42
+              },
+              {
+                "x": -51,
+                "y": 42
+              }
+            ],
+            [
+              {
+                "x": -51,
+                "y": -17
+              },
+              {
+                "x": -29,
+                "y": -17
+              },
+              {
+                "x": -29,
+                "y": -24
+              },
+              {
+                "x": -43,
+                "y": -24
+              },
+              {
+                "x": -43,
+                "y": -42
+              },
+              {
+                "x": -51,
+                "y": -42
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -47,
+              "y": 21
+            },
+            {
+              "x": -47,
+              "y": -21
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ],
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "MIR-3-7",
+        "family": "vertical-central-axis",
+        "context": "vertical asymmetric layout 7",
+        "stem": "Two copies of the same asymmetric piece are shown, including their dots. Which operation maps one complete piece to the other? For translation, use the piece on the left as the original. The crossing reference lines mark the vertical and horizontal lines through the origin. Case 7.",
+        "options": [
+          "Reflection in the vertical line through the origin",
+          "Reflection in the horizontal line through the origin",
+          "Half-turn about the origin",
+          "Translation90 units right and20 units down"
+        ],
+        "answer": 3,
+        "explanations": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed.",
+          "This matches every vertex and dot. Both x and y change sign.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "repairs": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This matches every vertex and dot. Both x and y change sign. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "Only x changes sign; y stays fixed.",
+          "Only y changes sign; x stays fixed.",
+          "Both x and y change sign.",
+          "Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "reason_answer": 3,
+        "reason_explanation": "Both x and y change sign.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 32), (-51, 32), (-51, 24), (-37, 38), (-51, 52), (-51, 44), (-65, 44)], [(65, -32), (51, -32), (51, -24), (37, -38), (51, -52), (51, -44), (65, -44)]]. Dots: [(-61, 28), (61, -28)]. Lines: [[(0, -95), (0, 95)], [(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -65,
+                "y": 32
+              },
+              {
+                "x": -51,
+                "y": 32
+              },
+              {
+                "x": -51,
+                "y": 24
+              },
+              {
+                "x": -37,
+                "y": 38
+              },
+              {
+                "x": -51,
+                "y": 52
+              },
+              {
+                "x": -51,
+                "y": 44
+              },
+              {
+                "x": -65,
+                "y": 44
+              }
+            ],
+            [
+              {
+                "x": 65,
+                "y": -32
+              },
+              {
+                "x": 51,
+                "y": -32
+              },
+              {
+                "x": 51,
+                "y": -24
+              },
+              {
+                "x": 37,
+                "y": -38
+              },
+              {
+                "x": 51,
+                "y": -52
+              },
+              {
+                "x": 51,
+                "y": -44
+              },
+              {
+                "x": 65,
+                "y": -44
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -61,
+              "y": 28
+            },
+            {
+              "x": 61,
+              "y": -28
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ],
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "MIR-3-8",
+        "family": "horizontal-central-axis",
+        "context": "horizontal asymmetric layout 8",
+        "stem": "Two copies of the same asymmetric piece are shown, including their dots. Which operation maps one complete piece to the other? For translation, use the piece on the left as the original. The crossing reference lines mark the vertical and horizontal lines through the origin. Case 8.",
+        "options": [
+          "Reflection in the vertical line through the origin",
+          "Reflection in the horizontal line through the origin",
+          "Half-turn about the origin",
+          "Translation90 units right and20 units down"
+        ],
+        "answer": 4,
+        "explanations": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed.",
+          "This rule fails the shown correspondence. Both x and y change sign.",
+          "This matches every vertex and dot. Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "repairs": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Both x and y change sign. Check the original and image of one distinctive corner, then every marked point.",
+          "This matches every vertex and dot. Every point moves90 units right and20 units down; orientation remains unchanged. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "Only x changes sign; y stays fixed.",
+          "Only y changes sign; x stays fixed.",
+          "Both x and y change sign.",
+          "Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "reason_answer": 4,
+        "reason_explanation": "Every point moves90 units right and20 units down; orientation remains unchanged.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 31), (-34, 37), (-41, 58), (-54, 50)], [(32, 11), (56, 17), (49, 38), (36, 30)]]. Dots: [(-54, 35), (36, 15)]. Lines: [[(0, -95), (0, 95)], [(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -58,
+                "y": 31
+              },
+              {
+                "x": -34,
+                "y": 37
+              },
+              {
+                "x": -41,
+                "y": 58
+              },
+              {
+                "x": -54,
+                "y": 50
+              }
+            ],
+            [
+              {
+                "x": 32,
+                "y": 11
+              },
+              {
+                "x": 56,
+                "y": 17
+              },
+              {
+                "x": 49,
+                "y": 38
+              },
+              {
+                "x": 36,
+                "y": 30
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -54,
+              "y": 35
+            },
+            {
+              "x": 36,
+              "y": 15
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ],
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      }
+    ],
+    "revision": [
+      {
+        "id": "MIR-3-9",
+        "family": "vertical-shifted-axis",
+        "context": "vertical asymmetric layout 9",
+        "stem": "Two copies of the same asymmetric piece are shown, including their dots. Which operation maps one complete piece to the other? For translation, use the piece on the left as the original. The crossing reference lines mark the vertical and horizontal lines through the origin. Case 9.",
+        "options": [
+          "Reflection in the vertical line through the origin",
+          "Reflection in the horizontal line through the origin",
+          "Half-turn about the origin",
+          "Translation90 units right and20 units down"
+        ],
+        "answer": 1,
+        "explanations": [
+          "This matches every vertex and dot. Only x changes sign; y stays fixed.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed.",
+          "This rule fails the shown correspondence. Both x and y change sign.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "repairs": [
+          "This matches every vertex and dot. Only x changes sign; y stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Both x and y change sign. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "Only x changes sign; y stays fixed.",
+          "Only y changes sign; x stays fixed.",
+          "Both x and y change sign.",
+          "Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Only x changes sign; y stays fixed.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 10), (-27, 10), (-27, 19), (-35, 19), (-35, 30), (-44, 30), (-44, 38), (-51, 38)], [(51, 10), (27, 10), (27, 19), (35, 19), (35, 30), (44, 30), (44, 38), (51, 38)]]. Dots: [(-47, 14), (47, 14)]. Lines: [[(0, -95), (0, 95)], [(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -51,
+                "y": 10
+              },
+              {
+                "x": -27,
+                "y": 10
+              },
+              {
+                "x": -27,
+                "y": 19
+              },
+              {
+                "x": -35,
+                "y": 19
+              },
+              {
+                "x": -35,
+                "y": 30
+              },
+              {
+                "x": -44,
+                "y": 30
+              },
+              {
+                "x": -44,
+                "y": 38
+              },
+              {
+                "x": -51,
+                "y": 38
+              }
+            ],
+            [
+              {
+                "x": 51,
+                "y": 10
+              },
+              {
+                "x": 27,
+                "y": 10
+              },
+              {
+                "x": 27,
+                "y": 19
+              },
+              {
+                "x": 35,
+                "y": 19
+              },
+              {
+                "x": 35,
+                "y": 30
+              },
+              {
+                "x": 44,
+                "y": 30
+              },
+              {
+                "x": 44,
+                "y": 38
+              },
+              {
+                "x": 51,
+                "y": 38
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -47,
+              "y": 14
+            },
+            {
+              "x": 47,
+              "y": 14
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ],
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "MIR-3-10",
+        "family": "horizontal-shifted-axis",
+        "context": "horizontal asymmetric layout 10",
+        "stem": "Two copies of the same asymmetric piece are shown, including their dots. Which operation maps one complete piece to the other? For translation, use the piece on the left as the original. The crossing reference lines mark the vertical and horizontal lines through the origin. Case 10.",
+        "options": [
+          "Reflection in the vertical line through the origin",
+          "Reflection in the horizontal line through the origin",
+          "Half-turn about the origin",
+          "Translation90 units right and20 units down"
+        ],
+        "answer": 2,
+        "explanations": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed.",
+          "This matches every vertex and dot. Only y changes sign; x stays fixed.",
+          "This rule fails the shown correspondence. Both x and y change sign.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "repairs": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This matches every vertex and dot. Only y changes sign; x stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Both x and y change sign. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "Only x changes sign; y stays fixed.",
+          "Only y changes sign; x stays fixed.",
+          "Both x and y change sign.",
+          "Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "reason_answer": 2,
+        "reason_explanation": "Only y changes sign; x stays fixed.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 17), (-43, 17), (-43, 24), (-57, 24), (-57, 42), (-65, 42)], [(-65, -17), (-43, -17), (-43, -24), (-57, -24), (-57, -42), (-65, -42)]]. Dots: [(-61, 21), (-61, -21)]. Lines: [[(0, -95), (0, 95)], [(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -65,
+                "y": 17
+              },
+              {
+                "x": -43,
+                "y": 17
+              },
+              {
+                "x": -43,
+                "y": 24
+              },
+              {
+                "x": -57,
+                "y": 24
+              },
+              {
+                "x": -57,
+                "y": 42
+              },
+              {
+                "x": -65,
+                "y": 42
+              }
+            ],
+            [
+              {
+                "x": -65,
+                "y": -17
+              },
+              {
+                "x": -43,
+                "y": -17
+              },
+              {
+                "x": -43,
+                "y": -24
+              },
+              {
+                "x": -57,
+                "y": -24
+              },
+              {
+                "x": -57,
+                "y": -42
+              },
+              {
+                "x": -65,
+                "y": -42
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -61,
+              "y": 21
+            },
+            {
+              "x": -61,
+              "y": -21
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ],
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "MIR-3-11",
+        "family": "vertical-shifted-axis",
+        "context": "vertical asymmetric layout 11",
+        "stem": "Two copies of the same asymmetric piece are shown, including their dots. Which operation maps one complete piece to the other? For translation, use the piece on the left as the original. The crossing reference lines mark the vertical and horizontal lines through the origin. Case 11.",
+        "options": [
+          "Reflection in the vertical line through the origin",
+          "Reflection in the horizontal line through the origin",
+          "Half-turn about the origin",
+          "Translation90 units right and20 units down"
+        ],
+        "answer": 3,
+        "explanations": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed.",
+          "This matches every vertex and dot. Both x and y change sign.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "repairs": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This matches every vertex and dot. Both x and y change sign. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Every point moves90 units right and20 units down; orientation remains unchanged. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "Only x changes sign; y stays fixed.",
+          "Only y changes sign; x stays fixed.",
+          "Both x and y change sign.",
+          "Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "reason_answer": 3,
+        "reason_explanation": "Both x and y change sign.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 32), (-44, 32), (-44, 24), (-30, 38), (-44, 52), (-44, 44), (-58, 44)], [(58, -32), (44, -32), (44, -24), (30, -38), (44, -52), (44, -44), (58, -44)]]. Dots: [(-54, 28), (54, -28)]. Lines: [[(0, -95), (0, 95)], [(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -58,
+                "y": 32
+              },
+              {
+                "x": -44,
+                "y": 32
+              },
+              {
+                "x": -44,
+                "y": 24
+              },
+              {
+                "x": -30,
+                "y": 38
+              },
+              {
+                "x": -44,
+                "y": 52
+              },
+              {
+                "x": -44,
+                "y": 44
+              },
+              {
+                "x": -58,
+                "y": 44
+              }
+            ],
+            [
+              {
+                "x": 58,
+                "y": -32
+              },
+              {
+                "x": 44,
+                "y": -32
+              },
+              {
+                "x": 44,
+                "y": -24
+              },
+              {
+                "x": 30,
+                "y": -38
+              },
+              {
+                "x": 44,
+                "y": -52
+              },
+              {
+                "x": 44,
+                "y": -44
+              },
+              {
+                "x": 58,
+                "y": -44
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -54,
+              "y": 28
+            },
+            {
+              "x": 54,
+              "y": -28
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ],
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "MIR-3-12",
+        "family": "horizontal-shifted-axis",
+        "context": "horizontal asymmetric layout 12",
+        "stem": "Two copies of the same asymmetric piece are shown, including their dots. Which operation maps one complete piece to the other? For translation, use the piece on the left as the original. The crossing reference lines mark the vertical and horizontal lines through the origin. Case 12.",
+        "options": [
+          "Reflection in the vertical line through the origin",
+          "Reflection in the horizontal line through the origin",
+          "Half-turn about the origin",
+          "Translation90 units right and20 units down"
+        ],
+        "answer": 4,
+        "explanations": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed.",
+          "This rule fails the shown correspondence. Both x and y change sign.",
+          "This matches every vertex and dot. Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "repairs": [
+          "This rule fails the shown correspondence. Only x changes sign; y stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Only y changes sign; x stays fixed. Check the original and image of one distinctive corner, then every marked point.",
+          "This rule fails the shown correspondence. Both x and y change sign. Check the original and image of one distinctive corner, then every marked point.",
+          "This matches every vertex and dot. Every point moves90 units right and20 units down; orientation remains unchanged. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "Only x changes sign; y stays fixed.",
+          "Only y changes sign; x stays fixed.",
+          "Both x and y change sign.",
+          "Every point moves90 units right and20 units down; orientation remains unchanged."
+        ],
+        "reason_answer": 4,
+        "reason_explanation": "Every point moves90 units right and20 units down; orientation remains unchanged.",
+        "diagram": {
+          "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 31), (-27, 37), (-34, 58), (-47, 50)], [(39, 11), (63, 17), (56, 38), (43, 30)]]. Dots: [(-47, 35), (43, 15)]. Lines: [[(0, -95), (0, 95)], [(-95, 0), (95, 0)]].",
+          "polygons": [
+            [
+              {
+                "x": -51,
+                "y": 31
+              },
+              {
+                "x": -27,
+                "y": 37
+              },
+              {
+                "x": -34,
+                "y": 58
+              },
+              {
+                "x": -47,
+                "y": 50
+              }
+            ],
+            [
+              {
+                "x": 39,
+                "y": 11
+              },
+              {
+                "x": 63,
+                "y": 17
+              },
+              {
+                "x": 56,
+                "y": 38
+              },
+              {
+                "x": 43,
+                "y": 30
+              }
+            ]
+          ],
+          "dots": [
+            {
+              "x": -47,
+              "y": 35
+            },
+            {
+              "x": 43,
+              "y": 15
+            }
+          ],
+          "lines": [
+            [
+              {
+                "x": 0,
+                "y": -95
+              },
+              {
+                "x": 0,
+                "y": 95
+              }
+            ],
+            [
+              {
+                "x": -95,
+                "y": 0
+              },
+              {
+                "x": 95,
+                "y": 0
+              }
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored asymmetric vector constructions; no third-party diagram reproduced. Not authenticated PYQs or measured exam difficulty."
+  ],
+  "illustrations": [
+    {
+      "description": "Worked vertical reflection: the original L-shaped piece is left of the upright mirror; its image is right. The marked top corner is40 units from the mirror on each side, at the same height. Two equal horizontal segments and matching ticks show equal distance.",
+      "polygons": [
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 0
+          },
+          {
+            "x": -40,
+            "y": 0
+          }
+        ],
+        [
+          {
+            "x": 40,
+            "y": 20
+          },
+          {
+            "x": 20,
+            "y": 20
+          },
+          {
+            "x": 20,
+            "y": 10
+          },
+          {
+            "x": 35,
+            "y": 10
+          },
+          {
+            "x": 35,
+            "y": 0
+          },
+          {
+            "x": 40,
+            "y": 0
+          }
+        ]
+      ],
+      "dots": [
+        {
+          "x": -40,
+          "y": 20
+        },
+        {
+          "x": 40,
+          "y": 20
+        }
+      ],
+      "lines": [
+        [
+          {
+            "x": 0,
+            "y": -80
+          },
+          {
+            "x": 0,
+            "y": 80
+          }
+        ],
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": 0,
+            "y": 20
+          }
+        ],
+        [
+          {
+            "x": 0,
+            "y": 20
+          },
+          {
+            "x": 40,
+            "y": 20
+          }
+        ],
+        [
+          {
+            "x": -20,
+            "y": 17
+          },
+          {
+            "x": -20,
+            "y": 23
+          }
+        ],
+        [
+          {
+            "x": 20,
+            "y": 17
+          },
+          {
+            "x": 20,
+            "y": 23
+          }
+        ]
+      ]
+    },
+    {
+      "description": "Worked water reflection: the original lies above the horizontal water line and the image below it. The marked corner stays at the same left/right position,20 units above versus20 below. Equal vertical segments and matching ticks show equal distances.",
+      "polygons": [
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 0
+          },
+          {
+            "x": -40,
+            "y": 0
+          }
+        ],
+        [
+          {
+            "x": -40,
+            "y": -20
+          },
+          {
+            "x": -20,
+            "y": -20
+          },
+          {
+            "x": -20,
+            "y": -10
+          },
+          {
+            "x": -35,
+            "y": -10
+          },
+          {
+            "x": -35,
+            "y": 0
+          },
+          {
+            "x": -40,
+            "y": 0
+          }
+        ]
+      ],
+      "dots": [
+        {
+          "x": -40,
+          "y": 20
+        },
+        {
+          "x": -40,
+          "y": -20
+        }
+      ],
+      "lines": [
+        [
+          {
+            "x": -80,
+            "y": 0
+          },
+          {
+            "x": 80,
+            "y": 0
+          }
+        ],
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": -40,
+            "y": 0
+          }
+        ],
+        [
+          {
+            "x": -40,
+            "y": 0
+          },
+          {
+            "x": -40,
+            "y": -20
+          }
+        ],
+        [
+          {
+            "x": -43,
+            "y": 10
+          },
+          {
+            "x": -37,
+            "y": 10
+          }
+        ],
+        [
+          {
+            "x": -43,
+            "y": -10
+          },
+          {
+            "x": -37,
+            "y": -10
+          }
+        ]
+      ]
+    },
+    {
+      "description": "Worked arrangement: an L piece and a triangle lie left of the vertical mirror. Their reflected images lie right. The triangle remains nearer the mirror, while both internal orientations and their marked points reverse. Moving the pieces alone would leave their orientations wrong.",
+      "polygons": [
+        [
+          {
+            "x": -65,
+            "y": -10
+          },
+          {
+            "x": -45,
+            "y": -10
+          },
+          {
+            "x": -45,
+            "y": 0
+          },
+          {
+            "x": -55,
+            "y": 0
+          },
+          {
+            "x": -55,
+            "y": 15
+          },
+          {
+            "x": -65,
+            "y": 15
+          }
+        ],
+        [
+          {
+            "x": -30,
+            "y": -10
+          },
+          {
+            "x": -10,
+            "y": -10
+          },
+          {
+            "x": -25,
+            "y": 15
+          }
+        ],
+        [
+          {
+            "x": 65,
+            "y": -10
+          },
+          {
+            "x": 45,
+            "y": -10
+          },
+          {
+            "x": 45,
+            "y": 0
+          },
+          {
+            "x": 55,
+            "y": 0
+          },
+          {
+            "x": 55,
+            "y": 15
+          },
+          {
+            "x": 65,
+            "y": 15
+          }
+        ],
+        [
+          {
+            "x": 30,
+            "y": -10
+          },
+          {
+            "x": 10,
+            "y": -10
+          },
+          {
+            "x": 25,
+            "y": 15
+          }
+        ]
+      ],
+      "dots": [
+        {
+          "x": -60,
+          "y": -5
+        },
+        {
+          "x": -24,
+          "y": -5
+        },
+        {
+          "x": 60,
+          "y": -5
+        },
+        {
+          "x": 24,
+          "y": -5
+        }
+      ],
+      "lines": [
+        [
+          {
+            "x": 0,
+            "y": -80
+          },
+          {
+            "x": 0,
+            "y": 80
+          }
+        ],
+        [
+          {
+            "x": -60,
+            "y": -5
+          },
+          {
+            "x": 60,
+            "y": -5
+          }
+        ]
+      ]
+    },
+    {
+      "description": "Worked shifted mirror: the vertical mirror is10 units right of the origin. The original marked point is at x=-20,30 units left of the mirror; its image is at x=40,30 units right. Both points have y=30. Matching ticks show equal segments about the actual mirror, not the page centre.",
+      "polygons": [],
+      "dots": [
+        {
+          "x": -20,
+          "y": 30
+        },
+        {
+          "x": 40,
+          "y": 30
+        }
+      ],
+      "lines": [
+        [
+          {
+            "x": 10,
+            "y": -80
+          },
+          {
+            "x": 10,
+            "y": 80
+          }
+        ],
+        [
+          {
+            "x": -20,
+            "y": 30
+          },
+          {
+            "x": 10,
+            "y": 30
+          }
+        ],
+        [
+          {
+            "x": 10,
+            "y": 30
+          },
+          {
+            "x": 40,
+            "y": 30
+          }
+        ],
+        [
+          {
+            "x": -5,
+            "y": 27
+          },
+          {
+            "x": -5,
+            "y": 33
+          }
+        ],
+        [
+          {
+            "x": 25,
+            "y": 27
+          },
+          {
+            "x": 25,
+            "y": 33
+          }
+        ]
+      ]
+    },
+    {
+      "description": "Worked half-turn comparison. The original is above-left of the origin and its half-turn image below-right. Two marked top corners become two bottom corners with their left/right order reversed. Both coordinates change sign; the two displacement vectors differ.",
+      "polygons": [
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 0
+          },
+          {
+            "x": -40,
+            "y": 0
+          }
+        ],
+        [
+          {
+            "x": 40,
+            "y": -20
+          },
+          {
+            "x": 20,
+            "y": -20
+          },
+          {
+            "x": 20,
+            "y": -10
+          },
+          {
+            "x": 35,
+            "y": -10
+          },
+          {
+            "x": 35,
+            "y": 0
+          },
+          {
+            "x": 40,
+            "y": 0
+          }
+        ]
+      ],
+      "dots": [
+        {
+          "x": -40,
+          "y": 20
+        },
+        {
+          "x": -20,
+          "y": 20
+        },
+        {
+          "x": 40,
+          "y": -20
+        },
+        {
+          "x": 20,
+          "y": -20
+        }
+      ],
+      "lines": [
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": 40,
+            "y": -20
+          }
+        ],
+        [
+          {
+            "x": -20,
+            "y": 20
+          },
+          {
+            "x": 20,
+            "y": -20
+          }
+        ]
+      ]
+    },
+    {
+      "description": "Worked translation comparison. The original lies left and its translated copy right. Every vertex and marked point moves90 units right and20 units down. The two connectors are parallel and equal; the orientation does not reverse.",
+      "polygons": [
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 0
+          },
+          {
+            "x": -40,
+            "y": 0
+          }
+        ],
+        [
+          {
+            "x": 50,
+            "y": 0
+          },
+          {
+            "x": 70,
+            "y": 0
+          },
+          {
+            "x": 70,
+            "y": -10
+          },
+          {
+            "x": 55,
+            "y": -10
+          },
+          {
+            "x": 55,
+            "y": -20
+          },
+          {
+            "x": 50,
+            "y": -20
+          }
+        ]
+      ],
+      "dots": [
+        {
+          "x": -40,
+          "y": 20
+        },
+        {
+          "x": -20,
+          "y": 20
+        },
+        {
+          "x": 50,
+          "y": 0
+        },
+        {
+          "x": 70,
+          "y": 0
+        }
+      ],
+      "lines": [
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": 50,
+            "y": 0
+          }
+        ],
+        [
+          {
+            "x": -20,
+            "y": 20
+          },
+          {
+            "x": 70,
+            "y": 0
+          }
+        ]
+      ]
+    }
+  ]
+}

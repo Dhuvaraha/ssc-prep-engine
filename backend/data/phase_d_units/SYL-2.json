@@ -1,0 +1,461 @@
+{
+  "objective_id": "SYL-2",
+  "prerequisites": [
+    "Translate all/no/some/some-not using the stated no-existential-import convention.",
+    "One object can belong to several sets.",
+    "Distinguish a required witness from a forbidden region."
+  ],
+  "explanation": "Retain exactly the stated constraints. Do not turn all A are B into all B are A, or infer existence from a universal. Some A are B allows every A to be B as well; it does not require an A outside B. Two some statements may use different witnesses. In a finite-model check, each listed object has exactly the stated memberships and no unlisted objects exist.",
+  "worked": [
+    {
+      "action": "Premise: all A are B. A model with one object in A and B and another in B alone is valid.",
+      "justification": "Every A is in B. Nothing forbids extra B objects."
+    },
+    {
+      "action": "The empty model also satisfies all A are B.",
+      "justification": "There is no A outside B; this convention does not infer an A witness."
+    },
+    {
+      "action": "Add some A are C. Now place a witness in A,B,C.",
+      "justification": "The witness must be in A and C, and the universal forces it into B."
+    },
+    {
+      "action": "Some A are B and some B are C can use object1 in A,B and object2 in B,C.",
+      "justification": "The witnesses need not be the same, so A/C overlap is not forced."
+    },
+    {
+      "action": "With no A are C, that two-object model still works, while a single A,B,C witness fails.",
+      "justification": "Check every premise separately: satisfying the existential statements does not excuse violating a universal exclusion."
+    },
+    {
+      "action": "All A are B plus no A are B permits an empty A set. Adding some A are A would make these premises inconsistent.",
+      "justification": "Universal constraints can empty a category; an explicit witness changes consistency."
+    }
+  ],
+  "hint": "Test each premise against every listed object. For some/some-not, locate the required witness; for all/no, search for a violating object.",
+  "shortcut": "Reject a proposed model as soon as one premise fails; verify every premise before accepting it.",
+  "limitation": "These finite models are complete as listed and use the explicit no-existential-import convention. A valid model shows consistency, not that every feature of that model is necessary.",
+  "checks": {
+    "entry": [
+      {
+        "id": "SYL-2-1",
+        "family": "containment",
+        "context": "containment",
+        "stem": "Premises: All A are B. Which complete model satisfies all premises? A, B and C are abstract categories.",
+        "options": [
+          "Object 1 belongs exactly to A, B; Object 2 belongs exactly to B. No other objects exist.",
+          "Object 1 belongs exactly to A. No other objects exist.",
+          "Object 1 belongs exactly to A, C. No other objects exist.",
+          "Object 1 belongs exactly to A; Object 2 belongs exactly to B. No other objects exist."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required.",
+          "This model violates: All A are B.",
+          "This model violates: All A are B.",
+          "This model violates: All A are B."
+        ],
+        "repairs": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: All A are B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: All A are B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: All A are B. Mark a witness for each existential premise, then test all universal constraints against every object."
+        ],
+        "reason_prompt": "Which rule justifies accepting the model?",
+        "reason_options": [
+          "Every required witness is present and every forbidden membership is absent.",
+          "Universal statements require at least one member of every named category.",
+          "The witnesses in different some statements must always be the same object.",
+          "Any two named categories must be disjoint unless overlap is explicitly required."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Existential premises require witnesses; universal premises prohibit counterexamples. No further conditions may be invented."
+      },
+      {
+        "id": "SYL-2-2",
+        "family": "disjointness",
+        "context": "disjointness",
+        "stem": "Premises: No A are B. Which complete model satisfies all premises? A, B and C are abstract categories.",
+        "options": [
+          "Object 1 belongs exactly to A; Object 2 belongs exactly to B. No other objects exist.",
+          "Object 1 belongs exactly to A, B. No other objects exist.",
+          "Object 1 belongs exactly to A, B; Object 2 belongs exactly to C. No other objects exist.",
+          "Object 1 belongs exactly to A, B, C. No other objects exist."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required.",
+          "This model violates: No A are B.",
+          "This model violates: No A are B.",
+          "This model violates: No A are B."
+        ],
+        "repairs": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: No A are B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: No A are B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: No A are B. Mark a witness for each existential premise, then test all universal constraints against every object."
+        ],
+        "reason_prompt": "Which rule justifies accepting the model?",
+        "reason_options": [
+          "Every required witness is present and every forbidden membership is absent.",
+          "Universal statements require at least one member of every named category.",
+          "The witnesses in different some statements must always be the same object.",
+          "Any two named categories must be disjoint unless overlap is explicitly required."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Existential premises require witnesses; universal premises prohibit counterexamples. No further conditions may be invented."
+      }
+    ],
+    "faded": [
+      {
+        "id": "SYL-2-3",
+        "family": "overlap-witness",
+        "context": "overlap-witness",
+        "stem": "Premises: Some A are B. Which complete model satisfies all premises? A, B and C are abstract categories. Partly worked: the premise requires a witness. Check the listed memberships of each object; an absent witness cannot be supplied by imagination.",
+        "options": [
+          "Object 1 belongs exactly to A, B. No other objects exist.",
+          "No objects exist.",
+          "Object 1 belongs exactly to A; Object 2 belongs exactly to B. No other objects exist.",
+          "Object 1 belongs exactly to B, C. No other objects exist."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required.",
+          "This model violates: Some A are B.",
+          "This model violates: Some A are B.",
+          "This model violates: Some A are B."
+        ],
+        "repairs": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some A are B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some A are B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some A are B. Mark a witness for each existential premise, then test all universal constraints against every object."
+        ],
+        "reason_prompt": "Which rule justifies accepting the model?",
+        "reason_options": [
+          "Every required witness is present and every forbidden membership is absent.",
+          "Universal statements require at least one member of every named category.",
+          "The witnesses in different some statements must always be the same object.",
+          "Any two named categories must be disjoint unless overlap is explicitly required."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Existential premises require witnesses; universal premises prohibit counterexamples. No further conditions may be invented."
+      },
+      {
+        "id": "SYL-2-4",
+        "family": "outside-witness",
+        "context": "outside-witness",
+        "stem": "Premises: Some A are not B. Which complete model satisfies all premises? A, B and C are abstract categories. Partly worked: the premise requires a witness. Check the listed memberships of each object; an absent witness cannot be supplied by imagination.",
+        "options": [
+          "Object 1 belongs exactly to A; Object 2 belongs exactly to A, B. No other objects exist.",
+          "Object 1 belongs exactly to A, B. No other objects exist.",
+          "Object 1 belongs exactly to B. No other objects exist.",
+          "No objects exist."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required.",
+          "This model violates: Some A are not B.",
+          "This model violates: Some A are not B.",
+          "This model violates: Some A are not B."
+        ],
+        "repairs": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some A are not B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some A are not B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some A are not B. Mark a witness for each existential premise, then test all universal constraints against every object."
+        ],
+        "reason_prompt": "Which rule justifies accepting the model?",
+        "reason_options": [
+          "Every required witness is present and every forbidden membership is absent.",
+          "Universal statements require at least one member of every named category.",
+          "The witnesses in different some statements must always be the same object.",
+          "Any two named categories must be disjoint unless overlap is explicitly required."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Existential premises require witnesses; universal premises prohibit counterexamples. No further conditions may be invented."
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "SYL-2-5",
+        "family": "contained-witness",
+        "context": "contained-witness",
+        "stem": "Premises: All A are B. Some A are C. Which complete model satisfies all premises? A, B and C are abstract categories.",
+        "options": [
+          "Object 1 belongs exactly to A, B, C. No other objects exist.",
+          "Object 1 belongs exactly to A, C. No other objects exist.",
+          "Object 1 belongs exactly to A, B. No other objects exist.",
+          "Object 1 belongs exactly to B, C. No other objects exist."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required.",
+          "This model violates: All A are B.",
+          "This model violates: Some A are C.",
+          "This model violates: Some A are C."
+        ],
+        "repairs": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: All A are B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some A are C. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some A are C. Mark a witness for each existential premise, then test all universal constraints against every object."
+        ],
+        "reason_prompt": "Which rule justifies accepting the model?",
+        "reason_options": [
+          "Every required witness is present and every forbidden membership is absent.",
+          "Universal statements require at least one member of every named category.",
+          "The witnesses in different some statements must always be the same object.",
+          "Any two named categories must be disjoint unless overlap is explicitly required."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Existential premises require witnesses; universal premises prohibit counterexamples. No further conditions may be invented."
+      },
+      {
+        "id": "SYL-2-6",
+        "family": "contained-negative",
+        "context": "contained-negative",
+        "stem": "Premises: All A are B. Some A are not C. Which complete model satisfies all premises? A, B and C are abstract categories.",
+        "options": [
+          "Object 1 belongs exactly to A, B. No other objects exist.",
+          "Object 1 belongs exactly to A, B, C. No other objects exist.",
+          "Object 1 belongs exactly to A. No other objects exist.",
+          "Object 1 belongs exactly to B. No other objects exist."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required.",
+          "This model violates: Some A are not C.",
+          "This model violates: All A are B.",
+          "This model violates: Some A are not C."
+        ],
+        "repairs": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some A are not C. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: All A are B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some A are not C. Mark a witness for each existential premise, then test all universal constraints against every object."
+        ],
+        "reason_prompt": "Which rule justifies accepting the model?",
+        "reason_options": [
+          "Every required witness is present and every forbidden membership is absent.",
+          "Universal statements require at least one member of every named category.",
+          "The witnesses in different some statements must always be the same object.",
+          "Any two named categories must be disjoint unless overlap is explicitly required."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Existential premises require witnesses; universal premises prohibit counterexamples. No further conditions may be invented."
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "SYL-2-7",
+        "family": "excluded-witness",
+        "context": "excluded-witness",
+        "stem": "Premises: No A are B. Some B are C. Which complete model satisfies all premises? A, B and C are abstract categories.",
+        "options": [
+          "Object 1 belongs exactly to B, C; Object 2 belongs exactly to A, C. No other objects exist.",
+          "Object 1 belongs exactly to A, B, C. No other objects exist.",
+          "Object 1 belongs exactly to B; Object 2 belongs exactly to C. No other objects exist.",
+          "Object 1 belongs exactly to A, B; Object 2 belongs exactly to B, C. No other objects exist."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required.",
+          "This model violates: No A are B.",
+          "This model violates: Some B are C.",
+          "This model violates: No A are B."
+        ],
+        "repairs": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: No A are B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some B are C. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: No A are B. Mark a witness for each existential premise, then test all universal constraints against every object."
+        ],
+        "reason_prompt": "Which rule justifies accepting the model?",
+        "reason_options": [
+          "Every required witness is present and every forbidden membership is absent.",
+          "Universal statements require at least one member of every named category.",
+          "The witnesses in different some statements must always be the same object.",
+          "Any two named categories must be disjoint unless overlap is explicitly required."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Existential premises require witnesses; universal premises prohibit counterexamples. No further conditions may be invented."
+      },
+      {
+        "id": "SYL-2-8",
+        "family": "overlap-not-transitive",
+        "context": "overlap-not-transitive",
+        "stem": "Premises: Some A are B. Some B are C. No A are C. Which complete model satisfies all premises? A, B and C are abstract categories.",
+        "options": [
+          "Object 1 belongs exactly to A, B; Object 2 belongs exactly to B, C. No other objects exist.",
+          "Object 1 belongs exactly to A, B, C. No other objects exist.",
+          "Object 1 belongs exactly to A, B. No other objects exist.",
+          "Object 1 belongs exactly to B, C. No other objects exist."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required.",
+          "This model violates: No A are C.",
+          "This model violates: Some B are C.",
+          "This model violates: Some A are B."
+        ],
+        "repairs": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: No A are C. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some B are C. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some A are B. Mark a witness for each existential premise, then test all universal constraints against every object."
+        ],
+        "reason_prompt": "Which rule justifies accepting the model?",
+        "reason_options": [
+          "Every required witness is present and every forbidden membership is absent.",
+          "Universal statements require at least one member of every named category.",
+          "The witnesses in different some statements must always be the same object.",
+          "Any two named categories must be disjoint unless overlap is explicitly required."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Existential premises require witnesses; universal premises prohibit counterexamples. No further conditions may be invented."
+      }
+    ],
+    "revision": [
+      {
+        "id": "SYL-2-9",
+        "family": "unmentioned-overlap",
+        "context": "unmentioned-overlap",
+        "stem": "Premises: All A are B. No B are C. Which complete model satisfies all premises? A, B and C are abstract categories.",
+        "options": [
+          "Object 1 belongs exactly to B; Object 2 belongs exactly to C. No other objects exist.",
+          "Object 1 belongs exactly to A, C. No other objects exist.",
+          "Object 1 belongs exactly to A. No other objects exist.",
+          "Object 1 belongs exactly to B, C. No other objects exist."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required.",
+          "This model violates: All A are B.",
+          "This model violates: All A are B.",
+          "This model violates: No B are C."
+        ],
+        "repairs": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: All A are B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: All A are B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: No B are C. Mark a witness for each existential premise, then test all universal constraints against every object."
+        ],
+        "reason_prompt": "Which rule justifies accepting the model?",
+        "reason_options": [
+          "Every required witness is present and every forbidden membership is absent.",
+          "Universal statements require at least one member of every named category.",
+          "The witnesses in different some statements must always be the same object.",
+          "Any two named categories must be disjoint unless overlap is explicitly required."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Existential premises require witnesses; universal premises prohibit counterexamples. No further conditions may be invented."
+      },
+      {
+        "id": "SYL-2-10",
+        "family": "empty-universals",
+        "context": "empty-universals",
+        "stem": "Premises: All A are B. No A are B. Which complete model satisfies all premises? A, B and C are abstract categories.",
+        "options": [
+          "Object 1 belongs exactly to B. No other objects exist.",
+          "Object 1 belongs exactly to A, B. No other objects exist.",
+          "Object 1 belongs exactly to A. No other objects exist.",
+          "Object 1 belongs exactly to A, B; Object 2 belongs exactly to A. No other objects exist."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required.",
+          "This model violates: No A are B.",
+          "This model violates: All A are B.",
+          "This model violates: All A are B. No A are B."
+        ],
+        "repairs": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: No A are B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: All A are B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: All A are B. No A are B. Mark a witness for each existential premise, then test all universal constraints against every object."
+        ],
+        "reason_prompt": "Which rule justifies accepting the model?",
+        "reason_options": [
+          "Every required witness is present and every forbidden membership is absent.",
+          "Universal statements require at least one member of every named category.",
+          "The witnesses in different some statements must always be the same object.",
+          "Any two named categories must be disjoint unless overlap is explicitly required."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Existential premises require witnesses; universal premises prohibit counterexamples. No further conditions may be invented."
+      },
+      {
+        "id": "SYL-2-11",
+        "family": "two-witnesses",
+        "context": "two-witnesses",
+        "stem": "Premises: Some A are not B. Some A are B. Which complete model satisfies all premises? A, B and C are abstract categories.",
+        "options": [
+          "Object 1 belongs exactly to A; Object 2 belongs exactly to A, B. No other objects exist.",
+          "Object 1 belongs exactly to A. No other objects exist.",
+          "Object 1 belongs exactly to A, B. No other objects exist.",
+          "Object 1 belongs exactly to B. No other objects exist."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required.",
+          "This model violates: Some A are B.",
+          "This model violates: Some A are not B.",
+          "This model violates: Some A are not B. Some A are B."
+        ],
+        "repairs": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some A are B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some A are not B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some A are not B. Some A are B. Mark a witness for each existential premise, then test all universal constraints against every object."
+        ],
+        "reason_prompt": "Which rule justifies accepting the model?",
+        "reason_options": [
+          "Every required witness is present and every forbidden membership is absent.",
+          "Universal statements require at least one member of every named category.",
+          "The witnesses in different some statements must always be the same object.",
+          "Any two named categories must be disjoint unless overlap is explicitly required."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Existential premises require witnesses; universal premises prohibit counterexamples. No further conditions may be invented."
+      },
+      {
+        "id": "SYL-2-12",
+        "family": "direction-chain",
+        "context": "direction-chain",
+        "stem": "Premises: All A are B. All B are C. Some C are not B. Which complete model satisfies all premises? A, B and C are abstract categories.",
+        "options": [
+          "Object 1 belongs exactly to A, B, C; Object 2 belongs exactly to C. No other objects exist.",
+          "Object 1 belongs exactly to A, B. No other objects exist.",
+          "Object 1 belongs exactly to B. No other objects exist.",
+          "Object 1 belongs exactly to A, B, C. No other objects exist."
+        ],
+        "answer": 1,
+        "explanations": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required.",
+          "This model violates: All B are C. Some C are not B.",
+          "This model violates: All B are C. Some C are not B.",
+          "This model violates: Some C are not B."
+        ],
+        "repairs": [
+          "This model satisfies every stated constraint. No unstated overlap, separation or existence is required. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: All B are C. Some C are not B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: All B are C. Some C are not B. Mark a witness for each existential premise, then test all universal constraints against every object.",
+          "This model violates: Some C are not B. Mark a witness for each existential premise, then test all universal constraints against every object."
+        ],
+        "reason_prompt": "Which rule justifies accepting the model?",
+        "reason_options": [
+          "Every required witness is present and every forbidden membership is absent.",
+          "Universal statements require at least one member of every named category.",
+          "The witnesses in different some statements must always be the same object.",
+          "Any two named categories must be disjoint unless overlap is explicitly required."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Existential premises require witnesses; universal premises prohibit counterexamples. No further conditions may be invented."
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored finite models under the declared categorical semantics; not authenticated PYQs."
+  ]
+}

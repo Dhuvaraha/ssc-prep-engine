@@ -1,0 +1,237 @@
+[
+  {
+    "question_id": "SYL-5-1",
+    "premises": [
+      [
+        "all",
+        "A",
+        "B"
+      ]
+    ],
+    "conclusion": [
+      "some",
+      "B",
+      "A"
+    ]
+  },
+  {
+    "question_id": "SYL-5-2",
+    "premises": [
+      [
+        "no",
+        "A",
+        "B"
+      ]
+    ],
+    "conclusion": [
+      "some",
+      "A",
+      "B"
+    ]
+  },
+  {
+    "question_id": "SYL-5-3",
+    "premises": [
+      [
+        "some",
+        "A",
+        "B"
+      ]
+    ],
+    "conclusion": [
+      "some",
+      "B",
+      "A"
+    ]
+  },
+  {
+    "question_id": "SYL-5-4",
+    "premises": [
+      [
+        "some",
+        "A",
+        "B"
+      ],
+      [
+        "some",
+        "B",
+        "C"
+      ]
+    ],
+    "conclusion": [
+      "some",
+      "A",
+      "C"
+    ]
+  },
+  {
+    "question_id": "SYL-5-5",
+    "premises": [
+      [
+        "all",
+        "A",
+        "B"
+      ],
+      [
+        "all",
+        "B",
+        "C"
+      ]
+    ],
+    "conclusion": [
+      "some",
+      "A",
+      "C"
+    ]
+  },
+  {
+    "question_id": "SYL-5-6",
+    "premises": [
+      [
+        "some",
+        "A",
+        "B"
+      ],
+      [
+        "no",
+        "B",
+        "C"
+      ]
+    ],
+    "conclusion": [
+      "some",
+      "A",
+      "C"
+    ]
+  },
+  {
+    "question_id": "SYL-5-7",
+    "premises": [
+      [
+        "all",
+        "A",
+        "B"
+      ],
+      [
+        "some",
+        "A",
+        "A"
+      ]
+    ],
+    "conclusion": [
+      "all",
+      "B",
+      "A"
+    ]
+  },
+  {
+    "question_id": "SYL-5-8",
+    "premises": [
+      [
+        "some",
+        "A",
+        "B"
+      ],
+      [
+        "no",
+        "A",
+        "B"
+      ]
+    ],
+    "conclusion": [
+      "all",
+      "A",
+      "C"
+    ]
+  },
+  {
+    "question_id": "SYL-5-9",
+    "premises": [
+      [
+        "all",
+        "Cards",
+        "Records"
+      ],
+      [
+        "no",
+        "Cards",
+        "Fragile"
+      ],
+      [
+        "some",
+        "Records",
+        "Fragile"
+      ]
+    ],
+    "conclusion": [
+      "all",
+      "Records",
+      "Fragile"
+    ]
+  },
+  {
+    "question_id": "SYL-5-10",
+    "premises": [
+      [
+        "all",
+        "Trainees",
+        "Visitors"
+      ],
+      [
+        "no",
+        "Visitors",
+        "Operators"
+      ],
+      [
+        "some",
+        "Trainees",
+        "Trainees"
+      ]
+    ],
+    "conclusion": [
+      "some",
+      "Trainees",
+      "Operators"
+    ]
+  },
+  {
+    "question_id": "SYL-5-11",
+    "premises": [
+      [
+        "some",
+        "Roses",
+        "Plants"
+      ],
+      [
+        "all",
+        "Plants",
+        "Tagged"
+      ]
+    ],
+    "conclusion": [
+      "some",
+      "Tagged",
+      "Roses"
+    ]
+  },
+  {
+    "question_id": "SYL-5-12",
+    "premises": [
+      [
+        "all",
+        "Maps",
+        "Documents"
+      ],
+      [
+        "some_not",
+        "Documents",
+        "Maps"
+      ]
+    ],
+    "conclusion": [
+      "all",
+      "Documents",
+      "Maps"
+    ]
+  }
+]

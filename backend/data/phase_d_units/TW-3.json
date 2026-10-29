@@ -1,0 +1,460 @@
+{
+  "objective_id": "TW-3",
+  "prerequisites": [
+    "Fractions and reciprocals with explicit units.",
+    "Equal-work comparison and constant-rate interpretation."
+  ],
+  "explanation": "Simultaneous independent productive rates add. Isolate an unknown rate by subtracting the known component from the joint rate.",
+  "worked": [
+    {
+      "action": "A takes 12 days and B 18 days for the same job; use 36 work units.",
+      "justification": "This convenient common scale leaves the underlying fractions unchanged."
+    },
+    {
+      "action": "A does 3 units/day; B does 2. Together their rate is 5 units/day.",
+      "justification": "Independent simultaneous productive rates add; durations do not."
+    },
+    {
+      "action": "Time =36/5 =7.2 days. If a pair instead completes 1/6 job/day and A alone does 1/10, B does 1/6-1/10 =1/15 job/day.",
+      "justification": "The first problem divides work by combined rate; the second subtracts a known component from the combined rate."
+    },
+    {
+      "action": "An outlet alone removes one full tank in 10 hours, while an inlet alone adds one tank in 15 hours. Take removal as positive.",
+      "justification": "Opposing flows change the same stored quantity in opposite directions."
+    },
+    {
+      "action": "Net removal rate =1/10-1/15=1/30 tank/hour. Emptying an initially full tank takes30 hours.",
+      "justification": "Subtract the inflow, then divide the initial volume by the positive net removal rate. If net removal were zero or negative, this model would not empty the tank."
+    }
+  ],
+  "illustrations": [],
+  "hint": "Choose work units and label each rate with work/time before calculating.",
+  "shortcut": "Use work = rate times active time; a convenient common work unit can avoid awkward fractions.",
+  "limitation": "The rates must describe the same job, remain constant during each modelled interval, and not interfere.",
+  "checks": {
+    "entry": [
+      {
+        "id": "TW-3-entry-0",
+        "family": "simultaneous-rate",
+        "context": "joint duration entry-0",
+        "stem": "A completes a job in 24 days and B in 12 days. At constant independent rates, how many days do they need together?",
+        "options": [
+          "36 days",
+          "18 days",
+          "8 days",
+          "12 days"
+        ],
+        "answer": 3,
+        "explanations": [
+          "36 adds durations, but simultaneous workers add work per day.",
+          "18 averages durations; it does not add rates.",
+          "The rate is 1/24 + 1/12 = 1/8 job per day, giving 8 days.",
+          "12 is B alone; A also contributes, so together they finish sooner."
+        ],
+        "repairs": [
+          "Write work/day for each worker before adding.",
+          "Use equal work units, not an average of times.",
+          "Check that the joint time is below both solo times.",
+          "Include both productive rates."
+        ],
+        "reason_prompt": "Which operation combines simultaneous work?",
+        "reason_options": [
+          "Add work per day, then divide one job by the sum",
+          "Add the two solo durations"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Both workers produce parts of the same job during each shared day.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-3-entry-1",
+        "family": "simultaneous-rate",
+        "context": "joint duration entry-1",
+        "stem": "A completes a job in 30 days and B in 15 days. At constant independent rates, how many days do they need together?",
+        "options": [
+          "45 days",
+          "45/2 days",
+          "10 days",
+          "15 days"
+        ],
+        "answer": 3,
+        "explanations": [
+          "45 adds durations, but simultaneous workers add work per day.",
+          "45/2 averages durations; it does not add rates.",
+          "The rate is 1/30 + 1/15 = 1/10 job per day, giving 10 days.",
+          "15 is B alone; A also contributes, so together they finish sooner."
+        ],
+        "repairs": [
+          "Write work/day for each worker before adding.",
+          "Use equal work units, not an average of times.",
+          "Check that the joint time is below both solo times.",
+          "Include both productive rates."
+        ],
+        "reason_prompt": "Which operation combines simultaneous work?",
+        "reason_options": [
+          "Add work per day, then divide one job by the sum",
+          "Add the two solo durations"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Both workers produce parts of the same job during each shared day.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "faded": [
+      {
+        "id": "TW-3-faded-0",
+        "family": "simultaneous-rate",
+        "context": "joint duration faded-0",
+        "stem": "A completes a job in 42 days and B in 21 days. At constant independent rates, how many days do they need together?\nPartly worked: Use 882 work units. The two rates in work units/day are 21 and 42. Add them, then divide total work by combined rate.",
+        "options": [
+          "63 days",
+          "63/2 days",
+          "14 days",
+          "21 days"
+        ],
+        "answer": 3,
+        "explanations": [
+          "63 adds durations, but simultaneous workers add work per day.",
+          "63/2 averages durations; it does not add rates.",
+          "The rate is 1/42 + 1/21 = 1/14 job per day, giving 14 days.",
+          "21 is B alone; A also contributes, so together they finish sooner."
+        ],
+        "repairs": [
+          "Write work/day for each worker before adding.",
+          "Use equal work units, not an average of times.",
+          "Check that the joint time is below both solo times.",
+          "Include both productive rates."
+        ],
+        "reason_prompt": "Which operation combines simultaneous work?",
+        "reason_options": [
+          "Add work per day, then divide one job by the sum",
+          "Add the two solo durations"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Both workers produce parts of the same job during each shared day.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-3-faded-1",
+        "family": "simultaneous-rate",
+        "context": "joint duration faded-1",
+        "stem": "A completes a job in 48 days and B in 24 days. At constant independent rates, how many days do they need together?\nPartly worked: Use 1152 work units. The two rates in work units/day are 24 and 48. Add them, then divide total work by combined rate.",
+        "options": [
+          "72 days",
+          "36 days",
+          "16 days",
+          "24 days"
+        ],
+        "answer": 3,
+        "explanations": [
+          "72 adds durations, but simultaneous workers add work per day.",
+          "36 averages durations; it does not add rates.",
+          "The rate is 1/48 + 1/24 = 1/16 job per day, giving 16 days.",
+          "24 is B alone; A also contributes, so together they finish sooner."
+        ],
+        "repairs": [
+          "Write work/day for each worker before adding.",
+          "Use equal work units, not an average of times.",
+          "Check that the joint time is below both solo times.",
+          "Include both productive rates."
+        ],
+        "reason_prompt": "Which operation combines simultaneous work?",
+        "reason_options": [
+          "Add work per day, then divide one job by the sum",
+          "Add the two solo durations"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Both workers produce parts of the same job during each shared day.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "TW-3-independent_a-0",
+        "family": "simultaneous-rate",
+        "context": "joint duration independent_a-0",
+        "stem": "A completes a job in 60 days and B in 30 days. At constant independent rates, how many days do they need together?",
+        "options": [
+          "90 days",
+          "45 days",
+          "20 days",
+          "30 days"
+        ],
+        "answer": 3,
+        "explanations": [
+          "90 adds durations, but simultaneous workers add work per day.",
+          "45 averages durations; it does not add rates.",
+          "The rate is 1/60 + 1/30 = 1/20 job per day, giving 20 days.",
+          "30 is B alone; A also contributes, so together they finish sooner."
+        ],
+        "repairs": [
+          "Write work/day for each worker before adding.",
+          "Use equal work units, not an average of times.",
+          "Check that the joint time is below both solo times.",
+          "Include both productive rates."
+        ],
+        "reason_prompt": "Which operation combines simultaneous work?",
+        "reason_options": [
+          "Add work per day, then divide one job by the sum",
+          "Add the two solo durations"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Both workers produce parts of the same job during each shared day.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-3-independent_a-1",
+        "family": "simultaneous-rate",
+        "context": "joint duration independent_a-1",
+        "stem": "A completes a job in 66 days and B in 33 days. At constant independent rates, how many days do they need together?",
+        "options": [
+          "99 days",
+          "99/2 days",
+          "22 days",
+          "33 days"
+        ],
+        "answer": 3,
+        "explanations": [
+          "99 adds durations, but simultaneous workers add work per day.",
+          "99/2 averages durations; it does not add rates.",
+          "The rate is 1/66 + 1/33 = 1/22 job per day, giving 22 days.",
+          "33 is B alone; A also contributes, so together they finish sooner."
+        ],
+        "repairs": [
+          "Write work/day for each worker before adding.",
+          "Use equal work units, not an average of times.",
+          "Check that the joint time is below both solo times.",
+          "Include both productive rates."
+        ],
+        "reason_prompt": "Which operation combines simultaneous work?",
+        "reason_options": [
+          "Add work per day, then divide one job by the sum",
+          "Add the two solo durations"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Both workers produce parts of the same job during each shared day.",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "TW-3-independent_b-0",
+        "family": "TW-3",
+        "context": "unknown rate from joint result independent_b-0",
+        "stem": "A and B together finish a job in 33 days. A alone needs 55 days. How many days would B alone need at a constant independent rate?",
+        "options": [
+          "165/2",
+          "22",
+          "88",
+          "2/165"
+        ],
+        "answer": 1,
+        "explanations": [
+          "B's rate is 1/33-1/55 = 2/165 job/day; invert it.",
+          "Subtracting durations does not isolate a work rate.",
+          "Adding durations does not isolate B's contribution.",
+          "This is B's rate, not B's time."
+        ],
+        "repairs": [
+          "B's rate is 1/33-1/55 = 2/165 job/day; invert it. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Subtracting durations does not isolate a work rate. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Adding durations does not isolate B's contribution. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This is B's rate, not B's time. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "1/T_B =1/33-1/55",
+          "T_B =55-33"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "1/T_B =1/33-1/55",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      },
+      {
+        "id": "TW-3-independent_b-1",
+        "family": "TW-3",
+        "context": "unknown rate from joint result independent_b-1",
+        "stem": "A and B together finish a job in 36 days. A alone needs 60 days. How many days would B alone need at a constant independent rate?",
+        "options": [
+          "90",
+          "24",
+          "96",
+          "1/90"
+        ],
+        "answer": 1,
+        "explanations": [
+          "B's rate is 1/36-1/60 = 1/90 job/day; invert it.",
+          "Subtracting durations does not isolate a work rate.",
+          "Adding durations does not isolate B's contribution.",
+          "This is B's rate, not B's time."
+        ],
+        "repairs": [
+          "B's rate is 1/36-1/60 = 1/90 job/day; invert it. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Subtracting durations does not isolate a work rate. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "Adding durations does not isolate B's contribution. Label work, rate and elapsed time separately, then reconstruct the equation.",
+          "This is B's rate, not B's time. Label work, rate and elapsed time separately, then reconstruct the equation."
+        ],
+        "reason_prompt": "Which work equation or unit statement justifies your answer?",
+        "reason_options": [
+          "1/T_B =1/36-1/60",
+          "T_B =60-36"
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "1/T_B =1/36-1/60",
+        "passage": null,
+        "figure": null,
+        "diagram": null
+      }
+    ],
+    "revision": [
+      {
+        "id": "TW-3-delayed-parallel-output",
+        "family": "contextual-parallel-output",
+        "context": "parallel-output",
+        "stem": "Two independent presses make 24 and 36 identical parts per hour. How long do they need together for 150 parts?",
+        "options": [
+          "5/2",
+          "5",
+          "25/4",
+          "25/6"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Their rate is60 parts/hour;150/60=2.5 hours.",
+          "This uses30 rather than the combined60 parts/hour.",
+          "150/24 uses only the slower press.",
+          "150/36 uses only the faster press."
+        ],
+        "repairs": [
+          "Their rate is60 parts/hour;150/60=2.5 hours. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This uses30 rather than the combined60 parts/hour. Rebuild the work/rate/time relation with matching units before calculating.",
+          "150/24 uses only the slower press. Rebuild the work/rate/time relation with matching units before calculating.",
+          "150/36 uses only the faster press. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "Equal output units and independent parallel production permit24+36.",
+          "Use the average of the two rates for combined output."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Equal output units and independent parallel production permit24+36."
+      },
+      {
+        "id": "TW-3-delayed-draining",
+        "family": "contextual-draining",
+        "context": "draining",
+        "stem": "A pump empties a full pond in 6 hours while a spring alone would refill an empty pond in 15 hours. Both rates are constant. Starting full, how long does emptying take?",
+        "options": [
+          "10",
+          "30/7",
+          "9",
+          "21"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Net removal is1/6-1/15=1/10 pond/hour.",
+          "Adding the rates treats the spring as removing water.",
+          "Subtracting solo durations does not give net-rate time.",
+          "Adding solo durations does not conserve volume."
+        ],
+        "repairs": [
+          "Net removal is1/6-1/15=1/10 pond/hour. Rebuild the work/rate/time relation with matching units before calculating.",
+          "Adding the rates treats the spring as removing water. Rebuild the work/rate/time relation with matching units before calculating.",
+          "Subtracting solo durations does not give net-rate time. Rebuild the work/rate/time relation with matching units before calculating.",
+          "Adding solo durations does not conserve volume. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "Use outflow minus inflow because their effects oppose.",
+          "Both rates reduce the pond contents."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Use outflow minus inflow because their effects oppose."
+      },
+      {
+        "id": "TW-3-delayed-missing-machine",
+        "family": "contextual-missing-machine",
+        "context": "missing-machine",
+        "stem": "Three independent machines together process 90 items/hour. Two process 25 and 35 items/hour. What is the third machine's rate?",
+        "options": [
+          "30",
+          "60",
+          "55",
+          "150"
+        ],
+        "answer": 1,
+        "explanations": [
+          "90-25-35=30 items/hour.",
+          "60 is the known pair's combined output.",
+          "55 subtracts only the35-item machine.",
+          "Adding total and known parts double-counts output."
+        ],
+        "repairs": [
+          "90-25-35=30 items/hour. Rebuild the work/rate/time relation with matching units before calculating.",
+          "60 is the known pair's combined output. Rebuild the work/rate/time relation with matching units before calculating.",
+          "55 subtracts only the35-item machine. Rebuild the work/rate/time relation with matching units before calculating.",
+          "Adding total and known parts double-counts output. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "Total output equals the sum of all three component rates.",
+          "The unknown component equals total plus the known components."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Total output equals the sum of all three component rates."
+      },
+      {
+        "id": "TW-3-delayed-two-shifts",
+        "family": "contextual-two-shifts",
+        "context": "two-shifts",
+        "stem": "Two copying stations each have a constant rate. A completes a batch in 8 hours; B in 12 hours. They run together for 2 hours. What fraction of the batch remains?",
+        "options": [
+          "7/12",
+          "5/12",
+          "5/24",
+          "1/6"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Two hours complete2(1/8+1/12)=5/12;7/12 remains.",
+          "This is completed, not remaining.",
+          "This is joint output for one hour.",
+          "This is B's output alone for two hours."
+        ],
+        "repairs": [
+          "Two hours complete2(1/8+1/12)=5/12;7/12 remains. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This is completed, not remaining. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This is joint output for one hour. Rebuild the work/rate/time relation with matching units before calculating.",
+          "This is B's output alone for two hours. Rebuild the work/rate/time relation with matching units before calculating."
+        ],
+        "reason_prompt": "Which principle supports the answer?",
+        "reason_options": [
+          "Subtract elapsed time times the summed rates from one whole batch.",
+          "The combined hourly rate is already the remaining fraction."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Subtract elapsed time times the summed rates from one whole batch."
+      }
+    ]
+  },
+  "sources": [
+    "Original Phase D authorship; conservation-of-work reasoning. Private cached SSC switching-time reference used only for family analysis."
+  ],
+  "subject_review": "",
+  "teaching_review": "",
+  "review_digest": ""
+}
