@@ -1,0 +1,743 @@
+{
+  "objective_id": "SYL-4",
+  "prerequisites": [
+    "Translate categorical statements and distinguish witnesses from forbidden regions.",
+    "Test all premises in one complete finite model.",
+    "Understand why a single countermodel refutes necessity (SYL-3)."
+  ],
+  "explanation": "Construct a counterexample rather than choosing a prepared drawing. Keep every premise true while making the proposed conclusion false. Add objects and specify exactly which categories each belongs to. No listed objects means an empty population. An object with no named memberships lies outside all named categories. Universal statements do not require existence in this unit.",
+  "worked": [
+    {
+      "action": "Premise: all X are Y. Proposed conclusion: all Y are X. Start with an empty population.",
+      "justification": "The premise is true, but the conclusion is also true; this is not yet a counterexample."
+    },
+    {
+      "action": "Add one object belonging to Y only, leaving X unchecked.",
+      "justification": "Every X is still Y, because there is no X. The Y-only object falsifies the conclusion."
+    },
+    {
+      "action": "If the premise instead includes some X are Y, add a second object in both X and Y.",
+      "justification": "The new witness satisfies the existential premise while the first Y-only object still refutes the converse."
+    },
+    {
+      "action": "To falsify some X are Z, keep the X/Z overlap empty while satisfying any other witness requirements with separate objects.",
+      "justification": "A counterexample to an existential conclusion need not add a violating object; it removes every possible witness in that model."
+    },
+    {
+      "action": "To falsify no X are Z, place an object in both X and Z, then check it against every premise.",
+      "justification": "A single overlapping witness falsifies a universal exclusion, but it cannot be used if a premise forbids that overlap."
+    },
+    {
+      "action": "To falsify some X are not Z, place every X inside Z, or keep X empty if the premises allow it.",
+      "justification": "The proposed outside witness must be absent. Existential premises may prevent using the empty model."
+    },
+    {
+      "action": "Before submitting, test each premise, then the conclusion, against the same complete object list.",
+      "justification": "Using different diagrams for different premises does not establish a counterexample."
+    }
+  ],
+  "hint": "Negate the proposed conclusion: all -> some-not; no -> some; some -> no; some-not -> all. Build that condition without breaking any premise.",
+  "shortcut": "Start from required witnesses, then add only the memberships needed by universal constraints. Look for the smallest countermodel.",
+  "limitation": "This bounded editor accepts up to eight objects and four named categories. These authored tasks have small countermodels. It uses the explicitly stated no-existential-import convention.",
+  "checks": {
+    "entry": [
+      {
+        "id": "SYL-4-1",
+        "family": "reverse-inclusion",
+        "context": "reverse-inclusion",
+        "stem": "Premises: All A are B. Proposed conclusion: All B are A. What evidence would establish that the conclusion does not necessarily follow? After saving your answer, construct that evidence with objects.",
+        "options": [
+          "A model where the conclusion is true.",
+          "One complete model where every premise is true and the conclusion is false.",
+          "One model where a premise is false.",
+          "A different model for each premise, with no common population."
+        ],
+        "answer": 2,
+        "explanations": [
+          "One supporting example shows possibility, not necessity or its failure.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement.",
+          "Breaking a premise makes the model irrelevant to the argument.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement."
+        ],
+        "repairs": [
+          "One supporting example shows possibility, not necessity or its failure. Recheck the membership of each object against each premise before testing the conclusion.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Breaking a premise makes the model irrelevant to the argument. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement. Recheck the membership of each object against each premise before testing the conclusion."
+        ],
+        "reason_prompt": "What must your constructed evidence preserve?",
+        "reason_options": [
+          "Every premise true, proposed conclusion false, all in the same population.",
+          "At least one true premise is enough, regardless of the others.",
+          "A true conclusion is enough, even if a premise fails.",
+          "Named categories must contain objects even when no existential statement requires them."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A countermodel satisfies the entire premise set while falsifying the conclusion. The submitted object list is checked for both conditions.",
+        "construction": {
+          "terms": [
+            "A",
+            "B",
+            "C"
+          ],
+          "premises": [
+            [
+              "all",
+              "A",
+              "B"
+            ]
+          ],
+          "conclusion": [
+            "all",
+            "B",
+            "A"
+          ]
+        }
+      },
+      {
+        "id": "SYL-4-2",
+        "family": "nonexistence",
+        "context": "nonexistence",
+        "stem": "Premises: No A are B. Proposed conclusion: Some A are A. What evidence would establish that the conclusion does not necessarily follow? After saving your answer, construct that evidence with objects.",
+        "options": [
+          "A model where the conclusion is true.",
+          "One complete model where every premise is true and the conclusion is false.",
+          "One model where a premise is false.",
+          "A different model for each premise, with no common population."
+        ],
+        "answer": 2,
+        "explanations": [
+          "One supporting example shows possibility, not necessity or its failure.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement.",
+          "Breaking a premise makes the model irrelevant to the argument.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement."
+        ],
+        "repairs": [
+          "One supporting example shows possibility, not necessity or its failure. Recheck the membership of each object against each premise before testing the conclusion.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Breaking a premise makes the model irrelevant to the argument. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement. Recheck the membership of each object against each premise before testing the conclusion."
+        ],
+        "reason_prompt": "What must your constructed evidence preserve?",
+        "reason_options": [
+          "Every premise true, proposed conclusion false, all in the same population.",
+          "At least one true premise is enough, regardless of the others.",
+          "A true conclusion is enough, even if a premise fails.",
+          "Named categories must contain objects even when no existential statement requires them."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A countermodel satisfies the entire premise set while falsifying the conclusion. The submitted object list is checked for both conditions.",
+        "construction": {
+          "terms": [
+            "A",
+            "B",
+            "C"
+          ],
+          "premises": [
+            [
+              "no",
+              "A",
+              "B"
+            ]
+          ],
+          "conclusion": [
+            "some",
+            "A",
+            "A"
+          ]
+        }
+      }
+    ],
+    "faded": [
+      {
+        "id": "SYL-4-3",
+        "family": "common-membership",
+        "context": "common-membership",
+        "stem": "Premises: All A are B. Some C are B. Proposed conclusion: Some A are C. What evidence would establish that the conclusion does not necessarily follow? After saving your answer, construct that evidence with objects. Partly worked: some C are B requires object1 in C and B. The universal all A are B adds no A membership to that object. Keep object1, decide whether any A object is required, and finish a model where no object is in both A and C.",
+        "options": [
+          "A model where the conclusion is true.",
+          "One complete model where every premise is true and the conclusion is false.",
+          "One model where a premise is false.",
+          "A different model for each premise, with no common population."
+        ],
+        "answer": 2,
+        "explanations": [
+          "One supporting example shows possibility, not necessity or its failure.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement.",
+          "Breaking a premise makes the model irrelevant to the argument.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement."
+        ],
+        "repairs": [
+          "One supporting example shows possibility, not necessity or its failure. Recheck the membership of each object against each premise before testing the conclusion.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Breaking a premise makes the model irrelevant to the argument. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement. Recheck the membership of each object against each premise before testing the conclusion."
+        ],
+        "reason_prompt": "What must your constructed evidence preserve?",
+        "reason_options": [
+          "Every premise true, proposed conclusion false, all in the same population.",
+          "At least one true premise is enough, regardless of the others.",
+          "A true conclusion is enough, even if a premise fails.",
+          "Named categories must contain objects even when no existential statement requires them."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A countermodel satisfies the entire premise set while falsifying the conclusion. The submitted object list is checked for both conditions.",
+        "construction": {
+          "terms": [
+            "A",
+            "B",
+            "C"
+          ],
+          "premises": [
+            [
+              "all",
+              "A",
+              "B"
+            ],
+            [
+              "some",
+              "C",
+              "B"
+            ]
+          ],
+          "conclusion": [
+            "some",
+            "A",
+            "C"
+          ]
+        }
+      },
+      {
+        "id": "SYL-4-4",
+        "family": "outside-subset",
+        "context": "outside-subset",
+        "stem": "Premises: Some A are not B. All A are C. Proposed conclusion: All C are A. What evidence would establish that the conclusion does not necessarily follow? After saving your answer, construct that evidence with objects. Partly worked: some A are not B requires object1 in A and outside B. All A are C forces that same object into C, so begin with object1 in A,C only. This object does not falsify all C are A. Add a suitable object that does, while checking both premises again.",
+        "options": [
+          "A model where the conclusion is true.",
+          "One complete model where every premise is true and the conclusion is false.",
+          "One model where a premise is false.",
+          "A different model for each premise, with no common population."
+        ],
+        "answer": 2,
+        "explanations": [
+          "One supporting example shows possibility, not necessity or its failure.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement.",
+          "Breaking a premise makes the model irrelevant to the argument.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement."
+        ],
+        "repairs": [
+          "One supporting example shows possibility, not necessity or its failure. Recheck the membership of each object against each premise before testing the conclusion.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Breaking a premise makes the model irrelevant to the argument. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement. Recheck the membership of each object against each premise before testing the conclusion."
+        ],
+        "reason_prompt": "What must your constructed evidence preserve?",
+        "reason_options": [
+          "Every premise true, proposed conclusion false, all in the same population.",
+          "At least one true premise is enough, regardless of the others.",
+          "A true conclusion is enough, even if a premise fails.",
+          "Named categories must contain objects even when no existential statement requires them."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A countermodel satisfies the entire premise set while falsifying the conclusion. The submitted object list is checked for both conditions.",
+        "construction": {
+          "terms": [
+            "A",
+            "B",
+            "C"
+          ],
+          "premises": [
+            [
+              "some_not",
+              "A",
+              "B"
+            ],
+            [
+              "all",
+              "A",
+              "C"
+            ]
+          ],
+          "conclusion": [
+            "all",
+            "C",
+            "A"
+          ]
+        }
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "SYL-4-5",
+        "family": "subset-without-witness",
+        "context": "subset-without-witness",
+        "stem": "Premises: Some A are B. All C are A. Proposed conclusion: Some B are C. What evidence would establish that the conclusion does not necessarily follow? After saving your answer, construct that evidence with objects.",
+        "options": [
+          "A model where the conclusion is true.",
+          "One complete model where every premise is true and the conclusion is false.",
+          "One model where a premise is false.",
+          "A different model for each premise, with no common population."
+        ],
+        "answer": 2,
+        "explanations": [
+          "One supporting example shows possibility, not necessity or its failure.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement.",
+          "Breaking a premise makes the model irrelevant to the argument.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement."
+        ],
+        "repairs": [
+          "One supporting example shows possibility, not necessity or its failure. Recheck the membership of each object against each premise before testing the conclusion.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Breaking a premise makes the model irrelevant to the argument. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement. Recheck the membership of each object against each premise before testing the conclusion."
+        ],
+        "reason_prompt": "What must your constructed evidence preserve?",
+        "reason_options": [
+          "Every premise true, proposed conclusion false, all in the same population.",
+          "At least one true premise is enough, regardless of the others.",
+          "A true conclusion is enough, even if a premise fails.",
+          "Named categories must contain objects even when no existential statement requires them."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A countermodel satisfies the entire premise set while falsifying the conclusion. The submitted object list is checked for both conditions.",
+        "construction": {
+          "terms": [
+            "A",
+            "B",
+            "C"
+          ],
+          "premises": [
+            [
+              "some",
+              "A",
+              "B"
+            ],
+            [
+              "all",
+              "C",
+              "A"
+            ]
+          ],
+          "conclusion": [
+            "some",
+            "B",
+            "C"
+          ]
+        }
+      },
+      {
+        "id": "SYL-4-6",
+        "family": "negative-witness-location",
+        "context": "negative-witness-location",
+        "stem": "Premises: All A are B. Some B are not C. Proposed conclusion: Some A are not C. What evidence would establish that the conclusion does not necessarily follow? After saving your answer, construct that evidence with objects.",
+        "options": [
+          "A model where the conclusion is true.",
+          "One complete model where every premise is true and the conclusion is false.",
+          "One model where a premise is false.",
+          "A different model for each premise, with no common population."
+        ],
+        "answer": 2,
+        "explanations": [
+          "One supporting example shows possibility, not necessity or its failure.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement.",
+          "Breaking a premise makes the model irrelevant to the argument.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement."
+        ],
+        "repairs": [
+          "One supporting example shows possibility, not necessity or its failure. Recheck the membership of each object against each premise before testing the conclusion.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Breaking a premise makes the model irrelevant to the argument. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement. Recheck the membership of each object against each premise before testing the conclusion."
+        ],
+        "reason_prompt": "What must your constructed evidence preserve?",
+        "reason_options": [
+          "Every premise true, proposed conclusion false, all in the same population.",
+          "At least one true premise is enough, regardless of the others.",
+          "A true conclusion is enough, even if a premise fails.",
+          "Named categories must contain objects even when no existential statement requires them."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A countermodel satisfies the entire premise set while falsifying the conclusion. The submitted object list is checked for both conditions.",
+        "construction": {
+          "terms": [
+            "A",
+            "B",
+            "C"
+          ],
+          "premises": [
+            [
+              "all",
+              "A",
+              "B"
+            ],
+            [
+              "some_not",
+              "B",
+              "C"
+            ]
+          ],
+          "conclusion": [
+            "some_not",
+            "A",
+            "C"
+          ]
+        }
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "SYL-4-7",
+        "family": "unrestricted-extra-member",
+        "context": "unrestricted-extra-member",
+        "stem": "Premises: No A are B. Some B are C. Proposed conclusion: All C are B. What evidence would establish that the conclusion does not necessarily follow? After saving your answer, construct that evidence with objects.",
+        "options": [
+          "A model where the conclusion is true.",
+          "One complete model where every premise is true and the conclusion is false.",
+          "One model where a premise is false.",
+          "A different model for each premise, with no common population."
+        ],
+        "answer": 2,
+        "explanations": [
+          "One supporting example shows possibility, not necessity or its failure.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement.",
+          "Breaking a premise makes the model irrelevant to the argument.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement."
+        ],
+        "repairs": [
+          "One supporting example shows possibility, not necessity or its failure. Recheck the membership of each object against each premise before testing the conclusion.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Breaking a premise makes the model irrelevant to the argument. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement. Recheck the membership of each object against each premise before testing the conclusion."
+        ],
+        "reason_prompt": "What must your constructed evidence preserve?",
+        "reason_options": [
+          "Every premise true, proposed conclusion false, all in the same population.",
+          "At least one true premise is enough, regardless of the others.",
+          "A true conclusion is enough, even if a premise fails.",
+          "Named categories must contain objects even when no existential statement requires them."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A countermodel satisfies the entire premise set while falsifying the conclusion. The submitted object list is checked for both conditions.",
+        "construction": {
+          "terms": [
+            "A",
+            "B",
+            "C"
+          ],
+          "premises": [
+            [
+              "no",
+              "A",
+              "B"
+            ],
+            [
+              "some",
+              "B",
+              "C"
+            ]
+          ],
+          "conclusion": [
+            "all",
+            "C",
+            "B"
+          ]
+        }
+      },
+      {
+        "id": "SYL-4-8",
+        "family": "exclusion-not-inherited-upward",
+        "context": "exclusion-not-inherited-upward",
+        "stem": "Premises: All A are B. No C are A. Proposed conclusion: No B are C. What evidence would establish that the conclusion does not necessarily follow? After saving your answer, construct that evidence with objects.",
+        "options": [
+          "A model where the conclusion is true.",
+          "One complete model where every premise is true and the conclusion is false.",
+          "One model where a premise is false.",
+          "A different model for each premise, with no common population."
+        ],
+        "answer": 2,
+        "explanations": [
+          "One supporting example shows possibility, not necessity or its failure.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement.",
+          "Breaking a premise makes the model irrelevant to the argument.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement."
+        ],
+        "repairs": [
+          "One supporting example shows possibility, not necessity or its failure. Recheck the membership of each object against each premise before testing the conclusion.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Breaking a premise makes the model irrelevant to the argument. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement. Recheck the membership of each object against each premise before testing the conclusion."
+        ],
+        "reason_prompt": "What must your constructed evidence preserve?",
+        "reason_options": [
+          "Every premise true, proposed conclusion false, all in the same population.",
+          "At least one true premise is enough, regardless of the others.",
+          "A true conclusion is enough, even if a premise fails.",
+          "Named categories must contain objects even when no existential statement requires them."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A countermodel satisfies the entire premise set while falsifying the conclusion. The submitted object list is checked for both conditions.",
+        "construction": {
+          "terms": [
+            "A",
+            "B",
+            "C"
+          ],
+          "premises": [
+            [
+              "all",
+              "A",
+              "B"
+            ],
+            [
+              "no",
+              "C",
+              "A"
+            ]
+          ],
+          "conclusion": [
+            "no",
+            "B",
+            "C"
+          ]
+        }
+      }
+    ],
+    "revision": [
+      {
+        "id": "SYL-4-9",
+        "family": "outside-two-sets",
+        "context": "outside-two-sets",
+        "stem": "Premises: Some A are not B. No B are C. Proposed conclusion: Some A are C. What evidence would establish that the conclusion does not necessarily follow? After saving your answer, construct that evidence with objects.",
+        "options": [
+          "A model where the conclusion is true.",
+          "One complete model where every premise is true and the conclusion is false.",
+          "One model where a premise is false.",
+          "A different model for each premise, with no common population."
+        ],
+        "answer": 2,
+        "explanations": [
+          "One supporting example shows possibility, not necessity or its failure.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement.",
+          "Breaking a premise makes the model irrelevant to the argument.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement."
+        ],
+        "repairs": [
+          "One supporting example shows possibility, not necessity or its failure. Recheck the membership of each object against each premise before testing the conclusion.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Breaking a premise makes the model irrelevant to the argument. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement. Recheck the membership of each object against each premise before testing the conclusion."
+        ],
+        "reason_prompt": "What must your constructed evidence preserve?",
+        "reason_options": [
+          "Every premise true, proposed conclusion false, all in the same population.",
+          "At least one true premise is enough, regardless of the others.",
+          "A true conclusion is enough, even if a premise fails.",
+          "Named categories must contain objects even when no existential statement requires them."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A countermodel satisfies the entire premise set while falsifying the conclusion. The submitted object list is checked for both conditions.",
+        "construction": {
+          "terms": [
+            "A",
+            "B",
+            "C"
+          ],
+          "premises": [
+            [
+              "some_not",
+              "A",
+              "B"
+            ],
+            [
+              "no",
+              "B",
+              "C"
+            ]
+          ],
+          "conclusion": [
+            "some",
+            "A",
+            "C"
+          ]
+        }
+      },
+      {
+        "id": "SYL-4-10",
+        "family": "three-level-converse",
+        "context": "three-level-converse",
+        "stem": "Premises: All A are B. All B are C. Proposed conclusion: All C are A. What evidence would establish that the conclusion does not necessarily follow? After saving your answer, construct that evidence with objects.",
+        "options": [
+          "A model where the conclusion is true.",
+          "One complete model where every premise is true and the conclusion is false.",
+          "One model where a premise is false.",
+          "A different model for each premise, with no common population."
+        ],
+        "answer": 2,
+        "explanations": [
+          "One supporting example shows possibility, not necessity or its failure.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement.",
+          "Breaking a premise makes the model irrelevant to the argument.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement."
+        ],
+        "repairs": [
+          "One supporting example shows possibility, not necessity or its failure. Recheck the membership of each object against each premise before testing the conclusion.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Breaking a premise makes the model irrelevant to the argument. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement. Recheck the membership of each object against each premise before testing the conclusion."
+        ],
+        "reason_prompt": "What must your constructed evidence preserve?",
+        "reason_options": [
+          "Every premise true, proposed conclusion false, all in the same population.",
+          "At least one true premise is enough, regardless of the others.",
+          "A true conclusion is enough, even if a premise fails.",
+          "Named categories must contain objects even when no existential statement requires them."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A countermodel satisfies the entire premise set while falsifying the conclusion. The submitted object list is checked for both conditions.",
+        "construction": {
+          "terms": [
+            "A",
+            "B",
+            "C"
+          ],
+          "premises": [
+            [
+              "all",
+              "A",
+              "B"
+            ],
+            [
+              "all",
+              "B",
+              "C"
+            ]
+          ],
+          "conclusion": [
+            "all",
+            "C",
+            "A"
+          ]
+        }
+      },
+      {
+        "id": "SYL-4-11",
+        "family": "existential-not-universal",
+        "context": "existential-not-universal",
+        "stem": "Premises: Some A are C. No B are C. Proposed conclusion: All A are C. What evidence would establish that the conclusion does not necessarily follow? After saving your answer, construct that evidence with objects.",
+        "options": [
+          "A model where the conclusion is true.",
+          "One complete model where every premise is true and the conclusion is false.",
+          "One model where a premise is false.",
+          "A different model for each premise, with no common population."
+        ],
+        "answer": 2,
+        "explanations": [
+          "One supporting example shows possibility, not necessity or its failure.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement.",
+          "Breaking a premise makes the model irrelevant to the argument.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement."
+        ],
+        "repairs": [
+          "One supporting example shows possibility, not necessity or its failure. Recheck the membership of each object against each premise before testing the conclusion.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Breaking a premise makes the model irrelevant to the argument. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement. Recheck the membership of each object against each premise before testing the conclusion."
+        ],
+        "reason_prompt": "What must your constructed evidence preserve?",
+        "reason_options": [
+          "Every premise true, proposed conclusion false, all in the same population.",
+          "At least one true premise is enough, regardless of the others.",
+          "A true conclusion is enough, even if a premise fails.",
+          "Named categories must contain objects even when no existential statement requires them."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A countermodel satisfies the entire premise set while falsifying the conclusion. The submitted object list is checked for both conditions.",
+        "construction": {
+          "terms": [
+            "A",
+            "B",
+            "C"
+          ],
+          "premises": [
+            [
+              "some",
+              "A",
+              "C"
+            ],
+            [
+              "no",
+              "B",
+              "C"
+            ]
+          ],
+          "conclusion": [
+            "all",
+            "A",
+            "C"
+          ]
+        }
+      },
+      {
+        "id": "SYL-4-12",
+        "family": "outside-small-not-large",
+        "context": "outside-small-not-large",
+        "stem": "Premises: Some C are not A. All A are B. Proposed conclusion: Some C are not B. What evidence would establish that the conclusion does not necessarily follow? After saving your answer, construct that evidence with objects.",
+        "options": [
+          "A model where the conclusion is true.",
+          "One complete model where every premise is true and the conclusion is false.",
+          "One model where a premise is false.",
+          "A different model for each premise, with no common population."
+        ],
+        "answer": 2,
+        "explanations": [
+          "One supporting example shows possibility, not necessity or its failure.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement.",
+          "Breaking a premise makes the model irrelevant to the argument.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement."
+        ],
+        "repairs": [
+          "One supporting example shows possibility, not necessity or its failure. Recheck the membership of each object against each premise before testing the conclusion.",
+          "A valid countermodel is sufficient: the conclusion fails in at least one allowed arrangement. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Breaking a premise makes the model irrelevant to the argument. Recheck the membership of each object against each premise before testing the conclusion.",
+          "Every premise must hold together in the same model; separate demonstrations do not meet that requirement. Recheck the membership of each object against each premise before testing the conclusion."
+        ],
+        "reason_prompt": "What must your constructed evidence preserve?",
+        "reason_options": [
+          "Every premise true, proposed conclusion false, all in the same population.",
+          "At least one true premise is enough, regardless of the others.",
+          "A true conclusion is enough, even if a premise fails.",
+          "Named categories must contain objects even when no existential statement requires them."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "A countermodel satisfies the entire premise set while falsifying the conclusion. The submitted object list is checked for both conditions.",
+        "construction": {
+          "terms": [
+            "A",
+            "B",
+            "C"
+          ],
+          "premises": [
+            [
+              "some_not",
+              "C",
+              "A"
+            ],
+            [
+              "all",
+              "A",
+              "B"
+            ]
+          ],
+          "conclusion": [
+            "some_not",
+            "C",
+            "B"
+          ]
+        }
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored counterexample construction tasks. Categorical validity checked by finite-model enumeration; not authenticated PYQs."
+  ]
+}

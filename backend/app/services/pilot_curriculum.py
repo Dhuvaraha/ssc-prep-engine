@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, model_validator
 from app.services.teaching_journey import JourneyContent, JourneyConflict
+from app.services.countermodel import CountermodelTask
 
 DATA = Path(__file__).resolve().parents[2] / 'data'
 SCOPE = json.loads((DATA / 'phase_d_scope.json').read_text(encoding='utf-8'))
@@ -63,6 +64,8 @@ class Check(BaseModel):
     passage: str | None = None
     figure: Figure | None = None
     diagram: Scene | None = None
+    construction: CountermodelTask | None = None
+    positional_figure_options: bool = False
 
     @model_validator(mode='after')
     def complete(self):
@@ -73,6 +76,8 @@ class Check(BaseModel):
             raise ValueError('Duplicate choices')
         if self.reason_answer > len(self.reason_options):
             raise ValueError('Reason key outside choices')
+        if self.positional_figure_options and (not self.figure or self.options!=['Figure 1','Figure 2','Figure 3','Figure 4']):
+            raise ValueError('Positional figures require four neutral canonical labels')
         return self
 
 
@@ -110,6 +115,13 @@ class ObjectiveUnit(BaseModel):
 
     def digest(self):
         payload = self.model_dump(exclude={'subject_review','teaching_review','review_digest'})
+        # Adding an optional response type must not invalidate earlier pinned units.
+        for checks in payload['checks'].values():
+            for check in checks:
+                if check.get('construction') is None:
+                    check.pop('construction',None)
+                if not check.get('positional_figure_options'):
+                    check.pop('positional_figure_options',None)
         return hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 
     def reviewed(self):
@@ -129,7 +141,7 @@ class ObjectiveUnit(BaseModel):
             available = [q for q in self.checks[state['stage']] if q.id not in seen]
             if not available:
                 raise JourneyConflict('No fresh reviewed check remains; further editorial content is required')
-            return available[0].model_dump(exclude_none=True)
+            return available[0].model_dump(mode='json',exclude_none=True)
         lesson = dict(objective=OBJECTIVES[self.objective_id]['description'],
             prerequisites=self.prerequisites,worked_example=[self.explanation]+[
                 step.action+' — '+step.justification for step in self.worked],

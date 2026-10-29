@@ -35,6 +35,7 @@ class Action(BaseModel):
     selected: StrictInt | None = Field(default=None,ge=1,le=4)
     reason_selected: StrictInt | None = Field(default=None,ge=1,le=4)
     guessed: StrictBool = False
+    model: list[list[str]] | None = Field(default=None,max_length=8)
 
 
 def now():
@@ -111,7 +112,8 @@ def act(objective_id: str, payload: Action, db: Session=Depends(get_db), user: U
         raise HTTPException(409,'Progress changed; reload the journey')
     try:
         state=journey.advance(content,json.loads(row.state) if row else journey.initial(content),
-            payload.action,payload.selected,now(),reason_selected=payload.reason_selected,guessed=payload.guessed)
+            payload.action,payload.selected,now(),reason_selected=payload.reason_selected,
+            guessed=payload.guessed,model=payload.model)
         response=journey.view(content,state,revision+1)
     except journey.JourneyConflict as error:
         raise HTTPException(409,str(error)) from error

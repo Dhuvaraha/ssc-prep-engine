@@ -1,0 +1,468 @@
+{
+  "objective_id": "ENG-2",
+  "prerequisites": [
+    "Find the head of the main subject, separating it from objects and modifiers.",
+    "Distinguish singular from plural; recognize the simple present and the base form of a verb."
+  ],
+  "explanation": "Agreement links the main subject to its finite verb. Intervening of-phrases and relative clauses do not change the main head. In the simple present, a third-person singular subject normally uses a verb ending in -s; a plural subject uses the base form. Be uses is/are. A passive keeps agreement in is/are before the past participle. A negative uses does not/do not before a base verb.",
+  "worked": [
+    {
+      "action": "The handle [of the cupboards] is broken: handle is singular.",
+      "justification": "Cupboards belongs to a modifier. Select is, not are."
+    },
+    {
+      "action": "The parcels [on the desk] arrive daily: parcels is plural.",
+      "justification": "Desk describes location, so it cannot select arrives."
+    },
+    {
+      "action": "The teacher [who works with the pupils] checks the books.",
+      "justification": "Teacher heads the main clause; who heads the relative clause. Keep the two agreement relationships separate."
+    },
+    {
+      "action": "The driver, along with the helpers, checks the tyres.",
+      "justification": "Along with is not the coordinator and; driver remains the singular main head."
+    },
+    {
+      "action": "The driver and the mechanic check the tyres, when these are two people.",
+      "justification": "Two separate people joined by and create a plural subject."
+    },
+    {
+      "action": "Neither of the keys fits; Each of the keys fits.",
+      "justification": "In the formal convention for these questions, Neither and Each are singular heads. Do not select a plural form from keys."
+    },
+    {
+      "action": "Beside the pump stand three buckets.",
+      "justification": "The subject follows the verb in inversion. Three buckets is plural."
+    },
+    {
+      "action": "The record of repairs is checked weekly; the records do not require copying.",
+      "justification": "The singular passive uses is checked. The plural negative uses do not plus base-form require."
+    }
+  ],
+  "hint": "Find the main subject head before looking at the nearest noun. Then check the requested tense and voice.",
+  "shortcut": "Bracket intervening phrases temporarily, agree the main verb, then restore the complete sentence.",
+  "limitation": "Do not treat every pair joined by and as two people or every collective noun as invariably singular. These checks specify unambiguous subjects and formal written usage; semantic and dialect alternatives require context.",
+  "checks": {
+    "entry": [
+      {
+        "id": "ENG-2-1",
+        "family": "singular-head",
+        "context": "The lid of the jars ___ loose.",
+        "stem": "Choose the simple present form. Complete: The lid of the jars ___ loose.",
+        "options": [
+          "is",
+          "are",
+          "were",
+          "have been"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Lid is the singular head; of the jars does not make it plural. is completes the requested form.",
+          "are mismatches the number of the main subject in the requested form. Lid is the singular head; of the jars does not make it plural.",
+          "were does not supply the requested simple-present form with this subject. Lid is the singular head; of the jars does not make it plural.",
+          "have been does not supply the requested simple-present form with this subject. Lid is the singular head; of the jars does not make it plural."
+        ],
+        "repairs": [
+          "Lid is the singular head; of the jars does not make it plural. is completes the requested form. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "are mismatches the number of the main subject in the requested form. Lid is the singular head; of the jars does not make it plural. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "were does not supply the requested simple-present form with this subject. Lid is the singular head; of the jars does not make it plural. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "have been does not supply the requested simple-present form with this subject. Lid is the singular head; of the jars does not make it plural. Bracket modifiers, identify the main head, then rebuild the requested verb phrase."
+        ],
+        "reason_prompt": "Which analysis explains the agreement?",
+        "reason_options": [
+          "The head is lid; choose the singular present form is.",
+          "The nearest noun to the blank determines agreement even when it is inside a modifier.",
+          "The presence of any plural noun makes the whole subject plural.",
+          "A phrase about location or companions always replaces the main subject head."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The head is lid; choose the singular present form is."
+      },
+      {
+        "id": "ENG-2-2",
+        "family": "plural-head",
+        "context": "The labels on the bottle ___ clear.",
+        "stem": "Choose the simple present form. Complete: The labels on the bottle ___ clear.",
+        "options": [
+          "is",
+          "are",
+          "was",
+          "has been"
+        ],
+        "answer": 2,
+        "explanations": [
+          "is mismatches the number of the main subject in the requested form. Labels is plural; bottle belongs to a modifying phrase.",
+          "Labels is plural; bottle belongs to a modifying phrase. are completes the requested form.",
+          "was does not supply the requested simple-present form with this subject. Labels is plural; bottle belongs to a modifying phrase.",
+          "has been does not supply the requested simple-present form with this subject. Labels is plural; bottle belongs to a modifying phrase."
+        ],
+        "repairs": [
+          "is mismatches the number of the main subject in the requested form. Labels is plural; bottle belongs to a modifying phrase. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "Labels is plural; bottle belongs to a modifying phrase. are completes the requested form. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "was does not supply the requested simple-present form with this subject. Labels is plural; bottle belongs to a modifying phrase. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "has been does not supply the requested simple-present form with this subject. Labels is plural; bottle belongs to a modifying phrase. Bracket modifiers, identify the main head, then rebuild the requested verb phrase."
+        ],
+        "reason_prompt": "Which analysis explains the agreement?",
+        "reason_options": [
+          "The head is labels; choose the plural present form are.",
+          "The nearest noun to the blank determines agreement even when it is inside a modifier.",
+          "The presence of any plural noun makes the whole subject plural.",
+          "A phrase about location or companions always replaces the main subject head."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The head is labels; choose the plural present form are."
+      }
+    ],
+    "faded": [
+      {
+        "id": "ENG-2-3",
+        "family": "each",
+        "context": "Each of the runners ___ a numbered vest.",
+        "stem": "Choose the simple present form. Partly worked: bracket [of the runners]; Each remains. Complete: Each of the runners ___ a numbered vest.",
+        "options": [
+          "wear",
+          "wears",
+          "have worn",
+          "are wearing"
+        ],
+        "answer": 2,
+        "explanations": [
+          "wear mismatches the number of the main subject in the requested form. Each considers one member at a time and takes wears in the simple present.",
+          "Each considers one member at a time and takes wears in the simple present. wears completes the requested form.",
+          "have worn does not supply the requested simple-present form with this subject. Each considers one member at a time and takes wears in the simple present.",
+          "are wearing does not supply the requested simple-present form with this subject. Each considers one member at a time and takes wears in the simple present."
+        ],
+        "repairs": [
+          "wear mismatches the number of the main subject in the requested form. Each considers one member at a time and takes wears in the simple present. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "Each considers one member at a time and takes wears in the simple present. wears completes the requested form. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "have worn does not supply the requested simple-present form with this subject. Each considers one member at a time and takes wears in the simple present. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "are wearing does not supply the requested simple-present form with this subject. Each considers one member at a time and takes wears in the simple present. Bracket modifiers, identify the main head, then rebuild the requested verb phrase."
+        ],
+        "reason_prompt": "Which analysis explains the agreement?",
+        "reason_options": [
+          "Each, not runners, is the head, so wears agrees.",
+          "The nearest noun to the blank determines agreement even when it is inside a modifier.",
+          "The presence of any plural noun makes the whole subject plural.",
+          "A phrase about location or companions always replaces the main subject head."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Each, not runners, is the head, so wears agrees."
+      },
+      {
+        "id": "ENG-2-4",
+        "family": "plural-relative",
+        "context": "The students who live near the library ___ early.",
+        "stem": "Choose the simple present form. Partly worked: bracket [who live near the library]; match the main verb to students. Complete: The students who live near the library ___ early.",
+        "options": [
+          "arrives",
+          "is arriving",
+          "arrive",
+          "has arrived"
+        ],
+        "answer": 3,
+        "explanations": [
+          "arrives mismatches the number of the main subject in the requested form. Students is the plural main head; the relative clause describes them.",
+          "is arriving does not supply the requested simple-present form with this subject. Students is the plural main head; the relative clause describes them.",
+          "Students is the plural main head; the relative clause describes them. arrive completes the requested form.",
+          "has arrived does not supply the requested simple-present form with this subject. Students is the plural main head; the relative clause describes them."
+        ],
+        "repairs": [
+          "arrives mismatches the number of the main subject in the requested form. Students is the plural main head; the relative clause describes them. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "is arriving does not supply the requested simple-present form with this subject. Students is the plural main head; the relative clause describes them. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "Students is the plural main head; the relative clause describes them. arrive completes the requested form. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "has arrived does not supply the requested simple-present form with this subject. Students is the plural main head; the relative clause describes them. Bracket modifiers, identify the main head, then rebuild the requested verb phrase."
+        ],
+        "reason_prompt": "Which analysis explains the agreement?",
+        "reason_options": [
+          "The main subject students takes arrive; live belongs to the relative clause.",
+          "The nearest noun to the blank determines agreement even when it is inside a modifier.",
+          "The presence of any plural noun makes the whole subject plural.",
+          "A phrase about location or companions always replaces the main subject head."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The main subject students takes arrive; live belongs to the relative clause."
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "ENG-2-5",
+        "family": "singular-relative",
+        "context": "The guide who knows the mountain paths ___ the group each morning.",
+        "stem": "Choose the simple present form. Complete: The guide who knows the mountain paths ___ the group each morning.",
+        "options": [
+          "lead",
+          "leads",
+          "have led",
+          "are leading"
+        ],
+        "answer": 2,
+        "explanations": [
+          "lead mismatches the number of the main subject in the requested form. Guide is singular; the plural paths is an object inside the relative clause.",
+          "Guide is singular; the plural paths is an object inside the relative clause. leads completes the requested form.",
+          "have led does not supply the requested simple-present form with this subject. Guide is singular; the plural paths is an object inside the relative clause.",
+          "are leading does not supply the requested simple-present form with this subject. Guide is singular; the plural paths is an object inside the relative clause."
+        ],
+        "repairs": [
+          "lead mismatches the number of the main subject in the requested form. Guide is singular; the plural paths is an object inside the relative clause. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "Guide is singular; the plural paths is an object inside the relative clause. leads completes the requested form. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "have led does not supply the requested simple-present form with this subject. Guide is singular; the plural paths is an object inside the relative clause. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "are leading does not supply the requested simple-present form with this subject. Guide is singular; the plural paths is an object inside the relative clause. Bracket modifiers, identify the main head, then rebuild the requested verb phrase."
+        ],
+        "reason_prompt": "Which analysis explains the agreement?",
+        "reason_options": [
+          "Match the main verb leads to guide, not to paths.",
+          "The nearest noun to the blank determines agreement even when it is inside a modifier.",
+          "The presence of any plural noun makes the whole subject plural.",
+          "A phrase about location or companions always replaces the main subject head."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Match the main verb leads to guide, not to paths."
+      },
+      {
+        "id": "ENG-2-6",
+        "family": "along-with",
+        "context": "The librarian, along with two volunteers, ___ the register every evening.",
+        "stem": "Choose the simple present form. Complete: The librarian, along with two volunteers, ___ the register every evening.",
+        "options": [
+          "check",
+          "are checking",
+          "checks",
+          "have checked"
+        ],
+        "answer": 3,
+        "explanations": [
+          "check mismatches the number of the main subject in the requested form. Along with adds a companion phrase rather than a second coordinated subject.",
+          "are checking does not supply the requested simple-present form with this subject. Along with adds a companion phrase rather than a second coordinated subject.",
+          "Along with adds a companion phrase rather than a second coordinated subject. checks completes the requested form.",
+          "have checked does not supply the requested simple-present form with this subject. Along with adds a companion phrase rather than a second coordinated subject."
+        ],
+        "repairs": [
+          "check mismatches the number of the main subject in the requested form. Along with adds a companion phrase rather than a second coordinated subject. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "are checking does not supply the requested simple-present form with this subject. Along with adds a companion phrase rather than a second coordinated subject. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "Along with adds a companion phrase rather than a second coordinated subject. checks completes the requested form. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "have checked does not supply the requested simple-present form with this subject. Along with adds a companion phrase rather than a second coordinated subject. Bracket modifiers, identify the main head, then rebuild the requested verb phrase."
+        ],
+        "reason_prompt": "Which analysis explains the agreement?",
+        "reason_options": [
+          "Librarian remains the singular head and takes checks.",
+          "The nearest noun to the blank determines agreement even when it is inside a modifier.",
+          "The presence of any plural noun makes the whole subject plural.",
+          "A phrase about location or companions always replaces the main subject head."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Librarian remains the singular head and takes checks."
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "ENG-2-7",
+        "family": "coordination",
+        "context": "The mechanic and the electrician ___ the machine daily.",
+        "stem": "Choose the simple present form; the two job titles refer to different people. Complete: The mechanic and the electrician ___ the machine daily.",
+        "options": [
+          "inspects",
+          "inspect",
+          "has inspected",
+          "is inspecting"
+        ],
+        "answer": 2,
+        "explanations": [
+          "inspects mismatches the number of the main subject in the requested form. Two distinct people joined by and form a plural subject.",
+          "Two distinct people joined by and form a plural subject. inspect completes the requested form.",
+          "has inspected does not supply the requested simple-present form with this subject. Two distinct people joined by and form a plural subject.",
+          "is inspecting does not supply the requested simple-present form with this subject. Two distinct people joined by and form a plural subject."
+        ],
+        "repairs": [
+          "inspects mismatches the number of the main subject in the requested form. Two distinct people joined by and form a plural subject. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "Two distinct people joined by and form a plural subject. inspect completes the requested form. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "has inspected does not supply the requested simple-present form with this subject. Two distinct people joined by and form a plural subject. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "is inspecting does not supply the requested simple-present form with this subject. Two distinct people joined by and form a plural subject. Bracket modifiers, identify the main head, then rebuild the requested verb phrase."
+        ],
+        "reason_prompt": "Which analysis explains the agreement?",
+        "reason_options": [
+          "Mechanic and electrician are two coordinated heads, so inspect agrees.",
+          "The nearest noun to the blank determines agreement even when it is inside a modifier.",
+          "The presence of any plural noun makes the whole subject plural.",
+          "A phrase about location or companions always replaces the main subject head."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Mechanic and electrician are two coordinated heads, so inspect agrees."
+      },
+      {
+        "id": "ENG-2-8",
+        "family": "neither-formal",
+        "context": "Neither of the proposed plans ___ the storage problem.",
+        "stem": "Choose the simple present form in formal written English. Complete: Neither of the proposed plans ___ the storage problem.",
+        "options": [
+          "solve",
+          "have solved",
+          "solves",
+          "are solving"
+        ],
+        "answer": 3,
+        "explanations": [
+          "solve mismatches the number of the main subject in the requested form. In the formal standard used here, Neither is singular; plans is inside the of-phrase.",
+          "have solved does not supply the requested simple-present form with this subject. In the formal standard used here, Neither is singular; plans is inside the of-phrase.",
+          "In the formal standard used here, Neither is singular; plans is inside the of-phrase. solves completes the requested form.",
+          "are solving does not supply the requested simple-present form with this subject. In the formal standard used here, Neither is singular; plans is inside the of-phrase."
+        ],
+        "repairs": [
+          "solve mismatches the number of the main subject in the requested form. In the formal standard used here, Neither is singular; plans is inside the of-phrase. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "have solved does not supply the requested simple-present form with this subject. In the formal standard used here, Neither is singular; plans is inside the of-phrase. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "In the formal standard used here, Neither is singular; plans is inside the of-phrase. solves completes the requested form. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "are solving does not supply the requested simple-present form with this subject. In the formal standard used here, Neither is singular; plans is inside the of-phrase. Bracket modifiers, identify the main head, then rebuild the requested verb phrase."
+        ],
+        "reason_prompt": "Which analysis explains the agreement?",
+        "reason_options": [
+          "Neither takes solves in this formal simple-present sentence.",
+          "The nearest noun to the blank determines agreement even when it is inside a modifier.",
+          "The presence of any plural noun makes the whole subject plural.",
+          "A phrase about location or companions always replaces the main subject head."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Neither takes solves in this formal simple-present sentence."
+      }
+    ],
+    "revision": [
+      {
+        "id": "ENG-2-9",
+        "family": "inversion",
+        "context": "Beyond the old sheds ___ two water tanks.",
+        "stem": "Choose the simple present form. Complete: Beyond the old sheds ___ two water tanks.",
+        "options": [
+          "stands",
+          "stand",
+          "has stood",
+          "is standing"
+        ],
+        "answer": 2,
+        "explanations": [
+          "stands mismatches the number of the main subject in the requested form. In this inverted sentence, two water tanks is the plural subject after the verb.",
+          "In this inverted sentence, two water tanks is the plural subject after the verb. stand completes the requested form.",
+          "has stood does not supply the requested simple-present form with this subject. In this inverted sentence, two water tanks is the plural subject after the verb.",
+          "is standing does not supply the requested simple-present form with this subject. In this inverted sentence, two water tanks is the plural subject after the verb."
+        ],
+        "repairs": [
+          "stands mismatches the number of the main subject in the requested form. In this inverted sentence, two water tanks is the plural subject after the verb. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "In this inverted sentence, two water tanks is the plural subject after the verb. stand completes the requested form. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "has stood does not supply the requested simple-present form with this subject. In this inverted sentence, two water tanks is the plural subject after the verb. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "is standing does not supply the requested simple-present form with this subject. In this inverted sentence, two water tanks is the plural subject after the verb. Bracket modifiers, identify the main head, then rebuild the requested verb phrase."
+        ],
+        "reason_prompt": "Which analysis explains the agreement?",
+        "reason_options": [
+          "The tanks stand; beyond the sheds gives location, not the subject.",
+          "The nearest noun to the blank determines agreement even when it is inside a modifier.",
+          "The presence of any plural noun makes the whole subject plural.",
+          "A phrase about location or companions always replaces the main subject head."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The tanks stand; beyond the sheds gives location, not the subject."
+      },
+      {
+        "id": "ENG-2-10",
+        "family": "passive",
+        "context": "The list of overdue books ___ checked each Friday.",
+        "stem": "Choose the simple present passive form. Complete: The list of overdue books ___ checked each Friday.",
+        "options": [
+          "are",
+          "have",
+          "is",
+          "were"
+        ],
+        "answer": 3,
+        "explanations": [
+          "are mismatches the number of the main subject in the requested form. List is singular; the simple-present passive is is checked.",
+          "Have checked would make a perfect active form; the sentence asks for a present passive. List is singular; the simple-present passive is is checked.",
+          "List is singular; the simple-present passive is is checked. is completes the requested form.",
+          "were does not supply the requested simple-present form with this subject. List is singular; the simple-present passive is is checked."
+        ],
+        "repairs": [
+          "are mismatches the number of the main subject in the requested form. List is singular; the simple-present passive is is checked. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "Have checked would make a perfect active form; the sentence asks for a present passive. List is singular; the simple-present passive is is checked. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "List is singular; the simple-present passive is is checked. is completes the requested form. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "were does not supply the requested simple-present form with this subject. List is singular; the simple-present passive is is checked. Bracket modifiers, identify the main head, then rebuild the requested verb phrase."
+        ],
+        "reason_prompt": "Which analysis explains the agreement?",
+        "reason_options": [
+          "The main subject list takes is; books belongs to its modifier.",
+          "The nearest noun to the blank determines agreement even when it is inside a modifier.",
+          "The presence of any plural noun makes the whole subject plural.",
+          "A phrase about location or companions always replaces the main subject head."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The main subject list takes is; books belongs to its modifier."
+      },
+      {
+        "id": "ENG-2-11",
+        "family": "one-among",
+        "context": "One of the doors facing the courtyards ___ shut.",
+        "stem": "Choose the simple present form. Complete: One of the doors facing the courtyards ___ shut.",
+        "options": [
+          "remain",
+          "remains",
+          "have remained",
+          "are remaining"
+        ],
+        "answer": 2,
+        "explanations": [
+          "remain mismatches the number of the main subject in the requested form. One is the singular subject head; doors and courtyards occur in modifiers.",
+          "One is the singular subject head; doors and courtyards occur in modifiers. remains completes the requested form.",
+          "have remained does not supply the requested simple-present form with this subject. One is the singular subject head; doors and courtyards occur in modifiers.",
+          "are remaining does not supply the requested simple-present form with this subject. One is the singular subject head; doors and courtyards occur in modifiers."
+        ],
+        "repairs": [
+          "remain mismatches the number of the main subject in the requested form. One is the singular subject head; doors and courtyards occur in modifiers. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "One is the singular subject head; doors and courtyards occur in modifiers. remains completes the requested form. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "have remained does not supply the requested simple-present form with this subject. One is the singular subject head; doors and courtyards occur in modifiers. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "are remaining does not supply the requested simple-present form with this subject. One is the singular subject head; doors and courtyards occur in modifiers. Bracket modifiers, identify the main head, then rebuild the requested verb phrase."
+        ],
+        "reason_prompt": "Which analysis explains the agreement?",
+        "reason_options": [
+          "One takes remains despite two nearby plural nouns.",
+          "The nearest noun to the blank determines agreement even when it is inside a modifier.",
+          "The presence of any plural noun makes the whole subject plural.",
+          "A phrase about location or companions always replaces the main subject head."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "One takes remains despite two nearby plural nouns."
+      },
+      {
+        "id": "ENG-2-12",
+        "family": "negation",
+        "context": "The instruction sheets inside the sealed packet ___ require a signature.",
+        "stem": "Choose the simple present negative form. Complete: The instruction sheets inside the sealed packet ___ require a signature.",
+        "options": [
+          "does not",
+          "is not",
+          "do not",
+          "has not"
+        ],
+        "answer": 3,
+        "explanations": [
+          "does not mismatches the number of the main subject in the requested form. Sheets is plural, so the simple-present negative uses do not plus the base verb require.",
+          "is not cannot form the requested simple-present negative before the base verb require. Sheets is plural, so the simple-present negative uses do not plus the base verb require.",
+          "Sheets is plural, so the simple-present negative uses do not plus the base verb require. do not completes the requested form.",
+          "has not cannot form the requested simple-present negative before the base verb require. Sheets is plural, so the simple-present negative uses do not plus the base verb require."
+        ],
+        "repairs": [
+          "does not mismatches the number of the main subject in the requested form. Sheets is plural, so the simple-present negative uses do not plus the base verb require. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "is not cannot form the requested simple-present negative before the base verb require. Sheets is plural, so the simple-present negative uses do not plus the base verb require. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "Sheets is plural, so the simple-present negative uses do not plus the base verb require. do not completes the requested form. Bracket modifiers, identify the main head, then rebuild the requested verb phrase.",
+          "has not cannot form the requested simple-present negative before the base verb require. Sheets is plural, so the simple-present negative uses do not plus the base verb require. Bracket modifiers, identify the main head, then rebuild the requested verb phrase."
+        ],
+        "reason_prompt": "Which analysis explains the agreement?",
+        "reason_options": [
+          "The plural main head sheets selects do not, not does not.",
+          "The nearest noun to the blank determines agreement even when it is inside a modifier.",
+          "The presence of any plural noun makes the whole subject plural.",
+          "A phrase about location or companions always replaces the main subject head."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The plural main head sheets selects do not, not does not."
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored agreement examples; not authentic SSC PYQs. Educational and grammatical review pending."
+  ]
+}

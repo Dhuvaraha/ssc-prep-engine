@@ -1,3 +1,67 @@
+# Active continuation - 29 October 2026
+
+**Phase D remains IN PROGRESS: 27 authored drafts / 45 objectives; 0 fully
+reviewed release digests; 0 accepted objectives.** Eighteen objectives still lack
+an authored unit. Scoped independent reviews below do not close objective or
+phase acceptance. The fixed checklist remains `PHASE_D_ACCEPTANCE.md`.
+Phase B stays closed; production, grants and publication are unchanged.
+
+## CI recovery and preserved implementation
+
+- `d35c2db` committed/pushed the previously reviewed objective foundation.
+- `b4525dc` pins both Playwright browser jobs to Ubuntu 24.04. GitHub CI run
+  40706671501 and Phase 0 Browser QA run 40706671822 both passed. This resolves
+  the unsupported Ubuntu runner failure; it does not validate later local edits.
+- The current local work preserves constructed countermodels, neutral shuffled
+  figure labels and diagrams, and exact pinned payload compatibility. A correct
+  option/reason cannot substitute for a required valid countermodel. Passage and
+  diagram context now stays visible during mistake repair as well as feedback.
+- Current drafts: PCT-1-6, TW-1-6, SYL-1-5, MIR-1-5, ENG-1/2/4, RC-1, PHY-1.
+  Missing: ENG-3/5/6, RC-2-6, POL-1-5, PHY-2-6. Do not count draft presence as
+  prerequisite/subject/teaching/API/browser acceptance.
+- Added original subject-head, agreement, article-sound, main-idea and measurement
+  material. RC delayed reading includes an argument and a narrative with bounded
+  inference. No third-party passages or diagrams were published.
+- Scoped independent review corrected a passive-subject/recipient explanation,
+  a repeated Syllogism worked pattern, overly easy RC distractors and repeated
+  Physics delayed conversions. Replacement delayed questions require different
+  constraints, genre transfer, mixed-unit comparison or timestamp subtraction.
+  Full phase educational review and exact editorial digests remain pending.
+
+## Current validation boundary
+
+- Full backend before the final content/API sweep additions: 379 passed,
+  13 PostgreSQL-only skips. Focused construction/content/visual suite: 30 passed;
+  subsequent content suite including Physics checks: 13 passed.
+- Isolated PostgreSQL security/revision/Percentage/objective/construction suite:
+  118 passed. The local server had to be restarted before this successful run;
+  the earlier unavailable-server attempt is not validation evidence.
+- Frontend: 21 tests passed; final TypeScript/Vite build passed. Nine browser
+  flows passed before adding authored RC; the new passage lock/reload/feedback/
+  repair flow passed separately, including a visually inspected 320px screenshot.
+- The later combined browser run hit the existing 120-second aggregate limit
+  during the eighth synthetic topic's valid feedback screen. Identical journey
+  assertions are now eight isolated tests with a 60-second budget each; all
+  eight passed in 2.4 minutes. This synthetic adapter coverage is not educational acceptance.
+- Actual authored payload HTTP sweeps exercise persistent repair, fresh retries,
+  locked answers, reload, denied early revision, delayed-repair non-credit and
+  finite completion under fixture-only authorization. All 27 current payloads passed across the recorded per-objective runs;
+  no draft file receives a test approval stamp.
+
+## Exact same-phase continuation
+
+Finish the eighteen missing objectives, then full objective-specific educational,
+prerequisite, visual/passage and source review across all 45. Complete bounded
+legacy dispositions using existing private evidence, actual eight-topic UI and
+retention evidence, migration/restart/rollback evidence and final phase-wide
+regressions/independent review. Commit/push verified changes after final checks;
+normal Git writes remain authorized. Never infer Phase A release permissions or
+mark Phase D complete from content counts or synthetic fixtures.
+
+---
+
+# Historical continuation - 28 October 2026
+
 # Active continuation — 28 October 2026
 
 **Phase D remains IN PROGRESS.** The fixed denominator is the 45 objectives in

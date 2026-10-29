@@ -1,0 +1,468 @@
+{
+  "objective_id": "PHY-1",
+  "prerequisites": [
+    "Read a measured value as a number together with a unit.",
+    "Multiply and divide fractions; interpret a squared denominator."
+  ],
+  "explanation": "A physical quantity is what is measured; a unit is the agreed comparison used to report it. Length has SI base unit metre (m), time second (s), mass kilogram (kg), and thermodynamic temperature kelvin (K). Derived units follow the operation: length/time is m/s, while velocity change/time is m/s^2. Speed and velocity share units but have different definitions: velocity includes direction. A unit conversion preserves the quantity and changes its numerical representation.",
+  "worked": [
+    {
+      "action": "A length of 2 m means two metre units, not two seconds or a bare number.",
+      "justification": "Identify the measured quantity before choosing a unit."
+    },
+    {
+      "action": "Convert 180 cm to metres: 180 cm * (1 m / 100 cm) = 1.8 m.",
+      "justification": "The centimetre factors cancel. Reporting in a larger unit gives a smaller numerical value."
+    },
+    {
+      "action": "Convert 1.5 minutes to seconds: 1.5 * 60 = 90 s.",
+      "justification": "Reporting the same duration in a smaller unit gives a larger numerical value."
+    },
+    {
+      "action": "Convert 400 ms to seconds: 400/1000 = 0.4 s.",
+      "justification": "Milli means one thousandth; ms is a time unit, distinct from m/s."
+    },
+    {
+      "action": "Divide 12 m by 3 s to get 4 m/s; divide a velocity change of 8 m/s by 2 s to get 4 m/s^2.",
+      "justification": "The numerical values happen to match but the physical quantities and units differ."
+    },
+    {
+      "action": "Convert 36 km/h to m/s: 36*1000/3600 = 10 m/s.",
+      "justification": "Convert both the numerator and denominator rather than relabelling 36."
+    },
+    {
+      "action": "A speed of 6 m/s and a velocity of 6 m/s east have the same unit.",
+      "justification": "Direction and definition distinguish them; the unit alone cannot."
+    },
+    {
+      "action": "Audit an acceleration reported as 2 cm/s^2: its equivalent is 0.02 m/s^2.",
+      "justification": "Only centimetres convert to metres. The two factors of seconds remain in the denominator."
+    }
+  ],
+  "hint": "Name the quantity and track units through every multiplication or division. Do not decide from the number alone.",
+  "shortcut": "Write conversion ratios equal to one so that unwanted units cancel.",
+  "limitation": "Dimensional consistency can reject an invalid unit but cannot prove a numerical result or physical model correct. Quantities with the same dimensions can still have different meanings.",
+  "checks": {
+    "entry": [
+      {
+        "id": "PHY-1-1",
+        "family": "length",
+        "context": "length",
+        "stem": "A ruler reports the length of a rod. Which is the SI base unit for this quantity?",
+        "options": [
+          "metre (m)",
+          "second (s)",
+          "kilogram (kg)",
+          "kelvin (K)"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Metre is the SI base unit of length.",
+          "Second measures time, not rod length.",
+          "Kilogram measures mass, not length.",
+          "Kelvin measures thermodynamic temperature, not length."
+        ],
+        "repairs": [
+          "Metre is the SI base unit of length. Write the quantity, the operation and the units separately before calculating.",
+          "Second measures time, not rod length. Write the quantity, the operation and the units separately before calculating.",
+          "Kilogram measures mass, not length. Write the quantity, the operation and the units separately before calculating.",
+          "Kelvin measures thermodynamic temperature, not length. Write the quantity, the operation and the units separately before calculating."
+        ],
+        "reason_prompt": "Which unit argument supports your answer?",
+        "reason_options": [
+          "The measured quantity is length, whose SI base unit is the metre.",
+          "Changing a unit label never requires changing the numerical value.",
+          "Every quantity associated with motion has the same unit.",
+          "The largest numerical value is correct regardless of the unit."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The measured quantity is length, whose SI base unit is the metre."
+      },
+      {
+        "id": "PHY-1-2",
+        "family": "time",
+        "context": "time",
+        "stem": "A stopwatch measures the elapsed time of a run. Which is the SI base unit for this quantity?",
+        "options": [
+          "metre (m)",
+          "second (s)",
+          "metre per second (m/s)",
+          "metre per second squared (m/s^2)"
+        ],
+        "answer": 2,
+        "explanations": [
+          "Metre measures length.",
+          "Second is the SI base unit of time.",
+          "m/s is a length-per-time unit, not a time unit.",
+          "m/s^2 is a change-of-velocity-per-time unit, not a time unit."
+        ],
+        "repairs": [
+          "Metre measures length. Write the quantity, the operation and the units separately before calculating.",
+          "Second is the SI base unit of time. Write the quantity, the operation and the units separately before calculating.",
+          "m/s is a length-per-time unit, not a time unit. Write the quantity, the operation and the units separately before calculating.",
+          "m/s^2 is a change-of-velocity-per-time unit, not a time unit. Write the quantity, the operation and the units separately before calculating."
+        ],
+        "reason_prompt": "Which unit argument supports your answer?",
+        "reason_options": [
+          "Elapsed time is measured in seconds; no distance is divided by that time in this measurement.",
+          "Changing a unit label never requires changing the numerical value.",
+          "Every quantity associated with motion has the same unit.",
+          "The largest numerical value is correct regardless of the unit."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Elapsed time is measured in seconds; no distance is divided by that time in this measurement."
+      }
+    ],
+    "faded": [
+      {
+        "id": "PHY-1-3",
+        "family": "ratio-unit",
+        "context": "ratio-unit",
+        "stem": "A result is formed by dividing a length measured in metres by a duration measured in seconds. Partly worked: write the units as m divided by s. Which unit completes the calculation?",
+        "options": [
+          "m*s",
+          "m/s",
+          "s/m",
+          "m/s^2"
+        ],
+        "answer": 2,
+        "explanations": [
+          "Multiplication would give m*s, but the stated operation is division.",
+          "Metres divided by seconds gives m/s.",
+          "s/m reverses the stated numerator and denominator.",
+          "Only one factor of seconds is in the denominator, not two."
+        ],
+        "repairs": [
+          "Multiplication would give m*s, but the stated operation is division. Write the quantity, the operation and the units separately before calculating.",
+          "Metres divided by seconds gives m/s. Write the quantity, the operation and the units separately before calculating.",
+          "s/m reverses the stated numerator and denominator. Write the quantity, the operation and the units separately before calculating.",
+          "Only one factor of seconds is in the denominator, not two. Write the quantity, the operation and the units separately before calculating."
+        ],
+        "reason_prompt": "Which unit argument supports your answer?",
+        "reason_options": [
+          "Keep the operation on the units: length/time gives m/s.",
+          "Changing a unit label never requires changing the numerical value.",
+          "Every quantity associated with motion has the same unit.",
+          "The largest numerical value is correct regardless of the unit."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Keep the operation on the units: length/time gives m/s."
+      },
+      {
+        "id": "PHY-1-4",
+        "family": "rate-change-unit",
+        "context": "rate-change-unit",
+        "stem": "Velocity change is measured in m/s and divided by elapsed time in s. Partly worked: (m/s)/s = m/(s*s). Which unit results?",
+        "options": [
+          "m/s",
+          "s^2/m",
+          "m/s^2",
+          "m^2/s"
+        ],
+        "answer": 3,
+        "explanations": [
+          "This leaves out the second division by time.",
+          "This inverts the required unit.",
+          "Two factors of seconds in the denominator give m/s^2.",
+          "The numerator still contains one metre factor, not metres squared."
+        ],
+        "repairs": [
+          "This leaves out the second division by time. Write the quantity, the operation and the units separately before calculating.",
+          "This inverts the required unit. Write the quantity, the operation and the units separately before calculating.",
+          "Two factors of seconds in the denominator give m/s^2. Write the quantity, the operation and the units separately before calculating.",
+          "The numerator still contains one metre factor, not metres squared. Write the quantity, the operation and the units separately before calculating."
+        ],
+        "reason_prompt": "Which unit argument supports your answer?",
+        "reason_options": [
+          "Dividing m/s by s gives m/s^2, the SI acceleration unit.",
+          "Changing a unit label never requires changing the numerical value.",
+          "Every quantity associated with motion has the same unit.",
+          "The largest numerical value is correct regardless of the unit."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Dividing m/s by s gives m/s^2, the SI acceleration unit."
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "PHY-1-5",
+        "family": "road-speed",
+        "context": "road-speed",
+        "stem": "A display reads 72 km/h. Express that speed in m/s, using 1 km = 1000 m and 1 h = 3600 s.",
+        "options": [
+          "72 m/s",
+          "259.2 m/s",
+          "20 m/s",
+          "20 m/s^2"
+        ],
+        "answer": 3,
+        "explanations": [
+          "This changes the unit label without converting the numerical value.",
+          "Multiplying by 3.6 goes from m/s to km/h, the opposite conversion.",
+          "72*1000/3600 = 20 m/s.",
+          "The numerical conversion is 20, but speed remains m/s, not acceleration."
+        ],
+        "repairs": [
+          "This changes the unit label without converting the numerical value. Write the quantity, the operation and the units separately before calculating.",
+          "Multiplying by 3.6 goes from m/s to km/h, the opposite conversion. Write the quantity, the operation and the units separately before calculating.",
+          "72*1000/3600 = 20 m/s. Write the quantity, the operation and the units separately before calculating.",
+          "The numerical conversion is 20, but speed remains m/s, not acceleration. Write the quantity, the operation and the units separately before calculating."
+        ],
+        "reason_prompt": "Which unit argument supports your answer?",
+        "reason_options": [
+          "Convert both length and time: 72*1000/3600 = 20, and the unit remains length/time.",
+          "Changing a unit label never requires changing the numerical value.",
+          "Every quantity associated with motion has the same unit.",
+          "The largest numerical value is correct regardless of the unit."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Convert both length and time: 72*1000/3600 = 20, and the unit remains length/time."
+      },
+      {
+        "id": "PHY-1-6",
+        "family": "unit-ambiguity",
+        "context": "unit-ambiguity",
+        "stem": "Two records both use m/s. One reports speed and the other reports velocity. What can you conclude from the unit alone?",
+        "options": [
+          "Both must be speed.",
+          "Both must be velocity.",
+          "One record must have an invalid unit.",
+          "The unit is valid for both; the definition and direction information distinguish them."
+        ],
+        "answer": 4,
+        "explanations": [
+          "Speed uses m/s, but velocity does too.",
+          "Velocity uses m/s, but speed does too.",
+          "Sharing the same unit does not make either record invalid.",
+          "Both have length/time units. Velocity also specifies direction; units alone do not establish that meaning."
+        ],
+        "repairs": [
+          "Speed uses m/s, but velocity does too. Write the quantity, the operation and the units separately before calculating.",
+          "Velocity uses m/s, but speed does too. Write the quantity, the operation and the units separately before calculating.",
+          "Sharing the same unit does not make either record invalid. Write the quantity, the operation and the units separately before calculating.",
+          "Both have length/time units. Velocity also specifies direction; units alone do not establish that meaning. Write the quantity, the operation and the units separately before calculating."
+        ],
+        "reason_prompt": "Which unit argument supports your answer?",
+        "reason_options": [
+          "Equal dimensions do not imply identical definitions: speed and velocity both use m/s.",
+          "Changing a unit label never requires changing the numerical value.",
+          "Every quantity associated with motion has the same unit.",
+          "The largest numerical value is correct regardless of the unit."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Equal dimensions do not imply identical definitions: speed and velocity both use m/s."
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "PHY-1-7",
+        "family": "milliseconds",
+        "context": "milliseconds",
+        "stem": "A sensor records an elapsed time of 250 ms. Here ms means milliseconds and 1000 ms = 1 s. Which equivalent report is correct?",
+        "options": [
+          "0.25 s",
+          "250 s",
+          "250000 s",
+          "0.25 m/s"
+        ],
+        "answer": 1,
+        "explanations": [
+          "250/1000 = 0.25 seconds.",
+          "This ignores the milli prefix.",
+          "This multiplies where conversion to the larger time unit requires division.",
+          "Elapsed time remains a time, not a speed."
+        ],
+        "repairs": [
+          "250/1000 = 0.25 seconds. Write the quantity, the operation and the units separately before calculating.",
+          "This ignores the milli prefix. Write the quantity, the operation and the units separately before calculating.",
+          "This multiplies where conversion to the larger time unit requires division. Write the quantity, the operation and the units separately before calculating.",
+          "Elapsed time remains a time, not a speed. Write the quantity, the operation and the units separately before calculating."
+        ],
+        "reason_prompt": "Which unit argument supports your answer?",
+        "reason_options": [
+          "Divide by 1000 to convert milliseconds into seconds without changing the measured quantity.",
+          "Changing a unit label never requires changing the numerical value.",
+          "Every quantity associated with motion has the same unit.",
+          "The largest numerical value is correct regardless of the unit."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Divide by 1000 to convert milliseconds into seconds without changing the measured quantity."
+      },
+      {
+        "id": "PHY-1-8",
+        "family": "centimetres",
+        "context": "centimetres",
+        "stem": "A track marker is 350 cm from the start. With 100 cm = 1 m, which equivalent length is correct?",
+        "options": [
+          "350 m",
+          "3.5 m",
+          "0.035 m",
+          "3.5 m/s"
+        ],
+        "answer": 2,
+        "explanations": [
+          "This changes the label without conversion.",
+          "350/100 = 3.5 metres.",
+          "This divides by 10000 instead of 100.",
+          "No time has been used; the quantity is length, not speed."
+        ],
+        "repairs": [
+          "This changes the label without conversion. Write the quantity, the operation and the units separately before calculating.",
+          "350/100 = 3.5 metres. Write the quantity, the operation and the units separately before calculating.",
+          "This divides by 10000 instead of 100. Write the quantity, the operation and the units separately before calculating.",
+          "No time has been used; the quantity is length, not speed. Write the quantity, the operation and the units separately before calculating."
+        ],
+        "reason_prompt": "Which unit argument supports your answer?",
+        "reason_options": [
+          "Changing centimetres to metres divides the number by 100 while preserving length.",
+          "Changing a unit label never requires changing the numerical value.",
+          "Every quantity associated with motion has the same unit.",
+          "The largest numerical value is correct regardless of the unit."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Changing centimetres to metres divides the number by 100 while preserving length."
+      }
+    ],
+    "revision": [
+      {
+        "id": "PHY-1-9",
+        "family": "compare-sensor-units",
+        "context": "compare-sensor-units",
+        "stem": "Two sensors report acceleration magnitudes: sensor A gives 3 cm/s^2 and sensor B gives 0.04 m/s^2. Which comparison is correct? Use 100 cm = 1 m.",
+        "options": [
+          "A is greater by 2.96 m/s^2.",
+          "B is greater by 0.01 m/s^2.",
+          "The two magnitudes are equal.",
+          "They cannot be compared because the length units differ."
+        ],
+        "answer": 2,
+        "explanations": [
+          "This subtracts raw numbers in different units. A is 0.03 m/s^2, not 3 m/s^2.",
+          "Convert A to 0.03 m/s^2; B exceeds it by 0.04 - 0.03 = 0.01 m/s^2.",
+          "After conversion the numbers are 0.03 and 0.04, which are unequal.",
+          "Compatible acceleration units can be converted to a common scale and compared."
+        ],
+        "repairs": [
+          "This subtracts raw numbers in different units. A is 0.03 m/s^2, not 3 m/s^2. Put both records into common units before comparing or combining them.",
+          "Convert A to 0.03 m/s^2; B exceeds it by 0.04 - 0.03 = 0.01 m/s^2. Put both records into common units before comparing or combining them.",
+          "After conversion the numbers are 0.03 and 0.04, which are unequal. Put both records into common units before comparing or combining them.",
+          "Compatible acceleration units can be converted to a common scale and compared. Put both records into common units before comparing or combining them."
+        ],
+        "reason_prompt": "Which unit argument supports your answer?",
+        "reason_options": [
+          "Both measure acceleration. Converting 3 cm/s^2 to 0.03 m/s^2 makes the comparison and 0.01 m/s^2 difference valid.",
+          "Changing a unit label never requires changing the numerical value.",
+          "Every quantity associated with motion has the same unit.",
+          "The largest numerical value is correct regardless of the unit."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Both measure acceleration. Converting 3 cm/s^2 to 0.03 m/s^2 makes the comparison and 0.01 m/s^2 difference valid."
+      },
+      {
+        "id": "PHY-1-10",
+        "family": "record-audit",
+        "context": "record-audit",
+        "stem": "A table describes its final column as velocity change divided by elapsed time, but labels the unit m/s. Which correction preserves the stated definition?",
+        "options": [
+          "Keep m/s because every motion quantity uses it.",
+          "Change the label to s/m.",
+          "Change the label to m^2/s.",
+          "Change the label to m/s^2."
+        ],
+        "answer": 4,
+        "explanations": [
+          "Motion quantities have different dimensions; the extra division by time matters.",
+          "This inverts a length/time ratio rather than adding the required time denominator.",
+          "No extra length factor is introduced by dividing by time.",
+          "The definition gives (m/s)/s = m/s^2, so the unit label needs a second time factor."
+        ],
+        "repairs": [
+          "Motion quantities have different dimensions; the extra division by time matters. Write the quantity, the operation and the units separately before calculating.",
+          "This inverts a length/time ratio rather than adding the required time denominator. Write the quantity, the operation and the units separately before calculating.",
+          "No extra length factor is introduced by dividing by time. Write the quantity, the operation and the units separately before calculating.",
+          "The definition gives (m/s)/s = m/s^2, so the unit label needs a second time factor. Write the quantity, the operation and the units separately before calculating."
+        ],
+        "reason_prompt": "Which unit argument supports your answer?",
+        "reason_options": [
+          "Audit the operation, not the topic word motion: velocity change/time has unit m/s^2.",
+          "Changing a unit label never requires changing the numerical value.",
+          "Every quantity associated with motion has the same unit.",
+          "The largest numerical value is correct regardless of the unit."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Audit the operation, not the topic word motion: velocity change/time has unit m/s^2."
+      },
+      {
+        "id": "PHY-1-11",
+        "family": "mixed-time-difference",
+        "context": "mixed-time-difference",
+        "stem": "A video clock reads 2 min 15 s when a cart starts and 3 min 5 s when it stops. There is no clock reset. What elapsed time in seconds should be entered in the motion record?",
+        "options": [
+          "50 s",
+          "90 s",
+          "1 s",
+          "110 s"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The timestamps are 135 s and 185 s, so elapsed time is 185 - 135 = 50 s.",
+          "A 90-second interval is not the difference between the two stated timestamps.",
+          "Subtracting the minute numbers alone loses the second components and does not give seconds.",
+          "Adding 110 s to the start time of 135 s reaches 245 s, later than the stated stop time of 185 s."
+        ],
+        "repairs": [
+          "The timestamps are 135 s and 185 s, so elapsed time is 185 - 135 = 50 s. Put both records into common units before comparing or combining them.",
+          "A 90-second interval is not the difference between the two stated timestamps. Put both records into common units before comparing or combining them.",
+          "Subtracting the minute numbers alone loses the second components and does not give seconds. Put both records into common units before comparing or combining them.",
+          "Adding 110 s to the start time of 135 s reaches 245 s, later than the stated stop time of 185 s. Put both records into common units before comparing or combining them."
+        ],
+        "reason_prompt": "Which unit argument supports your answer?",
+        "reason_options": [
+          "Convert each complete timestamp first: 3*60+5 minus (2*60+15) equals 50 seconds.",
+          "Changing a unit label never requires changing the numerical value.",
+          "Every quantity associated with motion has the same unit.",
+          "The largest numerical value is correct regardless of the unit."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Convert each complete timestamp first: 3*60+5 minus (2*60+15) equals 50 seconds."
+      },
+      {
+        "id": "PHY-1-12",
+        "family": "mixed-labels",
+        "context": "mixed-labels",
+        "stem": "An observation sheet lists: length 4 m; duration 2 s; speed 2 m/s; acceleration 3 m/s. Which entry has a unit inconsistent with its named quantity?",
+        "options": [
+          "Length 4 m",
+          "Duration 2 s",
+          "Speed 2 m/s",
+          "Acceleration 3 m/s"
+        ],
+        "answer": 4,
+        "explanations": [
+          "m is a valid length unit.",
+          "s is a valid duration unit.",
+          "m/s is a valid speed unit.",
+          "Acceleration requires velocity change per time, hence m/s^2 rather than m/s."
+        ],
+        "repairs": [
+          "m is a valid length unit. Write the quantity, the operation and the units separately before calculating.",
+          "s is a valid duration unit. Write the quantity, the operation and the units separately before calculating.",
+          "m/s is a valid speed unit. Write the quantity, the operation and the units separately before calculating.",
+          "Acceleration requires velocity change per time, hence m/s^2 rather than m/s. Write the quantity, the operation and the units separately before calculating."
+        ],
+        "reason_prompt": "Which unit argument supports your answer?",
+        "reason_options": [
+          "The acceleration label requires two time factors in the denominator. The other three quantity-unit pairs are dimensionally valid.",
+          "Changing a unit label never requires changing the numerical value.",
+          "Every quantity associated with motion has the same unit.",
+          "The largest numerical value is correct regardless of the unit."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The acceleration label requires two time factors in the denominator. The other three quantity-unit pairs are dimensionally valid."
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored measurement and motion-unit exercises. SI definitions and numerical conversions require independent subject review; not authenticated PYQs."
+  ]
+}

@@ -1,0 +1,5040 @@
+{
+  "objective_id": "MIR-4",
+  "prerequisites": [
+    "Distinguish left/right and above/below relative to a depicted line.",
+    "Recognise equal perpendicular distances.",
+    "Read the coordinate description if using the text alternative: x is right-positive, y is upward-positive."
+  ],
+  "explanation": "For an arrangement, reflect every vertex and every mark across the same global line. Reflecting only the order of the objects leaves their shapes wrong; flipping each shape around its own centre leaves their positions wrong.",
+  "worked": [
+    {
+      "action": "Use worked diagram1: the original is left of the vertical mirror and its image right. Follow the black marked corner along the horizontal connector; the matching ticks mark equal distances.",
+      "justification": "The diagram models the operation before using optional coordinates. Height is unchanged."
+    },
+    {
+      "action": "Use a vertical mirror through x=0. A corner at(-40,20) is40 units left and20 units above the centre.",
+      "justification": "Perpendicular distance to this vertical line is horizontal distance."
+    },
+    {
+      "action": "Its image is(40,20):40 units right at the same height.",
+      "justification": "Only the left/right displacement changes sign."
+    },
+    {
+      "action": "A second corner(-20,10) maps to(20,10), and a dot(-30,15) maps to(30,15).",
+      "justification": "Apply the same rule to every feature; the shape and its marked point must both transform."
+    },
+    {
+      "action": "For a horizontal water line through y=0,(-40,20) maps to(-40,-20). A half-turn instead maps it to(40,-20).",
+      "justification": "The water reflection preserves x, while the half-turn reverses both coordinates."
+    },
+    {
+      "action": "For a shifted vertical mirror x=10, a point at x=-20 is30 units left, so its image is x=40,30 units right.",
+      "justification": "Negating x alone works only when the mirror is x=0."
+    },
+    {
+      "action": "For two separate shapes, move their centres across the mirror and reflect each shape and mark as well.",
+      "justification": "One global reflection changes both the arrangement and the orientation of every component."
+    },
+    {
+      "action": "Compare worked diagram2 (water reflection), diagram3 (two-piece arrangement) and diagram4 (shifted mirror). Trace the marked points and then the remaining corners.",
+      "justification": "Use the depicted mirror and preserve perpendicular distance; every component and internal mark must transform."
+    }
+  ],
+  "hint": "Choose one distinctive corner or dot. Check its perpendicular distance and its position parallel to the mirror before testing the other features.",
+  "shortcut": "Reject an incorrect candidate using one violated feature, but verify all features in the final candidate.",
+  "limitation": "Use the depicted axis, not an assumed page edge. Reflection differs from rotation; symmetric figures alone may hide that difference.",
+  "checks": {
+    "entry": [
+      {
+        "id": "MIR-4-1",
+        "family": "vertical-central-axis",
+        "context": "vertical asymmetric layout 1",
+        "stem": "Reflect the complete given figure, including every marked point, in the depicted vertical line at x=0. Which candidate is the image? Case 1.",
+        "options": [
+          "Figure 1",
+          "Figure 2",
+          "Figure 3",
+          "Figure 4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Every feature reflects across the vertical line at 0, preserving perpendicular distance and its position parallel to the line.",
+          "This leaves the original positions and orientations unchanged.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered."
+        ],
+        "repairs": [
+          "Every feature reflects across the vertical line at 0, preserving perpendicular distance and its position parallel to the line. Check the original and image of one distinctive corner, then every marked point.",
+          "This leaves the original positions and orientations unchanged. Check the original and image of one distinctive corner, then every marked point.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line. Check the original and image of one distinctive corner, then every marked point.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The x coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The x coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+        "figure": {
+          "stem": {
+            "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 10), (-43, 10), (-43, 17), (-57, 17), (-57, 35), (-65, 35)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-61, 14), (-9, -43)]. Lines: [[(0, -95), (0, 95)]].",
+            "polygons": [
+              [
+                {
+                  "x": -65,
+                  "y": 10
+                },
+                {
+                  "x": -43,
+                  "y": 10
+                },
+                {
+                  "x": -43,
+                  "y": 17
+                },
+                {
+                  "x": -57,
+                  "y": 17
+                },
+                {
+                  "x": -57,
+                  "y": 35
+                },
+                {
+                  "x": -65,
+                  "y": 35
+                }
+              ],
+              [
+                {
+                  "x": -15,
+                  "y": -50
+                },
+                {
+                  "x": 8,
+                  "y": -50
+                },
+                {
+                  "x": -9,
+                  "y": -27
+                }
+              ]
+            ],
+            "dots": [
+              {
+                "x": -61,
+                "y": 14
+              },
+              {
+                "x": -9,
+                "y": -43
+              }
+            ],
+            "lines": [
+              [
+                {
+                  "x": 0,
+                  "y": -95
+                },
+                {
+                  "x": 0,
+                  "y": 95
+                }
+              ]
+            ]
+          },
+          "options": [
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(65, 10), (43, 10), (43, 17), (57, 17), (57, 35), (65, 35)], [(15, -50), (-8, -50), (9, -27)]]. Dots: [(61, 14), (9, -43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 65,
+                    "y": 10
+                  },
+                  {
+                    "x": 43,
+                    "y": 10
+                  },
+                  {
+                    "x": 43,
+                    "y": 17
+                  },
+                  {
+                    "x": 57,
+                    "y": 17
+                  },
+                  {
+                    "x": 57,
+                    "y": 35
+                  },
+                  {
+                    "x": 65,
+                    "y": 35
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": -50
+                  },
+                  {
+                    "x": -8,
+                    "y": -50
+                  },
+                  {
+                    "x": 9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 61,
+                  "y": 14
+                },
+                {
+                  "x": 9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 10), (-43, 10), (-43, 17), (-57, 17), (-57, 35), (-65, 35)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-61, 14), (-9, -43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -65,
+                    "y": 10
+                  },
+                  {
+                    "x": -43,
+                    "y": 10
+                  },
+                  {
+                    "x": -43,
+                    "y": 17
+                  },
+                  {
+                    "x": -57,
+                    "y": 17
+                  },
+                  {
+                    "x": -57,
+                    "y": 35
+                  },
+                  {
+                    "x": -65,
+                    "y": 35
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": -50
+                  },
+                  {
+                    "x": 8,
+                    "y": -50
+                  },
+                  {
+                    "x": -9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -61,
+                  "y": 14
+                },
+                {
+                  "x": -9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(65, -10), (43, -10), (43, -17), (57, -17), (57, -35), (65, -35)], [(15, 50), (-8, 50), (9, 27)]]. Dots: [(61, -14), (9, 43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 65,
+                    "y": -10
+                  },
+                  {
+                    "x": 43,
+                    "y": -10
+                  },
+                  {
+                    "x": 43,
+                    "y": -17
+                  },
+                  {
+                    "x": 57,
+                    "y": -17
+                  },
+                  {
+                    "x": 57,
+                    "y": -35
+                  },
+                  {
+                    "x": 65,
+                    "y": -35
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": 50
+                  },
+                  {
+                    "x": -8,
+                    "y": 50
+                  },
+                  {
+                    "x": 9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 61,
+                  "y": -14
+                },
+                {
+                  "x": 9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, -10), (-43, -10), (-43, -17), (-57, -17), (-57, -35), (-65, -35)], [(-15, 50), (8, 50), (-9, 27)]]. Dots: [(-61, -14), (-9, 43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -65,
+                    "y": -10
+                  },
+                  {
+                    "x": -43,
+                    "y": -10
+                  },
+                  {
+                    "x": -43,
+                    "y": -17
+                  },
+                  {
+                    "x": -57,
+                    "y": -17
+                  },
+                  {
+                    "x": -57,
+                    "y": -35
+                  },
+                  {
+                    "x": -65,
+                    "y": -35
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": 50
+                  },
+                  {
+                    "x": 8,
+                    "y": 50
+                  },
+                  {
+                    "x": -9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -61,
+                  "y": -14
+                },
+                {
+                  "x": -9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "positional_figure_options": true
+      },
+      {
+        "id": "MIR-4-2",
+        "family": "horizontal-central-axis",
+        "context": "horizontal asymmetric layout 2",
+        "stem": "Reflect the complete given figure, including every marked point, in the depicted horizontal line at y=0. Which candidate is the image? Case 2.",
+        "options": [
+          "Figure 1",
+          "Figure 2",
+          "Figure 3",
+          "Figure 4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Every feature reflects across the horizontal line at 0, preserving perpendicular distance and its position parallel to the line.",
+          "This leaves the original positions and orientations unchanged.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered."
+        ],
+        "repairs": [
+          "Every feature reflects across the horizontal line at 0, preserving perpendicular distance and its position parallel to the line. Check the original and image of one distinctive corner, then every marked point.",
+          "This leaves the original positions and orientations unchanged. Check the original and image of one distinctive corner, then every marked point.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line. Check the original and image of one distinctive corner, then every marked point.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The y coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The y coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+        "figure": {
+          "stem": {
+            "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 25), (-44, 25), (-44, 17), (-30, 31), (-44, 45), (-44, 37), (-58, 37)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-54, 21), (-9, -43)]. Lines: [[(-95, 0), (95, 0)]].",
+            "polygons": [
+              [
+                {
+                  "x": -58,
+                  "y": 25
+                },
+                {
+                  "x": -44,
+                  "y": 25
+                },
+                {
+                  "x": -44,
+                  "y": 17
+                },
+                {
+                  "x": -30,
+                  "y": 31
+                },
+                {
+                  "x": -44,
+                  "y": 45
+                },
+                {
+                  "x": -44,
+                  "y": 37
+                },
+                {
+                  "x": -58,
+                  "y": 37
+                }
+              ],
+              [
+                {
+                  "x": -15,
+                  "y": -50
+                },
+                {
+                  "x": 8,
+                  "y": -50
+                },
+                {
+                  "x": -9,
+                  "y": -27
+                }
+              ]
+            ],
+            "dots": [
+              {
+                "x": -54,
+                "y": 21
+              },
+              {
+                "x": -9,
+                "y": -43
+              }
+            ],
+            "lines": [
+              [
+                {
+                  "x": -95,
+                  "y": 0
+                },
+                {
+                  "x": 95,
+                  "y": 0
+                }
+              ]
+            ]
+          },
+          "options": [
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, -25), (-44, -25), (-44, -17), (-30, -31), (-44, -45), (-44, -37), (-58, -37)], [(-15, 50), (8, 50), (-9, 27)]]. Dots: [(-54, -21), (-9, 43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -58,
+                    "y": -25
+                  },
+                  {
+                    "x": -44,
+                    "y": -25
+                  },
+                  {
+                    "x": -44,
+                    "y": -17
+                  },
+                  {
+                    "x": -30,
+                    "y": -31
+                  },
+                  {
+                    "x": -44,
+                    "y": -45
+                  },
+                  {
+                    "x": -44,
+                    "y": -37
+                  },
+                  {
+                    "x": -58,
+                    "y": -37
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": 50
+                  },
+                  {
+                    "x": 8,
+                    "y": 50
+                  },
+                  {
+                    "x": -9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -54,
+                  "y": -21
+                },
+                {
+                  "x": -9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 25), (-44, 25), (-44, 17), (-30, 31), (-44, 45), (-44, 37), (-58, 37)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-54, 21), (-9, -43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -58,
+                    "y": 25
+                  },
+                  {
+                    "x": -44,
+                    "y": 25
+                  },
+                  {
+                    "x": -44,
+                    "y": 17
+                  },
+                  {
+                    "x": -30,
+                    "y": 31
+                  },
+                  {
+                    "x": -44,
+                    "y": 45
+                  },
+                  {
+                    "x": -44,
+                    "y": 37
+                  },
+                  {
+                    "x": -58,
+                    "y": 37
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": -50
+                  },
+                  {
+                    "x": 8,
+                    "y": -50
+                  },
+                  {
+                    "x": -9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -54,
+                  "y": 21
+                },
+                {
+                  "x": -9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(58, -25), (44, -25), (44, -17), (30, -31), (44, -45), (44, -37), (58, -37)], [(15, 50), (-8, 50), (9, 27)]]. Dots: [(54, -21), (9, 43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 58,
+                    "y": -25
+                  },
+                  {
+                    "x": 44,
+                    "y": -25
+                  },
+                  {
+                    "x": 44,
+                    "y": -17
+                  },
+                  {
+                    "x": 30,
+                    "y": -31
+                  },
+                  {
+                    "x": 44,
+                    "y": -45
+                  },
+                  {
+                    "x": 44,
+                    "y": -37
+                  },
+                  {
+                    "x": 58,
+                    "y": -37
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": 50
+                  },
+                  {
+                    "x": -8,
+                    "y": 50
+                  },
+                  {
+                    "x": 9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 54,
+                  "y": -21
+                },
+                {
+                  "x": 9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(58, 25), (44, 25), (44, 17), (30, 31), (44, 45), (44, 37), (58, 37)], [(15, -50), (-8, -50), (9, -27)]]. Dots: [(54, 21), (9, -43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 58,
+                    "y": 25
+                  },
+                  {
+                    "x": 44,
+                    "y": 25
+                  },
+                  {
+                    "x": 44,
+                    "y": 17
+                  },
+                  {
+                    "x": 30,
+                    "y": 31
+                  },
+                  {
+                    "x": 44,
+                    "y": 45
+                  },
+                  {
+                    "x": 44,
+                    "y": 37
+                  },
+                  {
+                    "x": 58,
+                    "y": 37
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": -50
+                  },
+                  {
+                    "x": -8,
+                    "y": -50
+                  },
+                  {
+                    "x": 9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 54,
+                  "y": 21
+                },
+                {
+                  "x": 9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "positional_figure_options": true
+      }
+    ],
+    "faded": [
+      {
+        "id": "MIR-4-3",
+        "family": "vertical-central-axis",
+        "context": "vertical asymmetric layout 3",
+        "stem": "Reflect the complete given figure, including every marked point, in the depicted vertical line at x=0. Which candidate is the image? Case 3. Partly worked: corner(-51,24) maps to(51,24). Finish checking the other corners and the dots.",
+        "options": [
+          "Figure 1",
+          "Figure 2",
+          "Figure 3",
+          "Figure 4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Every feature reflects across the vertical line at 0, preserving perpendicular distance and its position parallel to the line.",
+          "This leaves the original positions and orientations unchanged.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered."
+        ],
+        "repairs": [
+          "Every feature reflects across the vertical line at 0, preserving perpendicular distance and its position parallel to the line. Check the original and image of one distinctive corner, then every marked point.",
+          "This leaves the original positions and orientations unchanged. Check the original and image of one distinctive corner, then every marked point.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line. Check the original and image of one distinctive corner, then every marked point.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The x coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The x coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+        "figure": {
+          "stem": {
+            "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 24), (-27, 30), (-34, 51), (-47, 43)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-47, 28), (-9, -43)]. Lines: [[(0, -95), (0, 95)]].",
+            "polygons": [
+              [
+                {
+                  "x": -51,
+                  "y": 24
+                },
+                {
+                  "x": -27,
+                  "y": 30
+                },
+                {
+                  "x": -34,
+                  "y": 51
+                },
+                {
+                  "x": -47,
+                  "y": 43
+                }
+              ],
+              [
+                {
+                  "x": -15,
+                  "y": -50
+                },
+                {
+                  "x": 8,
+                  "y": -50
+                },
+                {
+                  "x": -9,
+                  "y": -27
+                }
+              ]
+            ],
+            "dots": [
+              {
+                "x": -47,
+                "y": 28
+              },
+              {
+                "x": -9,
+                "y": -43
+              }
+            ],
+            "lines": [
+              [
+                {
+                  "x": 0,
+                  "y": -95
+                },
+                {
+                  "x": 0,
+                  "y": 95
+                }
+              ]
+            ]
+          },
+          "options": [
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(51, 24), (27, 30), (34, 51), (47, 43)], [(15, -50), (-8, -50), (9, -27)]]. Dots: [(47, 28), (9, -43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 51,
+                    "y": 24
+                  },
+                  {
+                    "x": 27,
+                    "y": 30
+                  },
+                  {
+                    "x": 34,
+                    "y": 51
+                  },
+                  {
+                    "x": 47,
+                    "y": 43
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": -50
+                  },
+                  {
+                    "x": -8,
+                    "y": -50
+                  },
+                  {
+                    "x": 9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 47,
+                  "y": 28
+                },
+                {
+                  "x": 9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 24), (-27, 30), (-34, 51), (-47, 43)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-47, 28), (-9, -43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -51,
+                    "y": 24
+                  },
+                  {
+                    "x": -27,
+                    "y": 30
+                  },
+                  {
+                    "x": -34,
+                    "y": 51
+                  },
+                  {
+                    "x": -47,
+                    "y": 43
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": -50
+                  },
+                  {
+                    "x": 8,
+                    "y": -50
+                  },
+                  {
+                    "x": -9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -47,
+                  "y": 28
+                },
+                {
+                  "x": -9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(51, -24), (27, -30), (34, -51), (47, -43)], [(15, 50), (-8, 50), (9, 27)]]. Dots: [(47, -28), (9, 43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 51,
+                    "y": -24
+                  },
+                  {
+                    "x": 27,
+                    "y": -30
+                  },
+                  {
+                    "x": 34,
+                    "y": -51
+                  },
+                  {
+                    "x": 47,
+                    "y": -43
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": 50
+                  },
+                  {
+                    "x": -8,
+                    "y": 50
+                  },
+                  {
+                    "x": 9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 47,
+                  "y": -28
+                },
+                {
+                  "x": 9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, -24), (-27, -30), (-34, -51), (-47, -43)], [(-15, 50), (8, 50), (-9, 27)]]. Dots: [(-47, -28), (-9, 43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -51,
+                    "y": -24
+                  },
+                  {
+                    "x": -27,
+                    "y": -30
+                  },
+                  {
+                    "x": -34,
+                    "y": -51
+                  },
+                  {
+                    "x": -47,
+                    "y": -43
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": 50
+                  },
+                  {
+                    "x": 8,
+                    "y": 50
+                  },
+                  {
+                    "x": -9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -47,
+                  "y": -28
+                },
+                {
+                  "x": -9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "positional_figure_options": true
+      },
+      {
+        "id": "MIR-4-4",
+        "family": "horizontal-central-axis",
+        "context": "horizontal asymmetric layout 4",
+        "stem": "Reflect the complete given figure, including every marked point, in the depicted horizontal line at y=0. Which candidate is the image? Case 4. Partly worked: corner(-65,31) maps to(-65,-31). Finish checking the other corners and the dots.",
+        "options": [
+          "Figure 1",
+          "Figure 2",
+          "Figure 3",
+          "Figure 4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Every feature reflects across the horizontal line at 0, preserving perpendicular distance and its position parallel to the line.",
+          "This leaves the original positions and orientations unchanged.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered."
+        ],
+        "repairs": [
+          "Every feature reflects across the horizontal line at 0, preserving perpendicular distance and its position parallel to the line. Check the original and image of one distinctive corner, then every marked point.",
+          "This leaves the original positions and orientations unchanged. Check the original and image of one distinctive corner, then every marked point.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line. Check the original and image of one distinctive corner, then every marked point.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The y coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The y coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+        "figure": {
+          "stem": {
+            "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 31), (-41, 31), (-41, 40), (-49, 40), (-49, 51), (-58, 51), (-58, 59), (-65, 59)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-61, 35), (-9, -43)]. Lines: [[(-95, 0), (95, 0)]].",
+            "polygons": [
+              [
+                {
+                  "x": -65,
+                  "y": 31
+                },
+                {
+                  "x": -41,
+                  "y": 31
+                },
+                {
+                  "x": -41,
+                  "y": 40
+                },
+                {
+                  "x": -49,
+                  "y": 40
+                },
+                {
+                  "x": -49,
+                  "y": 51
+                },
+                {
+                  "x": -58,
+                  "y": 51
+                },
+                {
+                  "x": -58,
+                  "y": 59
+                },
+                {
+                  "x": -65,
+                  "y": 59
+                }
+              ],
+              [
+                {
+                  "x": -15,
+                  "y": -50
+                },
+                {
+                  "x": 8,
+                  "y": -50
+                },
+                {
+                  "x": -9,
+                  "y": -27
+                }
+              ]
+            ],
+            "dots": [
+              {
+                "x": -61,
+                "y": 35
+              },
+              {
+                "x": -9,
+                "y": -43
+              }
+            ],
+            "lines": [
+              [
+                {
+                  "x": -95,
+                  "y": 0
+                },
+                {
+                  "x": 95,
+                  "y": 0
+                }
+              ]
+            ]
+          },
+          "options": [
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, -31), (-41, -31), (-41, -40), (-49, -40), (-49, -51), (-58, -51), (-58, -59), (-65, -59)], [(-15, 50), (8, 50), (-9, 27)]]. Dots: [(-61, -35), (-9, 43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -65,
+                    "y": -31
+                  },
+                  {
+                    "x": -41,
+                    "y": -31
+                  },
+                  {
+                    "x": -41,
+                    "y": -40
+                  },
+                  {
+                    "x": -49,
+                    "y": -40
+                  },
+                  {
+                    "x": -49,
+                    "y": -51
+                  },
+                  {
+                    "x": -58,
+                    "y": -51
+                  },
+                  {
+                    "x": -58,
+                    "y": -59
+                  },
+                  {
+                    "x": -65,
+                    "y": -59
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": 50
+                  },
+                  {
+                    "x": 8,
+                    "y": 50
+                  },
+                  {
+                    "x": -9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -61,
+                  "y": -35
+                },
+                {
+                  "x": -9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 31), (-41, 31), (-41, 40), (-49, 40), (-49, 51), (-58, 51), (-58, 59), (-65, 59)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-61, 35), (-9, -43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -65,
+                    "y": 31
+                  },
+                  {
+                    "x": -41,
+                    "y": 31
+                  },
+                  {
+                    "x": -41,
+                    "y": 40
+                  },
+                  {
+                    "x": -49,
+                    "y": 40
+                  },
+                  {
+                    "x": -49,
+                    "y": 51
+                  },
+                  {
+                    "x": -58,
+                    "y": 51
+                  },
+                  {
+                    "x": -58,
+                    "y": 59
+                  },
+                  {
+                    "x": -65,
+                    "y": 59
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": -50
+                  },
+                  {
+                    "x": 8,
+                    "y": -50
+                  },
+                  {
+                    "x": -9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -61,
+                  "y": 35
+                },
+                {
+                  "x": -9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(65, -31), (41, -31), (41, -40), (49, -40), (49, -51), (58, -51), (58, -59), (65, -59)], [(15, 50), (-8, 50), (9, 27)]]. Dots: [(61, -35), (9, 43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 65,
+                    "y": -31
+                  },
+                  {
+                    "x": 41,
+                    "y": -31
+                  },
+                  {
+                    "x": 41,
+                    "y": -40
+                  },
+                  {
+                    "x": 49,
+                    "y": -40
+                  },
+                  {
+                    "x": 49,
+                    "y": -51
+                  },
+                  {
+                    "x": 58,
+                    "y": -51
+                  },
+                  {
+                    "x": 58,
+                    "y": -59
+                  },
+                  {
+                    "x": 65,
+                    "y": -59
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": 50
+                  },
+                  {
+                    "x": -8,
+                    "y": 50
+                  },
+                  {
+                    "x": 9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 61,
+                  "y": -35
+                },
+                {
+                  "x": 9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(65, 31), (41, 31), (41, 40), (49, 40), (49, 51), (58, 51), (58, 59), (65, 59)], [(15, -50), (-8, -50), (9, -27)]]. Dots: [(61, 35), (9, -43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 65,
+                    "y": 31
+                  },
+                  {
+                    "x": 41,
+                    "y": 31
+                  },
+                  {
+                    "x": 41,
+                    "y": 40
+                  },
+                  {
+                    "x": 49,
+                    "y": 40
+                  },
+                  {
+                    "x": 49,
+                    "y": 51
+                  },
+                  {
+                    "x": 58,
+                    "y": 51
+                  },
+                  {
+                    "x": 58,
+                    "y": 59
+                  },
+                  {
+                    "x": 65,
+                    "y": 59
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": -50
+                  },
+                  {
+                    "x": -8,
+                    "y": -50
+                  },
+                  {
+                    "x": 9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 61,
+                  "y": 35
+                },
+                {
+                  "x": 9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "positional_figure_options": true
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "MIR-4-5",
+        "family": "vertical-central-axis",
+        "context": "vertical asymmetric layout 5",
+        "stem": "Reflect the complete given figure, including every marked point, in the depicted vertical line at x=0. Which candidate is the image? Case 5.",
+        "options": [
+          "Figure 1",
+          "Figure 2",
+          "Figure 3",
+          "Figure 4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Every feature reflects across the vertical line at 0, preserving perpendicular distance and its position parallel to the line.",
+          "This leaves the original positions and orientations unchanged.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered."
+        ],
+        "repairs": [
+          "Every feature reflects across the vertical line at 0, preserving perpendicular distance and its position parallel to the line. Check the original and image of one distinctive corner, then every marked point.",
+          "This leaves the original positions and orientations unchanged. Check the original and image of one distinctive corner, then every marked point.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line. Check the original and image of one distinctive corner, then every marked point.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The x coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The x coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+        "figure": {
+          "stem": {
+            "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 10), (-36, 10), (-36, 17), (-50, 17), (-50, 35), (-58, 35)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-54, 14), (-9, -43)]. Lines: [[(0, -95), (0, 95)]].",
+            "polygons": [
+              [
+                {
+                  "x": -58,
+                  "y": 10
+                },
+                {
+                  "x": -36,
+                  "y": 10
+                },
+                {
+                  "x": -36,
+                  "y": 17
+                },
+                {
+                  "x": -50,
+                  "y": 17
+                },
+                {
+                  "x": -50,
+                  "y": 35
+                },
+                {
+                  "x": -58,
+                  "y": 35
+                }
+              ],
+              [
+                {
+                  "x": -15,
+                  "y": -50
+                },
+                {
+                  "x": 8,
+                  "y": -50
+                },
+                {
+                  "x": -9,
+                  "y": -27
+                }
+              ]
+            ],
+            "dots": [
+              {
+                "x": -54,
+                "y": 14
+              },
+              {
+                "x": -9,
+                "y": -43
+              }
+            ],
+            "lines": [
+              [
+                {
+                  "x": 0,
+                  "y": -95
+                },
+                {
+                  "x": 0,
+                  "y": 95
+                }
+              ]
+            ]
+          },
+          "options": [
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(58, 10), (36, 10), (36, 17), (50, 17), (50, 35), (58, 35)], [(15, -50), (-8, -50), (9, -27)]]. Dots: [(54, 14), (9, -43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 58,
+                    "y": 10
+                  },
+                  {
+                    "x": 36,
+                    "y": 10
+                  },
+                  {
+                    "x": 36,
+                    "y": 17
+                  },
+                  {
+                    "x": 50,
+                    "y": 17
+                  },
+                  {
+                    "x": 50,
+                    "y": 35
+                  },
+                  {
+                    "x": 58,
+                    "y": 35
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": -50
+                  },
+                  {
+                    "x": -8,
+                    "y": -50
+                  },
+                  {
+                    "x": 9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 54,
+                  "y": 14
+                },
+                {
+                  "x": 9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 10), (-36, 10), (-36, 17), (-50, 17), (-50, 35), (-58, 35)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-54, 14), (-9, -43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -58,
+                    "y": 10
+                  },
+                  {
+                    "x": -36,
+                    "y": 10
+                  },
+                  {
+                    "x": -36,
+                    "y": 17
+                  },
+                  {
+                    "x": -50,
+                    "y": 17
+                  },
+                  {
+                    "x": -50,
+                    "y": 35
+                  },
+                  {
+                    "x": -58,
+                    "y": 35
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": -50
+                  },
+                  {
+                    "x": 8,
+                    "y": -50
+                  },
+                  {
+                    "x": -9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -54,
+                  "y": 14
+                },
+                {
+                  "x": -9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(58, -10), (36, -10), (36, -17), (50, -17), (50, -35), (58, -35)], [(15, 50), (-8, 50), (9, 27)]]. Dots: [(54, -14), (9, 43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 58,
+                    "y": -10
+                  },
+                  {
+                    "x": 36,
+                    "y": -10
+                  },
+                  {
+                    "x": 36,
+                    "y": -17
+                  },
+                  {
+                    "x": 50,
+                    "y": -17
+                  },
+                  {
+                    "x": 50,
+                    "y": -35
+                  },
+                  {
+                    "x": 58,
+                    "y": -35
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": 50
+                  },
+                  {
+                    "x": -8,
+                    "y": 50
+                  },
+                  {
+                    "x": 9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 54,
+                  "y": -14
+                },
+                {
+                  "x": 9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, -10), (-36, -10), (-36, -17), (-50, -17), (-50, -35), (-58, -35)], [(-15, 50), (8, 50), (-9, 27)]]. Dots: [(-54, -14), (-9, 43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -58,
+                    "y": -10
+                  },
+                  {
+                    "x": -36,
+                    "y": -10
+                  },
+                  {
+                    "x": -36,
+                    "y": -17
+                  },
+                  {
+                    "x": -50,
+                    "y": -17
+                  },
+                  {
+                    "x": -50,
+                    "y": -35
+                  },
+                  {
+                    "x": -58,
+                    "y": -35
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": 50
+                  },
+                  {
+                    "x": 8,
+                    "y": 50
+                  },
+                  {
+                    "x": -9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -54,
+                  "y": -14
+                },
+                {
+                  "x": -9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "positional_figure_options": true
+      },
+      {
+        "id": "MIR-4-6",
+        "family": "horizontal-central-axis",
+        "context": "horizontal asymmetric layout 6",
+        "stem": "Reflect the complete given figure, including every marked point, in the depicted horizontal line at y=0. Which candidate is the image? Case 6.",
+        "options": [
+          "Figure 1",
+          "Figure 2",
+          "Figure 3",
+          "Figure 4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Every feature reflects across the horizontal line at 0, preserving perpendicular distance and its position parallel to the line.",
+          "This leaves the original positions and orientations unchanged.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered."
+        ],
+        "repairs": [
+          "Every feature reflects across the horizontal line at 0, preserving perpendicular distance and its position parallel to the line. Check the original and image of one distinctive corner, then every marked point.",
+          "This leaves the original positions and orientations unchanged. Check the original and image of one distinctive corner, then every marked point.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line. Check the original and image of one distinctive corner, then every marked point.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The y coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The y coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+        "figure": {
+          "stem": {
+            "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 25), (-37, 25), (-37, 17), (-23, 31), (-37, 45), (-37, 37), (-51, 37)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-47, 21), (-9, -43)]. Lines: [[(-95, 0), (95, 0)]].",
+            "polygons": [
+              [
+                {
+                  "x": -51,
+                  "y": 25
+                },
+                {
+                  "x": -37,
+                  "y": 25
+                },
+                {
+                  "x": -37,
+                  "y": 17
+                },
+                {
+                  "x": -23,
+                  "y": 31
+                },
+                {
+                  "x": -37,
+                  "y": 45
+                },
+                {
+                  "x": -37,
+                  "y": 37
+                },
+                {
+                  "x": -51,
+                  "y": 37
+                }
+              ],
+              [
+                {
+                  "x": -15,
+                  "y": -50
+                },
+                {
+                  "x": 8,
+                  "y": -50
+                },
+                {
+                  "x": -9,
+                  "y": -27
+                }
+              ]
+            ],
+            "dots": [
+              {
+                "x": -47,
+                "y": 21
+              },
+              {
+                "x": -9,
+                "y": -43
+              }
+            ],
+            "lines": [
+              [
+                {
+                  "x": -95,
+                  "y": 0
+                },
+                {
+                  "x": 95,
+                  "y": 0
+                }
+              ]
+            ]
+          },
+          "options": [
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, -25), (-37, -25), (-37, -17), (-23, -31), (-37, -45), (-37, -37), (-51, -37)], [(-15, 50), (8, 50), (-9, 27)]]. Dots: [(-47, -21), (-9, 43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -51,
+                    "y": -25
+                  },
+                  {
+                    "x": -37,
+                    "y": -25
+                  },
+                  {
+                    "x": -37,
+                    "y": -17
+                  },
+                  {
+                    "x": -23,
+                    "y": -31
+                  },
+                  {
+                    "x": -37,
+                    "y": -45
+                  },
+                  {
+                    "x": -37,
+                    "y": -37
+                  },
+                  {
+                    "x": -51,
+                    "y": -37
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": 50
+                  },
+                  {
+                    "x": 8,
+                    "y": 50
+                  },
+                  {
+                    "x": -9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -47,
+                  "y": -21
+                },
+                {
+                  "x": -9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 25), (-37, 25), (-37, 17), (-23, 31), (-37, 45), (-37, 37), (-51, 37)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-47, 21), (-9, -43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -51,
+                    "y": 25
+                  },
+                  {
+                    "x": -37,
+                    "y": 25
+                  },
+                  {
+                    "x": -37,
+                    "y": 17
+                  },
+                  {
+                    "x": -23,
+                    "y": 31
+                  },
+                  {
+                    "x": -37,
+                    "y": 45
+                  },
+                  {
+                    "x": -37,
+                    "y": 37
+                  },
+                  {
+                    "x": -51,
+                    "y": 37
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": -50
+                  },
+                  {
+                    "x": 8,
+                    "y": -50
+                  },
+                  {
+                    "x": -9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -47,
+                  "y": 21
+                },
+                {
+                  "x": -9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(51, -25), (37, -25), (37, -17), (23, -31), (37, -45), (37, -37), (51, -37)], [(15, 50), (-8, 50), (9, 27)]]. Dots: [(47, -21), (9, 43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 51,
+                    "y": -25
+                  },
+                  {
+                    "x": 37,
+                    "y": -25
+                  },
+                  {
+                    "x": 37,
+                    "y": -17
+                  },
+                  {
+                    "x": 23,
+                    "y": -31
+                  },
+                  {
+                    "x": 37,
+                    "y": -45
+                  },
+                  {
+                    "x": 37,
+                    "y": -37
+                  },
+                  {
+                    "x": 51,
+                    "y": -37
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": 50
+                  },
+                  {
+                    "x": -8,
+                    "y": 50
+                  },
+                  {
+                    "x": 9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 47,
+                  "y": -21
+                },
+                {
+                  "x": 9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(51, 25), (37, 25), (37, 17), (23, 31), (37, 45), (37, 37), (51, 37)], [(15, -50), (-8, -50), (9, -27)]]. Dots: [(47, 21), (9, -43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 51,
+                    "y": 25
+                  },
+                  {
+                    "x": 37,
+                    "y": 25
+                  },
+                  {
+                    "x": 37,
+                    "y": 17
+                  },
+                  {
+                    "x": 23,
+                    "y": 31
+                  },
+                  {
+                    "x": 37,
+                    "y": 45
+                  },
+                  {
+                    "x": 37,
+                    "y": 37
+                  },
+                  {
+                    "x": 51,
+                    "y": 37
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": -50
+                  },
+                  {
+                    "x": -8,
+                    "y": -50
+                  },
+                  {
+                    "x": 9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 47,
+                  "y": 21
+                },
+                {
+                  "x": 9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "positional_figure_options": true
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "MIR-4-7",
+        "family": "vertical-central-axis",
+        "context": "vertical asymmetric layout 7",
+        "stem": "Reflect the complete given figure, including every marked point, in the depicted vertical line at x=0. Which candidate is the image? Case 7.",
+        "options": [
+          "Figure 1",
+          "Figure 2",
+          "Figure 3",
+          "Figure 4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Every feature reflects across the vertical line at 0, preserving perpendicular distance and its position parallel to the line.",
+          "This leaves the original positions and orientations unchanged.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered."
+        ],
+        "repairs": [
+          "Every feature reflects across the vertical line at 0, preserving perpendicular distance and its position parallel to the line. Check the original and image of one distinctive corner, then every marked point.",
+          "This leaves the original positions and orientations unchanged. Check the original and image of one distinctive corner, then every marked point.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line. Check the original and image of one distinctive corner, then every marked point.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The x coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The x coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+        "figure": {
+          "stem": {
+            "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 24), (-41, 30), (-48, 51), (-61, 43)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-61, 28), (-9, -43)]. Lines: [[(0, -95), (0, 95)]].",
+            "polygons": [
+              [
+                {
+                  "x": -65,
+                  "y": 24
+                },
+                {
+                  "x": -41,
+                  "y": 30
+                },
+                {
+                  "x": -48,
+                  "y": 51
+                },
+                {
+                  "x": -61,
+                  "y": 43
+                }
+              ],
+              [
+                {
+                  "x": -15,
+                  "y": -50
+                },
+                {
+                  "x": 8,
+                  "y": -50
+                },
+                {
+                  "x": -9,
+                  "y": -27
+                }
+              ]
+            ],
+            "dots": [
+              {
+                "x": -61,
+                "y": 28
+              },
+              {
+                "x": -9,
+                "y": -43
+              }
+            ],
+            "lines": [
+              [
+                {
+                  "x": 0,
+                  "y": -95
+                },
+                {
+                  "x": 0,
+                  "y": 95
+                }
+              ]
+            ]
+          },
+          "options": [
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(65, 24), (41, 30), (48, 51), (61, 43)], [(15, -50), (-8, -50), (9, -27)]]. Dots: [(61, 28), (9, -43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 65,
+                    "y": 24
+                  },
+                  {
+                    "x": 41,
+                    "y": 30
+                  },
+                  {
+                    "x": 48,
+                    "y": 51
+                  },
+                  {
+                    "x": 61,
+                    "y": 43
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": -50
+                  },
+                  {
+                    "x": -8,
+                    "y": -50
+                  },
+                  {
+                    "x": 9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 61,
+                  "y": 28
+                },
+                {
+                  "x": 9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 24), (-41, 30), (-48, 51), (-61, 43)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-61, 28), (-9, -43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -65,
+                    "y": 24
+                  },
+                  {
+                    "x": -41,
+                    "y": 30
+                  },
+                  {
+                    "x": -48,
+                    "y": 51
+                  },
+                  {
+                    "x": -61,
+                    "y": 43
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": -50
+                  },
+                  {
+                    "x": 8,
+                    "y": -50
+                  },
+                  {
+                    "x": -9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -61,
+                  "y": 28
+                },
+                {
+                  "x": -9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(65, -24), (41, -30), (48, -51), (61, -43)], [(15, 50), (-8, 50), (9, 27)]]. Dots: [(61, -28), (9, 43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 65,
+                    "y": -24
+                  },
+                  {
+                    "x": 41,
+                    "y": -30
+                  },
+                  {
+                    "x": 48,
+                    "y": -51
+                  },
+                  {
+                    "x": 61,
+                    "y": -43
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": 50
+                  },
+                  {
+                    "x": -8,
+                    "y": 50
+                  },
+                  {
+                    "x": 9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 61,
+                  "y": -28
+                },
+                {
+                  "x": 9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, -24), (-41, -30), (-48, -51), (-61, -43)], [(-15, 50), (8, 50), (-9, 27)]]. Dots: [(-61, -28), (-9, 43)]. Lines: [[(0, -95), (0, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -65,
+                    "y": -24
+                  },
+                  {
+                    "x": -41,
+                    "y": -30
+                  },
+                  {
+                    "x": -48,
+                    "y": -51
+                  },
+                  {
+                    "x": -61,
+                    "y": -43
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": 50
+                  },
+                  {
+                    "x": 8,
+                    "y": 50
+                  },
+                  {
+                    "x": -9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -61,
+                  "y": -28
+                },
+                {
+                  "x": -9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 0,
+                    "y": -95
+                  },
+                  {
+                    "x": 0,
+                    "y": 95
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "positional_figure_options": true
+      },
+      {
+        "id": "MIR-4-8",
+        "family": "horizontal-central-axis",
+        "context": "horizontal asymmetric layout 8",
+        "stem": "Reflect the complete given figure, including every marked point, in the depicted horizontal line at y=0. Which candidate is the image? Case 8.",
+        "options": [
+          "Figure 1",
+          "Figure 2",
+          "Figure 3",
+          "Figure 4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Every feature reflects across the horizontal line at 0, preserving perpendicular distance and its position parallel to the line.",
+          "This leaves the original positions and orientations unchanged.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered."
+        ],
+        "repairs": [
+          "Every feature reflects across the horizontal line at 0, preserving perpendicular distance and its position parallel to the line. Check the original and image of one distinctive corner, then every marked point.",
+          "This leaves the original positions and orientations unchanged. Check the original and image of one distinctive corner, then every marked point.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line. Check the original and image of one distinctive corner, then every marked point.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The y coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The y coordinate changes to twice 0 minus its original value; the other coordinate remains unchanged for every feature.",
+        "figure": {
+          "stem": {
+            "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 31), (-34, 31), (-34, 40), (-42, 40), (-42, 51), (-51, 51), (-51, 59), (-58, 59)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-54, 35), (-9, -43)]. Lines: [[(-95, 0), (95, 0)]].",
+            "polygons": [
+              [
+                {
+                  "x": -58,
+                  "y": 31
+                },
+                {
+                  "x": -34,
+                  "y": 31
+                },
+                {
+                  "x": -34,
+                  "y": 40
+                },
+                {
+                  "x": -42,
+                  "y": 40
+                },
+                {
+                  "x": -42,
+                  "y": 51
+                },
+                {
+                  "x": -51,
+                  "y": 51
+                },
+                {
+                  "x": -51,
+                  "y": 59
+                },
+                {
+                  "x": -58,
+                  "y": 59
+                }
+              ],
+              [
+                {
+                  "x": -15,
+                  "y": -50
+                },
+                {
+                  "x": 8,
+                  "y": -50
+                },
+                {
+                  "x": -9,
+                  "y": -27
+                }
+              ]
+            ],
+            "dots": [
+              {
+                "x": -54,
+                "y": 35
+              },
+              {
+                "x": -9,
+                "y": -43
+              }
+            ],
+            "lines": [
+              [
+                {
+                  "x": -95,
+                  "y": 0
+                },
+                {
+                  "x": 95,
+                  "y": 0
+                }
+              ]
+            ]
+          },
+          "options": [
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, -31), (-34, -31), (-34, -40), (-42, -40), (-42, -51), (-51, -51), (-51, -59), (-58, -59)], [(-15, 50), (8, 50), (-9, 27)]]. Dots: [(-54, -35), (-9, 43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -58,
+                    "y": -31
+                  },
+                  {
+                    "x": -34,
+                    "y": -31
+                  },
+                  {
+                    "x": -34,
+                    "y": -40
+                  },
+                  {
+                    "x": -42,
+                    "y": -40
+                  },
+                  {
+                    "x": -42,
+                    "y": -51
+                  },
+                  {
+                    "x": -51,
+                    "y": -51
+                  },
+                  {
+                    "x": -51,
+                    "y": -59
+                  },
+                  {
+                    "x": -58,
+                    "y": -59
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": 50
+                  },
+                  {
+                    "x": 8,
+                    "y": 50
+                  },
+                  {
+                    "x": -9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -54,
+                  "y": -35
+                },
+                {
+                  "x": -9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 31), (-34, 31), (-34, 40), (-42, 40), (-42, 51), (-51, 51), (-51, 59), (-58, 59)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-54, 35), (-9, -43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -58,
+                    "y": 31
+                  },
+                  {
+                    "x": -34,
+                    "y": 31
+                  },
+                  {
+                    "x": -34,
+                    "y": 40
+                  },
+                  {
+                    "x": -42,
+                    "y": 40
+                  },
+                  {
+                    "x": -42,
+                    "y": 51
+                  },
+                  {
+                    "x": -51,
+                    "y": 51
+                  },
+                  {
+                    "x": -51,
+                    "y": 59
+                  },
+                  {
+                    "x": -58,
+                    "y": 59
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": -50
+                  },
+                  {
+                    "x": 8,
+                    "y": -50
+                  },
+                  {
+                    "x": -9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -54,
+                  "y": 35
+                },
+                {
+                  "x": -9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(58, -31), (34, -31), (34, -40), (42, -40), (42, -51), (51, -51), (51, -59), (58, -59)], [(15, 50), (-8, 50), (9, 27)]]. Dots: [(54, -35), (9, 43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 58,
+                    "y": -31
+                  },
+                  {
+                    "x": 34,
+                    "y": -31
+                  },
+                  {
+                    "x": 34,
+                    "y": -40
+                  },
+                  {
+                    "x": 42,
+                    "y": -40
+                  },
+                  {
+                    "x": 42,
+                    "y": -51
+                  },
+                  {
+                    "x": 51,
+                    "y": -51
+                  },
+                  {
+                    "x": 51,
+                    "y": -59
+                  },
+                  {
+                    "x": 58,
+                    "y": -59
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": 50
+                  },
+                  {
+                    "x": -8,
+                    "y": 50
+                  },
+                  {
+                    "x": 9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 54,
+                  "y": -35
+                },
+                {
+                  "x": 9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(58, 31), (34, 31), (34, 40), (42, 40), (42, 51), (51, 51), (51, 59), (58, 59)], [(15, -50), (-8, -50), (9, -27)]]. Dots: [(54, 35), (9, -43)]. Lines: [[(-95, 0), (95, 0)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 58,
+                    "y": 31
+                  },
+                  {
+                    "x": 34,
+                    "y": 31
+                  },
+                  {
+                    "x": 34,
+                    "y": 40
+                  },
+                  {
+                    "x": 42,
+                    "y": 40
+                  },
+                  {
+                    "x": 42,
+                    "y": 51
+                  },
+                  {
+                    "x": 51,
+                    "y": 51
+                  },
+                  {
+                    "x": 51,
+                    "y": 59
+                  },
+                  {
+                    "x": 58,
+                    "y": 59
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": -50
+                  },
+                  {
+                    "x": -8,
+                    "y": -50
+                  },
+                  {
+                    "x": 9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 54,
+                  "y": 35
+                },
+                {
+                  "x": 9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": 0
+                  },
+                  {
+                    "x": 95,
+                    "y": 0
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "positional_figure_options": true
+      }
+    ],
+    "revision": [
+      {
+        "id": "MIR-4-9",
+        "family": "vertical-shifted-axis",
+        "context": "vertical asymmetric layout 9",
+        "stem": "Reflect the complete given figure, including every marked point, in the depicted vertical line at x=10. Which candidate is the image? Case 9.",
+        "options": [
+          "Figure 1",
+          "Figure 2",
+          "Figure 3",
+          "Figure 4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Every feature reflects across the vertical line at 10, preserving perpendicular distance and its position parallel to the line.",
+          "This leaves the original positions and orientations unchanged.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered."
+        ],
+        "repairs": [
+          "Every feature reflects across the vertical line at 10, preserving perpendicular distance and its position parallel to the line. Check the original and image of one distinctive corner, then every marked point.",
+          "This leaves the original positions and orientations unchanged. Check the original and image of one distinctive corner, then every marked point.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line. Check the original and image of one distinctive corner, then every marked point.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The x coordinate changes to twice 10 minus its original value; the other coordinate remains unchanged for every feature.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The x coordinate changes to twice 10 minus its original value; the other coordinate remains unchanged for every feature.",
+        "figure": {
+          "stem": {
+            "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 10), (-29, 10), (-29, 17), (-43, 17), (-43, 35), (-51, 35)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-47, 14), (-9, -43)]. Lines: [[(10, -95), (10, 95)]].",
+            "polygons": [
+              [
+                {
+                  "x": -51,
+                  "y": 10
+                },
+                {
+                  "x": -29,
+                  "y": 10
+                },
+                {
+                  "x": -29,
+                  "y": 17
+                },
+                {
+                  "x": -43,
+                  "y": 17
+                },
+                {
+                  "x": -43,
+                  "y": 35
+                },
+                {
+                  "x": -51,
+                  "y": 35
+                }
+              ],
+              [
+                {
+                  "x": -15,
+                  "y": -50
+                },
+                {
+                  "x": 8,
+                  "y": -50
+                },
+                {
+                  "x": -9,
+                  "y": -27
+                }
+              ]
+            ],
+            "dots": [
+              {
+                "x": -47,
+                "y": 14
+              },
+              {
+                "x": -9,
+                "y": -43
+              }
+            ],
+            "lines": [
+              [
+                {
+                  "x": 10,
+                  "y": -95
+                },
+                {
+                  "x": 10,
+                  "y": 95
+                }
+              ]
+            ]
+          },
+          "options": [
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(71, 10), (49, 10), (49, 17), (63, 17), (63, 35), (71, 35)], [(35, -50), (12, -50), (29, -27)]]. Dots: [(67, 14), (29, -43)]. Lines: [[(10, -95), (10, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 71,
+                    "y": 10
+                  },
+                  {
+                    "x": 49,
+                    "y": 10
+                  },
+                  {
+                    "x": 49,
+                    "y": 17
+                  },
+                  {
+                    "x": 63,
+                    "y": 17
+                  },
+                  {
+                    "x": 63,
+                    "y": 35
+                  },
+                  {
+                    "x": 71,
+                    "y": 35
+                  }
+                ],
+                [
+                  {
+                    "x": 35,
+                    "y": -50
+                  },
+                  {
+                    "x": 12,
+                    "y": -50
+                  },
+                  {
+                    "x": 29,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 67,
+                  "y": 14
+                },
+                {
+                  "x": 29,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 10,
+                    "y": -95
+                  },
+                  {
+                    "x": 10,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 10), (-29, 10), (-29, 17), (-43, 17), (-43, 35), (-51, 35)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-47, 14), (-9, -43)]. Lines: [[(10, -95), (10, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -51,
+                    "y": 10
+                  },
+                  {
+                    "x": -29,
+                    "y": 10
+                  },
+                  {
+                    "x": -29,
+                    "y": 17
+                  },
+                  {
+                    "x": -43,
+                    "y": 17
+                  },
+                  {
+                    "x": -43,
+                    "y": 35
+                  },
+                  {
+                    "x": -51,
+                    "y": 35
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": -50
+                  },
+                  {
+                    "x": 8,
+                    "y": -50
+                  },
+                  {
+                    "x": -9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -47,
+                  "y": 14
+                },
+                {
+                  "x": -9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 10,
+                    "y": -95
+                  },
+                  {
+                    "x": 10,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(51, -10), (29, -10), (29, -17), (43, -17), (43, -35), (51, -35)], [(15, 50), (-8, 50), (9, 27)]]. Dots: [(47, -14), (9, 43)]. Lines: [[(10, -95), (10, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 51,
+                    "y": -10
+                  },
+                  {
+                    "x": 29,
+                    "y": -10
+                  },
+                  {
+                    "x": 29,
+                    "y": -17
+                  },
+                  {
+                    "x": 43,
+                    "y": -17
+                  },
+                  {
+                    "x": 43,
+                    "y": -35
+                  },
+                  {
+                    "x": 51,
+                    "y": -35
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": 50
+                  },
+                  {
+                    "x": -8,
+                    "y": 50
+                  },
+                  {
+                    "x": 9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 47,
+                  "y": -14
+                },
+                {
+                  "x": 9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 10,
+                    "y": -95
+                  },
+                  {
+                    "x": 10,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 10), (-29, 10), (-29, 3), (-43, 3), (-43, -15), (-51, -15)], [(-15, 70), (8, 70), (-9, 47)]]. Dots: [(-47, 6), (-9, 63)]. Lines: [[(10, -95), (10, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -51,
+                    "y": 10
+                  },
+                  {
+                    "x": -29,
+                    "y": 10
+                  },
+                  {
+                    "x": -29,
+                    "y": 3
+                  },
+                  {
+                    "x": -43,
+                    "y": 3
+                  },
+                  {
+                    "x": -43,
+                    "y": -15
+                  },
+                  {
+                    "x": -51,
+                    "y": -15
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": 70
+                  },
+                  {
+                    "x": 8,
+                    "y": 70
+                  },
+                  {
+                    "x": -9,
+                    "y": 47
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -47,
+                  "y": 6
+                },
+                {
+                  "x": -9,
+                  "y": 63
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 10,
+                    "y": -95
+                  },
+                  {
+                    "x": 10,
+                    "y": 95
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "positional_figure_options": true
+      },
+      {
+        "id": "MIR-4-10",
+        "family": "horizontal-shifted-axis",
+        "context": "horizontal asymmetric layout 10",
+        "stem": "Reflect the complete given figure, including every marked point, in the depicted horizontal line at y=-10. Which candidate is the image? Case 10.",
+        "options": [
+          "Figure 1",
+          "Figure 2",
+          "Figure 3",
+          "Figure 4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Every feature reflects across the horizontal line at -10, preserving perpendicular distance and its position parallel to the line.",
+          "This leaves the original positions and orientations unchanged.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered."
+        ],
+        "repairs": [
+          "Every feature reflects across the horizontal line at -10, preserving perpendicular distance and its position parallel to the line. Check the original and image of one distinctive corner, then every marked point.",
+          "This leaves the original positions and orientations unchanged. Check the original and image of one distinctive corner, then every marked point.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line. Check the original and image of one distinctive corner, then every marked point.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The y coordinate changes to twice -10 minus its original value; the other coordinate remains unchanged for every feature.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The y coordinate changes to twice -10 minus its original value; the other coordinate remains unchanged for every feature.",
+        "figure": {
+          "stem": {
+            "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 25), (-51, 25), (-51, 17), (-37, 31), (-51, 45), (-51, 37), (-65, 37)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-61, 21), (-9, -43)]. Lines: [[(-95, -10), (95, -10)]].",
+            "polygons": [
+              [
+                {
+                  "x": -65,
+                  "y": 25
+                },
+                {
+                  "x": -51,
+                  "y": 25
+                },
+                {
+                  "x": -51,
+                  "y": 17
+                },
+                {
+                  "x": -37,
+                  "y": 31
+                },
+                {
+                  "x": -51,
+                  "y": 45
+                },
+                {
+                  "x": -51,
+                  "y": 37
+                },
+                {
+                  "x": -65,
+                  "y": 37
+                }
+              ],
+              [
+                {
+                  "x": -15,
+                  "y": -50
+                },
+                {
+                  "x": 8,
+                  "y": -50
+                },
+                {
+                  "x": -9,
+                  "y": -27
+                }
+              ]
+            ],
+            "dots": [
+              {
+                "x": -61,
+                "y": 21
+              },
+              {
+                "x": -9,
+                "y": -43
+              }
+            ],
+            "lines": [
+              [
+                {
+                  "x": -95,
+                  "y": -10
+                },
+                {
+                  "x": 95,
+                  "y": -10
+                }
+              ]
+            ]
+          },
+          "options": [
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, -45), (-51, -45), (-51, -37), (-37, -51), (-51, -65), (-51, -57), (-65, -57)], [(-15, 30), (8, 30), (-9, 7)]]. Dots: [(-61, -41), (-9, 23)]. Lines: [[(-95, -10), (95, -10)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -65,
+                    "y": -45
+                  },
+                  {
+                    "x": -51,
+                    "y": -45
+                  },
+                  {
+                    "x": -51,
+                    "y": -37
+                  },
+                  {
+                    "x": -37,
+                    "y": -51
+                  },
+                  {
+                    "x": -51,
+                    "y": -65
+                  },
+                  {
+                    "x": -51,
+                    "y": -57
+                  },
+                  {
+                    "x": -65,
+                    "y": -57
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": 30
+                  },
+                  {
+                    "x": 8,
+                    "y": 30
+                  },
+                  {
+                    "x": -9,
+                    "y": 7
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -61,
+                  "y": -41
+                },
+                {
+                  "x": -9,
+                  "y": 23
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": -10
+                  },
+                  {
+                    "x": 95,
+                    "y": -10
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-65, 25), (-51, 25), (-51, 17), (-37, 31), (-51, 45), (-51, 37), (-65, 37)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-61, 21), (-9, -43)]. Lines: [[(-95, -10), (95, -10)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -65,
+                    "y": 25
+                  },
+                  {
+                    "x": -51,
+                    "y": 25
+                  },
+                  {
+                    "x": -51,
+                    "y": 17
+                  },
+                  {
+                    "x": -37,
+                    "y": 31
+                  },
+                  {
+                    "x": -51,
+                    "y": 45
+                  },
+                  {
+                    "x": -51,
+                    "y": 37
+                  },
+                  {
+                    "x": -65,
+                    "y": 37
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": -50
+                  },
+                  {
+                    "x": 8,
+                    "y": -50
+                  },
+                  {
+                    "x": -9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -61,
+                  "y": 21
+                },
+                {
+                  "x": -9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": -10
+                  },
+                  {
+                    "x": 95,
+                    "y": -10
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(65, -25), (51, -25), (51, -17), (37, -31), (51, -45), (51, -37), (65, -37)], [(15, 50), (-8, 50), (9, 27)]]. Dots: [(61, -21), (9, 43)]. Lines: [[(-95, -10), (95, -10)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 65,
+                    "y": -25
+                  },
+                  {
+                    "x": 51,
+                    "y": -25
+                  },
+                  {
+                    "x": 51,
+                    "y": -17
+                  },
+                  {
+                    "x": 37,
+                    "y": -31
+                  },
+                  {
+                    "x": 51,
+                    "y": -45
+                  },
+                  {
+                    "x": 51,
+                    "y": -37
+                  },
+                  {
+                    "x": 65,
+                    "y": -37
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": 50
+                  },
+                  {
+                    "x": -8,
+                    "y": 50
+                  },
+                  {
+                    "x": 9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 61,
+                  "y": -21
+                },
+                {
+                  "x": 9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": -10
+                  },
+                  {
+                    "x": 95,
+                    "y": -10
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(45, 25), (31, 25), (31, 17), (17, 31), (31, 45), (31, 37), (45, 37)], [(-5, -50), (-28, -50), (-11, -27)]]. Dots: [(41, 21), (-11, -43)]. Lines: [[(-95, -10), (95, -10)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 45,
+                    "y": 25
+                  },
+                  {
+                    "x": 31,
+                    "y": 25
+                  },
+                  {
+                    "x": 31,
+                    "y": 17
+                  },
+                  {
+                    "x": 17,
+                    "y": 31
+                  },
+                  {
+                    "x": 31,
+                    "y": 45
+                  },
+                  {
+                    "x": 31,
+                    "y": 37
+                  },
+                  {
+                    "x": 45,
+                    "y": 37
+                  }
+                ],
+                [
+                  {
+                    "x": -5,
+                    "y": -50
+                  },
+                  {
+                    "x": -28,
+                    "y": -50
+                  },
+                  {
+                    "x": -11,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 41,
+                  "y": 21
+                },
+                {
+                  "x": -11,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": -10
+                  },
+                  {
+                    "x": 95,
+                    "y": -10
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "positional_figure_options": true
+      },
+      {
+        "id": "MIR-4-11",
+        "family": "vertical-shifted-axis",
+        "context": "vertical asymmetric layout 11",
+        "stem": "Reflect the complete given figure, including every marked point, in the depicted vertical line at x=10. Which candidate is the image? Case 11.",
+        "options": [
+          "Figure 1",
+          "Figure 2",
+          "Figure 3",
+          "Figure 4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Every feature reflects across the vertical line at 10, preserving perpendicular distance and its position parallel to the line.",
+          "This leaves the original positions and orientations unchanged.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered."
+        ],
+        "repairs": [
+          "Every feature reflects across the vertical line at 10, preserving perpendicular distance and its position parallel to the line. Check the original and image of one distinctive corner, then every marked point.",
+          "This leaves the original positions and orientations unchanged. Check the original and image of one distinctive corner, then every marked point.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line. Check the original and image of one distinctive corner, then every marked point.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The x coordinate changes to twice 10 minus its original value; the other coordinate remains unchanged for every feature.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The x coordinate changes to twice 10 minus its original value; the other coordinate remains unchanged for every feature.",
+        "figure": {
+          "stem": {
+            "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 24), (-34, 30), (-41, 51), (-54, 43)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-54, 28), (-9, -43)]. Lines: [[(10, -95), (10, 95)]].",
+            "polygons": [
+              [
+                {
+                  "x": -58,
+                  "y": 24
+                },
+                {
+                  "x": -34,
+                  "y": 30
+                },
+                {
+                  "x": -41,
+                  "y": 51
+                },
+                {
+                  "x": -54,
+                  "y": 43
+                }
+              ],
+              [
+                {
+                  "x": -15,
+                  "y": -50
+                },
+                {
+                  "x": 8,
+                  "y": -50
+                },
+                {
+                  "x": -9,
+                  "y": -27
+                }
+              ]
+            ],
+            "dots": [
+              {
+                "x": -54,
+                "y": 28
+              },
+              {
+                "x": -9,
+                "y": -43
+              }
+            ],
+            "lines": [
+              [
+                {
+                  "x": 10,
+                  "y": -95
+                },
+                {
+                  "x": 10,
+                  "y": 95
+                }
+              ]
+            ]
+          },
+          "options": [
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(78, 24), (54, 30), (61, 51), (74, 43)], [(35, -50), (12, -50), (29, -27)]]. Dots: [(74, 28), (29, -43)]. Lines: [[(10, -95), (10, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 78,
+                    "y": 24
+                  },
+                  {
+                    "x": 54,
+                    "y": 30
+                  },
+                  {
+                    "x": 61,
+                    "y": 51
+                  },
+                  {
+                    "x": 74,
+                    "y": 43
+                  }
+                ],
+                [
+                  {
+                    "x": 35,
+                    "y": -50
+                  },
+                  {
+                    "x": 12,
+                    "y": -50
+                  },
+                  {
+                    "x": 29,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 74,
+                  "y": 28
+                },
+                {
+                  "x": 29,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 10,
+                    "y": -95
+                  },
+                  {
+                    "x": 10,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, 24), (-34, 30), (-41, 51), (-54, 43)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-54, 28), (-9, -43)]. Lines: [[(10, -95), (10, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -58,
+                    "y": 24
+                  },
+                  {
+                    "x": -34,
+                    "y": 30
+                  },
+                  {
+                    "x": -41,
+                    "y": 51
+                  },
+                  {
+                    "x": -54,
+                    "y": 43
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": -50
+                  },
+                  {
+                    "x": 8,
+                    "y": -50
+                  },
+                  {
+                    "x": -9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -54,
+                  "y": 28
+                },
+                {
+                  "x": -9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 10,
+                    "y": -95
+                  },
+                  {
+                    "x": 10,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(58, -24), (34, -30), (41, -51), (54, -43)], [(15, 50), (-8, 50), (9, 27)]]. Dots: [(54, -28), (9, 43)]. Lines: [[(10, -95), (10, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 58,
+                    "y": -24
+                  },
+                  {
+                    "x": 34,
+                    "y": -30
+                  },
+                  {
+                    "x": 41,
+                    "y": -51
+                  },
+                  {
+                    "x": 54,
+                    "y": -43
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": 50
+                  },
+                  {
+                    "x": -8,
+                    "y": 50
+                  },
+                  {
+                    "x": 9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 54,
+                  "y": -28
+                },
+                {
+                  "x": 9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 10,
+                    "y": -95
+                  },
+                  {
+                    "x": 10,
+                    "y": 95
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-58, -4), (-34, -10), (-41, -31), (-54, -23)], [(-15, 70), (8, 70), (-9, 47)]]. Dots: [(-54, -8), (-9, 63)]. Lines: [[(10, -95), (10, 95)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -58,
+                    "y": -4
+                  },
+                  {
+                    "x": -34,
+                    "y": -10
+                  },
+                  {
+                    "x": -41,
+                    "y": -31
+                  },
+                  {
+                    "x": -54,
+                    "y": -23
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": 70
+                  },
+                  {
+                    "x": 8,
+                    "y": 70
+                  },
+                  {
+                    "x": -9,
+                    "y": 47
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -54,
+                  "y": -8
+                },
+                {
+                  "x": -9,
+                  "y": 63
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": 10,
+                    "y": -95
+                  },
+                  {
+                    "x": 10,
+                    "y": 95
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "positional_figure_options": true
+      },
+      {
+        "id": "MIR-4-12",
+        "family": "horizontal-shifted-axis",
+        "context": "horizontal asymmetric layout 12",
+        "stem": "Reflect the complete given figure, including every marked point, in the depicted horizontal line at y=-10. Which candidate is the image? Case 12.",
+        "options": [
+          "Figure 1",
+          "Figure 2",
+          "Figure 3",
+          "Figure 4"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Every feature reflects across the horizontal line at -10, preserving perpendicular distance and its position parallel to the line.",
+          "This leaves the original positions and orientations unchanged.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered."
+        ],
+        "repairs": [
+          "Every feature reflects across the horizontal line at -10, preserving perpendicular distance and its position parallel to the line. Check the original and image of one distinctive corner, then every marked point.",
+          "This leaves the original positions and orientations unchanged. Check the original and image of one distinctive corner, then every marked point.",
+          "This rotates the arrangement by a half-turn about the origin instead of reflecting across the specified line. Check the original and image of one distinctive corner, then every marked point.",
+          "This reflects across the other axis orientation, so the required unchanged coordinate is altered. Check the original and image of one distinctive corner, then every marked point."
+        ],
+        "reason_prompt": "Which reflection property justifies your chosen figure?",
+        "reason_options": [
+          "The y coordinate changes to twice -10 minus its original value; the other coordinate remains unchanged for every feature.",
+          "A reflection reverses both coordinates about the page centre, regardless of the depicted line.",
+          "Only the order of the objects changes; every internal shape stays unreflected.",
+          "Dots can remain fixed while the surrounding shape reflects."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The y coordinate changes to twice -10 minus its original value; the other coordinate remains unchanged for every feature.",
+        "figure": {
+          "stem": {
+            "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 31), (-27, 31), (-27, 40), (-35, 40), (-35, 51), (-44, 51), (-44, 59), (-51, 59)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-47, 35), (-9, -43)]. Lines: [[(-95, -10), (95, -10)]].",
+            "polygons": [
+              [
+                {
+                  "x": -51,
+                  "y": 31
+                },
+                {
+                  "x": -27,
+                  "y": 31
+                },
+                {
+                  "x": -27,
+                  "y": 40
+                },
+                {
+                  "x": -35,
+                  "y": 40
+                },
+                {
+                  "x": -35,
+                  "y": 51
+                },
+                {
+                  "x": -44,
+                  "y": 51
+                },
+                {
+                  "x": -44,
+                  "y": 59
+                },
+                {
+                  "x": -51,
+                  "y": 59
+                }
+              ],
+              [
+                {
+                  "x": -15,
+                  "y": -50
+                },
+                {
+                  "x": 8,
+                  "y": -50
+                },
+                {
+                  "x": -9,
+                  "y": -27
+                }
+              ]
+            ],
+            "dots": [
+              {
+                "x": -47,
+                "y": 35
+              },
+              {
+                "x": -9,
+                "y": -43
+              }
+            ],
+            "lines": [
+              [
+                {
+                  "x": -95,
+                  "y": -10
+                },
+                {
+                  "x": 95,
+                  "y": -10
+                }
+              ]
+            ]
+          },
+          "options": [
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, -51), (-27, -51), (-27, -60), (-35, -60), (-35, -71), (-44, -71), (-44, -79), (-51, -79)], [(-15, 30), (8, 30), (-9, 7)]]. Dots: [(-47, -55), (-9, 23)]. Lines: [[(-95, -10), (95, -10)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -51,
+                    "y": -51
+                  },
+                  {
+                    "x": -27,
+                    "y": -51
+                  },
+                  {
+                    "x": -27,
+                    "y": -60
+                  },
+                  {
+                    "x": -35,
+                    "y": -60
+                  },
+                  {
+                    "x": -35,
+                    "y": -71
+                  },
+                  {
+                    "x": -44,
+                    "y": -71
+                  },
+                  {
+                    "x": -44,
+                    "y": -79
+                  },
+                  {
+                    "x": -51,
+                    "y": -79
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": 30
+                  },
+                  {
+                    "x": 8,
+                    "y": 30
+                  },
+                  {
+                    "x": -9,
+                    "y": 7
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -47,
+                  "y": -55
+                },
+                {
+                  "x": -9,
+                  "y": 23
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": -10
+                  },
+                  {
+                    "x": 95,
+                    "y": -10
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(-51, 31), (-27, 31), (-27, 40), (-35, 40), (-35, 51), (-44, 51), (-44, 59), (-51, 59)], [(-15, -50), (8, -50), (-9, -27)]]. Dots: [(-47, 35), (-9, -43)]. Lines: [[(-95, -10), (95, -10)]].",
+              "polygons": [
+                [
+                  {
+                    "x": -51,
+                    "y": 31
+                  },
+                  {
+                    "x": -27,
+                    "y": 31
+                  },
+                  {
+                    "x": -27,
+                    "y": 40
+                  },
+                  {
+                    "x": -35,
+                    "y": 40
+                  },
+                  {
+                    "x": -35,
+                    "y": 51
+                  },
+                  {
+                    "x": -44,
+                    "y": 51
+                  },
+                  {
+                    "x": -44,
+                    "y": 59
+                  },
+                  {
+                    "x": -51,
+                    "y": 59
+                  }
+                ],
+                [
+                  {
+                    "x": -15,
+                    "y": -50
+                  },
+                  {
+                    "x": 8,
+                    "y": -50
+                  },
+                  {
+                    "x": -9,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": -47,
+                  "y": 35
+                },
+                {
+                  "x": -9,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": -10
+                  },
+                  {
+                    "x": 95,
+                    "y": -10
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(51, -31), (27, -31), (27, -40), (35, -40), (35, -51), (44, -51), (44, -59), (51, -59)], [(15, 50), (-8, 50), (9, 27)]]. Dots: [(47, -35), (9, 43)]. Lines: [[(-95, -10), (95, -10)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 51,
+                    "y": -31
+                  },
+                  {
+                    "x": 27,
+                    "y": -31
+                  },
+                  {
+                    "x": 27,
+                    "y": -40
+                  },
+                  {
+                    "x": 35,
+                    "y": -40
+                  },
+                  {
+                    "x": 35,
+                    "y": -51
+                  },
+                  {
+                    "x": 44,
+                    "y": -51
+                  },
+                  {
+                    "x": 44,
+                    "y": -59
+                  },
+                  {
+                    "x": 51,
+                    "y": -59
+                  }
+                ],
+                [
+                  {
+                    "x": 15,
+                    "y": 50
+                  },
+                  {
+                    "x": -8,
+                    "y": 50
+                  },
+                  {
+                    "x": 9,
+                    "y": 27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 47,
+                  "y": -35
+                },
+                {
+                  "x": 9,
+                  "y": 43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": -10
+                  },
+                  {
+                    "x": 95,
+                    "y": -10
+                  }
+                ]
+              ]
+            },
+            {
+              "description": "Coordinates use right-positive x and upward-positive y, in equal grid units. Shapes: [[(31, 31), (7, 31), (7, 40), (15, 40), (15, 51), (24, 51), (24, 59), (31, 59)], [(-5, -50), (-28, -50), (-11, -27)]]. Dots: [(27, 35), (-11, -43)]. Lines: [[(-95, -10), (95, -10)]].",
+              "polygons": [
+                [
+                  {
+                    "x": 31,
+                    "y": 31
+                  },
+                  {
+                    "x": 7,
+                    "y": 31
+                  },
+                  {
+                    "x": 7,
+                    "y": 40
+                  },
+                  {
+                    "x": 15,
+                    "y": 40
+                  },
+                  {
+                    "x": 15,
+                    "y": 51
+                  },
+                  {
+                    "x": 24,
+                    "y": 51
+                  },
+                  {
+                    "x": 24,
+                    "y": 59
+                  },
+                  {
+                    "x": 31,
+                    "y": 59
+                  }
+                ],
+                [
+                  {
+                    "x": -5,
+                    "y": -50
+                  },
+                  {
+                    "x": -28,
+                    "y": -50
+                  },
+                  {
+                    "x": -11,
+                    "y": -27
+                  }
+                ]
+              ],
+              "dots": [
+                {
+                  "x": 27,
+                  "y": 35
+                },
+                {
+                  "x": -11,
+                  "y": -43
+                }
+              ],
+              "lines": [
+                [
+                  {
+                    "x": -95,
+                    "y": -10
+                  },
+                  {
+                    "x": 95,
+                    "y": -10
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "positional_figure_options": true
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored asymmetric vector constructions; no third-party diagram reproduced. Not authenticated PYQs or measured exam difficulty."
+  ],
+  "illustrations": [
+    {
+      "description": "Worked vertical reflection: the original L-shaped piece is left of the upright mirror; its image is right. The marked top corner is40 units from the mirror on each side, at the same height. Two equal horizontal segments and matching ticks show equal distance.",
+      "polygons": [
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 0
+          },
+          {
+            "x": -40,
+            "y": 0
+          }
+        ],
+        [
+          {
+            "x": 40,
+            "y": 20
+          },
+          {
+            "x": 20,
+            "y": 20
+          },
+          {
+            "x": 20,
+            "y": 10
+          },
+          {
+            "x": 35,
+            "y": 10
+          },
+          {
+            "x": 35,
+            "y": 0
+          },
+          {
+            "x": 40,
+            "y": 0
+          }
+        ]
+      ],
+      "dots": [
+        {
+          "x": -40,
+          "y": 20
+        },
+        {
+          "x": 40,
+          "y": 20
+        }
+      ],
+      "lines": [
+        [
+          {
+            "x": 0,
+            "y": -80
+          },
+          {
+            "x": 0,
+            "y": 80
+          }
+        ],
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": 0,
+            "y": 20
+          }
+        ],
+        [
+          {
+            "x": 0,
+            "y": 20
+          },
+          {
+            "x": 40,
+            "y": 20
+          }
+        ],
+        [
+          {
+            "x": -20,
+            "y": 17
+          },
+          {
+            "x": -20,
+            "y": 23
+          }
+        ],
+        [
+          {
+            "x": 20,
+            "y": 17
+          },
+          {
+            "x": 20,
+            "y": 23
+          }
+        ]
+      ]
+    },
+    {
+      "description": "Worked water reflection: the original lies above the horizontal water line and the image below it. The marked corner stays at the same left/right position,20 units above versus20 below. Equal vertical segments and matching ticks show equal distances.",
+      "polygons": [
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 20
+          },
+          {
+            "x": -20,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 10
+          },
+          {
+            "x": -35,
+            "y": 0
+          },
+          {
+            "x": -40,
+            "y": 0
+          }
+        ],
+        [
+          {
+            "x": -40,
+            "y": -20
+          },
+          {
+            "x": -20,
+            "y": -20
+          },
+          {
+            "x": -20,
+            "y": -10
+          },
+          {
+            "x": -35,
+            "y": -10
+          },
+          {
+            "x": -35,
+            "y": 0
+          },
+          {
+            "x": -40,
+            "y": 0
+          }
+        ]
+      ],
+      "dots": [
+        {
+          "x": -40,
+          "y": 20
+        },
+        {
+          "x": -40,
+          "y": -20
+        }
+      ],
+      "lines": [
+        [
+          {
+            "x": -80,
+            "y": 0
+          },
+          {
+            "x": 80,
+            "y": 0
+          }
+        ],
+        [
+          {
+            "x": -40,
+            "y": 20
+          },
+          {
+            "x": -40,
+            "y": 0
+          }
+        ],
+        [
+          {
+            "x": -40,
+            "y": 0
+          },
+          {
+            "x": -40,
+            "y": -20
+          }
+        ],
+        [
+          {
+            "x": -43,
+            "y": 10
+          },
+          {
+            "x": -37,
+            "y": 10
+          }
+        ],
+        [
+          {
+            "x": -43,
+            "y": -10
+          },
+          {
+            "x": -37,
+            "y": -10
+          }
+        ]
+      ]
+    },
+    {
+      "description": "Worked arrangement: an L piece and a triangle lie left of the vertical mirror. Their reflected images lie right. The triangle remains nearer the mirror, while both internal orientations and their marked points reverse. Moving the pieces alone would leave their orientations wrong.",
+      "polygons": [
+        [
+          {
+            "x": -65,
+            "y": -10
+          },
+          {
+            "x": -45,
+            "y": -10
+          },
+          {
+            "x": -45,
+            "y": 0
+          },
+          {
+            "x": -55,
+            "y": 0
+          },
+          {
+            "x": -55,
+            "y": 15
+          },
+          {
+            "x": -65,
+            "y": 15
+          }
+        ],
+        [
+          {
+            "x": -30,
+            "y": -10
+          },
+          {
+            "x": -10,
+            "y": -10
+          },
+          {
+            "x": -25,
+            "y": 15
+          }
+        ],
+        [
+          {
+            "x": 65,
+            "y": -10
+          },
+          {
+            "x": 45,
+            "y": -10
+          },
+          {
+            "x": 45,
+            "y": 0
+          },
+          {
+            "x": 55,
+            "y": 0
+          },
+          {
+            "x": 55,
+            "y": 15
+          },
+          {
+            "x": 65,
+            "y": 15
+          }
+        ],
+        [
+          {
+            "x": 30,
+            "y": -10
+          },
+          {
+            "x": 10,
+            "y": -10
+          },
+          {
+            "x": 25,
+            "y": 15
+          }
+        ]
+      ],
+      "dots": [
+        {
+          "x": -60,
+          "y": -5
+        },
+        {
+          "x": -24,
+          "y": -5
+        },
+        {
+          "x": 60,
+          "y": -5
+        },
+        {
+          "x": 24,
+          "y": -5
+        }
+      ],
+      "lines": [
+        [
+          {
+            "x": 0,
+            "y": -80
+          },
+          {
+            "x": 0,
+            "y": 80
+          }
+        ],
+        [
+          {
+            "x": -60,
+            "y": -5
+          },
+          {
+            "x": 60,
+            "y": -5
+          }
+        ]
+      ]
+    },
+    {
+      "description": "Worked shifted mirror: the vertical mirror is10 units right of the origin. The original marked point is at x=-20,30 units left of the mirror; its image is at x=40,30 units right. Both points have y=30. Matching ticks show equal segments about the actual mirror, not the page centre.",
+      "polygons": [],
+      "dots": [
+        {
+          "x": -20,
+          "y": 30
+        },
+        {
+          "x": 40,
+          "y": 30
+        }
+      ],
+      "lines": [
+        [
+          {
+            "x": 10,
+            "y": -80
+          },
+          {
+            "x": 10,
+            "y": 80
+          }
+        ],
+        [
+          {
+            "x": -20,
+            "y": 30
+          },
+          {
+            "x": 10,
+            "y": 30
+          }
+        ],
+        [
+          {
+            "x": 10,
+            "y": 30
+          },
+          {
+            "x": 40,
+            "y": 30
+          }
+        ],
+        [
+          {
+            "x": -5,
+            "y": 27
+          },
+          {
+            "x": -5,
+            "y": 33
+          }
+        ],
+        [
+          {
+            "x": 25,
+            "y": 27
+          },
+          {
+            "x": 25,
+            "y": 33
+          }
+        ]
+      ]
+    }
+  ]
+}

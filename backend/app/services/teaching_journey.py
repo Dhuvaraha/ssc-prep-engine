@@ -4,6 +4,7 @@ import hashlib
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Callable
+from app.services.countermodel import check as check_countermodel
 
 
 class JourneyConflict(ValueError):
@@ -55,6 +56,8 @@ class JourneyContent:
         if result.get('figure'):
             scenes=result['figure']['options']
             result['figure']['options']=scenes[shift:]+scenes[:shift]
+            if result.get('positional_figure_options'):
+                result['options']=['Figure 1','Figure 2','Figure 3','Figure 4']
         result['answer'] = (result['answer'] - 1 - shift) % 4 + 1
         return result
 
@@ -85,11 +88,13 @@ def view(content, state, revision):
         for field in ('passage', 'figure', 'diagram'):
             if field in q:
                 result['question'][field] = q[field]
+        if q.get('construction') and state['phase']=='justify':
+            result['question']['construction']=q['construction']
         result['hint'] = content.hint if state['assisted'] else None
     return result
 
 
-def advance(content, saved_state, action, selected, clock, *, reason_selected=None, guessed=False):
+def advance(content, saved_state, action, selected, clock, *, reason_selected=None, guessed=False, model=None):
     require_version(content, saved_state)
     state = deepcopy(saved_state)
     if selected is not None and (type(selected) is not int or selected not in (1,2,3,4)):
@@ -125,7 +130,14 @@ def advance(content, saved_state, action, selected, clock, *, reason_selected=No
             reason_correct = reason_selected == q['reason_answer']
         if type(guessed) is not bool:
             raise JourneyConflict('Guess evidence must be a boolean')
-        correct = selected == q['answer'] and reason_correct
+        construction_correct=True
+        construction_feedback=None
+        if q.get('construction'):
+            try:
+                construction_correct,construction_feedback=check_countermodel(q['construction'],model)
+            except ValueError as error:
+                raise JourneyConflict(str(error)) from error
+        correct = selected == q['answer'] and reason_correct and construction_correct
         guided = state['stage'] in content.guided_stages
         independent = correct and not state['assisted'] and not guessed and not guided
         state['feedback'] = dict(correct=correct, independent=independent,
@@ -138,6 +150,9 @@ def advance(content, saved_state, action, selected, clock, *, reason_selected=No
                 reason_correct=reason_correct,guessed=guessed,guided=guided)
             state['feedback']['reason_explanation'] = q.get('reason_explanation', '')
             state['feedback']['candidate_misconception'] = not correct
+            if q.get('construction'):
+                state['history'][-1].update(model=deepcopy(model),construction_correct=construction_correct)
+                state['feedback']['construction_feedback']=construction_feedback
             for field in ('passage','figure','diagram'):
                 if field in q:
                     state['feedback'][field] = deepcopy(q[field])

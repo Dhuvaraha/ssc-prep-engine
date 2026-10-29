@@ -1,0 +1,468 @@
+{
+  "objective_id": "ENG-1",
+  "prerequisites": [
+    "A noun names a person, place or thing; a pronoun can stand in for a noun phrase.",
+    "Distinguish the main action/state from words describing a noun."
+  ],
+  "explanation": "The head is the central noun or pronoun of the subject phrase, not necessarily the noun nearest the verb. First find the main finite verb, then ask who or what that verb is about. Bracket prepositional phrases, relative clauses and participial modifiers. A coordinated subject can have two heads. In an inverted sentence the subject may follow the verb.",
+  "worked": [
+    {
+      "action": "In The basket of apples is heavy, the main verb is is and the subject phrase is The basket of apples.",
+      "justification": "The sentence says that the basket is heavy; apples describes what it contains."
+    },
+    {
+      "action": "Bracket [of apples]; basket remains as the subject head.",
+      "justification": "The noun inside a prepositional modifier is not automatically the main subject."
+    },
+    {
+      "action": "In Each of the players has a badge, Each is the pronoun head.",
+      "justification": "The of-phrase specifies the set; the sentence considers each member separately."
+    },
+    {
+      "action": "In The student who carries the books is here, student heads the main subject; who heads only the relative clause.",
+      "justification": "Separate the main verb is from the embedded verb carries."
+    },
+    {
+      "action": "In The bags left near the door belong to Meera, bags is the head and left near the door is a participial modifier.",
+      "justification": "A descriptive participle is not the main finite verb belong."
+    },
+    {
+      "action": "In The author and the translator are present, author and translator are coordinated heads.",
+      "justification": "And combines two subject heads. Along with does not perform the same grammatical job."
+    },
+    {
+      "action": "In Beside the gate stands a guard, the main verb stands precedes its subject a guard.",
+      "justification": "Do not select the first noun merely because it appears earlier. The guard stands; the gate gives the location."
+    },
+    {
+      "action": "In One of the envelopes is open and Neither of the answers is complete, One and Neither are subject pronouns.",
+      "justification": "The nearby plural nouns belong to modifying of-phrases."
+    }
+  ],
+  "hint": "Find the main finite verb. Bracket modifiers, then identify the noun/pronoun the main clause is about.",
+  "shortcut": "Bracket of/to/near phrases before checking the head; restore them afterward to verify the meaning.",
+  "limitation": "Do not erase words mechanically: distinguish true coordination, relative-clause subjects, passive agents and inversion.",
+  "checks": {
+    "entry": [
+      {
+        "id": "ENG-1-1",
+        "family": "box",
+        "context": "The box of old photographs rests beside the desk.",
+        "stem": "Identify the head (or coordinated heads) of the main-clause subject: The box of old photographs rests beside the desk.",
+        "options": [
+          "box",
+          "photographs",
+          "desk",
+          "old"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The main subject is the box; of old photographs describes its contents.",
+          "Photographs is inside the modifying of-phrase, not the main subject head.",
+          "Desk belongs to the location phrase beside the desk.",
+          "Old describes photographs; it is an adjective, not the subject head."
+        ],
+        "repairs": [
+          "The main subject is the box; of old photographs describes its contents. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Photographs is inside the modifying of-phrase, not the main subject head. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Desk belongs to the location phrase beside the desk. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Old describes photographs; it is an adjective, not the subject head. Locate the main finite verb and bracket its subject modifiers before trying again."
+        ],
+        "reason_prompt": "Which grammatical analysis supports your answer?",
+        "reason_options": [
+          "The main subject is the box; of old photographs describes its contents.",
+          "The noun nearest the verb must always be the main subject head.",
+          "Every plural noun before the main verb becomes a subject head.",
+          "An object after the main verb is always the subject."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The main subject is the box; of old photographs describes its contents."
+      },
+      {
+        "id": "ENG-1-2",
+        "family": "collection",
+        "context": "A collection of rare stamps was donated to the museum by a collector.",
+        "stem": "Identify the head (or coordinated heads) of the main-clause subject: A collection of rare stamps was donated to the museum by a collector.",
+        "options": [
+          "collection",
+          "stamps",
+          "museum",
+          "collector"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Collection heads the grammatical subject: the collection is donated. The museum is the recipient, and the collector is the passive agent.",
+          "Stamps is governed by of inside the subject modifier.",
+          "Museum belongs to the to-phrase, not the subject.",
+          "Collector is the agent in a by-phrase; a passive sentence does not make that agent the grammatical subject."
+        ],
+        "repairs": [
+          "Collection heads the grammatical subject: the collection is donated. The museum is the recipient, and the collector is the passive agent. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Stamps is governed by of inside the subject modifier. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Museum belongs to the to-phrase, not the subject. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Collector is the agent in a by-phrase; a passive sentence does not make that agent the grammatical subject. Locate the main finite verb and bracket its subject modifiers before trying again."
+        ],
+        "reason_prompt": "Which grammatical analysis supports your answer?",
+        "reason_options": [
+          "Collection heads the grammatical subject: the collection is donated. The museum is the recipient, and the collector is the passive agent.",
+          "The noun nearest the verb must always be the main subject head.",
+          "Every plural noun before the main verb becomes a subject head.",
+          "An object after the main verb is always the subject."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Collection heads the grammatical subject: the collection is donated. The museum is the recipient, and the collector is the passive agent."
+      }
+    ],
+    "faded": [
+      {
+        "id": "ENG-1-3",
+        "family": "keys",
+        "context": "The keys to the cabinet near the stairs are missing.",
+        "stem": "Identify the head (or coordinated heads) of the main-clause subject: The keys to the cabinet near the stairs are missing. Partly worked: bracket [to the cabinet near the stairs] as a modifier. Identify the head of what remains before the main verb.",
+        "options": [
+          "keys",
+          "cabinet",
+          "stairs",
+          "near"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Keys heads the subject; the two following prepositional phrases locate which keys.",
+          "Cabinet is inside to the cabinet.",
+          "Stairs is inside near the stairs.",
+          "Near introduces a location phrase and is not a subject noun."
+        ],
+        "repairs": [
+          "Keys heads the subject; the two following prepositional phrases locate which keys. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Cabinet is inside to the cabinet. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Stairs is inside near the stairs. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Near introduces a location phrase and is not a subject noun. Locate the main finite verb and bracket its subject modifiers before trying again."
+        ],
+        "reason_prompt": "Which grammatical analysis supports your answer?",
+        "reason_options": [
+          "Keys heads the subject; the two following prepositional phrases locate which keys.",
+          "The noun nearest the verb must always be the main subject head.",
+          "Every plural noun before the main verb becomes a subject head.",
+          "An object after the main verb is always the subject."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Keys heads the subject; the two following prepositional phrases locate which keys."
+      },
+      {
+        "id": "ENG-1-4",
+        "family": "Each",
+        "context": "Each of the lamps on the shelves needs a battery.",
+        "stem": "Identify the head (or coordinated heads) of the main-clause subject: Each of the lamps on the shelves needs a battery. Partly worked: bracket [of the lamps on the shelves] as a modifier. Identify the head of what remains before the main verb.",
+        "options": [
+          "Each",
+          "lamps",
+          "shelves",
+          "battery"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Each is the subject pronoun; of the lamps specifies the set being considered one at a time.",
+          "Lamps is inside the of-phrase and does not replace Each as head.",
+          "Shelves belongs to the location modifier.",
+          "Battery is the object of needs."
+        ],
+        "repairs": [
+          "Each is the subject pronoun; of the lamps specifies the set being considered one at a time. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Lamps is inside the of-phrase and does not replace Each as head. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Shelves belongs to the location modifier. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Battery is the object of needs. Locate the main finite verb and bracket its subject modifiers before trying again."
+        ],
+        "reason_prompt": "Which grammatical analysis supports your answer?",
+        "reason_options": [
+          "Each is the subject pronoun; of the lamps specifies the set being considered one at a time.",
+          "The noun nearest the verb must always be the main subject head.",
+          "Every plural noun before the main verb becomes a subject head.",
+          "An object after the main verb is always the subject."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Each is the subject pronoun; of the lamps specifies the set being considered one at a time."
+      }
+    ],
+    "independent_a": [
+      {
+        "id": "ENG-1-5",
+        "family": "guide",
+        "context": "The guide who accompanied the tourists knows the route.",
+        "stem": "Identify the head (or coordinated heads) of the main-clause subject: The guide who accompanied the tourists knows the route.",
+        "options": [
+          "guide",
+          "tourists",
+          "route",
+          "who"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Guide heads the subject of the main verb knows.",
+          "Tourists is the object within the relative clause.",
+          "Route is the object of the main verb.",
+          "Who is the subject of accompanied inside the relative clause; it is not a replacement for the main subject head guide."
+        ],
+        "repairs": [
+          "Guide heads the subject of the main verb knows. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Tourists is the object within the relative clause. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Route is the object of the main verb. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Who is the subject of accompanied inside the relative clause; it is not a replacement for the main subject head guide. Locate the main finite verb and bracket its subject modifiers before trying again."
+        ],
+        "reason_prompt": "Which grammatical analysis supports your answer?",
+        "reason_options": [
+          "Guide heads the subject of the main verb knows.",
+          "The noun nearest the verb must always be the main subject head.",
+          "Every plural noun before the main verb becomes a subject head.",
+          "An object after the main verb is always the subject."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Guide heads the subject of the main verb knows."
+      },
+      {
+        "id": "ENG-1-6",
+        "family": "notices",
+        "context": "The notices posted beside the entrances mention a change.",
+        "stem": "Identify the head (or coordinated heads) of the main-clause subject: The notices posted beside the entrances mention a change.",
+        "options": [
+          "notices",
+          "entrances",
+          "change",
+          "posted"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Notices heads the subject of mention; posted beside the entrances modifies it.",
+          "Entrances is inside the modifying location phrase.",
+          "Change is the object of mention.",
+          "Posted is a participle modifying notices, not the main subject head."
+        ],
+        "repairs": [
+          "Notices heads the subject of mention; posted beside the entrances modifies it. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Entrances is inside the modifying location phrase. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Change is the object of mention. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Posted is a participle modifying notices, not the main subject head. Locate the main finite verb and bracket its subject modifiers before trying again."
+        ],
+        "reason_prompt": "Which grammatical analysis supports your answer?",
+        "reason_options": [
+          "Notices heads the subject of mention; posted beside the entrances modifies it.",
+          "The noun nearest the verb must always be the main subject head.",
+          "Every plural noun before the main verb becomes a subject head.",
+          "An object after the main verb is always the subject."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Notices heads the subject of mention; posted beside the entrances modifies it."
+      }
+    ],
+    "independent_b": [
+      {
+        "id": "ENG-1-7",
+        "family": "owner",
+        "context": "The owner of the shops, along with two assistants, checks the locks.",
+        "stem": "Identify the head (or coordinated heads) of the main-clause subject: The owner of the shops, along with two assistants, checks the locks.",
+        "options": [
+          "owner",
+          "shops",
+          "assistants",
+          "locks"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Owner heads the subject. Along with adds accompanying people without creating an and-coordinated subject.",
+          "Shops belongs to the of-phrase.",
+          "Assistants belongs to the supplementary along with phrase.",
+          "Locks is the object of checks."
+        ],
+        "repairs": [
+          "Owner heads the subject. Along with adds accompanying people without creating an and-coordinated subject. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Shops belongs to the of-phrase. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Assistants belongs to the supplementary along with phrase. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Locks is the object of checks. Locate the main finite verb and bracket its subject modifiers before trying again."
+        ],
+        "reason_prompt": "Which grammatical analysis supports your answer?",
+        "reason_options": [
+          "Owner heads the subject. Along with adds accompanying people without creating an and-coordinated subject.",
+          "The noun nearest the verb must always be the main subject head.",
+          "Every plural noun before the main verb becomes a subject head.",
+          "An object after the main verb is always the subject."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Owner heads the subject. Along with adds accompanying people without creating an and-coordinated subject."
+      },
+      {
+        "id": "ENG-1-8",
+        "family": "Neither",
+        "context": "Neither of the proposed routes crosses the river.",
+        "stem": "Identify the head (or coordinated heads) of the main-clause subject: Neither of the proposed routes crosses the river.",
+        "options": [
+          "Neither",
+          "routes",
+          "river",
+          "proposed"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Neither is the subject pronoun, considering neither one of the routes.",
+          "Routes belongs to the of-phrase.",
+          "River is the object of crosses.",
+          "Proposed modifies routes; it is not the subject head."
+        ],
+        "repairs": [
+          "Neither is the subject pronoun, considering neither one of the routes. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Routes belongs to the of-phrase. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "River is the object of crosses. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Proposed modifies routes; it is not the subject head. Locate the main finite verb and bracket its subject modifiers before trying again."
+        ],
+        "reason_prompt": "Which grammatical analysis supports your answer?",
+        "reason_options": [
+          "Neither is the subject pronoun, considering neither one of the routes.",
+          "The noun nearest the verb must always be the main subject head.",
+          "Every plural noun before the main verb becomes a subject head.",
+          "An object after the main verb is always the subject."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Neither is the subject pronoun, considering neither one of the routes."
+      }
+    ],
+    "revision": [
+      {
+        "id": "ENG-1-9",
+        "family": "coordination",
+        "context": "The photographer and the editor of the magazine are waiting.",
+        "stem": "Identify the head (or coordinated heads) of the main-clause subject: The photographer and the editor of the magazine are waiting.",
+        "options": [
+          "photographer and editor",
+          "magazine",
+          "photographer only",
+          "editor only"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The subject has two coordinated heads joined by and: photographer and editor.",
+          "Magazine is inside the of-phrase modifying editor.",
+          "This omits the second coordinated head.",
+          "This omits the first coordinated head."
+        ],
+        "repairs": [
+          "The subject has two coordinated heads joined by and: photographer and editor. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Magazine is inside the of-phrase modifying editor. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "This omits the second coordinated head. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "This omits the first coordinated head. Locate the main finite verb and bracket its subject modifiers before trying again."
+        ],
+        "reason_prompt": "Which grammatical analysis supports your answer?",
+        "reason_options": [
+          "The subject has two coordinated heads joined by and: photographer and editor.",
+          "The noun nearest the verb must always be the main subject head.",
+          "Every plural noun before the main verb becomes a subject head.",
+          "An object after the main verb is always the subject."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The subject has two coordinated heads joined by and: photographer and editor."
+      },
+      {
+        "id": "ENG-1-10",
+        "family": "inversion",
+        "context": "Under the stairs stands a cabinet of tools.",
+        "stem": "Identify the head (or coordinated heads) of the main-clause subject: Under the stairs stands a cabinet of tools.",
+        "options": [
+          "cabinet",
+          "stairs",
+          "tools",
+          "Under"
+        ],
+        "answer": 1,
+        "explanations": [
+          "The subject follows stands: a cabinet of tools, headed by cabinet. The opening phrase gives location.",
+          "Stairs belongs to the introductory location phrase.",
+          "Tools is inside the of-phrase modifying cabinet.",
+          "Under is a preposition, not the subject head."
+        ],
+        "repairs": [
+          "The subject follows stands: a cabinet of tools, headed by cabinet. The opening phrase gives location. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Stairs belongs to the introductory location phrase. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Tools is inside the of-phrase modifying cabinet. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Under is a preposition, not the subject head. Locate the main finite verb and bracket its subject modifiers before trying again."
+        ],
+        "reason_prompt": "Which grammatical analysis supports your answer?",
+        "reason_options": [
+          "The subject follows stands: a cabinet of tools, headed by cabinet. The opening phrase gives location.",
+          "The noun nearest the verb must always be the main subject head.",
+          "Every plural noun before the main verb becomes a subject head.",
+          "An object after the main verb is always the subject."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "The subject follows stands: a cabinet of tools, headed by cabinet. The opening phrase gives location."
+      },
+      {
+        "id": "ENG-1-11",
+        "family": "relative",
+        "context": "The proposal that the officers discussed yesterday requires a signature.",
+        "stem": "Identify the head (or coordinated heads) of the main-clause subject: The proposal that the officers discussed yesterday requires a signature.",
+        "options": [
+          "proposal",
+          "officers",
+          "signature",
+          "yesterday"
+        ],
+        "answer": 1,
+        "explanations": [
+          "Proposal heads the subject of requires; the relative clause identifies the proposal.",
+          "Officers is the subject of discussed in the embedded relative clause.",
+          "Signature is the object of requires.",
+          "Yesterday is a time adverb within the relative clause."
+        ],
+        "repairs": [
+          "Proposal heads the subject of requires; the relative clause identifies the proposal. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Officers is the subject of discussed in the embedded relative clause. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Signature is the object of requires. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Yesterday is a time adverb within the relative clause. Locate the main finite verb and bracket its subject modifiers before trying again."
+        ],
+        "reason_prompt": "Which grammatical analysis supports your answer?",
+        "reason_options": [
+          "Proposal heads the subject of requires; the relative clause identifies the proposal.",
+          "The noun nearest the verb must always be the main subject head.",
+          "Every plural noun before the main verb becomes a subject head.",
+          "An object after the main verb is always the subject."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "Proposal heads the subject of requires; the relative clause identifies the proposal."
+      },
+      {
+        "id": "ENG-1-12",
+        "family": "pronoun",
+        "context": "One of the paintings displayed near the windows needs cleaning.",
+        "stem": "Identify the head (or coordinated heads) of the main-clause subject: One of the paintings displayed near the windows needs cleaning.",
+        "options": [
+          "One",
+          "paintings",
+          "windows",
+          "cleaning"
+        ],
+        "answer": 1,
+        "explanations": [
+          "One is the subject head; the following phrases specify one member of a set.",
+          "Paintings is inside of the paintings.",
+          "Windows is in the location modifier.",
+          "Cleaning is the complement after needs, not the subject."
+        ],
+        "repairs": [
+          "One is the subject head; the following phrases specify one member of a set. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Paintings is inside of the paintings. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Windows is in the location modifier. Locate the main finite verb and bracket its subject modifiers before trying again.",
+          "Cleaning is the complement after needs, not the subject. Locate the main finite verb and bracket its subject modifiers before trying again."
+        ],
+        "reason_prompt": "Which grammatical analysis supports your answer?",
+        "reason_options": [
+          "One is the subject head; the following phrases specify one member of a set.",
+          "The noun nearest the verb must always be the main subject head.",
+          "Every plural noun before the main verb becomes a subject head.",
+          "An object after the main verb is always the subject."
+        ],
+        "reason_answer": 1,
+        "reason_explanation": "One is the subject head; the following phrases specify one member of a set."
+      }
+    ]
+  },
+  "sources": [
+    "Independently authored formal-English subject analysis; not copied reference sentences or authenticated PYQs."
+  ]
+}

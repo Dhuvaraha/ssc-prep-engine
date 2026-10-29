@@ -12,10 +12,10 @@ export type TeachingJourneyState = {
   evidence_label: string; hint?: string | null;
   pending_answer?: {selected:number;guessed:boolean};
   lesson: { objective:string; prerequisites:string[]; worked_example:string[]; shortcut:string; limit:string;illustrations?:TeachingScene[] };
-  question?: {id:string;stem:string;options:string[];requires_reason?:boolean;reason_prompt?:string;reason_options?:string[];passage?:string;figure?:TeachingFigureData;diagram?:TeachingScene};
-  feedback: null | {correct:boolean;independent:boolean;selected:number;correct_option:number;stem:string;options:string[];explanations:string[];repair:string;reason_explanation?:string;passage?:string;figure?:TeachingFigureData;diagram?:TeachingScene};
+  question?: {id:string;stem:string;options:string[];requires_reason?:boolean;reason_prompt?:string;reason_options?:string[];passage?:string;figure?:TeachingFigureData;diagram?:TeachingScene;construction?:{terms:string[];premises:[string,string,string][];conclusion:[string,string,string]}};
+  feedback: null | {correct:boolean;independent:boolean;selected:number;correct_option:number;stem:string;options:string[];explanations:string[];repair:string;reason_explanation?:string;passage?:string;figure?:TeachingFigureData;diagram?:TeachingScene;construction_feedback?:string};
 };
-export type JourneyAction = {expected_revision:number;action:string;selected?:number;reason_selected?:number;guessed?:boolean};
+export type JourneyAction = {expected_revision:number;action:string;selected?:number;reason_selected?:number;guessed?:boolean;model?:string[][]};
 export type PilotObjective = {objective_id:string;topic:string;title:string;available:boolean};
 export async function pilotCatalog(): Promise<PilotObjective[]> {
   const response=await sessionFetch(API_BASE+'/learn/pilot',{headers:authHeaders()});

@@ -131,7 +131,11 @@ def test_authored_delivery_varies_positions_and_preserves_answer_reason_alignmen
             state=journey.initial(content);state['stage']=stage
             for raw in checks:
                 delivered=content.question(state)
-                assert delivered['options'][delivered['answer']-1]==raw.options[raw.answer-1]
+                if raw.positional_figure_options:
+                    assert delivered['options']==['Figure 1','Figure 2','Figure 3','Figure 4']
+                    assert delivered['figure']['options'][delivered['answer']-1]==raw.figure.options[raw.answer-1].model_dump()
+                else:
+                    assert delivered['options'][delivered['answer']-1]==raw.options[raw.answer-1]
                 assert delivered['explanations'][delivered['answer']-1]==raw.explanations[raw.answer-1]
                 assert delivered['reason_options'][delivered['reason_answer']-1]==raw.reason_options[raw.reason_answer-1]
                 answer_positions.add(delivered['answer']);reason_positions.add(delivered['reason_answer'])
@@ -193,3 +197,33 @@ def test_necessity_keys_against_all_valid_categorical_models():
         key=(4 if not result['consistent'] else 1 if result['must_follow']
              else 2 if result['possible'] else 3)
         assert questions[row['question_id']].answer==key
+
+
+def test_possibility_keys_against_all_valid_categorical_models():
+    from app.content.syllogism import evaluate
+    questions={q.id:q for checks in load_unit('SYL-5').checks.values() for q in checks}
+    evidence=json.loads((DATA/'phase_d_possibility_evidence.json').read_text(encoding='utf-8'))
+    assert {row['question_id'] for row in evidence}==set(questions)
+    classifications=set()
+    for row in evidence:
+        result=evaluate(row['premises'],row['conclusion'])
+        key=(4 if not result['consistent'] else 1 if result['must_follow']
+             else 2 if result['possible'] else 3)
+        assert questions[row['question_id']].answer==key
+        classifications.add(key)
+    assert classifications=={1,2,3,4}
+
+
+def test_measurement_conversions_and_contextual_unit_comparisons():
+    questions={q.id:q for checks in load_unit('PHY-1').checks.values() for q in checks}
+    expected={'PHY-1-5':(F(72)*1000/3600,'m/s'),
+              'PHY-1-7':(F(250,1000),'s'),
+              'PHY-1-8':(F(350,100),'m'),
+              'PHY-1-11':(F(3*60+5-(2*60+15)),'s')}
+    for qid,(value,unit) in expected.items():
+        q=questions[qid]
+        number,suffix=q.options[q.answer-1].split()
+        assert F(number)==value and suffix==unit
+    q=questions['PHY-1-9']
+    assert F('0.04')-F(3,100)==F('0.01')
+    assert q.options[q.answer-1]=='B is greater by 0.01 m/s^2.'
